@@ -6,6 +6,7 @@
   "version": "0.1.0",
   "engines": { "vscode": "^1.74.0" },
   "categories": ["Programming Languages"],
+  "main": "./extension.js",
   "activationEvents": ["onLanguage:wodcraft"],
   "contributes": {
     "languages": [
@@ -28,7 +29,39 @@
         "language": "wodcraft",
         "path": "./snippets/wod.json"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "WODCraft",
+      "properties": {
+        "wodcraft.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python interpreter to run the linter (use .venv/bin/python if available)."
+        },
+        "wodcraft.cliPath": {
+          "type": "string",
+          "default": "wodc_merged.py",
+          "description": "Path to the WODCraft CLI script."
+        },
+        "wodcraft.catalogPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to a movement catalog JSON used during lint."
+        },
+        "wodcraft.track": {
+          "type": "string",
+          "enum": ["RX", "INTERMEDIATE", "SCALED"],
+          "default": "RX",
+          "description": "Default track used by the linter."
+        },
+        "wodcraft.gender": {
+          "type": "string",
+          "enum": ["male", "female"],
+          "default": "male",
+          "description": "Default gender used by the linter."
+        }
+      }
+    }
   }
 }
-
