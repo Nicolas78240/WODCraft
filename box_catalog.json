@@ -1,0 +1,62 @@
+{
+  "movements": {
+    "thrusters": {
+      "load": {
+        "rx": {
+          "male": "43kg",
+          "female": "30kg"
+        },
+        "intermediate": {
+          "male": "35kg",
+          "female": "25kg"
+        },
+        "scaled": {
+          "male": "25kg",
+          "female": "15kg"
+        }
+      }
+    },
+    "row": {
+      "cal": {
+        "rx": {
+          "male": 15,
+          "female": 12
+        },
+        "intermediate": {
+          "male": 12,
+          "female": 10
+        },
+        "scaled": {
+          "male": 10,
+          "female": 8
+        }
+      },
+      "distance": {
+        "rx": {
+          "male": 500,
+          "female": 400
+        }
+      }
+    },
+    "run": {
+      "distance": {
+        "rx": {
+          "male": 400,
+          "female": 300
+        },
+        "scaled": {
+          "male": 300,
+          "female": 200
+        }
+      }
+    },
+    "box_jumps": {
+      "load": {
+        "rx": {
+          "male": "24in",
+          "female": "20in"
+        }
+      }
+    }
+  }
+}

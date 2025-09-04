@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual env
+.venv/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Build/outputs
+out/
+exports/
+*.html
+*.ics
+out.json
+wod.html
+

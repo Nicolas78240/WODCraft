@@ -1,0 +1,6 @@
+# Core runtime
+lark>=1.1
+
+# Dev/test (optional)
+pytest>=7
+black>=24
