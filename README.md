@@ -1,5 +1,7 @@
 # WODCraft
 
+English | [Français](README.fr.md)
+
 WODCraft is a Domain‑Specific Language (DSL) to describe, validate, and export Workouts of the Day (WODs). It ships a single CLI to parse, lint, simulate (timeline), and export (JSON/HTML/ICS) workouts, with support for tracks (RX/Intermediate/Scaled) and gender (male/female).
 
 ## Why
