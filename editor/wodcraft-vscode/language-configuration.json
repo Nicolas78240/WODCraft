@@ -1,0 +1,10 @@
+{
+  "brackets": [ ["{", "}" ] ],
+  "autoClosingPairs": [ { "open": "{", "close": "}" } ],
+  "surroundingPairs": [ { "open": "{", "close": "}" }, { "open": "\"", "close": "\"" } ],
+  "indentationRules": {
+    "increaseIndentPattern": "^.*\{\s*$",
+    "decreaseIndentPattern": "^\s*\}\s*$"
+  }
+}
+

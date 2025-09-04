@@ -64,6 +64,10 @@ Makefile shortcuts: `make help` (parse, lint, run, export-*, demo, check-spec, f
 - Implementation: `wodc_merged.py` (Lark grammar + transformer, linter, timeline, exports, fmt).
 - Examples: `.wod` files at repo root (team_mixer, waterfall_trio, …). Catalog: `box_catalog.json`.
 
+## Editor Support
+- VS Code/Windsurf extension (local): see `editor/wodcraft-vscode/` for syntax highlighting and snippets.
+- Quick dev run: `code --extensionDevelopmentPath=./editor/wodcraft-vscode .`
+
 ## Roadmap
 - Advanced formatter (indentation/blocks), macros and shorthands (`21-15-9`).
 - Versioned grammar and canonical `wodc fmt`.

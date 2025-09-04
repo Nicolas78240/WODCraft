@@ -1,0 +1,100 @@
+{
+  "WOD Header": {
+    "prefix": ["wod", "header"],
+    "body": [
+      "WOD \"${1:Title}\"",
+      "TEAM ${2:2}",
+      "TRACKS [RX, INTERMEDIATE, SCALED]",
+      "CAP ${3:20:00}",
+      "",
+      "$0"
+    ],
+    "description": "WOD title, team size, tracks and global cap"
+  },
+  "BUYIN Block": {
+    "prefix": ["buyin"],
+    "body": [
+      "BUYIN {",
+      "  ${1:400m run;}",
+      "}"
+    ]
+  },
+  "CASHOUT Block": {
+    "prefix": ["cashout"],
+    "body": [
+      "CASHOUT {",
+      "  ${1:50 double_unders @each;}",
+      "}"
+    ]
+  },
+  "REST": {
+    "prefix": ["rest"],
+    "body": ["REST ${1:1:00}"]
+  },
+  "BLOCK AMRAP": {
+    "prefix": ["amrap"],
+    "body": [
+      "BLOCK AMRAP ${1:12:00} WORK ${2:split:any} {",
+      "  ${3:12 wall_balls @9kg SYNC;}",
+      "  ${4:10 box_jumps @24in;}",
+      "  ${5:200m run;}",
+      "}"
+    ],
+    "description": "AMRAP block with common movements"
+  },
+  "BLOCK EMOM": {
+    "prefix": ["emom"],
+    "body": [
+      "BLOCK EMOM ${1:10:00} {",
+      "  1: ${2:10 wall_balls @9kg;}",
+      "  2: ${3:8 box_jumps @24in;}",
+      "}"
+    ],
+    "description": "EMOM block with two slots"
+  },
+  "BLOCK FT": {
+    "prefix": ["ft"],
+    "body": [
+      "BLOCK FT {",
+      "  ${1:21 thrusters @43/30kg;}",
+      "  ${2:21 pullups;}",
+      "}"
+    ]
+  },
+  "BLOCK RFT": {
+    "prefix": ["rft"],
+    "body": [
+      "BLOCK RFT ${1:3} {",
+      "  ${2:10 burpees;}",
+      "  ${3:200m run;}",
+      "}"
+    ]
+  },
+  "BLOCK CHIPPER": {
+    "prefix": ["chipper"],
+    "body": [
+      "BLOCK CHIPPER {",
+      "  ${1:50 double_unders;}",
+      "  ${2:40 box_jumps;}",
+      "  ${3:30 wall_balls;}",
+      "}"
+    ]
+  },
+  "BLOCK TABATA": {
+    "prefix": ["tabata"],
+    "body": [
+      "BLOCK TABATA ${1:00:20}:${2:00:10}x${3:8} {",
+      "  ${4:air_squat;}",
+      "}"
+    ]
+  },
+  "BLOCK INTERVAL": {
+    "prefix": ["interval"],
+    "body": [
+      "BLOCK INTERVAL ${1:5}x(${2:01:00} on/${3:01:00} off) {",
+      "  ${4:row;}",
+      "}"
+    ]
+  }
+}
+

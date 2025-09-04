@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "WODCraft",
+  "scopeName": "source.wod",
+  "patterns": [
+    { "include": "#strings" },
+    { "include": "#keywords" },
+    { "include": "#time" },
+    { "include": "#numbers" },
+    { "include": "#units" },
+    { "include": "#flags" },
+    { "include": "#punctuation" },
+    { "include": "#slots" },
+    { "include": "#ident" }
+  ],
+  "repository": {
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.wod",
+          "match": "\"[^\"]*\""
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.wod",
+          "match": "\\b(WOD|TEAM|CAP|SCORE|TRACKS|BUYIN|CASHOUT|REST|BLOCK|TRACK|TIEBREAK|WORK|PARTITION|AMRAP|EMOM|FT|RFT|CHIPPER|TABATA|INTERVAL)\\b"
+        }
+      ]
+    },
+    "time": {
+      "patterns": [
+        { "name": "constant.numeric.time.wod", "match": "\\b\\d{1,2}:\\d{2}\\b" },
+        { "name": "constant.numeric.time.wod", "match": "\\b\\d+m\\b" },
+        { "name": "constant.numeric.time.wod", "match": "\\b\\d+s\\b" }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.wod", "match": "\\b\\d+(?:\\.\\d+)?\\b" }
+      ]
+    },
+    "units": {
+      "patterns": [
+        { "name": "support.constant.unit.wod", "match": "\\b(kg|lb|cm|in|m|km|cal|%)\\b" },
+        { "name": "constant.numeric.load.wod", "match": "@\\d+(?:\\.\\d+)?(?:/(?:\\d+(?:\\.\\d+)?))?(?:kg|lb|cm|in|m|km|%)" }
+      ]
+    },
+    "flags": {
+      "patterns": [
+        { "name": "storage.modifier.flag.wod", "match": "\\bSYNC\\b" },
+        { "name": "storage.modifier.flag.wod", "match": "@shared|@each" }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        { "name": "punctuation.section.block.begin.wod", "match": "\\{" },
+        { "name": "punctuation.section.block.end.wod", "match": "\\}" },
+        { "name": "punctuation.separator.comma.wod", "match": "," },
+        { "name": "punctuation.terminator.statement.wod", "match": ";" },
+        { "name": "keyword.operator.separator.wod", "match": "/" }
+      ]
+    },
+    "slots": {
+      "patterns": [
+        { "name": "variable.parameter.slot.wod", "match": "^\\s*\\d+\\s*:" }
+      ]
+    },
+    "ident": {
+      "patterns": [
+        { "name": "identifier.wod", "match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b" }
+      ]
+    }
+  }
+}
+
