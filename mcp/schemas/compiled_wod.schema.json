@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CompiledWOD",
+  "type": "object",
+  "required": [
+    "name",
+    "mode",
+    "timecap",
+    "blocks"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "AMRAP",
+        "FORTIME",
+        "EMOM"
+      ]
+    },
+    "timecap": {
+      "type": "string",
+      "description": "e.g., 20m or 12x1m for EMOM"
+    },
+    "rounds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "moves"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "repeat": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "moves": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "reps",
+                "movement"
+              ],
+              "properties": {
+                "reps": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "movement": {
+                  "type": "string"
+                },
+                "load": {
+                  "type": "object",
+                  "properties": {
+                    "male": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "female": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    }
+                  }
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scales": {
+      "type": "object",
+      "properties": {
+        "RX": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "INTERMEDIATE": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "SCALED": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

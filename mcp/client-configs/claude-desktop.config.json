@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "wodcraft": {
+      "command": "node",
+      "args": [
+        "<ABSOLUTE_PATH_TO>/dist/server.js"
+      ]
+    }
+  }
+}

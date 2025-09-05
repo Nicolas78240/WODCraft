@@ -1,0 +1,65 @@
+{
+  "pull-up": {
+    "category": "gymnastics"
+  },
+  "push-up": {
+    "category": "gymnastics"
+  },
+  "air squat": {
+    "category": "squat"
+  },
+  "thruster": {
+    "category": "weightlifting",
+    "defaultLoad": {
+      "male": "42.5kg",
+      "female": "30kg"
+    }
+  },
+  "front squat": {
+    "category": "weightlifting",
+    "defaultLoad": {
+      "male": "60kg",
+      "female": "40kg"
+    }
+  },
+  "deadlift": {
+    "category": "weightlifting",
+    "defaultLoad": {
+      "male": "100kg",
+      "female": "70kg"
+    }
+  },
+  "kettlebell swing": {
+    "category": "weightlifting",
+    "defaultLoad": {
+      "male": "24kg",
+      "female": "16kg"
+    }
+  },
+  "dumbbell snatch": {
+    "category": "weightlifting",
+    "defaultLoad": {
+      "male": "22.5kg",
+      "female": "15kg"
+    }
+  },
+  "burpee": {
+    "category": "conditioning"
+  },
+  "box jump": {
+    "category": "plyo",
+    "defaultLoad": {
+      "male": "60cm",
+      "female": "50cm"
+    }
+  },
+  "run": {
+    "category": "mono"
+  },
+  "row": {
+    "category": "mono"
+  },
+  "bike erg": {
+    "category": "mono"
+  }
+}
