@@ -200,6 +200,7 @@ function toMarkdown(w: CompiledWOD): string {
 // ---- Resources ----
 server.registerResource(
   'movements',
+  'wodcraft://movements',
   {
     title: 'Movement Catalog',
     description: 'Basic movement catalog with default loads',
@@ -214,6 +215,7 @@ server.registerResource(
 
 server.registerResource(
   'example-basic',
+  'wodcraft://examples/basic',
   {
     title: 'Example DSL',
     description: 'A simple example of the WODCraft DSL',
@@ -228,6 +230,7 @@ server.registerResource(
 
 server.registerResource(
   'compiled-schema',
+  'wodcraft://schema/compiled?v=0.1',
   {
     title: 'Compiled WOD JSON Schema',
     description: 'JSON Schema used by compile_wod output',
@@ -242,6 +245,7 @@ server.registerResource(
 
 server.registerResource(
   'spec',
+  'wodcraft://spec',
   { title: 'WODCraft Spec', description: 'WODCraft DSL specification (source of truth)' },
   async () => {
     const fs = await import('node:fs/promises');
@@ -257,7 +261,7 @@ server.registerTool(
   {
     title: 'Generate a WOD draft',
     description: 'Create a WODCraft DSL and compiled JSON from constraints',
-    inputSchema: z.object({
+    inputSchema: {
       mode: z.enum(['AMRAP', 'FT', 'EMOM', 'RFT', 'CHIPPER']),
       duration: z.string().describe('e.g., "12:00" for AMRAP/EMOM'),
       level: z.enum(['rx', 'intermediate', 'scaled']).optional(),
@@ -265,7 +269,7 @@ server.registerTool(
       focus: z.array(z.string()).optional(),
       teamSize: z.number().int().min(1).max(6).optional(),
       name: z.string().optional(),
-    }),
+    },
   },
   async ({ mode, duration, level, equipment, focus, name, teamSize }) => {
     const dsl = generateDsl({ mode, duration, level, equipment, focus, name, teamSize });
@@ -280,7 +284,7 @@ server.registerTool(
   {
     title: 'Lint a WOD DSL',
     description: 'Run canonical linter and return structured issues',
-    inputSchema: z.object({ dsl: z.string() }),
+    inputSchema: { dsl: z.string() },
   },
   async ({ dsl }) => {
     const issues = await lintDsl(dsl);
@@ -293,7 +297,7 @@ server.registerTool(
   {
     title: 'Compile DSL to JSON',
     description: 'Parse WODCraft DSL (Lark grammar) into structured JSON',
-    inputSchema: z.object({ dsl: z.string() }),
+    inputSchema: { dsl: z.string() },
   },
   async ({ dsl }) => {
     try {
@@ -310,7 +314,7 @@ server.registerTool(
   {
     title: 'Render WOD to Markdown',
     description: 'Transform compiled JSON into Markdown',
-    inputSchema: z.object({ compiled: z.any() }),
+    inputSchema: { compiled: z.any() },
   },
   async ({ compiled }) => {
     const md = toMarkdown(compiled as CompiledWOD);
@@ -323,7 +327,7 @@ server.registerTool(
   {
     title: 'Generate scaled variants',
     description: 'Add RX / INTERMEDIATE / SCALED suggestions to a compiled WOD',
-    inputSchema: z.object({ compiled: z.any() }),
+    inputSchema: { compiled: z.any() },
   },
   async ({ compiled }) => {
     const wod = compiled as CompiledWOD;
@@ -341,19 +345,19 @@ server.registerPrompt(
   {
     title: 'Design a WOD from constraints',
     description: 'Prompt template for creating a WOD that calls draft_wod appropriately',
-    argsSchema: z.object({
+    argsSchema: {
       goals: z.string().describe("Short goals, e.g., 'engine + legs'"),
-      level: z.enum(['rx', 'intermediate', 'scaled']).default('intermediate'),
-      duration: z.string().default('20:00'),
-      equipment: z.string().default('bodyweight'),
-    }),
+      level: z.enum(['rx', 'intermediate', 'scaled']).optional(),
+      duration: z.string().optional(),
+      equipment: z.string().optional(),
+    },
   },
   ({ goals, level, duration, equipment }) => ({
     messages: [{
       role: 'user',
       content: {
         type: 'text',
-        text: `Create a Cross-Training workout (WOD) balancing ${goals}. Target: ${level}. Duration: ${duration}. Equipment: ${equipment}.
+        text: `Create a Cross-Training workout (WOD) balancing ${goals}. Target: ${level ?? 'intermediate'}. Duration: ${duration ?? '20:00'}. Equipment: ${equipment ?? 'bodyweight'}.
 Return both a WODCraft DSL (v0.1) and a JSON plan. Then provide a brief coaching tip.`
       }
     }]
