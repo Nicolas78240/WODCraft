@@ -96,5 +96,64 @@
       "}"
     ]
   }
+  ,
+  "vNext Module": {
+    "prefix": ["module"],
+    "body": [
+      "module ${1:warmup.full_body_10m} v1 {",
+      "  warmup \"${2:Title}\" {",
+      "    block \"${3:Block}\" {",
+      "      ${4:10 Air_Squats}",
+      "    }",
+      "  }",
+      "}"
+    ],
+    "description": "vNext module skeleton"
+  },
+  "vNext Session": {
+    "prefix": ["session"],
+    "body": [
+      "session \"${1:Title}\" {",
+      "  components {",
+      "    warmup import ${2:warmup.full_body_10m}@v1",
+      "  }",
+      "  scoring {",
+      "    warmup none",
+      "  }",
+      "  meta {",
+      "    track = \"${3:RX}\"",
+      "  }",
+      "}"
+    ]
+  },
+  "vNext Programming": {
+    "prefix": ["programming"],
+    "body": [
+      "programming {",
+      "  macrocycle: { name: \"${1:Pre-Open}\", weeks: ${2:12} },",
+      "  microcycles: [",
+      "    { week: 1, sessions: [ { day: 1, focus: \"W\", design: { workout: \"heavy_day\" } } ] }",
+      "  ]",
+      "}"
+    ]
+  },
+  "vNext Team": {
+    "prefix": ["team"],
+    "body": [
+      "team {",
+      "  id: \"${1:T1}\", size: ${2:2},",
+      "  members: [ { athlete_id: \"ath#1\" }, { athlete_id: \"ath#2\" } ],",
+      "  policy: { partition: \"${3:relay}\", relay_order: [\"ath#1\",\"ath#2\"] }",
+      "}"
+    ]
+  },
+  "vNext Realized": {
+    "prefix": ["realized"],
+    "body": [
+      "realized {",
+      "  scoring: \"${1:amrap_reps}\",",
+      "  events: [ { at: \"00:30\", athlete: \"ath#1\", movement: \"row_cal\", value: 10 } ]",
+      "}"
+    ]
+  }
 }
-

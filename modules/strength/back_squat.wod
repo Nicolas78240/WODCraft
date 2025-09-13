@@ -1,0 +1,21 @@
+module strength.back_squat v1 {
+  vars {
+    scheme: Enum(["5x5", "5x3", "3x5"]) = "5x5"
+    percent_1rm: Load(%1RM) = 75%1RM
+  }
+
+  @tag("strength", "squat")
+  
+  strength "Back Squat" {
+    work {
+      // The session compiler will expand scheme into sets/reps
+      // e.g. "5x5" => 5 x (5 Back_Squat @ percent_1rm)
+      sets 5 reps 5 @ percent_1rm
+    }
+    
+    cues {
+      "Knees out"
+      "Neutral spine"
+    }
+  }
+}

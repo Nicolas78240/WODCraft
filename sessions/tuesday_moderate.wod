@@ -1,0 +1,31 @@
+session "Mardi – Intensité modérée" {
+  components {
+    warmup import warmup.full_body_10m@v1
+    
+    skill import skill.snatch_technique@v1 override {
+      percent_1rm = 65%1RM
+      tempo = "32X1"
+      sets = 5
+      reps = 3
+    }
+    
+    wod import wod.triplet_bodyweight_12@v2
+  }
+
+  scoring {
+    warmup none
+    skill LoadKg best_of_sets
+    wod AMRAP rounds+reps
+  }
+
+  meta {
+    track = "Général"
+    level = ["Rx", "Scaled", "Beginner"]
+  }
+
+  exports {
+    json
+    html
+    ics
+  }
+}

@@ -1,0 +1,9 @@
+module wod.mary v1 {
+  // Mary — AMRAP 20: 5 HSPU, 10 Pistols (alt), 15 Pull-ups
+  wod AMRAP 20:00 {
+    5 Handstand_Push_ups
+    10 Pistols
+    15 Pull_ups
+  }
+}
+

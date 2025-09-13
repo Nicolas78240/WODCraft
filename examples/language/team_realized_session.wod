@@ -1,0 +1,23 @@
+session "Team AMRAP – Demo" {
+  components {}
+  scoring { wod AMRAP rounds+reps }
+
+  team {  
+    id: "T1",
+    size: 2,
+    members: [ { athlete_id: "ath#nicolas" }, { athlete_id: "ath#alex" } ],
+    policy: { partition: "relay", relay_order: ["ath#nicolas","ath#alex"] }
+  
+  }
+
+  realized {
+    scoring: "amrap_reps",
+    source: "self",
+    unit: "event",
+    events: [
+      { at: "00:20", athlete: "ath#nicolas", movement: "row_cal", value: 12 },
+      { at: "00:45", athlete: "ath#alex", movement: "row_cal", value: 10 },
+      { at: "01:10", athlete: "ath#alex", movement: "row_cal", value: 8 } // ignored (out of turn)
+    ]
+  }
+}

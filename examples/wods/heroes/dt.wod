@@ -1,0 +1,9 @@
+module wod_hero.dt v1 {
+  // DT — 5 rounds for time: 12 Deadlifts, 9 Hang Power Cleans, 6 Push Jerks (155/105 lb)
+  // Represented as ForTime; rounds implied by workout description
+  wod ForTime {
+    12 Deadlifts @155lb
+    9 Hang_Power_Cleans @155lb
+    6 Push_Jerks @155lb
+  }
+}

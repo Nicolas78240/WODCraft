@@ -1,0 +1,16 @@
+module wod_hero.murph v1 {
+  // Murph — For time: 1 mile Run, 100 Pull-ups, 200 Push-ups, 300 Air Squats, 1 mile Run (partition as desired)
+  // Optional weighted vest; configure via session override.
+  vars {
+    vest: Bool = false
+    vest_weight: Load(lb|kg) = 20lb
+  }
+  @equipment("weighted_vest")
+  wod ForTime {
+    1m Run
+    100 Pull_ups
+    200 Push_ups
+    300 Air_Squats
+    1m Run
+  }
+}

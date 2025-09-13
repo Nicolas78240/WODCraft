@@ -1,0 +1,14 @@
+module wod.triplet_bodyweight_12 v2 {
+  @tag("amrap", "bodyweight", "12min")
+  
+  wod AMRAP 12:00 {
+    10 Pull_ups
+    15 Push_ups  
+    20 Air_Squats
+  }
+  
+  score AMRAP {
+    rounds: Rounds
+    reps: Reps = 0
+  }
+}

@@ -1,0 +1,12 @@
+module wod.elizabeth v1 {
+  // Elizabeth — 21-15-9 Cleans (135/95 lb) & Ring Dips
+  wod ForTime {
+    21 Cleans @135lb
+    21 Ring_Dips
+    15 Cleans @135lb
+    15 Ring_Dips
+    9 Cleans @135lb
+    9 Ring_Dips
+  }
+}
+

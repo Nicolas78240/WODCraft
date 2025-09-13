@@ -3,12 +3,22 @@
   "displayName": "WODCraft Language Support",
   "description": "Syntax highlighting and snippets for WODCraft (.wod) DSL",
   "publisher": "local",
-  "version": "0.1.0",
+  "version": "1.4.0",
   "engines": { "vscode": "^1.74.0" },
   "categories": ["Programming Languages"],
   "main": "./extension.js",
   "activationEvents": ["onLanguage:wodcraft"],
+  "repository": {
+    "type": "git",
+    "url": "https://example.com/WODCraft.git"
+  },
   "contributes": {
+    "commands": [
+      {
+        "command": "wodcraft.openModule",
+        "title": "WODCraft: Open Module"
+      }
+    ],
     "languages": [
       {
         "id": "wodcraft",
@@ -34,20 +44,20 @@
       "type": "object",
       "title": "WODCraft",
       "properties": {
-        "wodcraft.pythonPath": {
+        "wodcraft.cliExecutable": {
           "type": "string",
-          "default": "python3",
-          "description": "Python interpreter to run the linter (use .venv/bin/python if available)."
+          "default": "wodc",
+          "description": "Unified WODCraft CLI executable name (must be in PATH)."
         },
-        "wodcraft.cliPath": {
+        "wodcraft.modulesPath": {
           "type": "string",
-          "default": "wodc_merged.py",
-          "description": "Path to the WODCraft CLI script."
+          "default": "modules",
+          "description": "Path to vNext modules directory used for session compilation and imports."
         },
         "wodcraft.catalogPath": {
           "type": "string",
-          "default": "",
-          "description": "Optional path to a movement catalog JSON used during lint."
+          "default": "data/movements_catalog.json",
+          "description": "Path to a movement catalog JSON used for autocomplete (and optionally lint)."
         },
         "wodcraft.track": {
           "type": "string",
@@ -60,6 +70,11 @@
           "enum": ["male", "female"],
           "default": "male",
           "description": "Default gender used by the linter."
+        },
+        "wodcraft.preferredAsLabel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show preferred movement name as completion label (inserts snake_case id)."
         }
       }
     }

@@ -1,0 +1,12 @@
+module wod.fran v1 {
+  // Fran — 21-15-9 Thrusters (95/65 lb) & Pull-ups
+  wod ForTime {
+    21 Thrusters @95lb
+    21 Pull_ups
+    15 Thrusters @95lb
+    15 Pull_ups
+    9 Thrusters @95lb
+    9 Pull_ups
+  }
+}
+

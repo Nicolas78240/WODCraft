@@ -1,0 +1,12 @@
+module wod.linda v1 {
+  // Linda — 10-9-...-1: Deadlift 1.5x BW, Bench Press BW, Squat Clean 0.75x BW
+  // Note: bodyweight percentages depend on athlete; prescribe loads at runtime.
+  wod ForTime {
+    // Placeholder structure; loads to be resolved per athlete context
+    10 Deadlifts
+    10 Bench_Press
+    10 Squat_Cleans
+    // ... descending reps to 1
+  }
+}
+

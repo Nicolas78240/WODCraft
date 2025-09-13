@@ -17,8 +17,15 @@ Option B — Install from folder
 
 After installation
 - `.wod` files are recognized as language `WODCraft`.
-- Syntax highlighting is enabled.
-- Type `amrap`, `emom`, `ft`, `rft`, `buyin`, `cashout`, `rest` to get snippet suggestions.
+- Syntax highlighting is enabled for legacy and language constructs (module/session/programming/team/realized/achievements).
+- Comments supported: `// line`, `/* block */`.
+- Snippets:
+  - Legacy: `amrap`, `emom`, `ft`, `rft`, `buyin`, `cashout`, `rest`.
+  - Language blocks: `module`, `session`, `programming`, `team`, `realized`.
+
+Autocomplete from catalog
+- Set `wodcraft.catalogPath` (e.g. `box_catalog.json`) in settings.
+- Movement IDs from the catalog appear in completion suggestions.
 
 ## Files
 - `package.json` — extension manifest and contributions.
@@ -29,4 +36,3 @@ After installation
 ## Notes
 - The DSL currently has no comment syntax in the grammar.
 - You can still use the formatter `wodc fmt` to normalize spacing/blank lines.
-

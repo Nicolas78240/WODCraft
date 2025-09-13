@@ -1,0 +1,5 @@
+module open.wod_14_5 v1 {
+  // Open 14.5 — placeholder (fill exact details)
+  wod ForTime { }
+}
+

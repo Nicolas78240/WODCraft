@@ -1,0 +1,8 @@
+module wod.nicole v1 {
+  // Nicole — AMRAP 20: 400m Run, max Pull-ups (track total pull-ups)
+  wod AMRAP 20:00 {
+    400m Run
+    MaxRep Pull_ups
+  }
+}
+

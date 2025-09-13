@@ -1,0 +1,7 @@
+module wod.grace v1 {
+  // Grace — For time: 30 Clean & Jerk (135/95 lb)
+  wod ForTime {
+    30 Clean_and_Jerk @135lb
+  }
+}
+

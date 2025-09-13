@@ -1,0 +1,12 @@
+module wod.amanda v1 {
+  // Amanda — 9-7-5: Muscle-ups & Squat Snatches (135/95 lb)
+  wod ForTime {
+    9 Muscle_ups
+    9 Squat_Snatches @135lb
+    7 Muscle_ups
+    7 Squat_Snatches @135lb
+    5 Muscle_ups
+    5 Squat_Snatches @135lb
+  }
+}
+

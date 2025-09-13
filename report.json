@@ -1,0 +1,153 @@
+{
+  "reports": [
+    {
+      "programming": "Yearly CrossFit Plan (12 months)",
+      "issues": [
+        {
+          "level": "warning",
+          "code": "P102",
+          "week": 1,
+          "msg": "Couplet/Triplet ratio 0.33 < 0.6"
+        },
+        {
+          "level": "warning",
+          "code": "P102",
+          "week": 2,
+          "msg": "Couplet/Triplet ratio 0.33 < 0.6"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 2,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P102",
+          "week": 3,
+          "msg": "Couplet/Triplet ratio 0.33 < 0.6"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 3,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P102",
+          "week": 4,
+          "msg": "Couplet/Triplet ratio 0.33 < 0.6"
+        },
+        {
+          "level": "warning",
+          "code": "P102",
+          "week": 5,
+          "msg": "Couplet/Triplet ratio 0.33 < 0.6"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 5,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 12,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 12,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 13,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 13,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 20,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 20,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 28,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 28,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 36,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 36,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 44,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 44,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 48,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 48,
+          "msg": "No long domain session this week"
+        },
+        {
+          "level": "warning",
+          "code": "P101",
+          "week": 52,
+          "msg": "Less than 1 heavy day"
+        },
+        {
+          "level": "info",
+          "code": "P103",
+          "week": 52,
+          "msg": "No long domain session this week"
+        }
+      ]
+    }
+  ]
+}

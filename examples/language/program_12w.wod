@@ -1,0 +1,168 @@
+programming {
+  version: "1.0",
+  macrocycle: { name: "12-Week CrossFit Plan", weeks: 12, goals: ["GPP","Strength","Skills","Engine"] },
+  mesocycles: [
+    { name: "Base", weeks: 4, focus: ["volume_moderate","movement_quality"] },
+    { name: "Build", weeks: 4, focus: ["intensity_progression","strength_focus"] },
+    { name: "Sharpen", weeks: 4, focus: ["threshold","tests_light"] }
+  ],
+  microcycles: [
+    // Pattern: 3 on / 1 off, Heavy day each week, >=1 Long per week, majority couplets/triplets
+    { week: 1,
+      template: { pattern: "3on-1off", mgw_rotation: ["M","W","G","M","W","G"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 2, focus: "W", design: { workout: "heavy_day" } },
+        { day: 3, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 6, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "G", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 2,
+      template: { pattern: "3on-1off", mgw_rotation: ["W","G","M","W","G","M"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "G", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "W", design: { workout: "heavy_day" } },
+        { day: 6, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "M", design: { workout: "engine", domain: "long" } }
+      ]
+    },
+    { week: 3,
+      template: { pattern: "3on-1off", mgw_rotation: ["G","M","W","G","M","W"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "W", design: { workout: "heavy_day" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 6, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 7, focus: "W", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 4,
+      template: { pattern: "3on-1off", mgw_rotation: ["M","W","G","M","W","G"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 2, focus: "W", design: { workout: "heavy_day" } },
+        { day: 3, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 6, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "G", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 5,
+      template: { pattern: "3on-1off", mgw_rotation: ["W","G","M","W","G","M"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "G", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "W", design: { workout: "heavy_day" } },
+        { day: 6, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "M", design: { workout: "engine", domain: "long" } }
+      ]
+    },
+    { week: 6,
+      template: { pattern: "3on-1off", mgw_rotation: ["G","M","W","G","M","W"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "W", design: { workout: "heavy_day" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 6, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 7, focus: "W", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 7,
+      template: { pattern: "3on-1off", mgw_rotation: ["M","W","G","M","W","G"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 2, focus: "W", design: { workout: "heavy_day" } },
+        { day: 3, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 6, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "G", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 8,
+      template: { pattern: "3on-1off", mgw_rotation: ["W","G","M","W","G","M"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "G", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "W", design: { workout: "heavy_day" } },
+        { day: 6, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "M", design: { workout: "engine", domain: "long" } }
+      ]
+    },
+    { week: 9,
+      template: { pattern: "3on-1off", mgw_rotation: ["G","M","W","G","M","W"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "W", design: { workout: "heavy_day" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 6, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 7, focus: "W", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 10,
+      template: { pattern: "3on-1off", mgw_rotation: ["M","W","G","M","W","G"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 2, focus: "W", design: { workout: "heavy_day" } },
+        { day: 3, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 6, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "G", design: { workout: "triplet", domain: "long" } }
+      ]
+    },
+    { week: 11,
+      template: { pattern: "3on-1off", mgw_rotation: ["W","G","M","W","G","M"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "W", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "G", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "W", design: { workout: "heavy_day" } },
+        { day: 6, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 7, focus: "M", design: { workout: "engine", domain: "long" } }
+      ]
+    },
+    { week: 12,
+      template: { pattern: "3on-1off", mgw_rotation: ["G","M","W","G","M","W"], heavy_day: true, long_domain: "1x" },
+      constraints: { couplet_triplet_ratio: ">=60%" },
+      sessions: [
+        { day: 1, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 2, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "W", design: { workout: "heavy_day" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "G", design: { workout: "triplet", domain: "medium" } },
+        { day: 6, focus: "M", design: { workout: "couplet", domain: "short" } },
+        { day: 7, focus: "W", design: { workout: "triplet", domain: "long" } }
+      ]
+    }
+  ]
+}

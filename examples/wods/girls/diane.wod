@@ -1,0 +1,12 @@
+module wod.diane v1 {
+  // Diane — 21-15-9 Deadlifts (225/155 lb) & HSPU
+  wod ForTime {
+    21 Deadlifts @225lb
+    21 Handstand_Push_ups
+    15 Deadlifts @225lb
+    15 Handstand_Push_ups
+    9 Deadlifts @225lb
+    9 Handstand_Push_ups
+  }
+}
+

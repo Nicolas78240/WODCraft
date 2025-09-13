@@ -1,0 +1,17 @@
+programming {
+  macrocycle: { name: "Pre-Open 2026", weeks: 12, goals: ["GPP","Engine"] },
+  microcycles: [
+    {
+      week: 1,
+      sessions: [
+        { day: 1, focus: "W", design: { workout: "heavy_day" } },
+        { day: 2, focus: "M", design: { workout: "couplet", domain: "medium" } },
+        { day: 3, focus: "G", design: { workout: "triplet", domain: "short" } },
+        { day: 4, rest: true },
+        { day: 5, focus: "W", design: { workout: "oly_technique", domain: "medium" } },
+        { day: 6, focus: "M", design: { workout: "long_engine", domain: "long" } },
+        { day: 7, focus: "G", design: { workout: "emom_skill", domain: "short" } }
+      ]
+    }
+  ]
+}

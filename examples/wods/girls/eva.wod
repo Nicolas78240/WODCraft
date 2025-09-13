@@ -1,0 +1,9 @@
+module wod.eva v1 {
+  // Eva — 5 rounds for time: 800m Run, 30 KB Swings (32/24 kg), 30 Pull-ups
+  // Represented as ForTime; rounds implied by workout description
+  wod ForTime {
+    800m Run
+    30 Kettlebell_Swings @32kg
+    30 Pull_ups
+  }
+}

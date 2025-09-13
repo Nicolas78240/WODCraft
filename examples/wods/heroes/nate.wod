@@ -1,0 +1,9 @@
+module wod_hero.nate v1 {
+  // Nate — AMRAP 20: 2 Muscle-ups, 4 Handstand Push-ups, 8 Kettlebell Swings (32/24 kg)
+  wod AMRAP 20:00 {
+    2 Muscle_ups
+    4 Handstand_Push_ups
+    8 Kettlebell_Swings @32kg
+  }
+}
+

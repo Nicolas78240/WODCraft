@@ -1,0 +1,7 @@
+module wod.karen v1 {
+  // Karen — For time: 150 Wall Balls (20/14 lb)
+  wod ForTime {
+    150 Wall_Balls @20lb
+  }
+}
+

@@ -1,0 +1,7 @@
+module wod.isabel v1 {
+  // Isabel — For time: 30 Snatches (135/95 lb)
+  wod ForTime {
+    30 Snatches @135lb
+  }
+}
+

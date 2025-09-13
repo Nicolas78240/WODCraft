@@ -1,0 +1,8 @@
+module wod.nancy v1 {
+  // Nancy — 5 rounds for time: 400m Run, 15 Overhead Squats (95/65 lb)
+  // Represented as ForTime; rounds implied by workout description
+  wod ForTime {
+    400m Run
+    15 Overhead_Squats @95lb
+  }
+}

@@ -1,0 +1,9 @@
+module wod_hero.michael v1 {
+  // Michael — 3 rounds for time: 800m Run, 50 Back Extensions, 50 Sit-ups
+  // Represented as ForTime; rounds implied by workout description
+  wod ForTime {
+    800m Run
+    50 Back_Extensions
+    50 Sit_ups
+  }
+}

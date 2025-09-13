@@ -1,0 +1,10 @@
+module wod_hero.holleyman v1 {
+  // Holleyman — 30 rounds for time:
+  // 5 Wall Balls (20/14 lb), 3 Handstand Push-ups, 1 Power Clean (225/155 lb)
+  wod ForTime {
+    // Movements repeated 30x each in alternating sequence
+    5 Wall_Balls @20lb
+    3 Handstand_Push_ups
+    1 Power_Clean @225lb
+  }
+}

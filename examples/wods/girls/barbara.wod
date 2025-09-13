@@ -1,0 +1,11 @@
+module wod.barbara v1 {
+  // Barbara — 5 rounds for time: 20 Pull-ups, 30 Push-ups, 40 Sit-ups, 50 Air Squats; Rest 3:00 between rounds
+  // Represented as ForTime; rounds and rests implied by workout description
+  wod ForTime {
+    20 Pull_ups
+    30 Push_ups
+    40 Sit_ups
+    50 Air_Squats
+  }
+  // Rest between rounds not encoded; handle in notes/timer
+}

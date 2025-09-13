@@ -1,0 +1,8 @@
+module wod.lynne v1 {
+  // Lynne — 5 rounds: Max reps Bodyweight Bench Press + Max reps Pull-ups (rest as needed)
+  // Represented as ForTime (rounds implied); actual scoring is max reps per set, to be handled by scoring policy.
+  wod ForTime {
+    MaxRep Bench_Press
+    MaxRep Pull_ups
+  }
+}

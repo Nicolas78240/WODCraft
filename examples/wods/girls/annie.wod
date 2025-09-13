@@ -1,0 +1,16 @@
+module wod.annie v1 {
+  // Annie — 50-40-30-20-10: Double-Unders & Sit-ups
+  wod ForTime {
+    50 Double_Unders
+    50 Sit_ups
+    40 Double_Unders
+    40 Sit_ups
+    30 Double_Unders
+    30 Sit_ups
+    20 Double_Unders
+    20 Sit_ups
+    10 Double_Unders
+    10 Sit_ups
+  }
+}
+

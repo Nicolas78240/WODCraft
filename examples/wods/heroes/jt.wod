@@ -1,0 +1,15 @@
+module wod_hero.jt v1 {
+  // JT — 21-15-9: Handstand Push-ups, Ring Dips, Push-ups
+  wod ForTime {
+    21 Handstand_Push_ups
+    21 Ring_Dips
+    21 Push_ups
+    15 Handstand_Push_ups
+    15 Ring_Dips
+    15 Push_ups
+    9 Handstand_Push_ups
+    9 Ring_Dips
+    9 Push_ups
+  }
+}
+

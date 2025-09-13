@@ -3,8 +3,10 @@
   "name": "WODCraft",
   "scopeName": "source.wod",
   "patterns": [
+    { "include": "#comments" },
     { "include": "#strings" },
     { "include": "#keywords" },
+    { "include": "#keywords_vnext" },
     { "include": "#time" },
     { "include": "#numbers" },
     { "include": "#units" },
@@ -14,6 +16,12 @@
     { "include": "#ident" }
   ],
   "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.double-slash.wod", "match": "//.*$" },
+        { "name": "comment.block.wod", "begin": "/\\*", "end": "\\*/" }
+      ]
+    },
     "strings": {
       "patterns": [
         {
@@ -28,6 +36,15 @@
           "name": "keyword.control.wod",
           "match": "\\b(WOD|TEAM|CAP|SCORE|TRACKS|BUYIN|CASHOUT|REST|BLOCK|TRACK|TIEBREAK|WORK|PARTITION|AMRAP|EMOM|FT|RFT|CHIPPER|TABATA|INTERVAL)\\b"
         }
+      ]
+    },
+    "keywords_vnext": {
+      "patterns": [
+        {
+          "name": "keyword.control.vnext.wod",
+          "match": "\\b(module|vars|warmup|skill|strength|wod|score|session|components|import|override|scoring|meta|exports|json|html|ics|programming|team|realized|achievements)\\b"
+        },
+        { "name": "storage.type.annotation.wod", "match": "@\\w+" }
       ]
     },
     "time": {
@@ -75,4 +92,3 @@
     }
   }
 }
-

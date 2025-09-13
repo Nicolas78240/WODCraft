@@ -18,4 +18,17 @@ exports/
 *.ics
 out.json
 wod.html
+*.vsix
+*.zip
 
+# Private product docs (not versioned)
+PRD*.md
+docs/private/
+
+# Local packaging secrets (do not commit)
+.pypirc
+.pypirc.local
+.pypi_token
+.env
+.env.*
+.python-version

@@ -1,0 +1,8 @@
+module wod_hero.jerry v1 {
+  // Jerry — For time: 1 mile Run, 2k Row, 1 mile Run
+  wod ForTime {
+    1600m Run
+    2000m Row
+    1600m Run
+  }
+}

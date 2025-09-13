@@ -1,0 +1,5 @@
+module open.wod_24_1 v1 {
+  // Open 24.1 — placeholder (fill exact details)
+  wod ForTime { }
+}
+

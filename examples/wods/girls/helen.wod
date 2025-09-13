@@ -1,0 +1,9 @@
+module wod.helen v1 {
+  // Helen — 3 rounds for time: 400m Run, 21 KB Swings (1.5/1 pood), 12 Pull-ups
+  // Represented as ForTime; rounds implied by workout description
+  wod ForTime {
+    400m Run
+    21 Kettlebell_Swings @24kg
+    12 Pull_ups
+  }
+}

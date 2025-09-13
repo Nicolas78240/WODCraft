@@ -1,6 +1,6 @@
 # WODCraft
 
-WODCraft est un DSL (Domain‑Specific Language) pour décrire, valider et exporter des WODs (Workouts of the Day). Il fournit un outil CLI unique pour parser, linter, simuler (timeline) et exporter (JSON/HTML/ICS) des entraînements, avec prise en charge des niveaux (RX/Scaled/Intermediate) et des genres (H/F).
+WODCraft est un DSL (Domain‑Specific Language) pour décrire, valider et exporter des WODs (Workouts of the Day). Il fournit un outil CLI unifié pour parser, linter, compiler des sessions et exporter (JSON/ICS), avec prise en charge des niveaux et genres via un catalogue de mouvements.
 
 ## Pourquoi
 - Standardiser l’écriture des WODs, lisible par les coachs et les outils.
@@ -44,14 +44,48 @@ La grammaire complète et les règles sont décrites dans WODCraft_spec.md (sour
   - `make install` (crée `.venv` et installe `requirements.txt`)
   - ou `pip install -r requirements.txt`
 
-## Utilisation CLI
-- Parser: `python3 wodc_merged.py parse team_mixer.wod -o out/out.json`
-- Lint: `python3 wodc_merged.py lint team_mixer.wod --catalog box_catalog.json --track RX --gender female`
-- Timeline (texte): `python3 wodc_merged.py run team_mixer.wod --format text`
-- Export HTML: `python3 wodc_merged.py export team_mixer.wod --to html -o out/wod.html`
-- Formatage: `python3 wodc_merged.py fmt team_mixer.wod -i`
+## Utilisation CLI (unifiée)
+- Valider: `wodc validate examples/language/team_realized_session.wod`
+- Parser: `wodc parse examples/language/team_realized_session.wod`
+- Compiler une session → JSON/ICS: `wodc session examples/language/team_realized_session.wod --modules-path modules --format json`
+- Agréger le réalisé d’équipe: `wodc results examples/language/team_realized_session.wod --modules-path modules`
+- Construire le catalogue: `wodc catalog build`
 
-Raccourcis Makefile: `make help` (parse, lint, run, export-*, demo, check-spec, fmt, venv, install).
+Raccourcis Makefile: `make help` (venv, install, test, catalog-build, vnext-validate, vnext-session, vnext-results, build-dist).
+
+## Intégration Développeur
+- Installer: `pip install wodcraft`
+- Importer le SDK: `from wodcraft import sdk`
+- Usage courant:
+
+```python
+from pathlib import Path
+from wodcraft import sdk
+
+text = Path("examples/language/team_realized_session.wod").read_text()
+
+# Valider
+ok, err = sdk.validate(text)
+if not ok:
+    raise ValueError(err)
+
+# Parser en AST (dict)
+ast = sdk.parse(text)
+
+# Compiler la première session (résolution des modules depuis ./modules)
+compiled = sdk.compile_session(text, modules_path="modules")
+
+# Exporter ICS (nécessite exports.ics dans la session)
+ics_str = sdk.export_ics(compiled)
+
+# Agréger le réalisé d’équipe si présent
+agg = sdk.results(text, modules_path="modules")
+
+# Produire un résumé timeline
+timeline = sdk.run(text, modules_path="modules")
+```
+
+La façade `sdk` offre une surface stable (sans legacy/vNext). Pour les usages avancés, les APIs de bas niveau sont sous `wodcraft.lang.core`.
 
 ## Tests
 - Lancer: `make test` ou `pytest -q`
@@ -59,8 +93,14 @@ Raccourcis Makefile: `make help` (parse, lint, run, export-*, demo, check-spec, 
 
 ## Spécification et architecture
 - Spécification DSL: voir `WODCraft_spec.md`.
-- Implémentation: `wodc_merged.py` (grammaire Lark + transformer, linter, timeline, exports, fmt).
-- Exemples: fichiers `.wod` à la racine (team_mixer, waterfall_trio, …). Catalogue: `box_catalog.json`.
+- CLI unifiée: `src/wodcraft/cli.py` (entrypoint `wodc`).
+- Cœur langage: `src/wodcraft/lang/core.py` (façade sur vNext).
+- vNext core: `wodc_vnext/core.py` (modules/sessions/types), en cours de migration sous `src/`.
+- Exemples sous `examples/` et modules sous `modules/`. Catalogue de mouvements: `data/movements_catalog.json`.
+
+## Exemples (Langage / Programmation)
+- `examples/language/programming_plan.wod`: bloc “Coach Programming” minimal
+- `examples/language/team_realized_session.wod`: session avec `team` + `realized` pour l’agrégation
 
 ## Roadmap
 - Formatter avancé (indentation/blocs), macros et shorthands (`21-15-9`).
@@ -71,4 +111,15 @@ Raccourcis Makefile: `make help` (parse, lint, run, export-*, demo, check-spec, 
 - Lisez `AGENTS.md` (conventions, structure, commandes).
 - Ouvrez des PRs focalisées avec exemples CLI et artefacts d’export.
 
-© WODCraft — 2025
+## 📜 License
+
+- **Code (DSL, outils, générateurs)** : [Apache 2.0](./LICENSE)  
+- **Contenus (docs, liste de mouvements, exemples, images/vidéos)** : [CC-BY-SA 4.0](./LICENSE-docs)  
+
+En résumé :  
+Vous pouvez utiliser librement WODCraft dans vos projets, y compris commerciaux, tant que vous citez la source.  
+Les contenus (mouvements, docs, etc.) doivent rester ouverts et sous la même licence CC-BY-SA.
+
+---
+
+© 2025 Nicolas Caussin - caussin@aumana-consulting.com

@@ -1,0 +1,22 @@
+module skill.snatch_technique v1 {
+  vars {
+    percent_1rm: Load(%1RM) = 60%1RM [min=30%1RM, max=80%1RM]
+    tempo: Tempo = "31X1" [pattern="^[0-9X]{4}$"]
+    sets: Int = 5 [min=3, max=8]
+    reps: Int = 3 [min=1, max=5]
+  }
+
+  @tag("oly", "snatch", "technique")
+  
+  skill "Snatch Technique" {
+    work {
+      sets sets reps reps @ percent_1rm
+      tempo tempo
+    }
+    
+    cues {
+      "Speed under the bar"
+      "Vertical pull"
+    }
+  }
+}

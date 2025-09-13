@@ -42,7 +42,7 @@ BLOCK AMRAP 12:00 WORK split:any {
 
 ## 🔧 Outillage CLI
 
-Le binaire `wodc_merged.py` fournit :
+Le binaire `wodc` fournit :
 
 - `parse` → transforme un fichier `.wod` en AST JSON.  
 - `lint` → vérifie la validité et signale les incohérences (alias, charges douteuses, mouvements inconnus).  
@@ -51,22 +51,22 @@ Le binaire `wodc_merged.py` fournit :
 
 ### Exemples
 ```bash
-# Lint avec catalog et track/gender
-python wodc_merged.py lint examples/team_mixer.wod   --catalog box_catalog.json --track RX --gender female
+# Lint programmation (langage)
+wodc lint examples/language/program_12w.wod
 
-# Run en timeline JSON
-python wodc_merged.py run examples/team_mixer.wod   --catalog box_catalog.json --track RX --gender female --format json
+# Compiler une session (langage)
+wodc session examples/language/team_realized_session.wod --modules-path modules --format json
 
-# Export HTML
-python wodc_merged.py export examples/team_mixer.wod   --to html -o team_mixer.html   --catalog box_catalog.json --track RX --gender female
+# Construire le catalogue
+wodc catalog build
 ```
 
 ---
 
 ## 📂 Fichiers du projet
-- `wodc_merged.py` → CLI principale (parse, lint, run, export).
+- `wodc` → CLI unifiée (parse, lint, validate, session, results, catalog build).
 - `box_catalog.json` → catalog de mouvements avec standards RX/Scaled et H/F.
-- `examples/*.wod` → exemples de WODs (team_mixer, waterfall_trio, synchro_emom…).  
+- `examples/language/*.wod` → exemples de programmation/sessions/realized.
 - `exports/*.html|ics` → exemples d’exports.
 
 ---

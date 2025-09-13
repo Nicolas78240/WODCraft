@@ -1,0 +1,7 @@
+module wod_hero.randy v1 {
+  // Randy — For time: 75 Power Snatches (75/55 lb)
+  wod ForTime {
+    75 Power_Snatches @75lb
+  }
+}
+

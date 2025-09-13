@@ -1,0 +1,1428 @@
+{
+  "movements": {
+    "thrusters": {
+      "load": {
+        "rx": {
+          "male": "43kg",
+          "female": "30kg"
+        },
+        "intermediate": {
+          "male": "35kg",
+          "female": "25kg"
+        },
+        "scaled": {
+          "male": "25kg",
+          "female": "15kg"
+        }
+      },
+      "category": "weightlifting",
+      "aliases": [
+        "Thruster",
+        "Thrusters",
+        "thruster",
+        "thrusters"
+      ],
+      "preferred": "Thrusters"
+    },
+    "row": {
+      "cal": {
+        "rx": {
+          "male": 15,
+          "female": 12
+        },
+        "intermediate": {
+          "male": 12,
+          "female": 10
+        },
+        "scaled": {
+          "male": 10,
+          "female": 8
+        }
+      },
+      "distance": {
+        "rx": {
+          "male": 500,
+          "female": 400
+        }
+      },
+      "category": "mono",
+      "aliases": [
+        "Row",
+        "row",
+        "row_cal",
+        "rowing"
+      ],
+      "preferred": "Row"
+    },
+    "run": {
+      "distance": {
+        "rx": {
+          "male": 400,
+          "female": 300
+        },
+        "scaled": {
+          "male": 300,
+          "female": 200
+        }
+      },
+      "category": "mono",
+      "aliases": [
+        "Run",
+        "run",
+        "running"
+      ],
+      "preferred": "Run"
+    },
+    "box_jumps": {
+      "load": {
+        "rx": {
+          "male": "24in",
+          "female": "20in"
+        }
+      },
+      "category": "conditioning",
+      "aliases": [
+        "Box Jump",
+        "Box Jumps",
+        "box jump-over",
+        "box jumps",
+        "box-jumps",
+        "box_jumps"
+      ],
+      "preferred": "Box Jumps"
+    },
+    "pull_up": {
+      "category": "gymnastics",
+      "aliases": [
+        "Pull Up",
+        "pull up",
+        "pull-up",
+        "pull_up"
+      ],
+      "preferred": "Pull Up"
+    },
+    "push_up": {
+      "category": "gymnastics",
+      "aliases": [
+        "Push Up",
+        "push up",
+        "push-up",
+        "push_up"
+      ],
+      "preferred": "Push Up"
+    },
+    "air_squat": {
+      "category": "squat",
+      "aliases": [
+        "Air Squat",
+        "air squat",
+        "air-squat",
+        "air_squat"
+      ],
+      "preferred": "Air Squat"
+    },
+    "thruster": {
+      "category": "weightlifting",
+      "defaults": {
+        "defaultLoad": {
+          "male": "42.5kg",
+          "female": "30kg"
+        }
+      },
+      "aliases": [
+        "Thruster",
+        "thruster"
+      ],
+      "preferred": "Thruster"
+    },
+    "front_squat": {
+      "category": "weightlifting",
+      "defaults": {
+        "defaultLoad": {
+          "male": "60kg",
+          "female": "40kg"
+        }
+      },
+      "aliases": [
+        "Front Squat",
+        "front squat",
+        "front-squat",
+        "front_squat"
+      ],
+      "preferred": "Front Squat"
+    },
+    "deadlift": {
+      "category": "weightlifting",
+      "defaults": {
+        "defaultLoad": {
+          "male": "100kg",
+          "female": "70kg"
+        }
+      },
+      "aliases": [
+        "Deadlift",
+        "deadlift"
+      ],
+      "preferred": "Deadlift"
+    },
+    "kettlebell_swing": {
+      "category": "weightlifting",
+      "defaults": {
+        "defaultLoad": {
+          "male": "24kg",
+          "female": "16kg"
+        }
+      },
+      "aliases": [
+        "Kettlebell Swing",
+        "kettlebell swing",
+        "kettlebell-swing",
+        "kettlebell_swing"
+      ],
+      "preferred": "Kettlebell Swing"
+    },
+    "dumbbell_snatch": {
+      "category": "weightlifting",
+      "defaults": {
+        "defaultLoad": {
+          "male": "22.5kg",
+          "female": "15kg"
+        }
+      },
+      "aliases": [
+        "Dumbbell Snatch",
+        "dumbbell snatch",
+        "dumbbell-snatch",
+        "dumbbell_snatch"
+      ],
+      "preferred": "Dumbbell Snatch"
+    },
+    "burpee": {
+      "category": "conditioning",
+      "aliases": [
+        "Burpee",
+        "burpee"
+      ],
+      "preferred": "Burpee"
+    },
+    "box_jump": {
+      "category": "plyo",
+      "defaults": {
+        "defaultLoad": {
+          "male": "60cm",
+          "female": "50cm"
+        }
+      },
+      "aliases": [
+        "Box Jump",
+        "box jump",
+        "box-jump",
+        "box_jump"
+      ],
+      "preferred": "Box Jump"
+    },
+    "bike_erg": {
+      "category": "mono",
+      "aliases": [
+        "Bike",
+        "Bike Erg",
+        "air bike",
+        "assault bike",
+        "bike erg",
+        "bike-erg",
+        "bike_erg",
+        "echo bike"
+      ],
+      "preferred": "Bike Erg"
+    },
+    "snatch": {
+      "category": "weightlifting",
+      "aliases": [
+        "Snatch",
+        "power snatch",
+        "snatch",
+        "squat snatch"
+      ],
+      "preferred": "Snatch"
+    },
+    "clean_and_jerk": {
+      "category": "weightlifting",
+      "aliases": [
+        "C&J",
+        "Clean & Jerk",
+        "Clean And Jerk",
+        "clean and jerk",
+        "clean-and-jerk",
+        "clean_and_jerk"
+      ],
+      "preferred": "Clean And Jerk"
+    },
+    "clean": {
+      "category": "weightlifting",
+      "aliases": [
+        "Clean",
+        "clean",
+        "power clean",
+        "squat clean"
+      ],
+      "preferred": "Clean"
+    },
+    "jerk": {
+      "category": "weightlifting",
+      "aliases": [
+        "Jerk",
+        "jerk",
+        "push jerk",
+        "split jerk"
+      ],
+      "preferred": "Jerk"
+    },
+    "push_press": {
+      "category": "weightlifting",
+      "aliases": [
+        "Push Press",
+        "push press",
+        "push-press",
+        "push_press"
+      ],
+      "preferred": "Push Press"
+    },
+    "strict_press": {
+      "category": "weightlifting",
+      "aliases": [
+        "Strict Press",
+        "press",
+        "shoulder press",
+        "strict press",
+        "strict-press",
+        "strict_press"
+      ],
+      "preferred": "Strict Press"
+    },
+    "deadlifts": {
+      "category": "weightlifting",
+      "aliases": [
+        "Deadlift",
+        "Deadlifts",
+        "deadlift",
+        "deadlifts"
+      ],
+      "preferred": "Deadlifts"
+    },
+    "sumo_deadlift_high_pull": {
+      "category": "weightlifting",
+      "aliases": [
+        "SDHP",
+        "Sumo Deadlift High Pull",
+        "sumo DL high pull",
+        "sumo deadlift high pull",
+        "sumo-deadlift-high-pull",
+        "sumo_deadlift_high_pull"
+      ],
+      "preferred": "Sumo Deadlift High Pull"
+    },
+    "front_squats": {
+      "category": "weightlifting",
+      "aliases": [
+        "Front Squat",
+        "Front Squats",
+        "front squat",
+        "front squats",
+        "front-squats",
+        "front_squats"
+      ],
+      "preferred": "Front Squats"
+    },
+    "back_squats": {
+      "category": "weightlifting",
+      "aliases": [
+        "Back Squat",
+        "Back Squats",
+        "back squat",
+        "back squats",
+        "back-squats",
+        "back_squats"
+      ],
+      "preferred": "Back Squats"
+    },
+    "overhead_squats": {
+      "category": "weightlifting",
+      "aliases": [
+        "OHS",
+        "Overhead Squat",
+        "Overhead Squats",
+        "overhead squat",
+        "overhead squats",
+        "overhead-squats",
+        "overhead_squats"
+      ],
+      "preferred": "Overhead Squats"
+    },
+    "wall_balls": {
+      "category": "conditioning",
+      "aliases": [
+        "WB",
+        "Wall Ball",
+        "Wall Balls",
+        "wall ball shots",
+        "wall balls",
+        "wall-balls",
+        "wall_balls"
+      ],
+      "preferred": "Wall Balls"
+    },
+    "kettlebell_swings": {
+      "category": "weightlifting",
+      "aliases": [
+        "KB Swing",
+        "Kettlebell Swings",
+        "american swing",
+        "kettlebell swings",
+        "kettlebell-swings",
+        "kettlebell_swings",
+        "russian swing"
+      ],
+      "preferred": "Kettlebell Swings"
+    },
+    "goblet_squats": {
+      "category": "weightlifting",
+      "aliases": [
+        "Goblet Squat",
+        "Goblet Squats",
+        "goblet squats",
+        "goblet-squats",
+        "goblet_squats"
+      ],
+      "preferred": "Goblet Squats"
+    },
+    "dumbbell_snatches": {
+      "category": "weightlifting",
+      "aliases": [
+        "DB Snatch",
+        "Dumbbell Snatches",
+        "dumbbell snatch",
+        "dumbbell snatches",
+        "dumbbell-snatches",
+        "dumbbell_snatches"
+      ],
+      "preferred": "Dumbbell Snatches"
+    },
+    "dumbbell_thrusters": {
+      "category": "weightlifting",
+      "aliases": [
+        "DB Thruster",
+        "Dumbbell Thrusters",
+        "dumbbell thruster",
+        "dumbbell thrusters",
+        "dumbbell-thrusters",
+        "dumbbell_thrusters"
+      ],
+      "preferred": "Dumbbell Thrusters"
+    },
+    "dumbbell_cleans": {
+      "category": "weightlifting",
+      "aliases": [
+        "DB Clean",
+        "DB power clean",
+        "Dumbbell Cleans",
+        "dumbbell clean",
+        "dumbbell cleans",
+        "dumbbell-cleans",
+        "dumbbell_cleans"
+      ],
+      "preferred": "Dumbbell Cleans"
+    },
+    "push_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "Push Ups",
+        "Push-ups",
+        "push ups",
+        "push-ups",
+        "push_ups",
+        "pushup"
+      ],
+      "preferred": "Push Ups"
+    },
+    "pull_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "Pull Ups",
+        "Pull-ups",
+        "kipping pull-ups",
+        "pull ups",
+        "pull-ups",
+        "pull_ups",
+        "pullups",
+        "strict pull-ups"
+      ],
+      "preferred": "Pull Ups"
+    },
+    "chest_to_bar_pull_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "C2B",
+        "Chest To Bar Pull Ups",
+        "Chest-to-bar",
+        "chest to bar",
+        "chest to bar pull ups",
+        "chest-to-bar-pull-ups",
+        "chest_to_bar_pull_ups"
+      ],
+      "preferred": "Chest To Bar Pull Ups"
+    },
+    "bar_muscle_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "BMU",
+        "Bar Muscle Ups",
+        "bar muscle ups",
+        "bar muscle-up",
+        "bar-muscle-ups",
+        "bar_muscle_ups"
+      ],
+      "preferred": "Bar Muscle Ups"
+    },
+    "ring_muscle_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "RMU",
+        "Ring Muscle Ups",
+        "ring muscle ups",
+        "ring muscle-up",
+        "ring-muscle-ups",
+        "ring_muscle_ups"
+      ],
+      "preferred": "Ring Muscle Ups"
+    },
+    "handstand_push_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "HSPU",
+        "Handstand Push Ups",
+        "handstand push ups",
+        "handstand-push-ups",
+        "handstand_push_ups",
+        "kipping HSPU",
+        "strict HSPU"
+      ],
+      "preferred": "Handstand Push Ups"
+    },
+    "handstand_walk": {
+      "category": "gymnastics",
+      "aliases": [
+        "HS Walk",
+        "Handstand Walk",
+        "handstand walk",
+        "handstand walking",
+        "handstand-walk",
+        "handstand_walk"
+      ],
+      "preferred": "Handstand Walk"
+    },
+    "toes_to_bar": {
+      "category": "gymnastics",
+      "aliases": [
+        "TTB",
+        "Toes To Bar",
+        "toes to bar",
+        "toes-to-bar",
+        "toes_to_bar"
+      ],
+      "preferred": "Toes To Bar"
+    },
+    "knees_to_elbows": {
+      "category": "gymnastics",
+      "aliases": [
+        "K2E",
+        "Knees To Elbows",
+        "knees to elbows",
+        "knees-to-elbows",
+        "knees_to_elbows"
+      ],
+      "preferred": "Knees To Elbows"
+    },
+    "sit_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "GHD sit-ups",
+        "Sit Ups",
+        "Sit-ups",
+        "sit ups",
+        "sit-ups",
+        "sit_ups",
+        "v-ups"
+      ],
+      "preferred": "Sit Ups"
+    },
+    "ghd_sit_ups": {
+      "category": "gymnastics",
+      "aliases": [
+        "GHD Sit-ups",
+        "Ghd Sit Ups",
+        "ghd sit ups",
+        "ghd-sit-ups",
+        "ghd_sit_ups"
+      ],
+      "preferred": "Ghd Sit Ups"
+    },
+    "pistols": {
+      "category": "gymnastics",
+      "aliases": [
+        "Pistol Squat",
+        "Pistols",
+        "pistols",
+        "single-leg squat"
+      ],
+      "preferred": "Pistols"
+    },
+    "lunges": {
+      "category": "weightlifting",
+      "aliases": [
+        "DB lunge",
+        "Lunge",
+        "Lunges",
+        "lunges",
+        "overhead lunge",
+        "walking lunge"
+      ],
+      "preferred": "Lunges"
+    },
+    "rope_climbs": {
+      "category": "gymnastics",
+      "aliases": [
+        "Rope Climb",
+        "Rope Climbs",
+        "legless rope climb",
+        "rope climbs",
+        "rope-climbs",
+        "rope_climbs"
+      ],
+      "preferred": "Rope Climbs"
+    },
+    "double_unders": {
+      "category": "mono",
+      "aliases": [
+        "DU",
+        "Double Unders",
+        "double unders",
+        "double-unders",
+        "double_unders"
+      ],
+      "preferred": "Double Unders"
+    },
+    "single_unders": {
+      "category": "mono",
+      "aliases": [
+        "SU",
+        "Single Unders",
+        "single unders",
+        "single-unders",
+        "single_unders"
+      ],
+      "preferred": "Single Unders"
+    },
+    "burpees": {
+      "category": "conditioning",
+      "aliases": [
+        "Burpee",
+        "Burpees",
+        "burpee box jump-over",
+        "burpee over bar",
+        "burpees"
+      ],
+      "preferred": "Burpees"
+    },
+    "ski_erg": {
+      "category": "mono",
+      "aliases": [
+        "Ski",
+        "Ski Erg",
+        "ski erg",
+        "ski-erg",
+        "ski_erg"
+      ],
+      "preferred": "Ski Erg"
+    },
+    "bench_press": {
+      "category": "weightlifting",
+      "aliases": [
+        "Bench",
+        "Bench Press",
+        "bench",
+        "bench press",
+        "bench-press",
+        "bench_press"
+      ],
+      "preferred": "Bench Press"
+    },
+    "shoulder_to_overhead": {
+      "category": "weightlifting",
+      "aliases": [
+        "S2OH",
+        "Shoulder To Overhead",
+        "push jerk",
+        "push press",
+        "shoulder to overhead",
+        "shoulder-to-overhead",
+        "shoulder_to_overhead",
+        "split jerk"
+      ],
+      "preferred": "Shoulder To Overhead"
+    },
+    "power_cleans": {
+      "category": "weightlifting",
+      "aliases": [
+        "Power Clean",
+        "Power Cleans",
+        "power cleans",
+        "power-cleans",
+        "power_cleans"
+      ],
+      "preferred": "Power Cleans"
+    },
+    "squat_cleans": {
+      "category": "weightlifting",
+      "aliases": [
+        "Squat Clean",
+        "Squat Cleans",
+        "squat cleans",
+        "squat-cleans",
+        "squat_cleans"
+      ],
+      "preferred": "Squat Cleans"
+    },
+    "power_snatches": {
+      "category": "weightlifting",
+      "aliases": [
+        "Power Snatch",
+        "Power Snatches",
+        "power snatches",
+        "power-snatches",
+        "power_snatches"
+      ],
+      "preferred": "Power Snatches"
+    },
+    "squat_snatches": {
+      "category": "weightlifting",
+      "aliases": [
+        "Squat Snatch",
+        "Squat Snatches",
+        "squat snatches",
+        "squat-snatches",
+        "squat_snatches"
+      ],
+      "preferred": "Squat Snatches"
+    },
+    "oh_lunge": {
+      "category": "weightlifting",
+      "aliases": [
+        "Oh Lunge",
+        "Overhead Lunge",
+        "oh lunge",
+        "oh-lunge",
+        "oh_lunge"
+      ],
+      "preferred": "Oh Lunge"
+    },
+    "farmers_carry": {
+      "category": "conditioning",
+      "aliases": [
+        "Farmer Carry",
+        "Farmers Carry",
+        "farmers carry",
+        "farmers walk",
+        "farmers-carry",
+        "farmers_carry"
+      ],
+      "preferred": "Farmers Carry"
+    },
+    "sandbag_carry": {
+      "category": "conditioning",
+      "aliases": [
+        "Sandbag Carry",
+        "sandbag carry",
+        "sandbag-carry",
+        "sandbag_carry"
+      ],
+      "preferred": "Sandbag Carry"
+    },
+    "med_ball_clean": {
+      "category": "weightlifting",
+      "aliases": [
+        "Med Ball Clean",
+        "Medicine Ball Clean",
+        "med ball clean",
+        "med-ball-clean",
+        "med_ball_clean"
+      ],
+      "preferred": "Med Ball Clean"
+    },
+    "ring_dips": {
+      "category": "gymnastics",
+      "aliases": [
+        "Ring Dips",
+        "ring dips",
+        "ring-dips",
+        "ring_dips"
+      ],
+      "preferred": "Ring Dips"
+    },
+    "push_jerks": {
+      "category": "weightlifting",
+      "aliases": [
+        "Push Jerk",
+        "Push Jerks",
+        "push jerks",
+        "push-jerks",
+        "push_jerks"
+      ],
+      "preferred": "Push Jerks"
+    },
+    "split_jerks": {
+      "category": "weightlifting",
+      "aliases": [
+        "Split Jerk",
+        "Split Jerks",
+        "split jerks",
+        "split-jerks",
+        "split_jerks"
+      ],
+      "preferred": "Split Jerks"
+    },
+    "cluster": {
+      "category": "weightlifting",
+      "aliases": [
+        "Cluster",
+        "cluster",
+        "squat clean thruster"
+      ],
+      "preferred": "Cluster"
+    },
+    "bear_complex": {
+      "category": "weightlifting",
+      "aliases": [
+        "Bear Complex",
+        "bear complex",
+        "bear-complex",
+        "bear_complex"
+      ],
+      "preferred": "Bear Complex"
+    },
+    "back_extensions": {
+      "category": "gymnastics",
+      "aliases": [
+        "Back Extensions",
+        "back extensions",
+        "back-extensions",
+        "back_extensions",
+        "hip extension"
+      ],
+      "preferred": "Back Extensions"
+    },
+    "sit_to_stand": {
+      "category": "gymnastics",
+      "aliases": [
+        "Sit To Stand",
+        "Sit to stand",
+        "sit to stand",
+        "sit-to-stand",
+        "sit_to_stand"
+      ],
+      "preferred": "Sit To Stand"
+    },
+    "jumping_jacks": {
+      "category": "conditioning",
+      "aliases": [
+        "Jumping Jacks",
+        "jumping jacks",
+        "jumping-jacks",
+        "jumping_jacks"
+      ],
+      "preferred": "Jumping Jacks"
+    },
+    "pvc_pass_through": {
+      "category": "mobility",
+      "aliases": [
+        "PVC Pass-Through",
+        "Pvc Pass Through",
+        "pass through",
+        "pvc pass through",
+        "pvc-pass-through",
+        "pvc_pass_through",
+        "shoulder pass-through"
+      ],
+      "preferred": "Pvc Pass Through"
+    },
+    "hip_hinge_with_pvc": {
+      "category": "activation",
+      "aliases": [
+        "Hip Hinge With Pvc",
+        "Hip Hinge with PVC",
+        "PVC hip hinge",
+        "hip hinge with pvc",
+        "hip-hinge-with-pvc",
+        "hip_hinge_with_pvc"
+      ],
+      "preferred": "Hip Hinge With Pvc"
+    },
+    "scap_pull_ups": {
+      "category": "activation",
+      "aliases": [
+        "Scap Pull Ups",
+        "Scap Pull-ups",
+        "scap pull ups",
+        "scap-pull-ups",
+        "scap_pull_ups",
+        "scapular pull-ups"
+      ],
+      "preferred": "Scap Pull Ups"
+    },
+    "banded_face_pulls": {
+      "category": "activation",
+      "aliases": [
+        "Banded Face Pulls",
+        "banded face pulls",
+        "banded-face-pulls",
+        "banded_face_pulls",
+        "face pulls"
+      ],
+      "preferred": "Banded Face Pulls"
+    },
+    "dead_hang": {
+      "category": "mobility",
+      "aliases": [
+        "Dead Hang",
+        "bar hang",
+        "dead hang",
+        "dead-hang",
+        "dead_hang"
+      ],
+      "preferred": "Dead Hang"
+    },
+    "inchworms": {
+      "category": "activation",
+      "aliases": [
+        "Inchworm",
+        "Inchworms",
+        "inchworm walkout",
+        "inchworms"
+      ],
+      "preferred": "Inchworms"
+    },
+    "arm_circles": {
+      "category": "activation",
+      "aliases": [
+        "Arm Circles",
+        "arm circles",
+        "arm-circles",
+        "arm_circles"
+      ],
+      "preferred": "Arm Circles"
+    },
+    "shoulder_taps": {
+      "category": "activation",
+      "aliases": [
+        "Shoulder Taps",
+        "plank shoulder taps",
+        "shoulder taps",
+        "shoulder-taps",
+        "shoulder_taps"
+      ],
+      "preferred": "Shoulder Taps"
+    },
+    "hip_openers": {
+      "category": "mobility",
+      "aliases": [
+        "Hip Openers",
+        "hip opener",
+        "hip openers",
+        "hip-openers",
+        "hip_openers"
+      ],
+      "preferred": "Hip Openers"
+    },
+    "worlds_greatest_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "World's Greatest Stretch",
+        "Worlds Greatest Stretch",
+        "wgs",
+        "worlds greatest stretch",
+        "worlds-greatest-stretch",
+        "worlds_greatest_stretch"
+      ],
+      "preferred": "Worlds Greatest Stretch"
+    },
+    "samson_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Samson Stretch",
+        "samson stretch",
+        "samson-stretch",
+        "samson_stretch"
+      ],
+      "preferred": "Samson Stretch"
+    },
+    "couch_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Couch Stretch",
+        "couch stretch",
+        "couch-stretch",
+        "couch_stretch"
+      ],
+      "preferred": "Couch Stretch"
+    },
+    "quad_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Quad Stretch",
+        "quad stretch",
+        "quad-stretch",
+        "quad_stretch",
+        "quadriceps stretch"
+      ],
+      "preferred": "Quad Stretch"
+    },
+    "hamstring_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Hamstring Stretch",
+        "hamstring stretch",
+        "hamstring-stretch",
+        "hamstring_stretch"
+      ],
+      "preferred": "Hamstring Stretch"
+    },
+    "hip_flexor_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Hip Flexor Stretch",
+        "hip flexor stretch",
+        "hip-flexor-stretch",
+        "hip_flexor_stretch"
+      ],
+      "preferred": "Hip Flexor Stretch"
+    },
+    "calf_stretch": {
+      "category": "mobility",
+      "aliases": [
+        "Calf Stretch",
+        "calf stretch",
+        "calf-stretch",
+        "calf_stretch"
+      ],
+      "preferred": "Calf Stretch"
+    },
+    "ankle_mobility": {
+      "category": "mobility",
+      "aliases": [
+        "Ankle Mobility",
+        "ankle dorsiflexion drill",
+        "ankle mobility",
+        "ankle-mobility",
+        "ankle_mobility"
+      ],
+      "preferred": "Ankle Mobility"
+    },
+    "cat_cow": {
+      "category": "mobility",
+      "aliases": [
+        "Cat Cow",
+        "Cat-Cow",
+        "cat cow",
+        "cat-cow",
+        "cat_cow"
+      ],
+      "preferred": "Cat Cow"
+    },
+    "thoracic_rotations": {
+      "category": "mobility",
+      "aliases": [
+        "T-spine rotation",
+        "Thoracic Rotations",
+        "thoracic rotations",
+        "thoracic-rotations",
+        "thoracic_rotations"
+      ],
+      "preferred": "Thoracic Rotations"
+    },
+    "hollow_hold": {
+      "category": "activation",
+      "aliases": [
+        "Hollow Hold",
+        "hollow hold",
+        "hollow-hold",
+        "hollow_hold"
+      ],
+      "preferred": "Hollow Hold"
+    },
+    "arch_hold": {
+      "category": "activation",
+      "aliases": [
+        "Arch Hold",
+        "arch hold",
+        "arch-hold",
+        "arch_hold",
+        "superman hold"
+      ],
+      "preferred": "Arch Hold"
+    },
+    "plank": {
+      "category": "activation",
+      "aliases": [
+        "Plank",
+        "plank"
+      ],
+      "preferred": "Plank"
+    },
+    "side_plank": {
+      "category": "activation",
+      "aliases": [
+        "Side Plank",
+        "side plank",
+        "side-plank",
+        "side_plank"
+      ],
+      "preferred": "Side Plank"
+    },
+    "glute_bridge": {
+      "category": "activation",
+      "aliases": [
+        "Glute Bridge",
+        "glute bridge",
+        "glute-bridge",
+        "glute_bridge",
+        "hip bridge"
+      ],
+      "preferred": "Glute Bridge"
+    },
+    "bird_dog": {
+      "category": "activation",
+      "aliases": [
+        "Bird Dog",
+        "bird dog",
+        "bird-dog",
+        "bird_dog"
+      ],
+      "preferred": "Bird Dog"
+    },
+    "banded_pull_aparts": {
+      "category": "activation",
+      "aliases": [
+        "Banded Pull Aparts",
+        "Banded Pull-aparts",
+        "band pull-aparts",
+        "banded pull aparts",
+        "banded-pull-aparts",
+        "banded_pull_aparts"
+      ],
+      "preferred": "Banded Pull Aparts"
+    },
+    "banded_external_rotations": {
+      "category": "activation",
+      "aliases": [
+        "Banded External Rotations",
+        "ER band",
+        "banded external rotations",
+        "banded-external-rotations",
+        "banded_external_rotations"
+      ],
+      "preferred": "Banded External Rotations"
+    },
+    "cuban_rotations": {
+      "category": "activation",
+      "aliases": [
+        "Cuban Rotations",
+        "cuban rotations",
+        "cuban-rotations",
+        "cuban_rotations"
+      ],
+      "preferred": "Cuban Rotations"
+    },
+    "wall_slides": {
+      "category": "mobility",
+      "aliases": [
+        "Wall Slides",
+        "wall slides",
+        "wall-slides",
+        "wall_slides"
+      ],
+      "preferred": "Wall Slides"
+    },
+    "y_tw_l_raises": {
+      "category": "activation",
+      "aliases": [
+        "Y Tw L Raises",
+        "Y-T-W-L Raises",
+        "YTWL",
+        "y tw l raises",
+        "y-tw-l-raises",
+        "y_tw_l_raises"
+      ],
+      "preferred": "Y Tw L Raises"
+    },
+    "snatch_balance_drill": {
+      "category": "skill",
+      "aliases": [
+        "Snatch Balance Drill",
+        "snatch balance drill",
+        "snatch-balance-drill",
+        "snatch_balance_drill"
+      ],
+      "preferred": "Snatch Balance Drill"
+    },
+    "overhead_squat_pvc": {
+      "category": "skill",
+      "aliases": [
+        "Overhead Squat PVC",
+        "Overhead Squat Pvc",
+        "PVC OHS",
+        "overhead squat pvc",
+        "overhead-squat-pvc",
+        "overhead_squat_pvc"
+      ],
+      "preferred": "Overhead Squat Pvc"
+    },
+    "empty_bar_front_squat": {
+      "category": "skill",
+      "aliases": [
+        "Empty Bar Front Squat",
+        "empty bar front squat",
+        "empty-bar-front-squat",
+        "empty_bar_front_squat"
+      ],
+      "preferred": "Empty Bar Front Squat"
+    },
+    "empty_bar_press": {
+      "category": "skill",
+      "aliases": [
+        "Empty Bar Press",
+        "empty bar press",
+        "empty bar strict press",
+        "empty-bar-press",
+        "empty_bar_press"
+      ],
+      "preferred": "Empty Bar Press"
+    },
+    "empty_bar_snatch": {
+      "category": "skill",
+      "aliases": [
+        "Empty Bar Snatch",
+        "empty bar snatch",
+        "empty-bar-snatch",
+        "empty_bar_snatch"
+      ],
+      "preferred": "Empty Bar Snatch"
+    },
+    "empty_bar_clean": {
+      "category": "skill",
+      "aliases": [
+        "Empty Bar Clean",
+        "empty bar clean",
+        "empty-bar-clean",
+        "empty_bar_clean"
+      ],
+      "preferred": "Empty Bar Clean"
+    },
+    "good_mornings": {
+      "category": "activation",
+      "aliases": [
+        "Good Mornings",
+        "good mornings",
+        "good-mornings",
+        "good_mornings"
+      ],
+      "preferred": "Good Mornings"
+    },
+    "romanian_deadlift": {
+      "category": "activation",
+      "aliases": [
+        "RDL",
+        "Romanian Deadlift",
+        "romanian deadlift",
+        "romanian-deadlift",
+        "romanian_deadlift"
+      ],
+      "preferred": "Romanian Deadlift"
+    },
+    "hip_thrust": {
+      "category": "activation",
+      "aliases": [
+        "Hip Thrust",
+        "hip thrust",
+        "hip-thrust",
+        "hip_thrust"
+      ],
+      "preferred": "Hip Thrust"
+    },
+    "pogo_hops": {
+      "category": "activation",
+      "aliases": [
+        "Pogo Hops",
+        "ankle pogo",
+        "pogo hops",
+        "pogo-hops",
+        "pogo_hops"
+      ],
+      "preferred": "Pogo Hops"
+    },
+    "high_knees": {
+      "category": "activation",
+      "aliases": [
+        "High Knees",
+        "high knees",
+        "high-knees",
+        "high_knees"
+      ],
+      "preferred": "High Knees"
+    },
+    "butt_kicks": {
+      "category": "activation",
+      "aliases": [
+        "Butt Kicks",
+        "butt kicks",
+        "butt-kicks",
+        "butt_kicks"
+      ],
+      "preferred": "Butt Kicks"
+    },
+    "side_shuffles": {
+      "category": "activation",
+      "aliases": [
+        "Side Shuffles",
+        "lateral shuffle",
+        "side shuffles",
+        "side-shuffles",
+        "side_shuffles"
+      ],
+      "preferred": "Side Shuffles"
+    },
+    "karaoke": {
+      "category": "activation",
+      "aliases": [
+        "Karaoke",
+        "grapevine",
+        "karaoke"
+      ],
+      "preferred": "Karaoke"
+    },
+    "percent_1rm": {
+      "aliases": [
+        "Percent 1Rm",
+        "percent 1rm",
+        "percent-1rm",
+        "percent_1rm"
+      ],
+      "category": "general",
+      "preferred": "Percent 1Rm"
+    },
+    "tempo": {
+      "aliases": [
+        "Tempo",
+        "tempo"
+      ],
+      "category": "general",
+      "preferred": "Tempo"
+    },
+    "sets": {
+      "aliases": [
+        "Sets",
+        "sets"
+      ],
+      "category": "general",
+      "preferred": "Sets"
+    },
+    "reps": {
+      "aliases": [
+        "Reps",
+        "reps"
+      ],
+      "category": "general",
+      "preferred": "Reps"
+    },
+    "level": {
+      "aliases": [
+        "Level",
+        "level"
+      ],
+      "category": "general",
+      "preferred": "Level"
+    },
+    "snatches": {
+      "aliases": [
+        "Snatches",
+        "snatches"
+      ],
+      "category": "weightlifting",
+      "preferred": "Snatches"
+    },
+    "cleans": {
+      "aliases": [
+        "Cleans",
+        "cleans"
+      ],
+      "category": "weightlifting",
+      "preferred": "Cleans"
+    },
+    "air_squats": {
+      "aliases": [
+        "Air Squats",
+        "air squats",
+        "air-squats",
+        "air_squats"
+      ],
+      "category": "weightlifting",
+      "preferred": "Air Squats"
+    },
+    "muscle_ups": {
+      "aliases": [
+        "Muscle Ups",
+        "muscle ups",
+        "muscle-ups",
+        "muscle_ups"
+      ],
+      "category": "gymnastics",
+      "preferred": "Muscle Ups"
+    },
+    "power_clean": {
+      "aliases": [
+        "Power Clean",
+        "power clean",
+        "power-clean",
+        "power_clean"
+      ],
+      "category": "weightlifting",
+      "preferred": "Power Clean"
+    },
+    "hang_power_cleans": {
+      "aliases": [
+        "Hang Power Cleans",
+        "hang power cleans",
+        "hang-power-cleans",
+        "hang_power_cleans"
+      ],
+      "category": "weightlifting",
+      "preferred": "Hang Power Cleans"
+    },
+    "cues": {
+      "aliases": [
+        "Cues",
+        "cues"
+      ],
+      "category": "general",
+      "preferred": "Cues"
+    },
+    "pvc_overhead_squat": {
+      "aliases": [
+        "Pvc Overhead Squat",
+        "pvc overhead squat",
+        "pvc-overhead-squat",
+        "pvc_overhead_squat"
+      ],
+      "category": "weightlifting",
+      "preferred": "Pvc Overhead Squat"
+    }
+  }
+}

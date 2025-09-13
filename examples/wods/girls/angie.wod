@@ -1,0 +1,10 @@
+module wod.angie v1 {
+  // Angie — For time: 100 Pull-ups, 100 Push-ups, 100 Sit-ups, 100 Air Squats
+  wod ForTime {
+    100 Pull_ups
+    100 Push_ups
+    100 Sit_ups
+    100 Air_Squats
+  }
+}
+

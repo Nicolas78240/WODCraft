@@ -1,0 +1,16 @@
+module warmup.shoulder_prime_8m v1 {
+  @tag("shoulder", "8min")
+  
+  warmup "Shoulder Priming – 8 min" {
+    block "Scaps" {
+      10 Scap_Pull_ups
+      10 Banded_Face_Pulls
+      20s Dead_Hang
+    }
+    
+    block "Activation" {
+      2x10 PVC_Overhead_Squat tempo "30X1"
+      150m Row
+    }
+  }
+}

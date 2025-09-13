@@ -1,0 +1,9 @@
+module wod.chelsea v1 {
+  // Chelsea — EMOM 30: 5 Pull-ups, 10 Push-ups, 15 Air Squats
+  wod EMOM 30:00 {
+    5 Pull_ups
+    10 Push_ups
+    15 Air_Squats
+  }
+}
+

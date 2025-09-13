@@ -1,0 +1,16 @@
+module warmup.full_body_10m v1 {
+  @tag("mobility", "activation", "10min")
+  
+  warmup "Full Body – 10 min" {
+    block "Mobility" repeat 2 {
+      10 Air_Squats
+      10 PVC_Pass_Through
+      30s Jumping_Jacks
+    }
+    
+    block "Activation" {
+      2x10 Hip_Hinge_with_PVC tempo "31X1"
+      200m Row
+    }
+  }
+}

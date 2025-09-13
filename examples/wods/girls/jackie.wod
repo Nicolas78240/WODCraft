@@ -1,0 +1,9 @@
+module wod.jackie v1 {
+  // Jackie — For time: 1000m Row, 50 Thrusters (45 lb), 30 Pull-ups
+  wod ForTime {
+    1000m Row
+    50 Thrusters @45lb
+    30 Pull_ups
+  }
+}
+
