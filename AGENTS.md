@@ -1,41 +1,81 @@
-# Repository Guidelines
+# Repository Guidelines (for Agents)
 
-## Project Structure & Module Organization
-- spec: `WODCraft_spec.md` (authoritative DSL description; follow when editing grammar).
-- src: `wodc_merged.py` (CLI + parser, linter, runner, exporters).
-- examples: `.wod` workout files (currently in repo root, e.g., `team_mixer.wod`).
-- data: `box_catalog.json` (optional movement catalog used for normalization).
-- outputs: Generated files (e.g., `out/out.json`, `out/wod.html`) should not be committed.
+These guidelines describe how to work with this repository. They supersede old “legacy/vNext” notes: WODCraft is unified around one language and one CLI.
 
-## Build, Test, and Development Commands
-- Run parse: `python3 wodc_merged.py parse team_mixer.wod -o out.json`
-  - Parses a `.wod` file and writes normalized AST JSON.
-- Lint DSL: `python3 wodc_merged.py lint waterfall_trio.wod --catalog box_catalog.json --track RX --gender male`
-  - Reports DSL issues and normalization warnings.
-- Simulate/run: `python3 wodc_merged.py run synchro_waterfall_emom_t4.wod --format text`
-  - Prints a time‑ordered timeline; use `--format json` for machine output.
-- Export: `python3 wodc_merged.py export team_mixer.wod --to html -o wod.html`
-  - Exports to `json`, `ics`, or `html`.
- - Make targets: `make help` (see `parse`, `lint`, `run`, `export-*`, `demo`, `check-spec`, `fmt`, `venv`, `install`). `fmt` includes Python (Black) and DSL (`wodc fmt`).
+## Project Structure
+- Spec: `WODCraft_spec.md` (authoritative DSL description; align grammar changes with it).
+- Source (package): `src/wodcraft/`
+  - `cli.py` — unified CLI entrypoint (`wodc`)
+  - `sdk.py` — stable developer facade (parse/validate/compile_session/results/run/export_ics)
+  - `lang/core.py` — facade re‑exporting the language core
+- Language core (current source of truth): `wodc_vnext/core.py`
+  - Contains `GRAMMAR_VNEXT`, transformer, SessionCompiler, TeamRealizedAggregator, ProgrammingLinter
+  - Until fully merged under `src/`, make grammar/type changes here
+- Examples: `examples/` (language, girls/heroes/open)
+- Modules: `modules/` (module files resolved by sessions)
+- Catalog:
+  - Data: `data/movements_catalog.json` (+ seeds in `data/movements_seeds.json`)
+  - Builder: `scripts/build_catalog.py`
+- Editor: `editor/wodcraft-vscode/` (syntax, completion, CLI integration)
+- Tests: `tests/` (pytest)
 
-## Coding Style & Naming Conventions
-- Python 3, PEP 8, 4‑space indentation; keep lines readable (~100 cols).
-- Use type hints (`typing`) and descriptive `snake_case` names; constants `UPPER_SNAKE` (e.g., `GRAMMAR`, `KNOWN_MOVEMENTS`).
-- Prefer small functions with clear responsibilities; keep regexes and parsing rules close to their usage.
-- File naming: `.wod` for workouts; Python modules lowercase with underscores.
+## Commands (Unified CLI)
+- Validate: `wodc validate file.wod`
+- Parse: `wodc parse file.wod`
+- Session compile: `wodc session file.wod --modules-path modules --format json|ics`
+- Results aggregate: `wodc results file.wod --modules-path modules`
+- Timeline summary: `wodc run file.wod --modules-path modules --format text|json`
+- Catalog build: `wodc catalog build`
 
-## Testing Guidelines
-- Framework: Pytest (recommended). Place tests under `tests/` as `test_*.py`.
-- Cover: parsing (`parse`), lint rules (`lint`), and exporters (`export --to json/html/ics`).
-- Example: assert that parsing a sample `.wod` yields expected keys (`meta`, `program`) and `lint` exits non‑zero on errors.
-- Run: `pytest -q` (add Pytest as a dev dependency in your environment).
+Make targets:
+- `make install` (venv + editable install)
+- `make test` (pytest)
+- `make catalog-build`
+- `make build-dist` (sdist/wheel)
 
-## Commit & Pull Request Guidelines
-- Commits: Imperative present, concise subject; include scope when helpful (e.g., `parser:`, `lint:`). Example: `lint: flag unknown movements (W001)`.
-- PRs: Describe intent, link issues, include CLI examples (input `.wod`, command, expected output snippet). Screenshots for HTML export are helpful.
-- Keep PRs focused; include/adjust sample `.wod` files when changing grammar.
+## Coding Style & Conventions
+- Python 3, PEP 8, 4 spaces, ~100 cols. Type hints encouraged.
+- Prefer small, focused functions; keep grammar tokens unique (avoid duplicate terminals in Lark).
+- .wod is the only DSL extension. Python modules are lowercase with underscores.
+- User‑facing wording must avoid “legacy/vNext”. Use “WODCraft” and “session/module/programming”.
 
-## Security & Configuration Tips
-- Catalogs: Use trusted JSON for `--catalog` (matches `box_catalog.json` schema assumptions).
-- Validation first: Run `lint` before `run`/`export` to catch DSL mistakes.
-- Do not commit generated artifacts (`*.html`, `*.ics`, `out.json`).
+## Grammar & Core Changes
+- Edit `wodc_vnext/core.py`:
+  - Update `GRAMMAR_VNEXT` carefully; avoid duplicate terminal names (e.g., DIST/MAXREP issue).
+  - Keep transformer output consistent (AST shape used by tests and CLI).
+  - If you touch durations/loads, sync helpers in compiler/aggregator.
+- Run `pytest -q` after any grammar change.
+
+## Testing
+- Tests live in `tests/` and cover: parser, programming linter, resolver, team realized aggregation.
+- Run: `pytest -q`. Aim to keep existing tests passing; add new focused tests when adding features.
+
+## Packaging & Release
+- PyPI package name: `wodcraft`; entrypoint `wodc`.
+- Metadata in `pyproject.toml`. Bump version on user‑visible changes.
+- Build: `make build-dist`; Publish: `twine upload dist/*` (CI preferred).
+- Keep README (EN/FR) up to date; include Developer Quickstart and Integration.
+
+## VS Code Extension
+- Language id: `wodcraft`; uses the unified `wodc` CLI.
+- Update `editor/wodcraft-vscode/` for syntax/completion/hover/codelens; no direct Python invocation in the extension.
+
+## Security & Repo Hygiene
+- Do not commit generated artifacts (dist/, out/, *.html, *.ics).
+- `.pypirc.local` contains tokens; it must stay ignored by git.
+- When building the catalog, commit only curated JSON (not transient scratch files).
+
+## PR & Commit Guidelines
+- Commits: Imperative present, concise subject (e.g., `cli: enrich --help`, `grammar: support RFT shorthand`).
+- PRs: Describe intent, include CLI examples (command + short output), and note any AST changes.
+- Keep diffs focused; update docs and examples alongside code changes.
+
+## Developer API (Python)
+- Prefer importing via `from wodcraft import sdk` for a stable surface:
+  - `sdk.parse(text) -> dict`
+  - `sdk.validate(text) -> (ok, error)`
+  - `sdk.compile_session(text, modules_path) -> dict`
+  - `sdk.export_ics(compiled) -> str`
+  - `sdk.results(text, modules_path) -> dict`
+  - `sdk.run(text, modules_path) -> dict`
+- Lower‑level APIs are under `wodcraft.lang.core` if needed.
