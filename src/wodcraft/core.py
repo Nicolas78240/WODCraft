@@ -898,75 +898,87 @@ class SessionCompiler:
         quantity = movement.get("quantity", {})
         load = movement.get("load", {})
 
-        # Movement-specific quantity validation
-        if "row" in movement_name.lower():
-            if quantity.get("kind") == "calories" and quantity.get("value", 0) > 100:
-                print(f"WARNING: High calorie count ({quantity.get('value')}) for rowing - might be unrealistic")
+        # Validate dangerous loads for specific movements
+        if load and isinstance(load, dict):
+            load_value = self._extract_load_value(load)
+            if load_value and movement_name:
+                self._check_dangerous_loads(movement_name, load_value)
 
-        elif "deadlift" in movement_name.lower():
-            if quantity.get("kind") == "reps" and quantity.get("value", 0) > 50:
-                print(f"WARNING: High rep deadlifts ({quantity.get('value')}) - consider load and safety")
+        # Validate high rep dangerous movements
+        if quantity and isinstance(quantity, dict):
+            reps = quantity.get("value")
+            if reps and isinstance(reps, (int, float)) and movement_name:
+                self._check_high_rep_warnings(movement_name, reps)
 
-        elif "run" in movement_name.lower():
-            if quantity.get("kind") == "distance" and quantity.get("value", 0) > 5000:  # >5km
-                print(f"WARNING: Long distance run ({quantity.get('value')}m) might not fit WOD timeframe")
-
-        # Load validation
-        if load and load.get("type") in ("LOAD_VALUE", "LOAD_DUAL"):
-            self._validate_load_appropriateness(movement_name, load)
-
-    def _validate_load_appropriateness(self, movement_name: str, load: Dict):
-        """Validate load appropriateness for specific movements"""
+    def _extract_load_value(self, load: Dict) -> Optional[float]:
+        """Extract numeric load value in kg for comparison"""
         if load.get("type") == "LOAD_VALUE":
-            value = load.get("value", 0)
+            value = load.get("value")
             unit = load.get("unit", "")
+            if isinstance(value, (int, float)):
+                # Convert to kg for standardized comparison
+                if unit == "lb":
+                    return value * 0.453592
+                elif unit == "kg":
+                    return value
+        elif load.get("type") == "LOAD_DUAL" and load.get("per_gender"):
+            # Use male load as reference (typically higher)
+            male_load = load["per_gender"].get("male", {})
+            return self._extract_load_value(male_load)
+        return None
 
-            # Basic load sanity checks
-            if unit == "kg" and value > 300:
-                print(f"WARNING: Very heavy load ({value}kg) for {movement_name} - verify correctness")
-            elif unit == "lb" and value > 600:
-                print(f"WARNING: Very heavy load ({value}lb) for {movement_name} - verify correctness")
+    def _check_dangerous_loads(self, movement: str, load_kg: float):
+        """Check for potentially dangerous loads"""
+        movement_lower = movement.lower()
 
-            # Movement-specific load ranges
-            if "pull_up" in movement_name.lower() and value > 50:  # kg
-                print(f"WARNING: Heavy weighted pull-ups ({value}{unit}) - ensure proper progression")
+        # Deadlift warnings
+        if "deadlift" in movement_lower:
+            if load_kg > 180:  # > 180kg deadlift
+                print(f"WARNING: Very heavy deadlifts ({load_kg:.1f}kg) - verify safety progression and form")
+            elif load_kg > 140:  # > 140kg deadlift
+                print(f"INFO: Heavy deadlifts ({load_kg:.1f}kg) - ensure proper warmup and spotting")
+
+        # Overhead movement warnings
+        elif any(term in movement_lower for term in ["press", "jerk", "snatch", "overhead"]):
+            if load_kg > 80:  # > 80kg overhead
+                print(f"WARNING: Heavy overhead movement ({load_kg:.1f}kg) - check shoulder mobility and technique")
+
+        # Squat warnings
+        elif "squat" in movement_lower:
+            if load_kg > 150:  # > 150kg squat
+                print(f"WARNING: Very heavy squats ({load_kg:.1f}kg) - ensure proper depth and safety bars")
+
+    def _check_high_rep_warnings(self, movement: str, reps: float):
+        """Check for potentially dangerous high rep combinations"""
+        movement_lower = movement.lower()
+
+        if "deadlift" in movement_lower and reps > 20:
+            print(f"WARNING: High rep deadlifts ({int(reps)} reps) - high injury risk, consider scaling")
+
+        if "burpee" in movement_lower and reps > 50:
+            print(f"INFO: High rep burpees ({int(reps)} reps) - expect significant fatigue")
+
+        if any(term in movement_lower for term in ["thruster", "clean"]) and reps > 30:
+            print(f"INFO: High rep {movement} ({int(reps)} reps) - monitor form degradation")
 
     def _validate_wod_structure(self, form: Dict, movements: List[Dict]):
-        """Validate overall WOD structure and patterns"""
-        # Count movement types
-        cardio_movements = 0
-        strength_movements = 0
-        gymnastic_movements = 0
+        """Validate overall WOD structure"""
+        # Check for movement variety
+        movement_names = [m.get("movement", "") for m in movements if m.get("type") == "MOVEMENT_LINE"]
 
-        cardio_terms = ["row", "bike", "run", "ski", "assault"]
-        strength_terms = ["deadlift", "squat", "press", "clean", "snatch", "jerk"]
-        gymnastic_terms = ["pull_up", "push_up", "muscle_up", "handstand", "dip"]
+        if len(set(movement_names)) == 1 and len(movement_names) > 1:
+            print("INFO: Single movement WOD - consider pacing and scaling options")
 
-        for movement in movements:
-            if movement.get("type") != "MOVEMENT_LINE":
-                continue
+        # Check for balance between modalities
+        cardio_count = sum(1 for name in movement_names if any(term in name.lower()
+                          for term in ["run", "row", "bike", "ski"]))
+        strength_count = sum(1 for name in movement_names if any(term in name.lower()
+                            for term in ["deadlift", "squat", "press", "clean", "snatch"]))
 
-            movement_name = movement.get("movement", "").lower()
-
-            if any(term in movement_name for term in cardio_terms):
-                cardio_movements += 1
-            elif any(term in movement_name for term in strength_terms):
-                strength_movements += 1
-            elif any(term in movement_name for term in gymnastic_terms):
-                gymnastic_movements += 1
-
-        # WOD pattern suggestions
-        total_movements = cardio_movements + strength_movements + gymnastic_movements
-        if total_movements > 0:
-            if total_movements == 1:
-                print("INFO: Single movement WOD - consider pacing and scaling options")
-            elif total_movements > 5:
-                print("WARNING: Complex WOD with many movements - may be difficult to coach")
-
-            # Modal domain balance
-            if cardio_movements == 0 and total_movements > 1:
+        if len(movements) > 2:
+            if cardio_count == 0:
                 print("INFO: No cardio movements - WOD focuses on strength/gymnastics")
-            elif strength_movements == 0 and total_movements > 1:
+            elif strength_count == 0:
                 print("INFO: No strength movements - WOD focuses on cardio/gymnastics")
 
     def _resolve_and_parse_module(self, import_info: Dict) -> Dict:

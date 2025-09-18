@@ -322,6 +322,16 @@ function flattenToText(node) {
         return flattenToText(node.children);
     return '';
 }
+function convertLbToKg(value) {
+    return Math.round(value * 0.453592 * 10) / 10; // Round to 1 decimal
+}
+function formatLoadWithConversion(value, unit) {
+    if (unit === 'lb') {
+        const kg = convertLbToKg(value);
+        return `${value}lb (~${kg}kg)`;
+    }
+    return `${value}${unit}`;
+}
 function describeLoad(load) {
     if (!load)
         return '';
@@ -345,6 +355,9 @@ function describeLoad(load) {
     }
     if (load.type === 'LOAD_VALUE') {
         const unit = load.unit ?? '';
+        if (load.value !== undefined && (unit === 'lb' || unit === 'kg')) {
+            return formatLoadWithConversion(load.value, unit);
+        }
         return load.value !== undefined ? `${load.value}${unit}` : unit;
     }
     return flattenToText(load);
@@ -452,6 +465,25 @@ registerResource('guide-structure', 'wodcraft://guide/structure', {
     title: 'WODCraft DSL Quickstart',
     description: 'Structure, duals, progressions et scoring',
 }, async () => ({ text: STRUCTURE_GUIDE, mimeType: 'text/markdown' }));
+registerResource('database-integration', 'wodcraft://guide/database', {
+    title: 'Database Integration Guide',
+    description: 'Best practices for integrating WODCraft in production apps',
+}, async () => {
+    try {
+        const fs = await import('node:fs/promises');
+        const path = await import('node:path');
+        const __dirname = path.dirname(fileURLToPath(import.meta.url));
+        const dbGuidePath = path.resolve(__dirname, '../../DATABASE_INTEGRATION.md');
+        const content = await fs.readFile(dbGuidePath, 'utf-8');
+        return { text: content, mimeType: 'text/markdown' };
+    }
+    catch (error) {
+        return {
+            text: '# Database Integration Guide\n\nGuide not found. Please check if DATABASE_INTEGRATION.md exists in the project root.',
+            mimeType: 'text/markdown'
+        };
+    }
+});
 server.registerTool('list_resources', {
     title: 'List available resources',
     description: 'Show URIs exposed by the WODCraft MCP server',

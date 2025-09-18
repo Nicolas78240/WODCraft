@@ -1,6 +1,6 @@
 {
   "name": "wodcraft-mcp",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": true,
   "description": "MCP server to draft, lint, and compile WODs using the WODCraft DSL.",
   "type": "module",
