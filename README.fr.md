@@ -32,12 +32,26 @@ CASHOUT {
 La grammaire complète et les règles sont décrites dans WODCraft_spec.md (source de vérité).
 
 ## Fonctionnalités
-- Parser → AST JSON structuré.
-- Linter → erreurs/avertissements (ex: E010 REST>0, E020 EMOM sans slot, W001 mouvement inconnu, W002 charge suspecte, W050 alias).
-- Résolution → applique `--track`/`--gender` et un `--catalog` JSON.
-- Timeline → `run` produit une séquence d’événements (texte ou JSON).
-- Export → `export` vers `json`, `html`, `ics`.
-- Formatage → `fmt` (normalisation minimale sûre des `.wod`).
+
+### 🔍 **Analyse & Validation**
+- **Parser** → AST JSON structuré avec messages d'erreur enrichis
+- **Linter** → validation sémantique spécifique CrossFit :
+  - ✅ Erreurs de syntaxe avec ligne/colonne + suggestions
+  - ⚠️ Avertissements sécurité (charges lourdes, deadlifts haute répétition)
+  - 📊 Analyse structure WOD (équilibre mouvements, domaines temporels)
+  - 🏃 Sémantique mouvements (faisabilité EMOM, validation REST)
+- **Cache intelligent** → 80%+ compilation plus rapide
+
+### ⚙️ **Compilation & Résolution**
+- **Système de modules** → import/override avec versioning
+- **Compilation sessions** → résolution composants vers JSON exécutable
+- **Résolution tracks/genres** → applique variantes du catalogue mouvements
+- **Agrégation équipe** → scoring AMRAP/ForTime/MaxLoad
+
+### 📤 **Export & Timeline**
+- **Génération timeline** → résumés WOD pour coachs
+- **Formats export** → JSON, calendrier ICS, HTML
+- **Agrégation résultats** → analytics performance équipe
 
 ## Installation rapide
 - Python 3 recommandé. Environnement isolé:
@@ -45,11 +59,76 @@ La grammaire complète et les règles sont décrites dans WODCraft_spec.md (sour
   - ou `pip install -r requirements.txt`
 
 ## Utilisation CLI (unifiée)
-- Valider: `wodc validate examples/language/team_realized_session.wod`
-- Parser: `wodc parse examples/language/team_realized_session.wod`
-- Compiler une session → JSON/ICS: `wodc session examples/language/team_realized_session.wod --modules-path modules --format json`
-- Agréger le réalisé d’équipe: `wodc results examples/language/team_realized_session.wod --modules-path modules`
-- Construire le catalogue: `wodc catalog build`
+
+### 🔍 **Analyse & Validation** (Développement)
+```bash
+# Lint: analyse statique avec validation spécifique CrossFit
+wodc lint examples/wod/progressive_farmer.wod
+# ✓ Vérifie syntaxe, structure, sémantique mouvements
+# ✓ Signale avertissements charges dangereuses, timing impossible
+# ✓ Suggère améliorations pour coaching
+
+# Parse: conversion vers AST structuré (debug)
+wodc parse examples/language/team_realized_session.wod
+```
+
+### ⚙️ **Compilation & Export** (Production)
+```bash
+# Session: résolution imports & compilation vers JSON exécutable
+wodc session examples/language/team_realized_session.wod --modules-path modules --format json
+
+# Results: agrégation données performance équipe
+wodc results examples/language/team_realized_session.wod --modules-path modules
+
+# Run: génération résumé timeline pour coachs
+wodc run examples/language/team_realized_session.wod --modules-path modules
+```
+
+### 🛠️ **Utilitaires**
+```bash
+# Construction catalogue mouvements
+wodc catalog build
+
+# Validation syntaxe de base (vérification rapide)
+wodc validate examples/language/team_realized_session.wod
+```
+
+### **Quand utiliser quoi ?**
+
+| **Commande** | **Objectif** | **Cas d'usage** |
+|--------------|-------------|-----------------|
+| `wodc lint` | Analyse statique | **Développement**: détecter erreurs, valider logique CrossFit |
+| `wodc session` | Compilation JSON/ICS | **Production**: générer formats finaux pour apps |
+| `wodc run` | Génération timeline | **Coaching**: aperçu rapide WOD |
+| `wodc results` | Agrégation équipe | **Analyse**: calculer performance équipe |
+
+### **Exemple: Workflow Lint vs Compile**
+
+```bash
+# 1. Pendant développement : lint pour feedback immédiat
+$ wodc lint my_wod.wod
+WARNING: Deadlifts lourds (150kg) - vérifier progression sécurité
+INFO: WOD mouvement unique - considérer options pacing
+✓ Syntaxe WODCraft valide
+
+# 2. Pour production : compilation vers formats exécutables
+$ wodc session my_session.wod --format json
+{
+  "session": {
+    "title": "Focus Force",
+    "components": { ... },
+    "timeline": [ ... ]
+  }
+}
+
+# 3. Pour coaching : timeline rapide
+$ wodc run my_session.wod
+Session: Focus Force
+- Warmup: Mouvement Dynamique — 300s
+- Strength: Back Squat (5x5) — 1200s
+- WOD: AMRAP 12:00 (Push-ups, Air Squats) — 720s
+Total: 2220s (37 minutes)
+```
 
 Raccourcis Makefile: `make help` (venv, install, test, catalog-build, vnext-validate, vnext-session, vnext-results, build-dist).
 

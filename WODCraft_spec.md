@@ -189,15 +189,68 @@ wodc catalog build
 
 ---
 
-## 🤖 Usage par les agents IA
-Un agent IA peut :  
-1. Lire un fichier `.wod` et en obtenir l’AST JSON (`parse`).  
-2. Vérifier la validité (`lint`).  
-3. Adapter un WOD pour un profil (ex: femme, scaled) via `--track` / `--gender`.  
-4. Exporter le WOD dans un format exploitable (HTML/ICS/JSON).  
-5. Générer de nouveaux WODs en respectant la grammaire.  
+## 🔧 Workflow : Lint vs Compile
 
-Le DSL est conçu pour être **strict mais extensible**, afin de permettre une **interopérabilité maximale** avec des outils d’IA et des systèmes externes.
+### 🔍 **Lint** (`wodc lint`)
+**Objectif :** Analyse statique et validation sémantique sans exécution
+
+#### Ce que fait le linter :
+1. **Validation syntaxique** avec messages d'erreur enrichis :
+   - Position ligne/colonne exacte
+   - Contexte source affiché
+   - Suggestions de correction intelligentes
+
+2. **Validation sémantique CrossFit** :
+   - **Sécurité** : charges inappropriées (ex: `50 Deadlift @200kg`)
+   - **Faisabilité** : EMOM impossibles (trop de mouvements/temps)
+   - **Cohérence** : REST négatifs, progressions invalides
+   - **Structure** : équilibre des domaines modaux (cardio/strength/gymnastics)
+
+#### Exemple d'output :
+```bash
+$ wodc lint problematic_wod.wod
+WARNING: Heavy deadlifts (150kg) - verify safety progression
+WARNING: EMOM might be too packed - 5 movements in 60s slots
+ERROR: REST duration must be positive
+INFO: No cardio movements - WOD focuses on strength/gymnastics
+✓ 3 warnings, 1 error found
+```
+
+### ⚙️ **Compile/Session** (`wodc session`)
+**Objectif :** Résolution complète et génération d'artefacts exécutables
+
+#### Ce que fait la compilation :
+1. **Résolution de modules** avec cache intelligent :
+   - Import/override de composants versionnés
+   - Résolution de dépendances
+   - Cache LRU pour performances (80%+ gain)
+
+2. **Génération d'artefacts** :
+   - JSON exécutable structuré
+   - Timeline pour coachs
+   - Calendriers ICS
+   - Agrégation résultats d'équipe
+
+#### Workflow type :
+```bash
+# Développement : validation continue
+wodc lint my_session.wod        # Feedback rapide
+
+# Production : génération finale
+wodc session my_session.wod --format json  # Artefacts
+wodc run my_session.wod         # Timeline coaching
+```
+
+## 🤖 Usage par les agents IA
+Un agent IA peut :
+1. **Analyser** un fichier `.wod` avec `lint` pour validation sémantique
+2. **Parser** vers AST JSON structuré (`parse`)
+3. **Compiler** des sessions complètes avec résolution de modules (`session`)
+4. **Adapter** WODs pour profils spécifiques via `--track` / `--gender`
+5. **Exporter** vers formats multiples (HTML/ICS/JSON)
+6. **Générer** de nouveaux WODs respectant la grammaire et la sémantique CrossFit
+
+Le DSL est conçu pour être **strict mais extensible**, avec une architecture monolithique optimisée pour les agents IA permettant une **interopérabilité maximale**.
 
 ---
 

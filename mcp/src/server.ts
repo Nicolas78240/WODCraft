@@ -269,7 +269,7 @@ function describeForm(mode: string, duration?: string) {
   }
 }
 
-function buildScoreBlock(score: { name: string; fields: [string, string][] }) {
+function buildScoreBlock(score: { name: string; fields: string[][] }) {
   if (!score.fields.length) return '';
   const body = score.fields.map(([key, type]) => `    ${key}: ${type}`).join('\n');
   return `  score ${score.name} {\n${body}\n  }\n`;

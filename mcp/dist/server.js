@@ -208,42 +208,73 @@ async function parseViaPython(dsl) {
 }
 // Simple name generator
 function defaultName(params) {
-    return `${params.mode.toLowerCase()}-${params.duration}`.replace(/\s+/g, "-");
+    const duration = params.duration ? params.duration.replace(/\s+/g, '') : 'generic';
+    return `${params.mode.toLowerCase()}-${duration}`;
 }
-// ---- Generator (very naive template) ----
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '.')
+        .replace(/^\.+|\.+$/g, '')
+        .replace(/\.\.+/g, '.') || 'generated';
+}
+function describeForm(mode, duration) {
+    switch (mode) {
+        case 'AMRAP':
+            return { form: `AMRAP ${duration ?? '12:00'}`, score: { name: 'AMRAP', fields: [['rounds', 'Rounds'], ['reps', 'Reps']] } };
+        case 'EMOM':
+            return { form: `EMOM ${duration ?? '10:00'}`, score: { name: 'EMOM', fields: [['rounds', 'Rounds']] } };
+        case 'FT': {
+            const cap = duration ? ` cap ${duration}` : '';
+            return { form: `ForTime${cap}`, score: { name: 'ForTime', fields: [['time', 'Time']] } };
+        }
+        case 'RFT': {
+            const rounds = duration && /^\d+$/.test(duration) ? duration : '3';
+            return { form: `RFT ${rounds}`, score: { name: 'RFT', fields: [['time', 'Time']] } };
+        }
+        case 'CHIPPER':
+            return { form: 'CHIPPER', score: { name: 'ForTime', fields: [['time', 'Time']] } };
+        default:
+            return { form: mode, score: { name: 'Score', fields: [['result', 'String']] } };
+    }
+}
+function buildScoreBlock(score) {
+    if (!score.fields.length)
+        return '';
+    const body = score.fields.map(([key, type]) => `    ${key}: ${type}`).join('\n');
+    return `  score ${score.name} {\n${body}\n  }\n`;
+}
+function movementForFocus(opts) {
+    if (opts.focus?.includes('legs'))
+        return '20 Air_squat';
+    if (opts.focus?.includes('pull'))
+        return '10 Pull_up';
+    return '15 Burpee';
+}
+function movementForEquipment(opts) {
+    if (opts.equipment?.includes('kettlebell'))
+        return '12 Kettlebell_Swing @24kg/16kg';
+    if (opts.equipment?.includes('barbell'))
+        return '10 Thruster @43kg/30kg';
+    if (opts.equipment?.includes('dumbbell'))
+        return '10 Dumbbell_Snatch @22.5kg/15kg';
+    return '10 Push_up';
+}
+// ---- Generator (module-first template) ----
 function generateDsl(opts) {
     const title = opts.name ?? defaultName({ mode: opts.mode, duration: opts.duration });
-    const team = opts.teamSize ?? 1;
-    const lines = [];
-    // Simple heuristics
-    if (opts.focus?.includes('legs'))
-        lines.push('20 air_squat;');
-    else if (opts.focus?.includes('pull'))
-        lines.push('10 pullups;');
-    else
-        lines.push('15 burpees;');
-    if (opts.equipment?.includes('kettlebell'))
-        lines.push('12 kettlebell_swing @24/16kg;');
-    else if (opts.equipment?.includes('barbell'))
-        lines.push('10 thrusters @43/30kg;');
-    else if (opts.equipment?.includes('dumbbell'))
-        lines.push('10 dumbbell_snatch @22.5/15kg;');
-    else
-        lines.push('10 pushups;');
-    lines.push('200m run;');
-    let head = '';
-    if (opts.mode === 'AMRAP' || opts.mode === 'EMOM')
-        head = `BLOCK ${opts.mode} ${opts.duration}`;
-    else if (opts.mode === 'FT')
-        head = 'BLOCK FT';
-    else if (opts.mode === 'RFT')
-        head = 'BLOCK RFT 3';
-    else if (opts.mode === 'CHIPPER')
-        head = 'BLOCK CHIPPER';
-    const block = `${head} {\n  ${lines.join('\n  ')}\n}`;
-    const tracks = 'TRACKS [RX, INTERMEDIATE, SCALED]';
-    const cap = opts.mode === 'AMRAP' || opts.mode === 'EMOM' ? `\nCAP ${opts.duration}` : '';
-    return `WOD "${title}"\nTEAM ${team}\n${tracks}${cap}\n\n${block}\n`;
+    const moduleId = `wod.generated.${slugify(title)}`;
+    const { form, score } = describeForm(opts.mode, opts.duration);
+    const movements = [movementForFocus(opts), movementForEquipment(opts), '200m Run'];
+    const wodBody = movements.map((line) => `    ${line}`).join('\n');
+    const scoreBlock = buildScoreBlock(score);
+    let text = `module ${moduleId} v1 {\n`;
+    text += `  wod ${form} {\n${wodBody}\n  }\n`;
+    if (scoreBlock) {
+        text += `\n${scoreBlock}`;
+    }
+    text += `}\n`;
+    return text;
 }
 // ---- Parser / Compiler ----
 async function compileFromDsl(dsl) {
