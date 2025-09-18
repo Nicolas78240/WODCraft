@@ -16,6 +16,10 @@
         }
       },
       "category": "weightlifting",
+      "modality": "strength",
+      "muscle_groups": ["legs", "shoulders", "core"],
+      "equipment": ["barbell", "plates"],
+      "complexity": 3,
       "aliases": [
         "Thruster",
         "Thrusters",
@@ -46,6 +50,10 @@
         }
       },
       "category": "mono",
+      "modality": "cardio",
+      "muscle_groups": ["back", "legs", "core"],
+      "equipment": ["rowing_machine"],
+      "complexity": 2,
       "aliases": [
         "Row",
         "row",
@@ -66,6 +74,10 @@
         }
       },
       "category": "mono",
+      "modality": "cardio",
+      "muscle_groups": ["legs"],
+      "equipment": [],
+      "complexity": 1,
       "aliases": [
         "Run",
         "run",
@@ -81,6 +93,10 @@
         }
       },
       "category": "conditioning",
+      "modality": "cardio",
+      "muscle_groups": ["legs", "glutes"],
+      "equipment": ["box"],
+      "complexity": 2,
       "aliases": [
         "Box Jump",
         "Box Jumps",
@@ -93,6 +109,10 @@
     },
     "pull_up": {
       "category": "gymnastics",
+      "modality": "gymnastics",
+      "muscle_groups": ["back", "biceps", "core"],
+      "equipment": ["pull_up_bar"],
+      "complexity": 3,
       "aliases": [
         "Pull Up",
         "pull up",
@@ -103,6 +123,10 @@
     },
     "push_up": {
       "category": "gymnastics",
+      "modality": "gymnastics",
+      "muscle_groups": ["chest", "triceps", "shoulders", "core"],
+      "equipment": [],
+      "complexity": 1,
       "aliases": [
         "Push Up",
         "push up",
@@ -199,6 +223,10 @@
     },
     "burpee": {
       "category": "conditioning",
+      "modality": "cardio",
+      "muscle_groups": ["chest", "legs", "core", "shoulders"],
+      "equipment": [],
+      "complexity": 2,
       "aliases": [
         "Burpee",
         "burpee"

@@ -231,10 +231,14 @@ quantity: REPDUAL -> dual_reps
         | INT -> reps
         | NUMBER "cal" -> cal_qty
         | DIST -> distance_qty
+        | shorthand_macro
         | TIMEQ -> hold_time
 
+shorthand_macro: SHORTHAND_PATTERN movement_list_with_loads
+movement_list_with_loads: movement load? ("+" movement load?)*
+
 movement: IDENT ("_" IDENT)*
-load: "@" (LOADVAL|LOADDUAL)
+load: "@" (LOADVAL|LOADDUAL|PERCENT_LOAD)
 
 suffix: "SYNC" -> suff_sync
       | "@shared" -> suff_shared
@@ -250,8 +254,10 @@ track_block: "TRACK" IDENT "{" /[^}]+/ "}"
 
 // Terminals (avoid duplicating DIST; defined earlier)
 TIMEQ: /\d{1,2}:\d{2}/ | /\d+s/
-LOADVAL: /\d+(?:\.\d+)?(kg|lb|cm|in|m|km|%)\b/
-LOADDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?(kg|lb|cm|in|m|km|%)\b/
+LOADVAL: /\d+(?:\.\d+)?(kg|lb|cm|in|m|km|%|%1RM)\b/
+LOADDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?(kg|lb|cm|in|m|km|%|%1RM)\b/
+PERCENT_LOAD: /\d+(?:\.\d+)?%(?:1RM)?/
+SHORTHAND_PATTERN: /\d+(-\d+)+/  // e.g., 21-15-9, 5-10-15-20
 REPDUAL: /\d+\/\d+/
 CALDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?\s*cal/
 DISTDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?(?:m|km)\b/
@@ -329,6 +335,34 @@ class Load:
             return Load(round(self.value * one_rm_kg / 100, 1), UnitType.KG)
         else:
             raise ValueError(f"Cannot convert {self.unit} to kg")
+
+    def to_lb(self, one_rm_kg: Optional[float] = None) -> 'Load':
+        """Convert load to pounds"""
+        if self.unit == UnitType.LB:
+            return self
+        elif self.unit == UnitType.KG:
+            lb = self.value * 2.20462
+            lb_rounded = round(lb, 1)
+            # Avoid rounding tiny positive values to 0.0
+            if self.value > 0 and lb_rounded == 0.0:
+                lb_rounded = 0.1
+            return Load(lb_rounded, UnitType.LB)
+        elif self.unit == UnitType.PERCENT_1RM:
+            if one_rm_kg is None or one_rm_kg <= 0:
+                raise ValueError("1RM required for %1RM conversion")
+            kg_load = Load(round(self.value * one_rm_kg / 100, 1), UnitType.KG)
+            return kg_load.to_lb()
+        else:
+            raise ValueError(f"Cannot convert {self.unit} to lb")
+
+    def auto_convert_for_preference(self, preferred_unit: UnitType, one_rm_kg: Optional[float] = None) -> 'Load':
+        """Auto-convert to preferred unit system"""
+        if preferred_unit == UnitType.KG:
+            return self.to_kg(one_rm_kg)
+        elif preferred_unit == UnitType.LB:
+            return self.to_lb(one_rm_kg)
+        else:
+            return self
 
 @dataclass
 class Distance:
@@ -539,10 +573,12 @@ class ModuleResolver:
     """Abstract module resolver interface"""
 
     def resolve(self, ref: ModuleRef) -> ResolvedModule:
-        raise NotImplementedError
+        """Resolve a module reference to its AST and metadata"""
+        raise NotImplementedError("Subclasses must implement resolve method")
 
     def list(self, namespace: Optional[str] = None) -> List[ModuleRef]:
-        raise NotImplementedError
+        """List all available modules, optionally filtered by namespace"""
+        raise NotImplementedError("Subclasses must implement list method")
 
 class InMemoryResolver(ModuleResolver):
     """In-memory module registry for testing"""
@@ -618,8 +654,23 @@ class FileSystemResolver(ModuleResolver):
                 if len(parts) >= 2:
                     ns = parts[0]
                     name = ".".join(parts[1:])
-                    refs.append(ModuleRef(ns, name, "v1"))  # TODO: extract version from file
+                    # Extract version from file content if present, fallback to v1
+                    version = self._extract_version_from_file(file_path)
+                    refs.append(ModuleRef(ns, name, version))
         return refs
+
+    def _extract_version_from_file(self, file_path: Path) -> str:
+        """Extract version from module declaration in file"""
+        try:
+            content = file_path.read_text(encoding='utf-8')
+            # Look for module declarations like "module wod.name v2 {"
+            import re
+            match = re.search(r'module\s+[\w.]+\s+v(\d+)\s*\{', content)
+            if match:
+                return f"v{match.group(1)}"
+        except Exception:
+            pass
+        return "v1"  # fallback
 
 # Session Compiler with semantic validation
 class SessionCompiler:
@@ -730,6 +781,40 @@ class SessionCompiler:
         self._compiled_cache.clear()
         self._cache_hits = 0
         self._cache_misses = 0
+
+    def _expand_shorthand_macros(self, wod_ast: Dict) -> Dict:
+        """Expand shorthand macros like '21-15-9 Thrusters + Pull_ups' into individual movement lines"""
+        if not isinstance(wod_ast, dict):
+            return wod_ast
+
+        expanded_wod = wod_ast.copy()
+
+        # Look for shorthand macros in movement lines
+        if "movements" in expanded_wod:
+            expanded_movements = []
+            for movement in expanded_wod["movements"]:
+                if isinstance(movement, dict) and movement.get("quantity", {}).get("type") == "SHORTHAND_MACRO":
+                    # Expand the macro
+                    macro = movement["quantity"]
+                    reps_sequence = macro["reps_sequence"]
+                    movements_list = macro["movements"]
+
+                    # Create expanded movement lines
+                    for reps in reps_sequence:
+                        for mov_data in movements_list:
+                            expanded_movement = {
+                                "quantity": {"type": "reps", "value": reps},
+                                "movement": mov_data["movement"]
+                            }
+                            if "load" in mov_data:
+                                expanded_movement["load"] = mov_data["load"]
+                            expanded_movements.append(expanded_movement)
+                else:
+                    expanded_movements.append(movement)
+
+            expanded_wod["movements"] = expanded_movements
+
+        return expanded_wod
 
     def _validate_wod_semantics(self, wod_component: Dict):
         """Validate WOD semantic consistency"""
@@ -906,6 +991,10 @@ class SessionCompiler:
             # Find the component in the module body
             for item in module.get("body", []):
                 if isinstance(item, dict) and item.get("type", "").lower() == comp_type.upper():
+                    # Expand shorthand macros for WOD components
+                    if comp_type.upper() == "WOD":
+                        item = self._expand_shorthand_macros(item)
+
                     compiled = {
                         "id": f"{module['id']}@{module['version']}",
                         "component": item
@@ -937,7 +1026,7 @@ class SessionCompiler:
             "PRODID:-//WODCraft//Session//FR",
             "BEGIN:VEVENT",
             f"UID:session-{session['title'].lower().replace(' ', '-')}@wodcraft",
-            "DTSTAMP:20250909T163000Z",  # TODO: Use actual timestamp
+            f"DTSTAMP:{self._generate_timestamp()}",
             f"DTSTART:{ics_config['start'].replace('-', '').replace(':', '').replace('+', 'Z')}",
             f"DURATION:PT{ics_config['duration']}",
             f"SUMMARY:CrossFit – {session['title']}",
@@ -948,6 +1037,11 @@ class SessionCompiler:
         ]
 
         return "\n".join(ics_content)
+
+    def _generate_timestamp(self) -> str:
+        """Generate current timestamp in ICS format (YYYYMMDDTHHMMSSZ)"""
+        from datetime import datetime, timezone
+        return datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 
     def _generate_description(self, session: Dict) -> str:
         """Generate event description from session components"""
@@ -1276,6 +1370,40 @@ class ToASTvNext(Transformer):
         key = str(items[0])
         value = items[1] if len(items) > 1 else None
         return {"key": key, "value": value}
+
+    def shorthand_macro(self, items):
+        """Parse shorthand macros like '21-15-9 Thrusters + Pull_ups'"""
+        pattern = str(items[0])  # e.g., "21-15-9"
+        movements_with_loads = items[1]
+
+        # Parse the pattern into a list of numbers
+        reps_sequence = [int(x) for x in pattern.split('-')]
+
+        return {
+            "type": "SHORTHAND_MACRO",
+            "pattern": pattern,
+            "reps_sequence": reps_sequence,
+            "movements": movements_with_loads,
+            "raw": f"{pattern} {self._flatten(movements_with_loads)}"
+        }
+
+    def movement_list_with_loads(self, items):
+        """Parse movement list with optional loads like 'Thrusters @95lb + Pull_ups'"""
+        movements = []
+        i = 0
+        while i < len(items):
+            if hasattr(items[i], 'data') and items[i].data == 'movement':
+                movement = {"movement": str(items[i])}
+                # Check if next item is a load
+                if i + 1 < len(items) and hasattr(items[i + 1], 'type') and items[i + 1].type == 'LOAD_VALUE':
+                    movement["load"] = items[i + 1]
+                    i += 2
+                else:
+                    i += 1
+                movements.append(movement)
+            else:
+                i += 1
+        return movements
 
     def load_variant_amount(self, items):
         """Parse load variant amounts"""
