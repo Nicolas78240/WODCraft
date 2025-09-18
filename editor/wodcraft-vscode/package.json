@@ -52,7 +52,7 @@
         "wodcraft.modulesPath": {
           "type": "string",
           "default": "modules",
-          "description": "Path to vNext modules directory used for session compilation and imports."
+          "description": "Path to the modules directory used for session compilation and imports."
         },
         "wodcraft.catalogPath": {
           "type": "string",

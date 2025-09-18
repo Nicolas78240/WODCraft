@@ -2,7 +2,7 @@
 import pytest
 
 try:
-    from wodc_vnext import TeamRealizedAggregator, parse_vnext, SessionCompiler, InMemoryResolver
+    from src.wodcraft.core import TeamRealizedAggregator, parse_vnext, SessionCompiler, InMemoryResolver
 except Exception as e:  # pragma: no cover
     pytest.skip(f"wodc_vnext unavailable: {e}", allow_module_level=True)
 

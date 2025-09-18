@@ -2,7 +2,7 @@
 import pytest
 
 try:
-    from wodc_vnext import ProgrammingLinter, parse_vnext
+    from src.wodcraft.core import ProgrammingLinter, parse_vnext
 except Exception as e:  # pragma: no cover
     pytest.skip(f"wodc_vnext unavailable: {e}", allow_module_level=True)
 

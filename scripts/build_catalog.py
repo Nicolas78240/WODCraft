@@ -25,7 +25,7 @@ KEYWORDS = set(
     for k in [
         "wod","team","cap","score","tracks","buyin","cashout","rest","block","track","tiebreak","work","partition",
         "amrap","emom","ft","rft","chipper","tabata","interval",
-        # vNext
+        # Language core modules
         "module","vars","warmup","skill","strength","wod","score","session","components","import","override","scoring","meta","exports","json","html","ics","programming","team","realized","achievements",
         # qualifiers
         "maxrep","max",

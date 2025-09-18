@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wodcraft"
-version = "0.1.8"
+version = "0.2.3"
 description = "Write, lint, and compile CrossFit workouts (WODs) with a simple language and CLI. Export JSON/ICS, build a movements catalog, and get a quick timeline."
 authors = [
   { name = "WODCraft Authors" }
@@ -35,6 +35,6 @@ Repository = "https://github.com/Nicolas78240/WODCraft"
 Issues = "https://github.com/Nicolas78240/WODCraft/issues"
 
 [tool.setuptools.packages.find]
-# Include both src/ and the legacy vNext package path until fully merged
+# Include both src/ and the current language-core shim until consolidation completes
 where = ["src", "."]
 include = ["wodcraft*", "wodc_vnext*"]

@@ -17,7 +17,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
-from .lang.core import (
+from .core import (
     parse_vnext,
     FileSystemResolver,
     SessionCompiler,

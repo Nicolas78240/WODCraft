@@ -23,7 +23,7 @@ def cmd_lint(args):
     mode = args.mode or detect_mode_from_text(text)
     # language-first only
     # Prefer programming lint if block present; else validate
-    from wodcraft.lang.core import ProgrammingLinter, parse_vnext
+    from wodcraft.core import ProgrammingLinter, parse_vnext
     if "programming" in text:
         ast = parse_vnext(text)
         reports = []
@@ -93,10 +93,10 @@ def cmd_parse(args):
     mode = args.mode or detect_mode_from_text(text)
     if mode == "legacy":
         # Legacy not supported in clean mode — fallback to language parser
-        from wodcraft.lang.core import parse_vnext
+        from wodcraft.core import parse_vnext
         ast = parse_vnext(text)
     else:
-        from wodcraft.lang.core import parse_vnext
+        from wodcraft.core import parse_vnext
         ast = parse_vnext(text)
     print(json.dumps(ast, indent=2))
     return 0
@@ -182,7 +182,7 @@ def _infer_wod_form(form) -> tuple[str, int | None]:
 
 def cmd_run(args):
     # Unified WODCraft run: compile session and emit a simple timeline
-    from wodcraft.lang.core import parse_vnext, FileSystemResolver, SessionCompiler
+    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler
     p = Path(args.file)
     text = p.read_text()
     ast = parse_vnext(text)
@@ -251,10 +251,10 @@ def cmd_export(args):
 
 def cmd_validate(args):
     text = Path(args.file).read_text()
-    from wodcraft.lang.core import parse_vnext
+    from wodcraft.core import parse_vnext
     try:
         parse_vnext(text)
-        print("✓ Valid WODCraft vNext syntax")
+        print("✓ Valid WODCraft syntax")
         return 0
     except Exception as e:
         print(f"✗ Invalid syntax: {e}")
@@ -262,7 +262,7 @@ def cmd_validate(args):
 
 
 def cmd_session(args):
-    from wodcraft.lang.core import parse_vnext, FileSystemResolver, SessionCompiler
+    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler
     text = Path(args.file).read_text()
     ast = parse_vnext(text)
     if not ast.get("sessions"):
@@ -282,7 +282,7 @@ def cmd_session(args):
 
 
 def cmd_results(args):
-    from wodcraft.lang.core import parse_vnext, FileSystemResolver, SessionCompiler, TeamRealizedAggregator
+    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler, TeamRealizedAggregator
     text = Path(args.file).read_text()
     ast = parse_vnext(text)
     if not ast.get("sessions"):

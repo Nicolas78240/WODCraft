@@ -6,7 +6,7 @@ Test suite for WODCraft vNext module resolver functionality
 import pytest
 import tempfile
 from pathlib import Path
-from wodc_vnext import ModuleRef, InMemoryResolver, FileSystemResolver, ResolvedModule
+from src.wodcraft.core import ModuleRef, InMemoryResolver, FileSystemResolver, ResolvedModule
 
 
 class TestModuleRef:

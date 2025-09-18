@@ -143,7 +143,7 @@ function activate(context) {
       const tmp = path.join(os.tmpdir(), `wodcraft_${Date.now()}.wod`);
       const text = doc.getText();
       fs.writeFileSync(tmp, text, 'utf8');
-      // Heuristic: detect vNext (module/session/programming)
+      // Heuristic: detect module/session/programming blocks
       const isVNext = /\bmodule\s+[A-Za-z]/.test(text) || /\bsession\s+"/.test(text) || /\bprogramming\s*\{/.test(text);
       const hasProgramming = /\bprogramming\s*\{/.test(text);
       const hasSession = /\bsession\s+\"/.test(text);
@@ -237,7 +237,7 @@ function activate(context) {
 
   // Completion provider: offer catalog movements and common keywords
   const KEYWORDS = ['WOD','TEAM','CAP','SCORE','TRACKS','BUYIN','CASHOUT','REST','BLOCK','TRACK','TIEBREAK','WORK','PARTITION','AMRAP','EMOM','FT','RFT','CHIPPER','TABATA','INTERVAL',
-    // vNext
+    // Module-first DSL support
     'module','vars','warmup','skill','strength','wod','score','session','components','import','override','scoring','meta','exports','json','html','ics','programming','team','realized','achievements'];
   const keywordItems = KEYWORDS.map(k => {
     const it = new vscode.CompletionItem(k, vscode.CompletionItemKind.Keyword);
@@ -259,7 +259,7 @@ function activate(context) {
         );
         return ci;
       });
-      // Module imports (vNext): suggest ns.name@vX scanned from workspace, especially after 'import '
+      // Module imports: suggest ns.name@vX scanned from workspace, especially after 'import '
       const line = doc.lineAt(pos.line).text.substr(0, pos.character);
       let moduleItems = MODULE_IMPORTS.map((m)=>{
         const ci = new vscode.CompletionItem(m, vscode.CompletionItemKind.Module);
@@ -448,7 +448,7 @@ function getVarsForRef(refId) {
   // Try without version
   const base = refId.split('@')[0];
   if (VARS_BY_REF.has(base)) return VARS_BY_REF.get(base);
-  // Try parse module file via vNext CLI
+  // Try parse module file via the language-core CLI
   try {
     const file = MODULE_PATHS.get(base);
     if (!file) return [];

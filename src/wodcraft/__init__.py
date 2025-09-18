@@ -1,9 +1,8 @@
-"""Unified WODCraft package (legacy + vNext).
+"""Unified WODCraft package and CLI integrations.
 
-This package provides a single CLI and thin wrappers that route to the
-legacy DSL (wodc_merged) or the vNext language (wodc_vnext) depending
-on file contents or explicit subcommands.
+This package exposes the WODCraft CLI (`wodc`) along with helper shims
+used by the MCP server, SDK, and editor tooling while the language core
+continues to be consolidated under ``src/wodcraft``.
 """
 
 from .cli import main  # noqa: F401
-

@@ -85,7 +85,7 @@ agg = sdk.results(text, modules_path="modules")
 timeline = sdk.run(text, modules_path="modules")
 ```
 
-La façade `sdk` offre une surface stable (sans legacy/vNext). Pour les usages avancés, les APIs de bas niveau sont sous `wodcraft.lang.core`.
+La façade `sdk` offre une surface stable. Pour les usages avancés, les APIs de bas niveau sont sous `wodcraft.lang.core`.
 
 ## Tests
 - Lancer: `make test` ou `pytest -q`
@@ -94,8 +94,8 @@ La façade `sdk` offre une surface stable (sans legacy/vNext). Pour les usages a
 ## Spécification et architecture
 - Spécification DSL: voir `WODCraft_spec.md`.
 - CLI unifiée: `src/wodcraft/cli.py` (entrypoint `wodc`).
-- Cœur langage: `src/wodcraft/lang/core.py` (façade sur vNext).
-- vNext core: `wodc_vnext/core.py` (modules/sessions/types), en cours de migration sous `src/`.
+- Façade du cœur langage: `src/wodcraft/lang/core.py`.
+- Grammaire/transformer de référence: `wodc_vnext/core.py` (en cours de migration sous `src/`).
 - Exemples sous `examples/` et modules sous `modules/`. Catalogue de mouvements: `data/movements_catalog.json`.
 
 ## Exemples (Langage / Programmation)

@@ -5,7 +5,7 @@ Test suite for WODCraft vNext parser and grammar
 
 import pytest
 import json
-from wodc_vnext import parse_vnext, ToASTvNext, ModuleRef, InMemoryResolver, FileSystemResolver
+from src.wodcraft.core import parse_vnext, ToASTvNext, ModuleRef, InMemoryResolver, FileSystemResolver, WODCraftError
 from pathlib import Path
 
 
@@ -159,13 +159,128 @@ class TestVNextParser:
             warmup import test
         '''
         
-        with pytest.raises(ValueError, match="Parse error"):
+        with pytest.raises(WODCraftError, match="Syntax error"):
             parse_vnext(source)
             
     def test_parse_empty_file(self):
         """Test parsing empty file returns empty structure"""
         ast = parse_vnext("")
         assert ast == {"modules": [], "sessions": []}
+
+    def test_parse_dual_load(self):
+        source = '''
+        module wod.dual_load v1 {
+          wod AMRAP 10:00 {
+            10 Thrusters @95lb/65lb
+          }
+        }
+        '''
+        ast = parse_vnext(source)
+        module = ast["modules"][0]
+        wod = module["body"]["children"][0]["children"][0]
+        movement = wod["movements"][0]
+        load = movement.get("load")
+        assert load["type"] == "LOAD_DUAL"
+        assert load["per_gender"]["male"]["raw"] == "95lb"
+        assert load["per_gender"]["female"]["raw"] == "65lb"
+
+    def test_parse_dual_calories(self):
+        source = '''
+        module wod.dual_cal v1 {
+          wod AMRAP 5:00 {
+            20/16 cal Row
+          }
+        }
+        '''
+        ast = parse_vnext(source)
+        movement = ast["modules"][0]["body"]["children"][0]["children"][0]["movements"][0]
+        quantity = movement.get("quantity")
+        assert quantity["kind"] == "calories"
+        assert quantity["per_gender"]["male"]["value"] == 20.0
+        assert quantity["per_gender"]["female"]["value"] == 16.0
+
+    def test_parse_notes_scopes(self):
+        source = '''
+        module wod.with.notes v1 {
+          notes: {
+            stimulus: "Anaerobic sprint",
+            coaching: ["Stay long", "Relax grip"]
+          }
+
+          wod AMRAP 12:00 {
+            notes: ["Stimulus: grip", "Pace breathing"]
+            15/12 cal Bike_Erg
+            50m Farmer_Carry PROGRESS("+10m/round") @24kg/16kg
+            notes: "Coaching: break carries before grip fails"
+          }
+        }
+        '''
+        ast = parse_vnext(source)
+        module = ast["modules"][0]
+        body_children = module["body"].get("children", [])
+
+        module_notes = []
+        for body in body_children:
+            if not isinstance(body, dict):
+                continue
+            for child in body.get("children", []):
+                if isinstance(child, dict) and child.get("type") == "NOTES":
+                    module_notes.append(child)
+        assert module_notes, "Module-level notes not captured"
+        notes_value = module_notes[0]["value"]
+        assert isinstance(notes_value, dict)
+        assert notes_value["stimulus"] == "Anaerobic sprint"
+        assert notes_value["coaching"][0] == "Stay long"
+
+        wod_node = None
+        for body in body_children:
+            for child in body.get("children", []):
+                if isinstance(child, dict) and child.get("type") == "WOD":
+                    wod_node = child
+                    break
+            if wod_node:
+                break
+        assert wod_node is not None
+        wod_notes = wod_node.get("notes")
+        assert isinstance(wod_notes, list)
+        assert wod_notes[0] == "Stimulus: grip"
+        assert "Coaching: break carries" in wod_notes[-1]
+
+    def test_parse_wod_rest(self):
+        source = '''
+        module wod.rest.sample v1 {
+          wod AMRAP 10:00 {
+            10 Burpee
+            REST 2:00
+            200m Run
+          }
+        }
+        '''
+        ast = parse_vnext(source)
+        wod = ast["modules"][0]["body"]["children"][0]["children"][0]
+        moves = wod["movements"]
+        assert len(moves) == 3
+        rest = moves[1]
+        assert rest["type"] == "REST"
+        duration = rest.get("duration", {})
+        assert duration.get("kind") == "duration"
+        assert duration.get("seconds") == 120
+        assert rest.get("raw") in {"2:00", "02:00", "2m"}
+
+    def test_parse_progress_clause(self):
+        source = '''
+        module wod.progress v1 {
+          wod AMRAP 12:00 {
+            15m Farmer_Carry PROGRESS("+15m/round")
+          }
+        }
+        '''
+        ast = parse_vnext(source)
+        movement = ast["modules"][0]["body"]["children"][0]["children"][0]["movements"][0]
+        progression = movement.get("progression")
+        assert progression["increment"]["value"] == 15.0
+        assert progression["increment"]["unit"] == "m"
+        assert progression["cadence"] == "round"
 
 
 class TestTransformerMethods:
@@ -193,11 +308,11 @@ class TestTransformerMethods:
         
         # Test single version
         result = transformer.version([1])
-        assert result == "v1"
-        
+        assert result == {"version": "v1"}
+
         # Test major.minor version
         result = transformer.version([2, 1])
-        assert result == "v2.1"
+        assert result == {"version": "v2.1"}
 
 
 if __name__ == "__main__":
