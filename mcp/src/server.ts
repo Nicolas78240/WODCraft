@@ -56,10 +56,17 @@ const STRUCTURE_GUIDE = [
   '5. Tempo / note optionnelles',
   '',
   '## 3. Types de score supportés',
-  '- `Time`, `Rounds`, `Reps`',
-  '- `Distance(m)`, `Load(kg)`',
-  '- `Calories`, `Tempo`',
-  '- `Int`, `Float`, `Bool`, `String`',
+  '- **Temporels** : `Time` (pour ForTime)',
+  '- **Rounds/Reps** : `Rounds`, `Reps` (pour AMRAP, EMOM)',
+  '- **Métriques** : `Distance(m)`, `Load(kg)`, `Calories`',
+  '- **Avancés** : `Tempo`, `Int`, `Float`, `Bool`, `String`',
+  '',
+  '**Syntaxe avec virgules** (nouveau) :',
+  '```wod',
+  'score AMRAP {',
+  '  rounds: Rounds, reps: Reps  // ✓ Virgules acceptées',
+  '}',
+  '```',
   '',
   '## 4. Multi-blocs avec repos',
   '```wod',
@@ -92,20 +99,40 @@ const STRUCTURE_GUIDE = [
   '```wod',
   'session "Pull Pyramid" {',
   '  components {',
-  '    wod import wod.block.a@v1',
-  '    wod import wod.block.b@v1',
-  '    wod import wod.block.c@v1',
+  '    strength import wod.squat.heavy@v1      // Force/puissance',
+  '    wod import wod.metcon.cindy@v1          // Conditioning',
   '  }',
-  '  scoring { wod ForTime time+reps }',
+  '  scoring { strength EMOM rounds, wod AMRAP rounds }',
   '}',
   '```',
   '',
-  '## 6. Rappels pratiques',
+  '**Alias de session supportés** :',
+  '- `warmup` : Échauffement',
+  '- `skill` : Technique/gymnastique',
+  '- `strength` : Force/puissance',
+  '- `wod` : Conditioning principal (metcon)',
+  '',
+  '💡 **Convention** : Pour sessions multi-WOD, utilisez `strength` pour le travail de force et `wod` pour le conditioning.',
+  '',
+  '## 6. Clarifications importantes',
+  '',
+  '**REST comme mouvement spécial** :',
+  '- `REST 2:00` est une ligne de mouvement qui insert une pause',
+  '- Se place DANS le WOD, pas entre les WODs',
+  '',
+  '**Conversions automatiques** :',
+  '- `@135lb` devient `135lb (~61.2kg)` dans la sortie',
+  '- `@95lb/65lb` devient `95lb (~43.1kg)/65lb (~29.5kg)`',
+  '',
+  '**Unités supportées** :',
+  '- Poids : `kg`, `lb`, `%1RM`',
+  '- Hauteurs : `in`, `cm`, `ft` (nouveau)',
+  '',
+  '## 7. Rappels pratiques',
   '- Pas de commentaires `#` : utiliser `//` ou `notes:`',
   '- Time cap via `ForTime cap 10:00` ou `notes`',
-  '- Les repos se déclarent avec `REST 2:00`',
   '- Modules en minuscules : `module wod.category.name v1`',
-  '- Mouvement en snake_case (`pull_up`, `farmer_carry`)',
+  '- Mouvement en snake_case (`Pull_up`, `Farmer_Carry`)',
 ].join('\n');
 
 const RESOURCE_REGISTRY: Array<{
@@ -206,12 +233,56 @@ async function lintViaPython(dsl: string) {
   if (DEFAULTS.CATALOG) args.push('--catalog', DEFAULTS.CATALOG);
   const { stdout, stderr } = await runWithTimeout(DEFAULTS.PYTHON, args, { tmpFile: f, tool: 'lint' });
   await unlink(f).catch(() => {});
-  const lines = (stdout + '\n' + stderr).split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
-  const re = /^(WARNING|ERROR)\s+([A-Z]\d{3})\s+([^:]+):\s+(.*)$/;
-  return lines
-    .map((ln) => re.exec(ln))
-    .filter(Boolean)
-    .map((m) => ({ level: m![1], code: m![2], path: m![3], message: m![4] }));
+
+  const output = stdout + '\n' + stderr;
+  const issues = [];
+
+  // Handle syntax errors (✗ Invalid syntax:)
+  if (output.includes('✗ Invalid syntax:')) {
+    const lines = output.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    for (const line of lines) {
+      if (line.startsWith('✗ Invalid syntax:')) {
+        let message = line.replace('✗ Invalid syntax:', '').trim();
+
+        // Enrich common error patterns
+        if (message.includes("Syntax error at '25'") || message.includes("Syntax error at")) {
+          const match = message.match(/Syntax error at '(\w+)'/);
+          if (match && match[1]) {
+            const token = match[1];
+            if (/^\d+$/.test(token)) {
+              message += '. Expected WOD format like "AMRAP 25:00", "ForTime cap 25:00", or "EMOM 25:00"';
+            } else if (token === 'metcon') {
+              message += '. "metcon" is not a valid session alias. Use "wod" for conditioning or "strength" for force work';
+            }
+          }
+        }
+
+        issues.push({
+          level: 'ERROR',
+          code: 'E001',
+          path: f,
+          message: message
+        });
+      }
+    }
+  }
+
+  // Handle semantic warnings/errors in output
+  const lines = output.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  for (const line of lines) {
+    // Match WARNING/ERROR pattern if present
+    const warningMatch = line.match(/^(WARNING|ERROR)\s+([A-Z]\d{3})\s+([^:]+):\s+(.*)$/);
+    if (warningMatch) {
+      issues.push({
+        level: warningMatch[1],
+        code: warningMatch[2],
+        path: warningMatch[3],
+        message: warningMatch[4]
+      });
+    }
+  }
+
+  return issues;
 }
 
 async function parseViaPython(dsl: string): Promise<any> {
@@ -372,11 +443,11 @@ function formatLoadWithConversion(value: number, unit: string): string {
 function describeLoad(load: any): string {
   if (!load) return '';
   if (typeof load === 'string') return load;
-  if (load.raw) return String(load.raw);
+
   if (load.type === 'LOAD_DUAL' && load.per_gender) {
     const male = describeLoad(load.per_gender.male);
     const female = describeLoad(load.per_gender.female);
-    return `${male}/${female}`.trim();
+    return `${male}/${female}`;
   }
   if (load.type === 'LOAD_VARIANT' && load.variants) {
     const formatted = Object.entries(load.variants)
@@ -393,6 +464,9 @@ function describeLoad(load: any): string {
     }
     return load.value !== undefined ? `${load.value}${unit}` : unit;
   }
+
+  // Fallback to raw value if no specific type handling
+  if (load.raw) return String(load.raw);
   return flattenToText(load);
 }
 
@@ -519,6 +593,30 @@ registerResource(
       return {
         text: '# Database Integration Guide\n\nGuide not found. Please check if DATABASE_INTEGRATION.md exists in the project root.',
         mimeType: 'text/markdown'
+      };
+    }
+  }
+);
+
+registerResource(
+  'best-practices',
+  'wodcraft://guide/best-practices',
+  {
+    title: 'WODCraft Best Practices',
+    description: 'Common errors, conventions, and recommended patterns',
+  },
+  async () => {
+    try {
+      const fs = await import('node:fs/promises');
+      const path = await import('node:path');
+      const __dirname = path.dirname(fileURLToPath(import.meta.url));
+      const guidePath = path.resolve(__dirname, '../BEST_PRACTICES.md');
+      const content = await fs.readFile(guidePath, 'utf-8');
+      return { text: content, mimeType: 'text/markdown' };
+    } catch (error) {
+      return {
+        text: '# WODCraft Best Practices\n\nGuide des bonnes pratiques temporairement indisponible.',
+        mimeType: 'text/markdown',
       };
     }
   }

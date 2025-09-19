@@ -101,14 +101,14 @@ load_dual: load_value "/" load_value
 load_variant: IDENT "(" load_variant_entry ("," load_variant_entry)* ")"
 load_variant_entry: IDENT ":" load_variant_amount
 load_variant_amount: load_value | NUMBER | IDENT | STRING
-load_value: NUMBER UNIT_WEIGHT
+load_value: NUMBER (UNIT_WEIGHT | UNIT_HEIGHT)
 tempo_spec: TEMPO (tempo_value | IDENT)
 tempo_value: STRING
 note: STRING
 
 notes_decl: "notes" ":" value
 
-score_decl: "score" IDENT "{" field_decl* "}"
+score_decl: "score" IDENT "{" field_decl ("," field_decl)* "}"
 field_decl: IDENT ":" type_spec
 
 // Session System
@@ -262,6 +262,8 @@ REPDUAL: /\d+\/\d+/
 CALDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?\s*cal/
 DISTDUAL: /\d+(?:\.\d+)?\/\d+(?:\.\d+)?(?:m|km)\b/
 UNIT_WEIGHT: /(kg|lb|%1RM)/
+// Height units must be defined before IDENT to have priority
+UNIT_HEIGHT: /(in|cm|ft)/
 
 // Identifiers: allow ASCII letters, digits, underscore, and common Latin-1 letters
 IDENT: /[A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF][A-Za-z0-9_\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF]*/
