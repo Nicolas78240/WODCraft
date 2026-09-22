@@ -19,7 +19,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SKIPPED = {"docs/PROPOSITION-v1.md"}
 MARKDOWN = sorted(
     path
-    for path in [*ROOT.glob("*.md"), *(ROOT / "docs").glob("*.md"), *(ROOT / "spec").glob("*.md"), *(ROOT / "src/wodcraft/library").glob("*.md")]
+    for path in [
+        *ROOT.glob("*.md"),
+        *(ROOT / "docs").glob("*.md"),
+        *(ROOT / "spec").glob("*.md"),
+        *(ROOT / "src/wodcraft/library").glob("*.md"),
+    ]
     if path.is_file() and path.relative_to(ROOT).as_posix() not in SKIPPED
 )
 FENCE = re.compile(r"^```wod\n(.*?)^```", re.MULTILINE | re.DOTALL)
