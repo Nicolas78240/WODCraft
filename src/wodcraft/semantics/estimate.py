@@ -6,7 +6,10 @@ from wodcraft.catalog import Catalog
 from wodcraft.diagnostics import DiagnosticBag, Span
 
 FATIGUE = 1.25  # transitions, breathing, set breaks
-SPREAD = 0.35  # ± around the central estimate: catalog paces describe an average Rx athlete
+SPREAD = 0.4  # ± around the central estimate: catalog paces describe an average Rx athlete
+LOAD_SENSITIVITY = 0.9  # a movement at its Rx load costs about twice its unloaded cadence
+MAX_LOAD_FACTOR = 3.5
+REFERENCE_KG = {"barbell": 50.0, "dumbbell": 22.5, "kettlebell": 24.0, "medicine_ball": 9.0, "sandbag": 45.0}
 DEFAULT_REP_PACE = 3.0
 DEFAULT_SET_REST = 120.0  # strength work: rest between sets unless the source says otherwise
 
@@ -15,6 +18,21 @@ def _pick(amount, category: str = "men") -> float:
     if isinstance(amount, dict):
         return float(amount.get(category, next(iter(amount.values()))))
     return float(amount)
+
+
+def load_factor(item: dict, entry) -> float:
+    """Heavier than the usual Rx load means slower reps, and far heavier means singles."""
+    load = item.get("load")
+    if not load or entry is None:
+        return 1.0
+    kg = _pick(load.get("kg", 0))
+    reference = None
+    if entry.rx and entry.rx.get("unit", "kg") == "kg":
+        reference = float(entry.rx.get("men", 0)) or None
+    reference = reference or REFERENCE_KG.get(entry.equipment)
+    if not reference or not kg:
+        return 1.0
+    return min(MAX_LOAD_FACTOR, 1.0 + LOAD_SENSITIVITY * (kg / reference))
 
 
 def item_seconds(item: dict, catalog: Catalog) -> float:
@@ -34,13 +52,14 @@ def item_seconds(item: dict, catalog: Catalog) -> float:
     if kind == "calories":
         return _pick(quantity.get("cal", 0)) * (pace or 3.5)
     reps = _pick(quantity.get("reps", 0)) if kind == "reps" else 0.0
+    per_rep = (pace or DEFAULT_REP_PACE) * load_factor(item, entry)
     sets = item.get("sets")
     if sets:
         reps = float(sum(sets["reps"]))
         rest = _declared_rest(item)
         rest = DEFAULT_SET_REST if rest is None else rest
-        return reps * (pace or DEFAULT_REP_PACE) + rest * max(0, len(sets["reps"]) - 1)
-    return reps * (pace or DEFAULT_REP_PACE)
+        return reps * per_rep + rest * max(0, len(sets["reps"]) - 1)
+    return reps * per_rep
 
 
 def _declared_rest(item: dict) -> float | None:
@@ -84,7 +103,8 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
         for item in items:
             if item.get("type") == "movement" and not item.get("quantity"):
                 entry = catalog.movements.get(item.get("movement", ""))
-                per_rep_cost += (entry.pace_for("reps") if entry else None) or DEFAULT_REP_PACE
+                pace = (entry.pace_for("reps") if entry else None) or DEFAULT_REP_PACE
+                per_rep_cost += pace * load_factor(item, entry)
             else:
                 fixed += block_seconds(item, catalog)
         return sum(reps) * per_rep_cost + fixed * len(reps)

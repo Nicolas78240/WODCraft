@@ -359,6 +359,9 @@ Errors make compilation fail; warnings and infos do not.
 | W104 | warning | load far above the catalog reference (typo?) |
 | I200 | info | estimated duration |
 
+Duration estimates are **indicative**: they come from the average paces of the catalog and a load
+factor, and they are excluded from conformance (§16).
+
 ## 16. Conformance
 
 `spec/conformance/` contains pairs of files: `NAME.wod` with either `NAME.json` (expected compiled
