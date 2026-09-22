@@ -46,6 +46,7 @@ def _parser() -> argparse.ArgumentParser:
     _add_input(check)
     check.add_argument("--json", action="store_true", help="machine-readable diagnostics")
     check.add_argument("--quiet", "-q", action="store_true", help="only report errors")
+    check.add_argument("--strict", action="store_true", help="treat warnings as errors")
     check.set_defaults(func=cmd_check)
 
     build = subparsers.add_parser("build", help="compile to JSON")
@@ -116,10 +117,13 @@ def cmd_check(args) -> int:
                 if args.quiet and diagnostic.severity.value != "error":
                     continue
                 print(diagnostic.format(result.source_lines))
+            warnings = len([d for d in result.diagnostics if d.severity.value != "error"])
             if result.ok and not args.quiet:
-                counts = len([d for d in result.diagnostics if d.severity.value != "error"])
-                print(f"✓ {result.path}: valid" + (f" ({counts} warning{'s' if counts > 1 else ''})" if counts else ""))
-        if not result.ok:
+                if args.strict and warnings:
+                    print(f"✗ {result.path}: {warnings} warning{'s' if warnings > 1 else ''} (--strict)")
+                else:
+                    print(f"✓ {result.path}: valid" + (f" ({warnings} warning{'s' if warnings > 1 else ''})" if warnings else ""))
+        if not result.ok or (args.strict and result.diagnostics):
             status = EXIT_DIAGNOSTICS
     if args.json:
         print(json.dumps(payload, indent=2))
