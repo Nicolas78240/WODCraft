@@ -100,8 +100,9 @@ def test_every_console_transcript_matches_the_real_output(name, line, command, e
 
     monkeypatch.chdir(ROOT)
     argv = command.split()[1:]
-    if any(Path(argument).suffix == ".wod" for argument in argv):
-        pytest.skip(f"{name}:{line} uses a file of its own")
+    missing = [a for a in argv if (a.endswith(".wod") or a.endswith(".toml")) and not (ROOT / a).exists()]
+    if missing:
+        pytest.skip(f"{name}:{line} refers to files that are not in the repository: {missing}")
 
     assert main(argv) == 0
     printed = capsys.readouterr().out

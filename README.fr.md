@@ -70,7 +70,7 @@ wodc show girls/fran --lang fr    # …et n'importe lequel de ses WODs, par son 
 ```
 
 Un profil d'athlète (`athlete.toml`, cherché dans le dossier courant, ses parents, puis
-`~/.config/wodcraft/`) transforme les prescriptions en vos charges :
+`~/.config/wodcraft/`) transforme les prescriptions en vos charges — il y en a un dans [`examples/`](examples/) :
 
 ```toml
 category = "men"     # men | women
@@ -84,9 +84,12 @@ clean = 100
 ```
 
 ```console
-$ wodc show force.wod --me
+$ wodc show examples/strength.wod --profile examples/athlete.toml
 BACK SQUAT
-Back squat ........................ 5x5 105 kg
+Back squat ............ 5x5 105 kg (rest 2:30)
+Estimate: 8:24–15:36
+Note: Add 2.5 kg next week if every set moves well.
+[men · rx · kg]
 ```
 
 ## Le langage en une minute

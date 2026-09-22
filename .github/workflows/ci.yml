@@ -25,8 +25,8 @@ jobs:
         run: pytest --cov=wodcraft --cov-report=term-missing
       - name: The standard library compiles and is canonical
         run: |
-          wodc check src/wodcraft/library/*/*.wod
-          wodc fmt --check src/wodcraft/library/*/*.wod
+          wodc check src/wodcraft/library/*/*.wod examples/*.wod
+          wodc fmt --check src/wodcraft/library/*/*.wod examples/*.wod
       - name: Compiled output matches the JSON schema
         run: python spec/validate_schema.py
 
