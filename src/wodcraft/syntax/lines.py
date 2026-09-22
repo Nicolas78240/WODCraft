@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from wodcraft.diagnostics import DiagnosticBag, Span
-from wodcraft.syntax.ast import Block, Dual, MetaLine, MovementLine, Param, Quantity, RestLine, Sets, Statement, UseLine
+from wodcraft.syntax.ast import Block, CommentLine, Dual, MetaLine, MovementLine, Param, Quantity, RestLine, Sets, Statement, UseLine
 from wodcraft.syntax.lexer import Line, Token, tokenize
 from wodcraft.syntax.units import parse_clock, seconds, unit_kind
 
@@ -513,6 +513,8 @@ def _meta_or_label(line: Line, tokens: list[Token], file: str | None) -> tuple[s
 
 def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace: bool = False) -> Statement | None:
     """Parse a non-heading line. Returns None when the line is invalid (a diagnostic was emitted)."""
+    if not line.text:
+        return CommentLine(line.comment or "", Span(line.number, line.col0, file=file)) if line.comment else None
     scratch = DiagnosticBag()
     tokens = tokenize(line, scratch, file)
     # a meta value is free text: it must not go through the lexer's expectations

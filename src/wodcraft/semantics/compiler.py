@@ -12,6 +12,7 @@ from wodcraft.semantics import measures
 from wodcraft.semantics.estimate import estimate_workout
 from wodcraft.syntax.ast import (
     Block,
+    CommentLine,
     Document,
     MetaLine,
     MovementLine,
@@ -179,7 +180,7 @@ class Compiler:
     def _statements(self, statements: list[Statement], parent: str) -> list[dict]:
         items: list[dict] = []
         for stmt in statements:
-            if isinstance(stmt, MetaLine):
+            if isinstance(stmt, (MetaLine, CommentLine)):
                 continue
             if isinstance(stmt, RestLine):
                 items.append({"type": "rest", "seconds": stmt.seconds, "source": stmt.span.to_dict()})

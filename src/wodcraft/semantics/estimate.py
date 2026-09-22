@@ -5,8 +5,8 @@ from __future__ import annotations
 from wodcraft.catalog import Catalog
 from wodcraft.diagnostics import DiagnosticBag, Span
 
-FATIGUE = 1.15  # transitions, breathing, set breaks
-SPREAD = 0.25  # ± around the central estimate
+FATIGUE = 1.25  # transitions, breathing, set breaks
+SPREAD = 0.35  # ± around the central estimate: catalog paces describe an average Rx athlete
 DEFAULT_REP_PACE = 3.0
 
 

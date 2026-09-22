@@ -73,6 +73,12 @@ class UseLine:
 
 
 @dataclass
+class CommentLine:
+    text: str
+    span: Span
+
+
+@dataclass
 class MetaLine:
     key: str
     value: str
@@ -99,7 +105,7 @@ class Block:
     is_label: bool = False
 
 
-Statement = Union[Block, MovementLine, RestLine, UseLine, MetaLine]
+Statement = Union[Block, MovementLine, RestLine, UseLine, MetaLine, CommentLine]
 
 LEVEL_LABELS = ("scaled", "intermediate", "foundations")
 

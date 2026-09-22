@@ -51,37 +51,41 @@ class Line:
     indent: int
     text: str  # without indentation and comment, right-stripped
     raw: str
+    comment: str | None = None  # "// …" text, without the slashes
 
     @property
     def col0(self) -> int:
         return self.indent + 1
 
 
-def strip_comment(text: str) -> str:
-    """Remove a ``//`` comment. ``//`` only starts a comment at line start or after whitespace,
-    and never inside a quoted string, so URLs such as ``https://…`` survive."""
+def strip_comment(text: str) -> tuple[str, str | None]:
+    """Split a line into code and its ``//`` comment. ``//`` only starts a comment at line start
+    or after whitespace, and never inside a quoted string, so URLs such as ``https://…`` survive."""
     in_str = False
     for i, ch in enumerate(text):
         if ch == '"':
             in_str = not in_str
         elif ch == "/" and not in_str and text.startswith("//", i) and (i == 0 or text[i - 1].isspace()):
-            return text[:i]
-    return text
+            return text[:i], text[i + 2 :].strip()
+    return text, None
 
 
 def split_lines(source: str, diags: DiagnosticBag, file: str | None = None) -> tuple[list[Line], list[str]]:
     raw_lines = source.replace("\r\n", "\n").replace("\r", "\n").split("\n")
     out: list[Line] = []
     for n, raw in enumerate(raw_lines, start=1):
-        body = strip_comment(raw).rstrip()
+        body, comment = strip_comment(raw)
+        body = body.rstrip()
         if not body.strip():
+            if comment:
+                out.append(Line(n, len(raw) - len(raw.lstrip()), "", raw, comment))
             continue
         stripped = body.lstrip(" \t")
         lead = body[: len(body) - len(stripped)]
         if "\t" in lead:
             diags.add("E002", "Tab in indentation; use spaces.", Span(n, lead.index("\t") + 1, file=file))
             lead = lead.replace("\t", "  ")
-        out.append(Line(n, len(lead), stripped, raw))
+        out.append(Line(n, len(lead), stripped, raw, comment))
     return out, raw_lines
 
 
