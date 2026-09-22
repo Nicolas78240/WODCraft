@@ -1,0 +1,161 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "run",
+          "name": "Run",
+          "quantity": {
+            "m": 1609.344,
+            "unit": "mi",
+            "written": 1,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 2,
+            "col": 8
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "m": 5000,
+            "unit": "km",
+            "written": 5,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 3,
+            "col": 8
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "kettlebell_swing",
+          "name": "Kettlebell swing",
+          "quantity": {
+            "kind": "reps",
+            "reps": 21
+          },
+          "load": {
+            "kg": {
+              "men": 24,
+              "women": 16
+            },
+            "lb": {
+              "men": 53,
+              "women": 36
+            },
+            "unit": "pood",
+            "written": {
+              "men": 1.5,
+              "women": 1
+            }
+          },
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "box_jump",
+          "name": "Box jump",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "height": {
+            "cm": {
+              "men": 60,
+              "women": 50
+            },
+            "in": {
+              "men": 24,
+              "women": 20
+            },
+            "unit": "in",
+            "written": {
+              "men": 24,
+              "women": 20
+            }
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "thruster",
+          "name": "Thruster",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "load": {
+            "kg": {
+              "men": 43,
+              "women": 30
+            },
+            "lb": {
+              "men": 95,
+              "women": 65
+            },
+            "unit": "lb",
+            "written": {
+              "men": 95,
+              "women": 65
+            }
+          },
+          "source": {
+            "line": 6,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "wall_ball",
+          "name": "Wall ball",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "load": {
+            "kg": {
+              "men": 9,
+              "women": 6
+            },
+            "lb": {
+              "men": 20,
+              "women": 14
+            },
+            "unit": "kg",
+            "written": {
+              "men": 9,
+              "women": 6
+            }
+          },
+          "source": {
+            "line": 7,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Helen",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "rounds": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "run",
+          "name": "Run",
+          "quantity": {
+            "m": 400,
+            "unit": "m",
+            "written": 400,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 3,
+            "col": 9
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "kettlebell_swing",
+          "name": "Kettlebell swing",
+          "quantity": {
+            "kind": "reps",
+            "reps": 21
+          },
+          "load": {
+            "kg": {
+              "men": 24,
+              "women": 16
+            },
+            "lb": {
+              "men": 53,
+              "women": 36
+            },
+            "unit": "pood",
+            "written": {
+              "men": 1.5,
+              "women": 1
+            }
+          },
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 12
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

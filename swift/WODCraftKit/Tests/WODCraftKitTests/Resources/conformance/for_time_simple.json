@@ -1,0 +1,64 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Jerry",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "run",
+          "name": "Run",
+          "quantity": {
+            "m": 1609.344,
+            "unit": "mi",
+            "written": 1,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 3,
+            "col": 8
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "m": 2000,
+            "unit": "km",
+            "written": 2,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 4,
+            "col": 8
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "run",
+          "name": "Run",
+          "quantity": {
+            "m": 1609.344,
+            "unit": "mi",
+            "written": 1,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 5,
+            "col": 8
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

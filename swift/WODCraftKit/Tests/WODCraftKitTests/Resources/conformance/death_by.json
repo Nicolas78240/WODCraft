@@ -1,0 +1,29 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "death_by",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "interval_s": 60.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "burpee",
+          "name": "Burpee",
+          "source": {
+            "line": 1,
+            "col": 10
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  }
+}

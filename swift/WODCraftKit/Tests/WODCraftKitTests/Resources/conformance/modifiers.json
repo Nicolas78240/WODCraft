@@ -1,0 +1,99 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "duration_s": 600.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "thruster",
+          "name": "Thruster",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "load": {
+            "kg": {
+              "men": 43,
+              "women": 30
+            },
+            "lb": {
+              "men": 95,
+              "women": 65
+            },
+            "unit": "kg",
+            "written": {
+              "men": 43,
+              "women": 30
+            }
+          },
+          "modifiers": [
+            "unbroken"
+          ],
+          "source": {
+            "line": 2,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "dumbbell_snatch",
+          "name": "Dumbbell snatch",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "load": {
+            "kg": {
+              "men": 22.5,
+              "women": 15
+            },
+            "lb": {
+              "men": 50,
+              "women": 35
+            },
+            "unit": "kg",
+            "written": {
+              "men": 22.5,
+              "women": 15
+            }
+          },
+          "modifiers": [
+            "alternating",
+            "one arm per set"
+          ],
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "lunge",
+          "name": "Lunge",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "modifiers": [
+            "per side"
+          ],
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  }
+}

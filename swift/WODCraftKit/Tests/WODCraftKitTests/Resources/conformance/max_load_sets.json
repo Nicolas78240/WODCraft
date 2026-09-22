@@ -1,0 +1,41 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "max_load",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "back_squat",
+          "name": "Back squat",
+          "sets": {
+            "reps": [
+              5,
+              5,
+              5,
+              5,
+              5
+            ]
+          },
+          "percent": {
+            "value": 75,
+            "of": "back_squat"
+          },
+          "source": {
+            "line": 2,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "load"
+  }
+}

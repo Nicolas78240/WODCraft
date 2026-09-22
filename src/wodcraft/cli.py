@@ -97,6 +97,11 @@ def _parser() -> argparse.ArgumentParser:
     catalog.add_argument("--json", action="store_true")
     catalog.set_defaults(func=cmd_catalog)
 
+    bundle = subparsers.add_parser("bundle", help="write the JSON bundle an application embeds")
+    bundle.add_argument("directory", nargs="?", default="bundle", help="where to write (default: ./bundle)")
+    bundle.add_argument("--pretty", action="store_true", help="indent the JSON")
+    bundle.set_defaults(func=cmd_bundle)
+
     library = subparsers.add_parser("lib", help="list the standard workout library")
     library.add_argument("query", nargs="?", help="filter by name")
     library.set_defaults(func=cmd_lib)
@@ -266,6 +271,18 @@ def cmd_catalog(args) -> int:
         print(f"{movement.id:34} {movement.family}  {', '.join(movement.quantities):24} {movement.name}{rx}")
     print(f"\n{len(rows)} movement{'s' if len(rows) > 1 else ''}" + (f" of {len(catalog)}" if query or args.family else ""))
     return EXIT_OK
+
+
+def cmd_bundle(args) -> int:
+    from wodcraft.bundle import write_bundle
+
+    report = write_bundle(args.directory, compact=not args.pretty)
+    for path, size in report.files.items():
+        print(f"{path:44} {size / 1024:6.1f} kB")
+    print(f"{report.workouts} workouts, {report.movements} movements")
+    for failure in report.failures:
+        print(f"wodc: {failure}: does not compile, left out of the bundle", file=sys.stderr)
+    return EXIT_DIAGNOSTICS if report.failures else EXIT_OK
 
 
 def cmd_lib(args) -> int:
