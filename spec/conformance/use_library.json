@@ -59,5 +59,49 @@
   "score": {
     "type": "time",
     "capped": "reps"
+  },
+  "levels": {
+    "scaled": [
+      {
+        "movement": "thruster",
+        "load": {
+          "kg": {
+            "men": 30,
+            "women": 20
+          },
+          "lb": {
+            "men": 65,
+            "women": 45
+          },
+          "unit": "lb",
+          "written": {
+            "men": 65,
+            "women": 45
+          }
+        },
+        "source": {
+          "line": 9,
+          "col": 3
+        }
+      },
+      {
+        "movement": "pull_up",
+        "replace_with": "jumping_pull_up",
+        "name": "Jumping pull-up",
+        "source": {
+          "line": 10,
+          "col": 3
+        }
+      }
+    ]
+  },
+  "meta": {
+    "tags": [
+      "girls",
+      "benchmark"
+    ],
+    "stimulus": [
+      "Short and intense; unbroken or near-unbroken sets."
+    ]
   }
 }

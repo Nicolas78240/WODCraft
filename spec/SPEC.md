@@ -225,7 +225,7 @@ Deadlift 5-5-3-3-1-1 @ RPE 8
 | percent | `@ 75%`, `@ 75% Back squat` | share of a one-rep max (of the movement itself, or of the named lift) |
 | RPE | `@ RPE 8` | rate of perceived exertion (1–10) |
 | bodyweight | `bw`, `@ 1.5 bw` | multiple of bodyweight |
-| distance, calories | `Row 500 m` | read as the quantity, when the movement accepts it and no quantity was written |
+| distance, calories | `Row 500 m`, `10 Shuttle run 25 m` | the quantity when none was written, otherwise a per-rep measure; the movement must accept that kind |
 
 A number without unit in parameter position is a load in the `units:` default unit; without a
 default it is an error (`E031`).

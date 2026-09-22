@@ -395,12 +395,19 @@ class Compiler:
             centimetres = Dual(param.value.men * M_PER[param.unit or "m"] * 100, param.value.women * M_PER[param.unit or "m"] * 100, param.value.is_dual)
             param = _Param("height", centimetres, "cm", param.span)
         if param.kind in ("distance", "calories"):
-            self._err(
-                "E032",
-                f"{entry.name} does not take a {param.kind} parameter.",
-                param.span,
-                "write it as the quantity, before the movement name",
-            )
+            if param.kind not in entry.quantities:
+                self._err(
+                    "E032",
+                    f"{entry.name} does not take a {param.kind} parameter.",
+                    param.span,
+                    "write it as the quantity, before the movement name",
+                )
+                return
+            # a per-rep measure: "10 Shuttle run 25 m" is ten runs of 25 metres
+            if param.kind == "distance":
+                out["distance"] = measures.distance_to_json(param.value, param.unit or "m")
+            else:
+                out["calories"] = {"cal": measures.amount(param.value)}
             return
         if param.kind == "height" and "height" not in entry.params:
             expected = "a load (kg, lb)" if "load" in entry.params else "no height"

@@ -70,6 +70,8 @@
         "quantity": { "$ref": "#/$defs/quantity" },
         "load": { "$ref": "#/$defs/load" },
         "height": { "$ref": "#/$defs/height" },
+        "distance": { "type": "object", "description": "a per-rep distance, e.g. ten 25 m shuttle runs" },
+        "calories": { "type": "object", "description": "a per-rep calorie count" },
         "percent": {
           "type": "object",
           "properties": { "value": { "$ref": "#/$defs/amount" }, "of": { "type": "string" } },
@@ -169,6 +171,8 @@
         },
         "load": { "$ref": "#/$defs/load" },
         "height": { "$ref": "#/$defs/height" },
+        "distance": { "type": "object", "description": "a per-rep distance, e.g. ten 25 m shuttle runs" },
+        "calories": { "type": "object", "description": "a per-rep calorie count" },
         "percent": { "type": "object" },
         "rpe": { "$ref": "#/$defs/amount" },
         "bodyweight": { "$ref": "#/$defs/amount" },
