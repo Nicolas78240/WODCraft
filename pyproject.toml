@@ -47,6 +47,9 @@ where = ["src"]
 include = ["wodcraft*"]
 exclude = ["wodcraft.*.tests", "wodcraft.*.tests.*", "wodcraft.tests", "wodcraft.tests.*"]
 
+[tool.setuptools.exclude-package-data]
+"*" = ["tests/*", "*/tests/*", "__pycache__/*"]
+
 [tool.setuptools.package-data]
 wodcraft = ["catalog/*.toml", "library/**/*.wod", "library/*.md", "spec/*.md", "spec/*.json"]
 
