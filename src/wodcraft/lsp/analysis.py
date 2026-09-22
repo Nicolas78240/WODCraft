@@ -320,8 +320,7 @@ def _fixes_for(analysis: Analysis, diagnostic: Diagnostic) -> list[Fix]:
         ]
     if code == "E031":
         fixes = [
-            Fix(f"Add the unit '{unit}'", diagnostic, (_append(text, diagnostic.span, f" {unit}"),), unit == "kg")
-            for unit in ("kg", "lb")
+            Fix(f"Add the unit '{unit}'", diagnostic, (_append(text, diagnostic.span, f" {unit}"),), unit == "kg") for unit in ("kg", "lb")
         ]
         insert_line = _units_insert_line(analysis, diagnostic.span.line)
         fixes.append(Fix("Add 'units: kg' to the workout", diagnostic, (Edit(insert_line, 1, 1, "units: kg\n"),)))
@@ -351,7 +350,9 @@ def _fixes_for(analysis: Analysis, diagnostic: Diagnostic) -> list[Fix]:
         fixed = _detab(text)
         return [Fix("Replace the tabs with spaces", diagnostic, (Edit(diagnostic.span.line, 1, len(text) + 1, fixed),), True)]
     if code == "E001" and candidates:
-        return [Fix(f"Replace with '{c}'", diagnostic, (_replace(text, diagnostic.span, c),), index == 0) for index, c in enumerate(candidates)]
+        return [
+            Fix(f"Replace with '{c}'", diagnostic, (_replace(text, diagnostic.span, c),), index == 0) for index, c in enumerate(candidates)
+        ]
     return []
 
 

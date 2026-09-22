@@ -71,3 +71,8 @@ ignore = ["E501"]
 python_version = "3.11"
 files = ["src/wodcraft"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# The MCP and LSP layers hand dynamic dictionaries to typed SDK models; the core is what is checked.
+module = ["wodcraft.mcp.*", "wodcraft.lsp.*"]
+ignore_errors = true

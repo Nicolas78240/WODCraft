@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from wodcraft.syntax.ast import (
+    LEVEL_LABELS,
     Block,
     CommentLine,
     Document,
@@ -74,7 +75,7 @@ def _statement(stmt: Statement, depth: int) -> list[str]:
     head = _block_head(block)
     lines = [pad + head] if head else []
     child_depth = depth + (1 if head else 0)
-    if block.is_label and len(block.children) == 1 and isinstance(block.children[0], MovementLine) and not block.kind.startswith("scal"):
+    if block.is_label and block.kind not in LEVEL_LABELS and len(block.children) == 1 and isinstance(block.children[0], MovementLine):
         return [f"{pad}{head} {movement(block.children[0])}"]
     lines += _statements(block.children, child_depth)
     return lines

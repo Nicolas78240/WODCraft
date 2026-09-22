@@ -93,6 +93,8 @@ A format line or a label line opens a **block**. The block owns, by the first ru
 1. its **indented children**, if the next non-blank line is more indented;
 2. if it is the **first format line of a workout body** (meta lines excepted): every following line of
    the body, up to the first level label (`Scaled:`…) — the whole workout hangs off its main format;
+   a meta line is transparent here: it never owns the indented lines that follow it, they belong to
+   the block above it;
 3. otherwise, the **following sibling lines** at the same indentation, up to the next format line,
    label line, level label, heading, or end of body.
 
@@ -318,13 +320,44 @@ Compiling a document produces a JSON object described by `spec/workout.schema.js
   e.g. 95 lb ↔ 43 kg, 24 in ↔ 60 cm) before falling back to arithmetic conversion rounded to
   0.5 kg / 1 lb / 1 cm / 1 in.
 
+### 13.1 A worked example
+
+`21-15-9 for time, cap 10:00` with `Thruster 95/65 lb` and `Pull-up` compiles to:
+
+```json
+{
+  "wodcraft": "1.0", "kind": "workout", "title": "Fran",
+  "blocks": [{
+    "type": "for_time", "cap_s": 600, "reps": [21, 15, 9],
+    "items": [
+      { "type": "movement", "movement": "thruster", "name": "Thruster",
+        "load": { "kg": { "men": 43, "women": 30 }, "lb": { "men": 95, "women": 65 },
+                  "unit": "lb", "written": { "men": 95, "women": 65 } },
+        "source": { "line": 4, "col": 3 } },
+      { "type": "movement", "movement": "pull_up", "name": "Pull-up", "source": { "line": 5, "col": 3 } }
+    ],
+    "source": { "line": 3, "col": 1 }
+  }],
+  "score": { "type": "time", "capped": "reps" }
+}
+```
+
+Note the canonical merge (§13): the `for_time` block carries the ladder directly, `unit` and
+`written` keep what the author typed, and `kg`/`lb` carry the normalized values. A workout with
+several timed blocks scores `{"type": "multi", "parts": [{"type": "…", "block": 0}, …]}`.
+
 ## 14. Athlete resolution
 
 A compiled workout MAY be resolved for an athlete profile: `category` (`men` | `women`), `level`
 (`rx` | `scaled` | `intermediate` | `foundations`), `units` (`kg` | `lb`) and one-rep maxes.
 Resolution applies the level block, selects the category value of every dual, converts to the
 preferred units and turns percentages into loads rounded to the nearest 2.5 kg / 5 lb.
-A level missing from the workout falls back to the closest easier-to-harder existing level, then Rx.
+
+When the asked level is missing from the workout, resolution walks the levels from the asked one
+**towards the easiest** (`rx` → `intermediate` → `scaled` → `foundations`), then back up towards Rx:
+an athlete who asks for `scaled` in a workout that only offers `foundations` gets the foundations
+work, and one who asks for `foundations` in a workout that only offers `scaled` gets the scaled work.
+Rx is always the last resort, because every workout has it.
 
 ## 15. Diagnostics
 
@@ -370,6 +403,11 @@ factor, and they are excluded from conformance (§16).
 ## 16. Conformance
 
 `spec/conformance/` contains pairs of files: `NAME.wod` with either `NAME.json` (expected compiled
-output) or `NAME.diag` (expected diagnostic codes and lines, one `CODE LINE` per line).
-An implementation conforms to WODCraft 1.0 when it produces, for every case, the same JSON (key order
-and `estimate` excluded) or the same set of error codes and lines.
+output) or `NAME.diag` (expected diagnostics).
+
+A `.diag` file holds one `CODE LINE` per line, in source order, and lists **every** diagnostic the
+case produces — warnings included, and the cascading ones too (a rejected line that leaves its block
+empty also reports `E016`).
+
+An implementation conforms to WODCraft 1.0 when, for every case, it produces the same JSON (key
+order and the `estimate` object excluded) or exactly that list of diagnostics.

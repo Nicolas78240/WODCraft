@@ -15,9 +15,7 @@ from typing import Any
 try:  # pygls >= 2
     from pygls.lsp.server import LanguageServer
 except ImportError as exc:  # pragma: no cover - depends on the installed pygls
-    raise ImportError(
-        "The WODCraft language server needs pygls 2: pip install 'pygls>=2,<3'"
-    ) from exc
+    raise ImportError("The WODCraft language server needs pygls 2: pip install 'pygls>=2,<3'") from exc
 
 from lsprotocol import types as lsp
 
@@ -86,9 +84,7 @@ def diagnostics_for(analysis: Analysis) -> list[lsp.Diagnostic]:
 def publish_diagnostics(ls: WodcraftLanguageServer, uri: str) -> list[lsp.Diagnostic]:
     analysis = ls.analyse(uri)
     items = diagnostics_for(analysis)
-    ls.text_document_publish_diagnostics(
-        lsp.PublishDiagnosticsParams(uri=uri, version=analysis.version, diagnostics=items)
-    )
+    ls.text_document_publish_diagnostics(lsp.PublishDiagnosticsParams(uri=uri, version=analysis.version, diagnostics=items))
     return items
 
 
@@ -106,9 +102,7 @@ def did_save(ls: WodcraftLanguageServer, params: lsp.DidSaveTextDocumentParams) 
 
 def did_close(ls: WodcraftLanguageServer, params: lsp.DidCloseTextDocumentParams) -> None:
     ls.cache.drop(params.text_document.uri)
-    ls.text_document_publish_diagnostics(
-        lsp.PublishDiagnosticsParams(uri=params.text_document.uri, diagnostics=[])
-    )
+    ls.text_document_publish_diagnostics(lsp.PublishDiagnosticsParams(uri=params.text_document.uri, diagnostics=[]))
 
 
 # --------------------------------------------------------------------------- completion
@@ -158,18 +152,14 @@ def completion_items(text: str, line: int, col: int, path: str | None = None) ->
 
         base = Path(path).parent if path else None
         return [
-            _simple(target, lsp.CompletionItemKind.File, "library workout", f"`use {target}`", "10")
-            for target in vocab.library_paths(base)
+            _simple(target, lsp.CompletionItemKind.File, "library workout", f"`use {target}`", "10") for target in vocab.library_paths(base)
         ]
     if "score_value" in categories:
         return [_simple(value, lsp.CompletionItemKind.EnumMember, "score", "SPEC §12", "10") for value in vocab.SCORE_VALUES]
     if "units_value" in categories:
         return [_simple(value, lsp.CompletionItemKind.EnumMember, "default load unit", "SPEC §6", "10") for value in ("kg", "lb")]
     if "modifier" in categories:
-        return [
-            _simple(modifier, lsp.CompletionItemKind.Property, "modifier", "SPEC §7.5", "10")
-            for modifier in vocab.MODIFIER_ITEMS
-        ]
+        return [_simple(modifier, lsp.CompletionItemKind.Property, "modifier", "SPEC §7.5", "10") for modifier in vocab.MODIFIER_ITEMS]
 
     if "format" in categories:
         items += [_simple(label, lsp.CompletionItemKind.Keyword, detail, doc, "00") for label, detail, doc in vocab.FORMATS]
@@ -177,8 +167,7 @@ def completion_items(text: str, line: int, col: int, path: str | None = None) ->
         items += [_simple(label, lsp.CompletionItemKind.Keyword, detail, doc, "01") for label, detail, doc in vocab.LABEL_ITEMS]
     if "meta" in categories:
         items += [
-            _simple(f"{key}: ", lsp.CompletionItemKind.Property, detail, doc, "02")
-            for key, (detail, doc) in vocab.META_ITEMS.items()
+            _simple(f"{key}: ", lsp.CompletionItemKind.Property, detail, doc, "02") for key, (detail, doc) in vocab.META_ITEMS.items()
         ]
     if "unit" in categories:
         items += [_simple(unit, lsp.CompletionItemKind.Unit, kind, "SPEC §2.2", "03") for unit, kind in vocab.UNITS]

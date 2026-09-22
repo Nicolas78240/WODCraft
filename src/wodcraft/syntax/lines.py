@@ -396,6 +396,11 @@ def _parse_param(cur: Cursor, file: str | None) -> Param:
         last = cur.toks[cur.i - 1]
         param = Param("percent", value, "%", cur.span(first, file, last))
         cur.accept_word("of")
+        nxt, after = cur.peek(), cur.peek(1)
+        if nxt is not None and nxt.kind == "NUM" and nxt.text == "1" and after is not None and after.is_word("rm"):
+            cur.next()
+            cur.next()
+            cur.accept_word("of")
         cur.accept_word("1rm")
         if not cur.done and cur.peek().kind == "WORD":  # type: ignore[union-attr]
             name, c0, c1 = _parse_name(cur)
@@ -518,9 +523,7 @@ def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace
     scratch = DiagnosticBag()
     tokens = tokenize(line, scratch, file)
     # meta values and library paths are free text: they must not go through the lexer's expectations
-    free_text = bool(tokens) and (
-        _meta_or_label(line, tokens, file) == ("meta", tokens[0].lower, 1) or tokens[0].is_word("use")
-    )
+    free_text = bool(tokens) and (_meta_or_label(line, tokens, file) == ("meta", tokens[0].lower, 1) or tokens[0].is_word("use"))
     if not free_text:
         diags.extend(scratch)
     if not tokens:

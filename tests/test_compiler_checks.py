@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import pytest
-from conftest import coded_lines, compile_wod, first_item, only
 
+from conftest import coded_lines, compile_wod, first_item, only
 from wodcraft.semantics.compiler import _score_compatible, format_duration
 
 
@@ -107,10 +107,7 @@ def test_a_non_movement_statement_in_a_level_block_is_e014():
 
 
 def test_a_level_block_selector_can_carry_a_height():
-    source = (
-        "AMRAP 10:00\n  10 Box jump 24/20 in\n  10 Box jump 30/24 in\n\n"
-        "Scaled:\n  Box jump 30/24 in -> Box jump 24/20 in\n"
-    )
+    source = "AMRAP 10:00\n  10 Box jump 24/20 in\n  10 Box jump 30/24 in\n\nScaled:\n  Box jump 30/24 in -> Box jump 24/20 in\n"
     result = compile_wod(source)
     assert result.ok, result.report()
     (operation,) = result.document["levels"]["scaled"]

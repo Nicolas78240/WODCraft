@@ -23,6 +23,7 @@ from wodcraft.syntax.lines import _meta_or_label, format_is_timed, is_format_sta
 class _Node:
     line: Line
     children: list[_Node] = field(default_factory=list)
+    previous: _Node | None = None  # the sibling before it, so a meta line can hand its body over
 
 
 def _build_tree(lines: list[Line], diags: DiagnosticBag, file: str | None) -> list[_Node]:
@@ -35,6 +36,8 @@ def _build_tree(lines: list[Line], diags: DiagnosticBag, file: str | None) -> li
             last.pop()
         if line.indent > stack[-1][0]:
             parent = last[-1]
+            while parent is not None and _classify(parent.line) == "meta" and parent.previous is not None:
+                parent = parent.previous  # a meta line is transparent: its body belongs to the block above
             if parent is None:
                 diags.add("E004", "Unexpected indentation.", Span(line.number, 1, line.col0, file))
                 line = Line(line.number, stack[-1][0], line.text, line.raw)
@@ -44,7 +47,7 @@ def _build_tree(lines: list[Line], diags: DiagnosticBag, file: str | None) -> li
         elif line.indent != stack[-1][0]:
             diags.add("E004", "Inconsistent indentation.", Span(line.number, 1, line.col0, file))
             line = Line(line.number, stack[-1][0], line.text, line.raw)
-        node = _Node(line)
+        node = _Node(line, previous=last[-1])
         stack[-1][1].append(node)
         last[-1] = node
     return root

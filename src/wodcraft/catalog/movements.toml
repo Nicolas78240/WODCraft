@@ -447,7 +447,7 @@ pace = { rep = 15 }
 
 [movements.burpee_over_the_bar]
 name = "Burpee over the bar"
-aliases = ["bar facing burpee", "burpee over bar", "bfb", "lateral burpee over bar"]
+aliases = ["burpee over bar", "bfb", "lateral burpee over bar"]
 fr = ["burpee par-dessus la barre"]
 fr_name = "Burpee par-dessus la barre"
 family = "G"
@@ -2240,7 +2240,7 @@ pace = { rep = 1.5 }
 
 [movements.dumbbell_hang_clean_to_overhead]
 name = "Dumbbell hang clean-to-overhead"
-aliases = ["db hang clean to overhead", "dumbbell hang clean and jerk", "hang clean-to-overhead"]
+aliases = ["db hang clean to overhead", "hang clean-to-overhead"]
 fr = ["épaulé suspendu haltère au-dessus de la tête"]
 family = "W"
 quantities = ["reps"]

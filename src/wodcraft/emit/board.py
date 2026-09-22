@@ -70,8 +70,12 @@ def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: 
     if not skip_title and workout.get("title"):
         lines.append(_title(workout["title"]))
     meta = workout.get("meta") or {}
+    body: list[str] = []
     for block in workout.get("blocks", []):
-        lines += _block(block, 0, width)
+        body += _block(block, 0, width)
+    if workout.get("team") and body:
+        body[0] = f"Teams of {workout['team']['size']} · {body[0]}"
+    lines += body
     if meta.get("vest"):
         lines.append(f"Vest: {_load(meta['vest'])}")
     score = workout.get("score") or {}

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 from wodcraft import __version__
 from wodcraft.emit.board import render
@@ -45,7 +45,7 @@ def _events(document: dict) -> list[str]:
     return [
         "BEGIN:VEVENT",
         f"UID:{uid}",
-        f"DTSTAMP:{datetime.now().strftime('%Y%m%dT%H%M%S')}",
+        f"DTSTAMP:{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}",
         f"DTSTART:{start.strftime('%Y%m%dT%H%M%S')}",
         f"DTEND:{end.strftime('%Y%m%dT%H%M%S')}",
         f"SUMMARY:{_escape(title)}",

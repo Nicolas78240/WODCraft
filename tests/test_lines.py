@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import pytest
-from conftest import codes, compile_wod, first_item, items, only, tokens_of
 
+from conftest import codes, compile_wod, first_item, items, only, tokens_of
 from wodcraft.diagnostics import DiagnosticBag
 from wodcraft.syntax.lexer import Line
 from wodcraft.syntax.lines import (
@@ -15,7 +15,6 @@ from wodcraft.syntax.lines import (
     parse_line,
 )
 from wodcraft.syntax.units import fmt_num, format_clock, parse_clock, seconds, unit_kind
-
 
 # --------------------------------------------------------------------------- units table
 
@@ -138,7 +137,19 @@ def test_fmt_num(value, expected):
 
 @pytest.mark.parametrize(
     "text",
-    ["For time", "AMRAP 12", "EMOM 10", "E2MOM 20", "Every 3:00 x 5", "Tabata", "Death by", "Max load", "3 rounds", "21-15-9", "teams of 2"],
+    [
+        "For time",
+        "AMRAP 12",
+        "EMOM 10",
+        "E2MOM 20",
+        "Every 3:00 x 5",
+        "Tabata",
+        "Death by",
+        "Max load",
+        "3 rounds",
+        "21-15-9",
+        "teams of 2",
+    ],
 )
 def test_is_format_start_accepts_every_format(text):
     assert is_format_start(tokens_of(text)) is True
@@ -386,11 +397,10 @@ def test_percent_accepts_the_noise_word_of():
     assert item["percent"] == {"value": 70, "of": "back_squat"}
 
 
-def test_percent_of_1rm_spelling_is_not_accepted():
-    # The lexer splits "1RM" into NUM(1) + WORD(RM), so lines.py's `accept_word("1rm")`
-    # never fires. Documented here because "@ 75% of 1RM" reads naturally on a whiteboard.
-    result = compile_wod("Max load\n  Front squat 3x3 @ 70% of 1RM Back squat\n")
-    assert codes(result) == ["E001"]
+def test_percent_of_1rm_spelling_is_accepted():
+    # "@ 70% of 1RM Back squat" reads naturally on a whiteboard and means the same thing.
+    item = first_item("Max load\n  Front squat 3x3 @ 70% of 1RM Back squat\n")
+    assert item["percent"] == {"value": 70, "of": "back_squat"}
 
 
 def test_rpe():

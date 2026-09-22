@@ -37,17 +37,16 @@ Scaled:
 @pytest.fixture()
 def server():
     instance = S.create_server()
-    instance.protocol._workspace = Workspace(
-        None, lsp.TextDocumentSyncKind.Full, [], lsp.PositionEncodingKind.Utf16
-    )
+    instance.protocol._workspace = Workspace(None, lsp.TextDocumentSyncKind.Full, [], lsp.PositionEncodingKind.Utf16)
     return instance
 
 
 def open_document(server, text: str, uri: str = URI, version: int = 1):
-    server.workspace.put_text_document(
-        lsp.TextDocumentItem(uri=uri, language_id="wodcraft", version=version, text=text)
+    server.workspace.put_text_document(lsp.TextDocumentItem(uri=uri, language_id="wodcraft", version=version, text=text))
+    S.did_open(
+        server,
+        lsp.DidOpenTextDocumentParams(text_document=lsp.TextDocumentItem(uri=uri, language_id="wodcraft", version=version, text=text)),
     )
-    S.did_open(server, lsp.DidOpenTextDocumentParams(text_document=lsp.TextDocumentItem(uri=uri, language_id="wodcraft", version=version, text=text)))
     return uri
 
 
@@ -87,9 +86,7 @@ def test_diagnostics_are_refreshed_on_change(server):
     open_document(server, "# T\nFor time\n  21 Thrustr 43/30 kg\n")
     assert "E020" in [d.code for d in S.diagnostics_for(server.analyse(URI))]
     fixed = "# T\nFor time\n  21 Thruster 43/30 kg\n"
-    server.workspace.put_text_document(
-        lsp.TextDocumentItem(uri=URI, language_id="wodcraft", version=2, text=fixed)
-    )
+    server.workspace.put_text_document(lsp.TextDocumentItem(uri=URI, language_id="wodcraft", version=2, text=fixed))
     S.did_change(
         server,
         lsp.DidChangeTextDocumentParams(
@@ -211,9 +208,7 @@ def test_hover_outside_a_movement_returns_none(server):
 def _format(server, uri=URI):
     return S.formatting(
         server,
-        lsp.DocumentFormattingParams(
-            text_document=ident(uri), options=lsp.FormattingOptions(tab_size=2, insert_spaces=True)
-        ),
+        lsp.DocumentFormattingParams(text_document=ident(uri), options=lsp.FormattingOptions(tab_size=2, insert_spaces=True)),
     )
 
 

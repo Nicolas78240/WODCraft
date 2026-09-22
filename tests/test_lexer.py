@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import pytest
+
 from conftest import codes, compile_wod, lex, token_texts, tokens_of
-
 from wodcraft.syntax.lexer import Line, strip_comment
-
 
 # --------------------------------------------------------------------------- comments
 

@@ -181,9 +181,7 @@ def library_paths(extra: Path | None = None) -> list[str]:
 # --------------------------------------------------------------------------- line classification
 
 _UNIT_ALTERNATION = "|".join(sorted(ALL_UNIT_WORDS, key=len, reverse=True))
-_QUANTITY_ONLY = re.compile(
-    rf"^\s*(?:\d+(?:\.\d+)?(?:\s*/\s*\d+(?:\.\d+)?)?(?:\s*(?:{_UNIT_ALTERNATION}))?|max(?:\s+\w+)?)\s+$"
-)
+_QUANTITY_ONLY = re.compile(rf"^\s*(?:\d+(?:\.\d+)?(?:\s*/\s*\d+(?:\.\d+)?)?(?:\s*(?:{_UNIT_ALTERNATION}))?|max(?:\s+\w+)?)\s+$")
 _AFTER_NUMBER = re.compile(r"(?:^|[\s@(])\d+(?:\.\d+)?(?:\s*/\s*\d+(?:\.\d+)?)?\s*$")
 _META_START = re.compile(r"^\s*([A-Za-z][\w-]*)\s*:\s*(.*)$")
 _USE_START = re.compile(r"^\s*use\s+(\S*)$", re.IGNORECASE)

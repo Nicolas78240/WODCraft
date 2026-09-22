@@ -392,7 +392,9 @@ class Compiler:
             from wodcraft.syntax.ast import Param as _Param
             from wodcraft.syntax.units import M_PER
 
-            centimetres = Dual(param.value.men * M_PER[param.unit or "m"] * 100, param.value.women * M_PER[param.unit or "m"] * 100, param.value.is_dual)
+            centimetres = Dual(
+                param.value.men * M_PER[param.unit or "m"] * 100, param.value.women * M_PER[param.unit or "m"] * 100, param.value.is_dual
+            )
             param = _Param("height", centimetres, "cm", param.span)
         if param.kind in ("distance", "calories"):
             if param.kind not in entry.quantities:
