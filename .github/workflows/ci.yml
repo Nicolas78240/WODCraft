@@ -42,6 +42,25 @@ jobs:
       - run: ruff format --check src tests
       - run: mypy
 
+  swift:
+    name: WODCraftKit (the second implementation)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Build and test
+        working-directory: swift/WODCraftKit
+        run: swift test
+      - name: The embedded resources match the Python implementation
+        run: |
+          python3 -m pip install --quiet -e .
+          python3 -m wodcraft.cli bundle /tmp/bundle
+          for file in catalog.json library.json workout.schema.json; do
+            diff -q "/tmp/bundle/$file" "swift/WODCraftKit/Sources/WODCraftKit/Resources/$file" \
+              || { echo "::error::$file is stale, run make swift-resources"; exit 1; }
+          done
+
   package:
     runs-on: ubuntu-latest
     steps:
