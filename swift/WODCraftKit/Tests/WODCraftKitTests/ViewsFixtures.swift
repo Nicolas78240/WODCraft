@@ -1,9 +1,8 @@
 // Generated from the Python reference implementation. Do not edit by hand.
 //
-// Produced by rendering every compiled document of `Resources/library.json` and of
-// the conformance corpus with `wodcraft.emit.board`, `wodcraft.emit.markdown` and
-// `wodcraft.emit.timeline`. Package.swift declares no extra test resource, so the
-// expectations travel as string constants rather than as files.
+// Every compiled document of `Resources/library.json` and of the conformance corpus, rendered by
+// `wodcraft.emit.board`, `wodcraft.emit.markdown` and `wodcraft.emit.timeline`. Regenerate with
+// `make swift-resources`.
 
 enum ViewsFixtures {
     static let libraryJSON: String = #"""
@@ -1652,6 +1651,22 @@ enum ViewsFixtures {
     "label": "Max load: Deadlift 5-5-3-3-1-1 RPE 8",
     "kind": "work",
     "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "strength_sets",
+  "board": "Back squat ............... 5x5 75% (rest 2:30)\nScore: load",
+  "boardFr": "Squat arrière ............ 5x5 75% (rest 2:30)\nScore: load",
+  "markdown": "# Workout\n\n```\nBack squat ......... 5x5 75% (rest 2:30)\n```\n\n**Score** — load\n",
+  "timer": "    0:00   11:15  Back squat ......... 5x5 75% (rest 2:30)\n           11:15  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 675.0,
+    "label": "Back squat ......... 5x5 75% (rest 2:30)",
+    "kind": "work",
+    "openEnded": false
    }
   ]
  },

@@ -403,6 +403,9 @@ extension Compiler {
         let main: JSONObject? = blocks.first
         let kind: String = main?["type"]?.stringValue ?? "none"
         var inferred: String = scoreByFormat[kind] ?? "none"
+        if kind == "movement", main?["sets"] != nil {
+            inferred = "load"  // a bare strength line: the score is what you lifted
+        }
         if intervalKinds.contains(kind), let main, hasMax(main) {
             inferred = "reps"
         }

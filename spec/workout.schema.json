@@ -198,7 +198,11 @@
         "wodcraft": { "const": "1.0" },
         "kind": { "const": "workout" },
         "title": { "type": ["string", "null"] },
-        "blocks": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+        "blocks": {
+          "type": "array",
+          "description": "The body of the workout. Usually blocks; a body written as a bare movement line (a strength piece) or a rest keeps that item at the top level.",
+          "items": { "$ref": "#/$defs/item" }
+        },
         "score": { "$ref": "#/$defs/score" },
         "team": {
           "type": "object",

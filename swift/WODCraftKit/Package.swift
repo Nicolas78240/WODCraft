@@ -5,9 +5,9 @@ let package = Package(
     name: "WODCraftKit",
     platforms: [.iOS(.v16), .macOS(.v13), .watchOS(.v9)],
     products: [
-        .library(name: "WODCraftKit", targets: ["WODCraftKit"])
+        .library(name: "WODCraftKit", targets: ["WODCraftKit"]),
+        .executable(name: "wodcraftc", targets: ["wodcraftc"]),
     ],
-    swiftLanguageModes: [.v6],
     targets: [
         .target(
             name: "WODCraftKit",
@@ -17,10 +17,12 @@ let package = Package(
                 .copy("Resources/workout.schema.json"),
             ]
         ),
+        .executableTarget(name: "wodcraftc", dependencies: ["WODCraftKit"]),
         .testTarget(
             name: "WODCraftKitTests",
             dependencies: ["WODCraftKit"],
             resources: [.copy("Resources/conformance")]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )

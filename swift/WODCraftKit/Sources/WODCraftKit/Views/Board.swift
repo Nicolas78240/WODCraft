@@ -97,8 +97,8 @@ public enum Board {
 
     public static func localize(_ workout: Workout, language: Language, catalog: Catalog = .shared) -> Workout {
         var out = workout
-        var blocks: [Block] = []
-        for block in out.blocks { blocks.append(localize(block: block, language: language, catalog: catalog)) }
+        var blocks: [Item] = []
+        for item in out.blocks { blocks.append(localize(item: item, language: language, catalog: catalog)) }
         out.blocks = blocks
         return out
     }
@@ -106,21 +106,24 @@ public enum Board {
     private static func localize(block: Block, language: Language, catalog: Catalog) -> Block {
         var out = block
         var items: [Item] = []
-        for item in out.items {
-            switch item {
-            case var .movement(movement):
-                if let entry = catalog.movement(id: movement.movement) {
-                    movement.name = entry.displayName(language)
-                }
-                items.append(.movement(movement))
-            case .rest:
-                items.append(item)
-            case let .block(nested):
-                items.append(.block(localize(block: nested, language: language, catalog: catalog)))
-            }
-        }
+        for item in out.items { items.append(localize(item: item, language: language, catalog: catalog)) }
         out.items = items
         return out
+    }
+
+    /// A body holds items, not only blocks: a strength line stands on its own.
+    private static func localize(item: Item, language: Language, catalog: Catalog) -> Item {
+        switch item {
+        case var .movement(movement):
+            if let entry = catalog.movement(id: movement.movement) {
+                movement.name = entry.displayName(language)
+            }
+            return .movement(movement)
+        case .rest:
+            return item
+        case let .block(nested):
+            return .block(localize(block: nested, language: language, catalog: catalog))
+        }
     }
 
     // MARK: Session

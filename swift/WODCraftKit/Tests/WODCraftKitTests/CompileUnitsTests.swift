@@ -18,8 +18,9 @@ struct CompileUnitsTests {
 
     static func firstMovement(_ source: String) throws -> Movement {
         let workout: Workout = try workout(source)
-        let block: Block = try #require(workout.blocks.first)
-        for item in block.items {
+        let first: Item = try #require(workout.blocks.first)
+        if case let .movement(movement) = first { return movement }  // a bare strength line
+        for item in first.items {
             if case let .movement(movement) = item { return movement }
         }
         throw TestFailure.noMovement

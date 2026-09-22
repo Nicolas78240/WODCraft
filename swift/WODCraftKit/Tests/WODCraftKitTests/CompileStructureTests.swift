@@ -9,14 +9,9 @@ struct CompileStructureTests {
         try CompileUnitsTests.workout(source)
     }
 
-    /// A readable outline of the block tree: one line per item, indented like the tree.
-    static func outline(_ blocks: [Block], _ depth: Int = 0) -> [String] {
-        var lines: [String] = []
-        for block in blocks {
-            lines.append(String(repeating: "  ", count: depth) + label(block))
-            lines.append(contentsOf: outline(items: block.items, depth + 1))
-        }
-        return lines
+    /// A readable outline of the body: one line per item, indented like the tree.
+    static func outline(_ body: [Item], _ depth: Int = 0) -> [String] {
+        return outline(items: body, depth)
     }
 
     static func outline(items: [Item], _ depth: Int) -> [String] {
@@ -70,7 +65,7 @@ struct CompileStructureTests {
         """)
         // the canonical merge folds the ladder into the for_time block (SPEC §13)
         #expect(workout.blocks.count == 1)
-        #expect(workout.blocks[0].type == .forTime)
+        #expect(workout.blocks[0].asBlock?.type == .forTime)
         #expect(workout.blocks[0].reps == [21, 15, 9])
         #expect(workout.blocks[0].capS == 600)
         #expect(Self.outline(workout.blocks) == ["for_time", "  thruster", "  pull_up"])

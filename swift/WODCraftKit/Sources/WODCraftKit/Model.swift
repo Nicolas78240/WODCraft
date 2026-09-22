@@ -226,6 +226,52 @@ public enum Item: Codable, Equatable, Sendable {
     }
 }
 
+public extension Item {
+    /// The block behind this item, when it is one.
+    var asBlock: Block? {
+        if case let .block(block) = self { return block }
+        return nil
+    }
+
+    var asMovement: Movement? {
+        if case let .movement(movement) = self { return movement }
+        return nil
+    }
+
+    var asRest: Rest? {
+        if case let .rest(rest) = self { return rest }
+        return nil
+    }
+
+    /// `"movement"`, `"rest"`, or the block kind — what the `type` field of the JSON carries.
+    var type: String {
+        switch self {
+        case .movement: return "movement"
+        case .rest: return "rest"
+        case let .block(block): return block.type.rawValue
+        }
+    }
+
+    // Reading a block's fields without unwrapping first: an item that is not a block has none.
+    var items: [Item] { asBlock?.items ?? [] }
+    var rounds: Int? { asBlock?.rounds }
+    var reps: [Int]? { asBlock?.reps }
+    var repsOpen: Bool? { asBlock?.repsOpen }
+    var durationS: Double? { asBlock?.durationS }
+    var intervalS: Double? { asBlock?.intervalS }
+    var capS: Double? { asBlock?.capS }
+    var teams: Int? { asBlock?.teams }
+    var slot: Block.Slot? { asBlock?.slot }
+    var used: UsedFrom? { asBlock?.used }
+    var source: SourceSpan? {
+        switch self {
+        case let .movement(movement): return movement.source
+        case let .rest(rest): return rest.source
+        case let .block(block): return block.source
+        }
+    }
+}
+
 // MARK: - Score, levels, meta
 
 public struct Score: Codable, Equatable, Sendable {
@@ -332,7 +378,8 @@ public struct Workout: Codable, Equatable, Sendable {
     public var wodcraft: String
     public var kind: String
     public var title: String?
-    public var blocks: [Block]
+    /// The body: blocks, plus any movement or rest line written at the top level (a strength piece).
+    public var blocks: [Item]
     public var score: Score
     public var team: Team?
     public var levels: [String: [LevelOperation]]?

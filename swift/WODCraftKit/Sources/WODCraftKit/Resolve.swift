@@ -74,8 +74,8 @@ struct Resolver {
             meta = current
         }
 
-        var blocks: [Block] = []
-        for block in out.blocks { blocks.append(self.block(block, operations: operations)) }
+        var blocks: [Item] = []
+        for item in out.blocks { blocks.append(self.item(item, operations: operations)) }
         out.blocks = blocks
 
         if var current = meta, let vest = current.vest {
@@ -145,18 +145,21 @@ struct Resolver {
     func block(_ input: Block, operations: [LevelOperation]) -> Block {
         var out = input
         var items: [Item] = []
-        for item in out.items {
-            switch item {
-            case let .movement(movement):
-                items.append(.movement(self.movement(movement, operations: operations)))
-            case .rest:
-                items.append(item)
-            case let .block(nested):
-                items.append(.block(block(nested, operations: operations)))
-            }
-        }
+        for item in out.items { items.append(self.item(item, operations: operations)) }
         out.items = items
         return out
+    }
+
+    /// A body holds items, not only blocks: a strength line stands on its own.
+    func item(_ input: Item, operations: [LevelOperation]) -> Item {
+        switch input {
+        case let .movement(movement):
+            return .movement(self.movement(movement, operations: operations))
+        case .rest:
+            return input
+        case let .block(nested):
+            return .block(block(nested, operations: operations))
+        }
     }
 
     // MARK: Movements

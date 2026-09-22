@@ -574,6 +574,8 @@ class Compiler:
         main = blocks[0] if blocks else None
         kind = main["type"] if main else "none"
         inferred = SCORE_BY_FORMAT.get(kind, "none")
+        if kind == "movement" and main and main.get("sets"):
+            inferred = "load"  # a bare strength line: the score is what you lifted
         if kind in INTERVALS and main and _has_max(main):
             inferred = "reps"
         if kind in ("rounds", "ladder") and main and main.get("for_time"):
@@ -617,6 +619,8 @@ def _score_compatible(declared: str, kind: str, main: dict | None) -> bool:
     """A declared score is accepted when the format can plausibly measure it."""
     if declared == "none":
         return True
+    if kind == "movement":
+        return declared in ("load", "reps", "time", "distance", "calories", "rounds")
     if kind in INTERVALS:
         return declared in ("reps", "rounds", "rounds+reps", "calories", "distance", "none")
     if kind in ("for_time", "rounds", "ladder"):
@@ -661,7 +665,9 @@ def _walk(statements: list[Statement]):
 
 def _normalize_block(block: dict) -> dict:
     """Canonical form: 'For time' + a single untimed child merges into one block (SPEC §13)."""
-    block["items"] = [_normalize_block(i) if i.get("type") in ALLOWED_CHILDREN else i for i in block.get("items", [])]
+    if "items" not in block:  # a movement or a rest standing on its own, e.g. a strength line
+        return block
+    block["items"] = [_normalize_block(i) if i.get("type") in ALLOWED_CHILDREN else i for i in block["items"]]
     if block["type"] in ("for_time", "amrap") and len(block["items"]) == 1:
         child = block["items"][0]
         if child.get("type") in ("rounds", "ladder") and not {"cap_s", "duration_s", "teams"} & set(child):

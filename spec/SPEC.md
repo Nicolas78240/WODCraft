@@ -302,6 +302,7 @@ The score of a workout is taken from the `score:` meta line, or inferred from it
 | `tabata` | `reps` |
 | `death_by` | `rounds+reps` |
 | `max_load`, sets | `load` |
+| a bare movement line carrying sets (`Back squat 5x5 @ 75%`) | `load` |
 | untimed `rounds` / ladder | `none`, or the declared `score:` (`reps`, `load`…) |
 | several timed blocks in one workout | `multi`: one score per part |
 
@@ -314,7 +315,8 @@ single) scores `multi`, with one entry per part — that is also how a workout c
 Compiling a document produces a JSON object described by `spec/workout.schema.json`. In summary:
 
 - `wodcraft`: spec version (`"1.0"`); `kind`: `"workout"` or `"session"`; `title`.
-- Workout: `blocks` (tree of blocks and items), `score`, `levels`, `meta`, `team`.
+- Workout: `blocks` (the body: blocks, and the movement or rest lines written at the top level, such
+  as a bare strength line), `score`, `levels`, `meta`, `team`.
 - Session: `sections`, each `{ "title", "workout" }`, plus `date`, `time`, `meta`.
 - Every item has a `source` span `{ "line", "col" }` (1-based).
 - The canonical written form of a workout is the **compact** one: `21-15-9 for time, cap 10:00` rather

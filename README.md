@@ -84,6 +84,7 @@ clean = 100
 $ wodc show examples/strength.wod --profile examples/athlete.toml
 BACK SQUAT
 Back squat ............ 5x5 105 kg (rest 2:30)
+Score: load
 Estimate: 8:24–15:36
 Note: Add 2.5 kg next week if every set moves well.
 [men · rx · kg]

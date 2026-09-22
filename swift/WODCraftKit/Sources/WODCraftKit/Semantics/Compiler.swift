@@ -245,6 +245,9 @@ func hasMax(_ block: JSONObject) -> Bool {
 /// A declared score is accepted when the format can plausibly measure it.
 func scoreCompatible(_ declared: String, _ kind: String) -> Bool {
     if declared == "none" { return true }
+    if kind == "movement" {
+        return ["load", "reps", "time", "distance", "calories", "rounds"].contains(declared)
+    }
     if intervalKinds.contains(kind) {
         return ["reps", "rounds", "rounds+reps", "calories", "distance", "none"].contains(declared)
     }

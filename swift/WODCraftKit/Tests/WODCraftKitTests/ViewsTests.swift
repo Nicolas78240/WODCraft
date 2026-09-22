@@ -148,7 +148,8 @@ struct ViewsTests {
 
     @Test("the conformance corpus is loaded")
     func conformanceIsLoaded() {
-        #expect(ViewExpectations.conformance.count == 37)
+        // the corpus grows: what matters is that every case has an expectation
+        #expect(ViewExpectations.conformance.count >= 37)
         #expect(ConformanceDocuments.all.count == ViewExpectations.conformance.count)
     }
 

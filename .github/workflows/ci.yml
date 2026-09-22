@@ -60,6 +60,11 @@ jobs:
             diff -q "/tmp/bundle/$file" "swift/WODCraftKit/Sources/WODCraftKit/Resources/$file" \
               || { echo "::error::$file is stale, run make swift-resources"; exit 1; }
           done
+      - name: The two implementations agree, source by source
+        working-directory: swift/WODCraftKit
+        run: swift build -c release --product wodcraftc
+      - name: Differential check
+        run: python3 scripts/differential_check.py "$(cd swift/WODCraftKit && swift build -c release --show-bin-path)/wodcraftc"
 
   package:
     runs-on: ubuntu-latest

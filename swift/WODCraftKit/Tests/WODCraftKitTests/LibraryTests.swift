@@ -56,7 +56,7 @@ struct LibraryTests {
         #expect(fran.score.type == .time)
         #expect(fran.score.capped == .reps)
         #expect(fran.blocks.count == 1)
-        #expect(fran.blocks[0].type == .forTime)
+        #expect(fran.blocks[0].asBlock?.type == .forTime)
         #expect(fran.blocks[0].reps == [21, 15, 9])
         #expect(fran.blocks[0].capS == 600)
         #expect(fran.levels?["scaled"] != nil)
