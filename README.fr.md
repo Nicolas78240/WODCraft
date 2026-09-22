@@ -139,6 +139,13 @@ print(workout["score"])          # {'type': 'time', 'capped': 'reps'}
 print(workout["estimate"])       # {'min_s': 146, 'max_s': 304, ...}
 ```
 
+## Dans votre éditeur
+
+L'extension VS Code de [`editor/vscode/`](editor/vscode/) colore les fichiers `.wod` toute seule, et
+active les diagnostics en direct, la complétion des mouvements, le survol, le formatage et les
+corrections rapides dès qu'un interpréteur Python avec `wodcraft[lsp]` est disponible. Le serveur de
+langage est `python -m wodcraft.lsp` : n'importe quel éditeur compatible LSP peut s'en servir.
+
 ## Pour les agents IA
 
 `wodcraft[mcp]` fournit un serveur MCP qui expose le compilateur lui-même — sans sous-processus ni

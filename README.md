@@ -133,6 +133,13 @@ print(workout["score"])          # {'type': 'time', 'capped': 'reps'}
 print(workout["estimate"])       # {'min_s': 146, 'max_s': 304, ...}
 ```
 
+## In your editor
+
+The VS Code extension in [`editor/vscode/`](editor/vscode/) highlights `.wod` files on its own, and
+turns on live diagnostics, movement completion, hover, formatting and quick fixes as soon as a Python
+interpreter with `wodcraft[lsp]` is available. The language server is `python -m wodcraft.lsp`, so any
+LSP-capable editor can use it.
+
 ## For AI agents
 
 `wodcraft[mcp]` ships an MCP server that exposes the compiler itself — no shelling out, no temporary
