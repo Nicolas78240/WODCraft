@@ -21,6 +21,9 @@ src/wodcraft/
   api.py         compile_source / compile_file -> Result(documents, diagnostics, ok)
   cli.py         the `wodc` command      profile.py  athlete profile      diagnostics.py  codes
   mcp/  lsp/     MCP server (FastMCP) and language server (pygls), optional extras
+  service.py     HTTP compile service (optional extra), bundle.py  the JSON an app embeds
+swift/WODCraftKit  the same language in Swift, for iOS and macOS applications
+deploy/          Dockerfile for the service
 tests/           pytest suite, including test_docs.py: every documented snippet and console
                  transcript is run and compared
 examples/        a workout and an athlete profile used by the README

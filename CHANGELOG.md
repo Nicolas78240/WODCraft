@@ -33,7 +33,11 @@ Complete rewrite. WODCraft is now a specified language with a reference compiler
   fixes (`wodcraft[lsp]`), plus a VS Code extension.
 - Standard library of 40 benchmark workouts (Girls, Heroes, Open); the specification and the JSON
   schema ship inside the package.
-- 1 507 tests, 64 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
+- `wodc bundle` writes the JSON an application embeds (catalog, library, schema: 115 kB).
+- `swift/WODCraftKit`: the language in Swift for iOS, watchOS and macOS — compiled model, compiler,
+  catalog, library, whiteboard and timeline, offline, validated by the conformance suite.
+- `wodcraft[service]`: a small HTTP compile service, with a Dockerfile that builds.
+- 1 559 tests, 64 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
 
 ## 0.3.2 and earlier
 

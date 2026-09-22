@@ -151,6 +151,19 @@ active les diagnostics en direct, la complétion des mouvements, le survol, le f
 corrections rapides dès qu'un interpréteur Python avec `wodcraft[lsp]` est disponible. Le serveur de
 langage est `python -m wodcraft.lsp` : n'importe quel éditeur compatible LSP peut s'en servir.
 
+## Dans une application
+
+```bash
+wodc bundle            # catalog.json, library.json et le schéma : 115 Ko à embarquer
+```
+
+- **Plateformes Apple** — [`swift/WODCraftKit`](swift/WODCraftKit) est un package SwiftPM sans aucune
+  dépendance tierce : le modèle compilé, le compilateur, le catalogue, les 40 benchmarks, le tableau
+  blanc et une timeline qui pilote un timer. Il compile **hors ligne** et passe la même suite de
+  conformité que l'implémentation de référence.
+- **Le reste** — `pip install "wodcraft[service]"` lance un petit service HTTP (`/compile`, `/check`,
+  `/format`, `/show`, `/catalog`, `/library`). Voir [docs/service.md](docs/service.md).
+
 ## Pour les agents IA
 
 `wodcraft[mcp]` fournit un serveur MCP qui expose le compilateur lui-même — sans sous-processus ni
