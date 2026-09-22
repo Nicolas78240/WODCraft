@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from wodcraft import __version__
-from wodcraft.api import LIBRARY_DIR, Result, compile_file, parse_file
+from wodcraft.api import LIBRARY_DIR, compile_file, parse_file
 from wodcraft.catalog import load_catalog
 from wodcraft.emit import board
 from wodcraft.emit.source import format_source
@@ -36,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="wodc",
-        description="Write, check and compile functional-fitness workouts (WODCraft %s)." % __version__,
+        description=f"Write, check and compile functional-fitness workouts (WODCraft {__version__}).",
         epilog="Specification: spec/SPEC.md · https://github.com/Nicolas78240/WODCraft",
     )
     parser.add_argument("--version", action="version", version=f"wodc {__version__} (spec 1.0)")

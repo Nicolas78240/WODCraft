@@ -107,7 +107,7 @@ def _head(block: dict) -> str:
         parts.append(ladder + (" …" if block.get("reps_open") else ""))
     elif kind == "slot":
         slot = block.get("slot")
-        return {"odd": "Odd:", "even": "Even:"}.get(slot, f"Min {slot}:")
+        return {"odd": "Odd:", "even": "Even:"}.get(str(slot), f"Min {slot}:")
     elif kind == "buy_in":
         return "Buy-in:"
     elif kind == "cash_out":

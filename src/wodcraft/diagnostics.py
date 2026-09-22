@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     ERROR = "error"
     WARNING = "warning"
     INFO = "info"
@@ -73,7 +73,7 @@ class DiagnosticBag:
     def add(self, code: str, message: str, span: Span, suggestion: str | None = None) -> None:
         self.items.append(Diagnostic(code, message, span, suggestion))
 
-    def extend(self, other: "DiagnosticBag | list[Diagnostic]") -> None:
+    def extend(self, other: DiagnosticBag | list[Diagnostic]) -> None:
         self.items.extend(other.items if isinstance(other, DiagnosticBag) else other)
 
     @property

@@ -51,7 +51,7 @@ def _declared_rest(item: dict) -> float | None:
 
             text = modifier.split(" ", 1)[1].strip()
             try:
-                return parse_clock(text) if ":" in text else float(text.rstrip("s ")) 
+                return parse_clock(text) if ":" in text else float(text.rstrip("s "))
             except ValueError:
                 return None
     return None

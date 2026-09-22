@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Union
 
 from wodcraft.diagnostics import Span
 
@@ -17,7 +16,7 @@ class Dual:
     is_dual: bool = False
 
     @classmethod
-    def single(cls, value: float) -> "Dual":
+    def single(cls, value: float) -> Dual:
         return cls(value, value, False)
 
 
@@ -92,7 +91,7 @@ class Block:
 
     kind: str
     span: Span
-    children: list["Statement"] = field(default_factory=list)
+    children: list[Statement] = field(default_factory=list)
     duration_s: float | None = None
     interval_s: float | None = None
     rounds: int | None = None
@@ -105,7 +104,7 @@ class Block:
     is_label: bool = False
 
 
-Statement = Union[Block, MovementLine, RestLine, UseLine, MetaLine, CommentLine]
+Statement = Block | MovementLine | RestLine | UseLine | MetaLine | CommentLine
 
 LEVEL_LABELS = ("scaled", "intermediate", "foundations")
 

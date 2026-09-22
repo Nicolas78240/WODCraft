@@ -22,7 +22,7 @@ from wodcraft.syntax.lines import _meta_or_label, format_is_timed, is_format_sta
 @dataclass
 class _Node:
     line: Line
-    children: list["_Node"] = field(default_factory=list)
+    children: list[_Node] = field(default_factory=list)
 
 
 def _build_tree(lines: list[Line], diags: DiagnosticBag, file: str | None) -> list[_Node]:
@@ -68,7 +68,9 @@ def _classify(line: Line) -> str:
     return "other"
 
 
-def _group(nodes: list[_Node], diags: DiagnosticBag, file: str | None, top: bool, in_level: bool = False) -> tuple[list[Statement], list[Block]]:
+def _group(
+    nodes: list[_Node], diags: DiagnosticBag, file: str | None, top: bool, in_level: bool = False
+) -> tuple[list[Statement], list[Block]]:
     statements: list[Statement] = []
     levels: list[Block] = []
     kinds = [_classify(n.line) for n in nodes]

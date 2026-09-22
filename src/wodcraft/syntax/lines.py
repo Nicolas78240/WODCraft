@@ -165,10 +165,7 @@ TIMED_STARTERS = {"for", "amrap", "emom", "every", "tabata", "death", "max"}
 
 def format_is_timed(tokens: list[Token]) -> bool:
     """A format line that puts the athlete on the clock (SPEC §4.1 rule 2)."""
-    for tok in tokens:
-        if tok.kind == "WORD" and (tok.lower in TIMED_STARTERS or _ENMOM.match(tok.text) or tok.lower == "rft"):
-            return True
-    return False
+    return any(tok.kind == "WORD" and (tok.lower in TIMED_STARTERS or _ENMOM.match(tok.text) or tok.lower == "rft") for tok in tokens)
 
 
 def _split_segments(tokens: list[Token]) -> list[list[Token]]:
@@ -210,7 +207,9 @@ def parse_format(line: Line, tokens: list[Token], file: str | None) -> Block:
                 raise LineError("E001", "Expected 'for time'.", seg[0].col, seg[-1].end_col)
             block.for_time = True
         else:
-            raise LineError("E001", f"Unknown option {seg[0].text!r}.", seg[0].col, seg[-1].end_col, "options are: cap, teams of N, for time")
+            raise LineError(
+                "E001", f"Unknown option {seg[0].text!r}.", seg[0].col, seg[-1].end_col, "options are: cap, teams of N, for time"
+            )
         cur.expect_end()
     return block
 
@@ -246,10 +245,10 @@ def _parse_format_core(cur: Cursor, span: Span) -> Block:
             cur.accept_word("rounds", "intervals", "sets")
     elif w == "tabata":
         block = Block("tabata", span, rounds=8, interval_s=30.0)
-        n = cur.peek()
-        if n is not None and n.kind == "NUM":
+        rounds_tok = cur.peek()
+        if rounds_tok is not None and rounds_tok.kind == "NUM":
             cur.next()
-            block.rounds = int(_number(n))
+            block.rounds = int(_number(rounds_tok))
     elif w == "death":
         cur.next()  # "by"
         block = Block("death_by", span, interval_s=60.0)
@@ -350,8 +349,7 @@ def _parse_name(cur: Cursor) -> tuple[str, int, int]:
         words.append(cur.next())
     if not words:
         tok = cur.peek()
-        col = tok.col if tok else cur.end_col
-        raise LineError("E001", "Expected a movement name.", col, tok.end_col if tok else 0)
+        raise LineError("E001", "Expected a movement name.", tok.col if tok else cur.end_col, tok.end_col if tok else 0)
     return " ".join(w.text for w in words), words[0].col, words[-1].end_col
 
 
@@ -367,7 +365,7 @@ def _parse_sets(cur: Cursor, file: str | None) -> Sets | None:
     if tok.kind == "NUM" and nxt is not None and nxt.is_sym("-"):
         start = cur.next()
         reps = [int(_number(start))]
-        last = start
+        last: Token = start
         while cur.accept_sym("-"):
             last = cur.next()
             if last.kind != "NUM":
@@ -408,11 +406,13 @@ def _parse_param(cur: Cursor, file: str | None) -> Param:
         cur.next()
         return Param("bw", value, None, cur.span(first, file, unit_tok))
     uk = unit_kind(unit_tok.text) if unit_tok is not None and unit_tok.kind == "WORD" else None
-    if uk is None:
+    if uk is None or unit_tok is None:
         return Param("load", value, None, cur.span(first, file, last))
     cur.next()
     if uk[0] == "time":
-        raise LineError("E032", "A duration cannot follow the movement name.", first.col, unit_tok.end_col, "put the duration first: '30 s Plank'")  # type: ignore[union-attr]
+        raise LineError(
+            "E032", "A duration cannot follow the movement name.", first.col, unit_tok.end_col, "put the duration first: '30 s Plank'"
+        )
     return Param(uk[0], value, uk[1], cur.span(first, file, unit_tok))
 
 
@@ -531,8 +531,20 @@ def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace
             rest = tokens[colon + 1 :]
             if kind == "unknown":
                 if tokens[0].text[0].islower():
-                    raise LineError("E012", f"Unknown meta key {name!r}.", tokens[0].col, tokens[colon].end_col, "known keys: " + ", ".join(sorted(META_KEYS)))
-                raise LineError("E011", f"Unknown label {tokens[0].text!r}.", tokens[0].col, tokens[colon].end_col, "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations")
+                    raise LineError(
+                        "E012",
+                        f"Unknown meta key {name!r}.",
+                        tokens[0].col,
+                        tokens[colon].end_col,
+                        "known keys: " + ", ".join(sorted(META_KEYS)),
+                    )
+                raise LineError(
+                    "E011",
+                    f"Unknown label {tokens[0].text!r}.",
+                    tokens[0].col,
+                    tokens[colon].end_col,
+                    "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations",
+                )
             if kind == "meta":
                 raw = line.text.split(":", 1)[1].strip()
                 value_col = line.indent + line.text.index(":") + 2

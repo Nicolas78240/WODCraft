@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 from wodcraft import SPEC_VERSION
 from wodcraft.catalog import Catalog, Equivalences, load_catalog, load_equivalences
@@ -294,7 +294,7 @@ class Compiler:
                     quantity.span,
                     "it is measured in " + " or ".join(_quantity_word(q) for q in entry.quantities),
                 )
-            elif quantity.kind == "max":
+            elif quantity.kind == "max" or quantity.value is None:
                 out["quantity"] = {"kind": "max", "of": kind}
             elif kind == "distance":
                 out["quantity"] = dict(measures.distance_to_json(quantity.value, quantity.unit or "m"), kind="distance")

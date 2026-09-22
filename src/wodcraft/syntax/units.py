@@ -6,7 +6,17 @@ LOAD_UNITS = {"kg": "kg", "kgs": "kg", "lb": "lb", "lbs": "lb", "pood": "pood", 
 HEIGHT_UNITS = {"in": "in", "inch": "in", "inches": "in", "cm": "cm", '"': "in"}
 DISTANCE_UNITS = {"m": "m", "km": "km", "mi": "mi", "mile": "mi", "miles": "mi", "ft": "ft", "foot": "ft", "feet": "ft"}
 CALORIE_UNITS = {"cal": "cal", "cals": "cal", "calorie": "cal", "calories": "cal"}
-TIME_UNITS = {"s": "s", "sec": "s", "secs": "s", "second": "s", "seconds": "s", "min": "min", "mins": "min", "minute": "min", "minutes": "min"}
+TIME_UNITS = {
+    "s": "s",
+    "sec": "s",
+    "secs": "s",
+    "second": "s",
+    "seconds": "s",
+    "min": "min",
+    "mins": "min",
+    "minute": "min",
+    "minutes": "min",
+}
 
 KG_PER_LB = 0.45359237
 KG_PER_POOD = 16.0

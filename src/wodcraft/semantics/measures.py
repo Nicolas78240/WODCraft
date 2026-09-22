@@ -7,6 +7,7 @@ from wodcraft.syntax.ast import Dual
 from wodcraft.syntax.units import CM_PER_IN, KG_PER_LB, KG_PER_POOD, M_PER
 
 Amount = float | dict[str, float]
+Measure = dict[str, "Amount | str"]  # normalized units plus the unit written in the source
 
 
 def amount(value: Dual) -> Amount:
@@ -31,7 +32,7 @@ def _round(value: float) -> float:
     return int(rounded) if float(rounded).is_integer() else rounded
 
 
-def load_to_json(value: Dual, unit: str, eq: Equivalences) -> dict[str, Amount]:
+def load_to_json(value: Dual, unit: str, eq: Equivalences) -> Measure:
     """Loads are exposed in kg and lb, using the equivalence table first."""
     written = amount(value)
     if unit == "pood":
@@ -44,7 +45,7 @@ def load_to_json(value: Dual, unit: str, eq: Equivalences) -> dict[str, Amount]:
     return {"kg": kg, "lb": map_amount(kg, lambda v: _kg_to_lb(v, eq)), "unit": "kg", "written": written}
 
 
-def height_to_json(value: Dual, unit: str, eq: Equivalences) -> dict[str, Amount]:
+def height_to_json(value: Dual, unit: str, eq: Equivalences) -> Measure:
     written = amount(value)
     if unit == "in":
         cm = map_amount(written, lambda v: eq.in_to_cm(v) or round(v * CM_PER_IN))
@@ -53,7 +54,7 @@ def height_to_json(value: Dual, unit: str, eq: Equivalences) -> dict[str, Amount
     return {"cm": cm, "in": map_amount(cm, lambda v: eq.cm_to_in(v) or round(v / CM_PER_IN)), "unit": "cm", "written": written}
 
 
-def distance_to_json(value: Dual, unit: str) -> dict[str, Amount]:
+def distance_to_json(value: Dual, unit: str) -> Measure:
     factor = M_PER[unit]
     return {"m": map_amount(amount(value), lambda v: v * factor), "unit": unit, "written": amount(value)}
 

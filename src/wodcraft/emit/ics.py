@@ -73,7 +73,7 @@ def _minutes(document: dict) -> int:
 
 
 def _escape(text: str) -> str:
-    return text.replace("\\", "\\\\").replace(";", "\;").replace(",", "\\,").replace("\n", "\\n")
+    return text.replace("\\", "\\\\").replace(";", r"\;").replace(",", "\\,").replace("\n", "\\n")
 
 
 def _fold(line: str) -> str:

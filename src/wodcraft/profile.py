@@ -20,7 +20,7 @@ class Profile:
     name: str | None = None
 
     @classmethod
-    def load(cls, path: str | Path) -> "Profile":
+    def load(cls, path: str | Path) -> Profile:
         data = tomllib.loads(Path(path).read_text(encoding="utf-8"))
         return cls(
             category=str(data.get("category", "men")).lower(),
@@ -32,7 +32,7 @@ class Profile:
         )
 
     @classmethod
-    def discover(cls, start: Path | None = None) -> "Profile | None":
+    def discover(cls, start: Path | None = None) -> Profile | None:
         """Look for athlete.toml in the current directory, its parents, then the user's config."""
         here = (start or Path.cwd()).resolve()
         for directory in [here, *here.parents]:

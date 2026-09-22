@@ -99,16 +99,16 @@ class Equivalences:
     height: tuple[tuple[float, float], ...]  # (cm, in)
 
     def kg_to_lb(self, kg: float) -> float | None:
-        return next((lb for k, lb in self.load if abs(k - kg) < 1e-9), None)
+        return next((pounds for kilos, pounds in self.load if abs(kilos - kg) < 1e-9), None)
 
     def lb_to_kg(self, lb: float) -> float | None:
-        return next((k for k, l in self.load if abs(l - lb) < 1e-9), None)
+        return next((k for k, pounds in self.load if abs(pounds - lb) < 1e-9), None)
 
     def cm_to_in(self, cm: float) -> float | None:
-        return next((i for c, i in self.height if abs(c - cm) < 1e-9), None)
+        return next((inches for centimetres, inches in self.height if abs(centimetres - cm) < 1e-9), None)
 
     def in_to_cm(self, inch: float) -> float | None:
-        return next((c for c, i in self.height if abs(i - inch) < 1e-9), None)
+        return next((centimetres for centimetres, inches in self.height if abs(inches - inch) < 1e-9), None)
 
 
 @lru_cache(maxsize=4)

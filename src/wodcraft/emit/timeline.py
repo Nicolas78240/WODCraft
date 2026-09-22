@@ -45,7 +45,14 @@ def _block(block: dict, document: dict) -> list[dict]:
     if kind in ("amrap", "tabata") and block.get("duration_s"):
         return [{"duration_s": block["duration_s"], "label": f"{label}: {_items_label(block.get('items', []))}", "kind": "work"}]
     duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
-    return [{"duration_s": duration, "label": f"{label}: {_items_label(block.get('items', []))}", "kind": "work", "open_ended": not block.get("cap_s")}]
+    return [
+        {
+            "duration_s": duration,
+            "label": f"{label}: {_items_label(block.get('items', []))}",
+            "kind": "work",
+            "open_ended": not block.get("cap_s"),
+        }
+    ]
 
 
 def _slot_label(slots: list[dict], index: int) -> str:

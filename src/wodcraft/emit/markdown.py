@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from wodcraft.emit.board import SCORE_LABEL, _block, _head, _range
+from wodcraft.emit.board import SCORE_LABEL, _block, _range
 
 
 def to_markdown(document: dict) -> str:
