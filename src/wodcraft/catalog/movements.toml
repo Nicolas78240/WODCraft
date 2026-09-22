@@ -36,6 +36,7 @@
 name = "Snatch"
 aliases = ["full snatch", "barbell snatch"]
 fr = ["arraché"]
+fr_name = "Arraché"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -46,6 +47,7 @@ pace = { rep = 4 }
 name = "Power snatch"
 aliases = ["psn"]
 fr = ["arraché debout", "arraché en puissance"]
+fr_name = "Arraché puissance"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -57,6 +59,7 @@ pace = { rep = 3.5 }
 name = "Squat snatch"
 aliases = ["full squat snatch"]
 fr = ["arraché complet"]
+fr_name = "Arraché squat"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -109,6 +112,7 @@ pace = { rep = 4 }
 name = "Overhead squat"
 aliases = ["ohs"]
 fr = ["squat bras tendus", "squat overhead"]
+fr_name = "Squat overhead"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -120,6 +124,7 @@ pace = { rep = 3 }
 name = "Clean"
 aliases = ["full clean", "barbell clean"]
 fr = ["épaulé"]
+fr_name = "Épaulé"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -130,6 +135,7 @@ pace = { rep = 3.5 }
 name = "Power clean"
 aliases = ["pc"]
 fr = ["épaulé debout", "épaulé en puissance"]
+fr_name = "Épaulé puissance"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -141,6 +147,7 @@ pace = { rep = 3 }
 name = "Squat clean"
 aliases = ["full squat clean"]
 fr = ["épaulé complet"]
+fr_name = "Épaulé squat"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -162,6 +169,7 @@ pace = { rep = 3.5 }
 name = "Hang power clean"
 aliases = ["hpc"]
 fr = ["épaulé debout suspendu"]
+fr_name = "Épaulé suspendu puissance"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -183,6 +191,7 @@ pace = { rep = 3.5 }
 name = "Clean and jerk"
 aliases = ["c&j", "cj", "clean & jerk", "clean-and-jerk"]
 fr = ["épaulé-jeté", "épaulé jeté"]
+fr_name = "Épaulé-jeté"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -214,6 +223,7 @@ pace = { rep = 3 }
 name = "Push jerk"
 aliases = ["pj"]
 fr = ["jeté poussé"]
+fr_name = "Jeté force"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -224,6 +234,7 @@ pace = { rep = 2.5 }
 name = "Split jerk"
 aliases = []
 fr = ["jeté fendu"]
+fr_name = "Jeté fente"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -256,6 +267,7 @@ pace = { rep = 3.5 }
 name = "Thruster"
 aliases = ["barbell thruster"]
 fr = ["thruster barre"]
+fr_name = "Thruster"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -288,6 +300,7 @@ pace = { rep = 2.5 }
 name = "Push press"
 aliases = ["pp"]
 fr = ["développé poussé"]
+fr_name = "Développé jeté"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -299,6 +312,7 @@ pace = { rep = 2.5 }
 name = "Bench press"
 aliases = ["bench", "bp"]
 fr = ["développé couché"]
+fr_name = "Développé couché"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -309,6 +323,7 @@ pace = { rep = 2.5 }
 name = "Deadlift"
 aliases = ["dl", "conventional deadlift", "barbell deadlift"]
 fr = ["soulevé de terre", "sdt"]
+fr_name = "Soulevé de terre"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -339,6 +354,7 @@ pace = { rep = 2.5 }
 name = "Sumo deadlift high pull"
 aliases = ["sdhp", "sumo high pull", "sumo dl high pull"]
 fr = ["tirage menton sumo"]
+fr_name = "Soulevé de terre sumo tirage menton"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -350,6 +366,7 @@ pace = { rep = 2.5 }
 name = "Back squat"
 aliases = ["bs", "barbell back squat"]
 fr = ["squat arrière", "squat barre dos"]
+fr_name = "Squat arrière"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -360,6 +377,7 @@ pace = { rep = 3 }
 name = "Front squat"
 aliases = ["fs", "barbell front squat"]
 fr = ["squat avant"]
+fr_name = "Squat avant"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -431,6 +449,7 @@ pace = { rep = 15 }
 name = "Burpee over the bar"
 aliases = ["bar facing burpee", "burpee over bar", "bfb", "lateral burpee over bar"]
 fr = ["burpee par-dessus la barre"]
+fr_name = "Burpee par-dessus la barre"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -451,6 +470,7 @@ pace = { rep = 3 }
 name = "Dumbbell snatch"
 aliases = ["db snatch", "alternating dumbbell snatch", "single arm dumbbell snatch"]
 fr = ["arraché haltère", "arraché dumbbell"]
+fr_name = "Arraché haltère"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -635,6 +655,7 @@ pace = { rep = 3 }
 name = "Devil press"
 aliases = ["db devil press", "devils press"]
 fr = ["devil press haltères"]
+fr_name = "Devil press"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -678,6 +699,7 @@ pace = { rep = 3.5 }
 name = "Kettlebell swing"
 aliases = ["kb swing", "american swing", "american kettlebell swing", "kbs"]
 fr = ["swing kettlebell", "swing"]
+fr_name = "Swing kettlebell"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -818,6 +840,7 @@ pace = { rep = 3 }
 name = "Wall ball"
 aliases = ["wall ball shot", "wallball", "wb", "wall-ball"]
 fr = ["lancer de medecine ball", "lancer de médecine-ball"]
+fr_name = "Wall ball"
 family = "W"
 quantities = ["reps"]
 param = ["load", "height"]  # ball weight and target height
@@ -911,6 +934,7 @@ pace = { m = 1.5 }
 name = "Farmer carry"
 aliases = ["farmers carry", "farmer walk", "farmers walk", "farmer's carry", "farmer's walk"]
 fr = ["marche du fermier", "portage fermier"]
+fr_name = "Portage du fermier"
 family = "W"
 quantities = ["distance", "time"]
 param = "load"
@@ -983,6 +1007,7 @@ pace = { rep = 3 }
 name = "Pull-up"
 aliases = ["pullup", "pull up", "kipping pull-up", "kipping pullup"]
 fr = ["traction"]
+fr_name = "Traction"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -993,6 +1018,7 @@ pace = { rep = 1.5 }
 name = "Strict pull-up"
 aliases = ["strict pullup", "strict pull up", "dead hang pull-up"]
 fr = ["traction stricte", "tractions strictes"]
+fr_name = "Traction stricte"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1013,6 +1039,7 @@ pace = { rep = 1.2 }
 name = "Chest-to-bar pull-up"
 aliases = ["c2b", "ctb", "chest to bar", "chest-to-bar", "c2b pull-up", "chest to bar pull up"]
 fr = ["traction poitrine barre", "tractions poitrine"]
+fr_name = "Traction poitrine-barre"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1033,6 +1060,7 @@ pace = { rep = 2 }
 name = "Jumping pull-up"
 aliases = ["jumping pullup", "jumping pull up"]
 fr = ["traction sautée", "tractions sautées"]
+fr_name = "Traction sautée"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1053,6 +1081,7 @@ pace = { rep = 2 }
 name = "Ring row"
 aliases = ["inverted row", "body row"]
 fr = ["rowing anneaux", "tirage anneaux"]
+fr_name = "Tirage aux anneaux"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1063,6 +1092,7 @@ pace = { rep = 2 }
 name = "Bar muscle-up"
 aliases = ["bmu", "bar muscle up", "bar mu"]
 fr = ["muscle-up à la barre", "muscle up barre"]
+fr_name = "Muscle-up à la barre"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1073,6 +1103,7 @@ pace = { rep = 4 }
 name = "Ring muscle-up"
 aliases = ["rmu", "ring muscle up", "muscle-up", "muscle up", "mu"]
 fr = ["muscle-up aux anneaux", "muscle up anneaux"]
+fr_name = "Muscle-up aux anneaux"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1083,6 +1114,7 @@ pace = { rep = 5 }
 name = "Ring dip"
 aliases = []
 fr = ["dips anneaux"]
+fr_name = "Dips aux anneaux"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1103,6 +1135,7 @@ pace = { rep = 2 }
 name = "Push-up"
 aliases = ["pushup", "push up", "press-up"]
 fr = ["pompe"]
+fr_name = "Pompe"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1123,6 +1156,7 @@ pace = { rep = 2 }
 name = "Handstand push-up"
 aliases = ["hspu", "handstand pushup", "handstand push up", "kipping hspu"]
 fr = ["pompe en équilibre", "pompes poirier", "hspu français"]
+fr_name = "Pompe en équilibre"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1163,6 +1197,7 @@ pace = { rep = 10 }
 name = "Handstand walk"
 aliases = ["hs walk", "handstand walking"]
 fr = ["marche en équilibre", "marche sur les mains"]
+fr_name = "Marche en équilibre"
 family = "G"
 quantities = ["distance", "time"]
 param = "none"
@@ -1182,6 +1217,7 @@ equipment = "bodyweight"
 name = "Toes-to-bar"
 aliases = ["t2b", "ttb", "toes to bar", "ttb reps"]
 fr = ["pieds à la barre", "orteils à la barre"]
+fr_name = "Pointes de pieds à la barre"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1192,6 +1228,7 @@ pace = { rep = 2 }
 name = "Knees-to-elbow"
 aliases = ["k2e", "kte", "knees to elbows"]
 fr = ["genoux aux coudes"]
+fr_name = "Genoux aux coudes"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1212,6 +1249,7 @@ pace = { rep = 1.8 }
 name = "Sit-up"
 aliases = ["situp", "sit up", "abmat sit-up", "abmat situp"]
 fr = ["abdo", "redressement assis"]
+fr_name = "Relevé de buste"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1222,6 +1260,7 @@ pace = { rep = 1.8 }
 name = "GHD sit-up"
 aliases = ["ghd situp", "ghd sit up", "ghd"]
 fr = ["ghd abdos", "relevé ghd"]
+fr_name = "Relevé de buste GHD"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1290,6 +1329,7 @@ equipment = "bodyweight"
 name = "Plank"
 aliases = ["plank hold", "front plank"]
 fr = ["gainage", "planche"]
+fr_name = "Gainage"
 family = "G"
 quantities = ["time"]
 param = "none"
@@ -1326,6 +1366,7 @@ equipment = "other"
 name = "Air squat"
 aliases = ["bodyweight squat", "squat"]
 fr = ["squat au poids du corps", "squat à vide"]
+fr_name = "Squat à vide"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1346,6 +1387,7 @@ pace = { rep = 2 }
 name = "Pistol"
 aliases = ["pistol squat", "single leg squat", "single-leg squat"]
 fr = ["squat pistolet", "pistolet"]
+fr_name = "Squat pistolet"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1356,6 +1398,7 @@ pace = { rep = 3 }
 name = "Lunge"
 aliases = ["walking lunge", "bodyweight lunge", "alternating lunge"]
 fr = ["fente", "fentes marchées"]
+fr_name = "Fente"
 family = "G"
 quantities = ["reps", "distance"]
 param = "none"
@@ -1386,6 +1429,7 @@ pace = { rep = 2 }
 name = "Burpee"
 aliases = ["standard burpee"]
 fr = ["burpee simple"]
+fr_name = "Burpee"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1458,6 +1502,7 @@ pace = { rep = 1.5 }
 name = "Box jump"
 aliases = ["bj"]
 fr = ["saut sur box", "saut de box"]
+fr_name = "Saut sur box"
 family = "G"
 quantities = ["reps"]
 param = "height"
@@ -1469,6 +1514,7 @@ pace = { rep = 3 }
 name = "Box jump-over"
 aliases = ["bjo", "box jump over", "box over"]
 fr = ["passage de box", "saut par-dessus la box"]
+fr_name = "Saut sur box franchi"
 family = "G"
 quantities = ["reps"]
 param = "height"
@@ -1491,6 +1537,7 @@ pace = { rep = 3.5 }
 name = "Step-up"
 aliases = ["step up", "box step-up", "box step up"]
 fr = ["montée sur box", "step up box"]
+fr_name = "Montée sur box"
 family = "G"
 quantities = ["reps"]
 param = "height"
@@ -1512,6 +1559,7 @@ pace = { rep = 3, m = 1.5 }
 name = "Rope climb"
 aliases = []
 fr = ["montée de corde", "grimper de corde"]
+fr_name = "Montée de corde"
 family = "G"
 quantities = ["reps"]
 param = "none"
@@ -1692,6 +1740,7 @@ pace = { rep = 2 }
 name = "Run"
 aliases = ["running", "jog"]
 fr = ["course", "courir", "course à pied"]
+fr_name = "Course"
 family = "M"
 quantities = ["distance", "time"]
 param = "none"
@@ -1722,6 +1771,7 @@ pace = { m = 0.2 }
 name = "Row"
 aliases = ["rowing", "erg row", "concept2 row"]
 fr = ["rameur", "ramer"]
+fr_name = "Rameur"
 family = "M"
 quantities = ["calories", "distance", "time"]
 param = "none"
@@ -1732,6 +1782,7 @@ pace = { m = 0.24, cal = 3.5 }
 name = "Bike erg"
 aliases = ["bike", "bikeerg", "c2 bike", "erg bike"]
 fr = ["vélo erg", "vélo"]
+fr_name = "Vélo erg"
 family = "M"
 quantities = ["calories", "distance", "time"]
 param = "none"
@@ -1742,6 +1793,7 @@ pace = { m = 0.1, cal = 3.2 }
 name = "Assault bike"
 aliases = ["air bike", "echo bike", "fan bike", "assault air bike"]
 fr = ["assault bike vélo", "vélo à air"]
+fr_name = "Assault bike"
 family = "M"
 quantities = ["calories", "distance", "time"]
 param = "none"
@@ -1752,6 +1804,7 @@ pace = { m = 0.12, cal = 4 }
 name = "Ski erg"
 aliases = ["ski", "skierg", "ski ergometer"]
 fr = ["ski erg machine", "skieur"]
+fr_name = "Ski erg"
 family = "M"
 quantities = ["calories", "distance", "time"]
 param = "none"
@@ -1772,6 +1825,7 @@ pace = { m = 1.3 }
 name = "Double-under"
 aliases = ["du", "dubs", "double under"]
 fr = ["double saut", "corde à sauter double", "double unders français"]
+fr_name = "Double under"
 family = "M"
 quantities = ["reps"]
 param = "none"
@@ -1782,6 +1836,7 @@ pace = { rep = 0.6 }
 name = "Single-under"
 aliases = ["su", "single under", "jump rope", "skipping"]
 fr = ["corde à sauter", "saut simple"]
+fr_name = "Saut à la corde"
 family = "M"
 quantities = ["reps"]
 param = "none"
@@ -2166,6 +2221,7 @@ pace = { rep = 1.5 }
 name = "Knee push-up"
 aliases = ["knee pushup", "push-up from the knees", "knee push up"]
 fr = ["pompe sur les genoux"]
+fr_name = "Pompe sur les genoux"
 family = "G"
 quantities = ["reps"]
 param = "none"

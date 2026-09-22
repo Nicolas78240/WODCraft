@@ -37,9 +37,8 @@ def localize(document: dict, lang: str) -> dict:
     def walk(node: dict) -> None:
         if node.get("type") == "movement":
             entry = catalog.movements.get(node.get("movement", ""))
-            aliases = getattr(entry, lang, ()) if entry else ()
-            if aliases:
-                node["name"] = aliases[0][:1].upper() + aliases[0][1:]
+            if entry:
+                node["name"] = entry.display_name(lang)
         for child in node.get("items", []):
             walk(child)
 

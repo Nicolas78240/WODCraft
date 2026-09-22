@@ -21,8 +21,17 @@ class Movement:
     equipment: str
     aliases: tuple[str, ...] = ()
     fr: tuple[str, ...] = ()
+    fr_name: str | None = None  # French display name; defaults to the first French alias
     rx: dict[str, float] | None = None  # {"men": 43, "women": 30, "unit": "kg"}
     pace: dict[str, float] = field(default_factory=dict)  # seconds per rep / m / cal
+
+    def display_name(self, lang: str = "en") -> str:
+        if lang == "fr":
+            if self.fr_name:
+                return self.fr_name
+            if self.fr:
+                return self.fr[0][:1].upper() + self.fr[0][1:]
+        return self.name
 
     def pace_for(self, kind: str) -> float | None:
         return self.pace.get({"reps": "rep", "distance": "m", "calories": "cal"}.get(kind, kind))
@@ -79,6 +88,7 @@ def _load_catalog(path: Path) -> Catalog:
             equipment=entry.get("equipment", "other"),
             aliases=tuple(entry.get("aliases", ())),
             fr=tuple(entry.get("fr", ())),
+            fr_name=entry.get("fr_name"),
             rx=entry.get("rx"),
             pace=dict(entry.get("pace", {})),
         )
