@@ -7,6 +7,7 @@ from wodcraft.syntax.units import fmt_num, format_clock
 SCORE_LABEL = {
     "time": "time",
     "rounds+reps": "rounds + reps",
+    "rounds": "rounds",
     "reps": "reps",
     "load": "load",
     "distance": "distance",

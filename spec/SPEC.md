@@ -169,7 +169,7 @@ and MUST have a constant step: `3-6-9 ...` means 3, 6, 9, 12… until the cap is
 | Key | Value | Where |
 |---|---|---|
 | `cap` | duration | workout |
-| `score` | `time`, `rounds+reps`, `reps`, `load`, `distance`, `calories`, `none` | workout |
+| `score` | `time`, `rounds+reps`, `rounds`, `reps`, `load`, `distance`, `calories`, `none` | workout |
 | `tiebreak` | free text | workout |
 | `units` | `kg` or `lb` | workout, session — default unit for loads written without one |
 | `vest` | load | workout |

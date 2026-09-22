@@ -140,7 +140,7 @@
     "score": {
       "type": "object",
       "properties": {
-        "type": { "enum": ["time", "rounds+reps", "reps", "load", "distance", "calories", "none", "multi"] },
+        "type": { "enum": ["time", "rounds+reps", "rounds", "reps", "load", "distance", "calories", "none", "multi"] },
         "capped": { "type": "string", "description": "what is scored by an athlete who hits the cap" },
         "tiebreak": { "type": "string" },
         "parts": {

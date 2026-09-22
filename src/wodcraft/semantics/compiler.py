@@ -41,7 +41,7 @@ ALLOWED_CHILDREN = {
     "cash_out": UNTIMED,
     "root": TIMED | UNTIMED | {"buy_in", "cash_out"},
 }
-SCORE_TYPES = {"time", "rounds+reps", "reps", "load", "distance", "calories", "none"}
+SCORE_TYPES = {"time", "rounds+reps", "rounds", "reps", "load", "distance", "calories", "none"}
 SCORE_BY_FORMAT = {
     "for_time": "time",
     "amrap": "rounds+reps",
@@ -533,15 +533,15 @@ def _score_compatible(declared: str, kind: str, main: dict | None) -> bool:
     if declared == "none":
         return True
     if kind in INTERVALS:
-        return declared in ("reps", "rounds+reps", "calories", "distance", "none")
+        return declared in ("reps", "rounds", "rounds+reps", "calories", "distance", "none")
     if kind in ("for_time", "rounds", "ladder"):
-        return declared in ("time", "reps") or (declared == "load" and kind != "for_time")
+        return declared in ("time", "reps", "rounds") or (declared == "load" and kind != "for_time")
     if kind == "amrap":
-        return declared in ("rounds+reps", "reps", "calories", "distance")
+        return declared in ("rounds+reps", "rounds", "reps", "calories", "distance")
     if kind == "max_load":
         return declared in ("load", "reps")
     if kind == "tabata":
-        return declared in ("reps", "calories", "distance")
+        return declared in ("reps", "rounds", "calories", "distance")
     return True
 
 
