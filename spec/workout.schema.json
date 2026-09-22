@@ -241,6 +241,11 @@
         "tags": { "type": "array", "items": { "type": "string" } },
         "notes": { "type": "array", "items": { "type": "string" } },
         "stimulus": { "type": "array", "items": { "type": "string" } },
+        "estimate": {
+          "type": "object",
+          "properties": { "min_s": { "type": "number" }, "max_s": { "type": "number" } },
+          "required": ["min_s", "max_s"]
+        },
         "sections": {
           "type": "array",
           "items": {

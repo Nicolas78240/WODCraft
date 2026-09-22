@@ -60,6 +60,9 @@ def _session(session: dict, width: int) -> str:
         lines.append("")
         lines.append(section["title"].upper())
         lines.append(_workout(section["workout"], width, skip_title=True))
+    if session.get("estimate"):
+        lines.append("")
+        lines.append(f"Session estimate: {_range(session['estimate'])}")
     return "\n".join(lines).rstrip() + "\n"
 
 

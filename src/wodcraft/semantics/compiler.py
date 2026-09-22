@@ -96,6 +96,12 @@ class Compiler:
             "title": doc.title,
             "sections": sections,
         }
+        estimates = [s["workout"].get("estimate") for s in sections if s["workout"].get("estimate")]
+        if estimates:
+            out["estimate"] = {
+                "min_s": round(sum(e["min_s"] for e in estimates)),
+                "max_s": round(sum(e["max_s"] for e in estimates)),
+            }
         for key in ("date", "time", "units", "tags", "notes", "stimulus"):
             if key in meta:
                 out[key] = meta[key]
