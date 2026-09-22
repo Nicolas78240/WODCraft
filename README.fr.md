@@ -183,6 +183,7 @@ WODCraft est fait pour être réimplémenté par d'autres :
 | Catalogue de mouvements | [src/wodcraft/catalog/movements.toml](src/wodcraft/catalog/movements.toml) — 200+ mouvements, alias FR/EN |
 | Bibliothèque de référence | [src/wodcraft/library/](src/wodcraft/library/) — Girls, Heroes, Open |
 | Implémentation de référence | ce dépôt (Apache-2.0) |
+| Seconde implémentation | [`swift/WODCraftKit`](swift/WODCraftKit) — en Swift, validée par la même suite de conformité |
 
 ## Contribuer
 

@@ -177,6 +177,7 @@ WODCraft is meant to be implementable by anyone:
 | Movement catalog | [src/wodcraft/catalog/movements.toml](src/wodcraft/catalog/movements.toml) — 200+ movements, FR/EN aliases |
 | Benchmark library | [src/wodcraft/library/](src/wodcraft/library/) — Girls, Heroes, Open |
 | Reference implementation | this repository (Apache-2.0) |
+| Second implementation | [`swift/WODCraftKit`](swift/WODCraftKit) — Swift, validated by the same conformance suite |
 
 ## Contributing
 
