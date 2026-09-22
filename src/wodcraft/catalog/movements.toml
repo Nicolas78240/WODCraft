@@ -11,7 +11,8 @@
 #                                  handled by the resolver and are NOT listed. Spelling
 #                                  variants and abbreviations are ("pullup", "pull up",
 #                                  "t2b", "hspu", "du", "c2b"...).
-#   fr         = [...]             common French aliases, lowercase
+#   fr         = [...]             common French aliases, lowercase. The FIRST one is what
+#                                  `wodc show --lang fr` displays, so put the best name first.
 #   family     = "W"               M = monostructural, G = gymnastics, W = weightlifting/loaded
 #   quantities = ["reps"]          ordered subset of reps | distance | calories | time
 #   param      = "load"            what the movement expects after its name:

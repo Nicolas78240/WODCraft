@@ -277,6 +277,7 @@ The catalog (`catalog/movements.toml`) is part of the standard. Each entry has a
 `G` gymnastics, `W` weightlifting), the quantities it accepts (reps, distance, calories, time), the
 parameter kind it expects (load, height, none), and an average pace used for duration estimates.
 Implementations MUST accept every catalog entry and MUST NOT accept names outside the catalog.
+The first French alias is also the French display name (`wodc show --lang fr`).
 
 ## 12. Score
 

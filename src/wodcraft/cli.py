@@ -101,6 +101,7 @@ def _add_profile(sub: argparse.ArgumentParser) -> None:
     sub.add_argument("--category", choices=["men", "women"])
     sub.add_argument("--level", help="rx, intermediate, scaled, foundations")
     sub.add_argument("--units", choices=["kg", "lb"])
+    sub.add_argument("--lang", choices=["en", "fr"], default="en", help="language of the movement names")
 
 
 # --------------------------------------------------------------------------- commands
@@ -158,7 +159,7 @@ def cmd_show(args) -> int:
         for document in result.documents:
             if profile is not None:
                 document = resolve(document, profile)
-            print(board.render(document))
+            print(board.render(document, lang=getattr(args, "lang", "en")))
             print()
     return status
 

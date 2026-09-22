@@ -17,10 +17,38 @@ SCORE_LABEL = {
 }
 
 
-def render(document: dict, width: int = 46) -> str:
+def render(document: dict, width: int = 46, lang: str = "en") -> str:
+    if lang != "en":
+        document = localize(document, lang)
     if document.get("kind") == "session":
         return _session(document, width)
     return _workout(document, width)
+
+
+def localize(document: dict, lang: str) -> dict:
+    """Rewrite movement names in another language, using the catalog aliases (today: 'fr')."""
+    import copy
+
+    from wodcraft.catalog import load_catalog
+
+    catalog = load_catalog()
+    out = copy.deepcopy(document)
+
+    def walk(node: dict) -> None:
+        if node.get("type") == "movement":
+            entry = catalog.movements.get(node.get("movement", ""))
+            aliases = getattr(entry, lang, ()) if entry else ()
+            if aliases:
+                node["name"] = aliases[0][:1].upper() + aliases[0][1:]
+        for child in node.get("items", []):
+            walk(child)
+
+    for section in out.get("sections", []):
+        for block in section["workout"].get("blocks", []):
+            walk(block)
+    for block in out.get("blocks", []):
+        walk(block)
+    return out
 
 
 def _session(session: dict, width: int) -> str:
