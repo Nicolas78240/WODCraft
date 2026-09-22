@@ -72,6 +72,7 @@ class Compiler:
         self.units = "kg"
         self._units_declared = False
         self._movement_ids: list[str] = []
+        self._used_workout: dict | None = None
 
     # ------------------------------------------------------------------ documents
 
@@ -109,6 +110,9 @@ class Compiler:
         meta = self._meta({}, [s for s in _walk(body.statements) if isinstance(s, MetaLine)])
         if "units" in meta:
             self.units, self._units_declared = meta["units"], True
+        used = self._sole_use(body.statements)
+        if used is not None:
+            return self._adopt(used, title, meta)
         blocks = self._statements(body.statements, "root")
         blocks = [_normalize_block(b) for b in blocks]
         team = None
@@ -138,6 +142,31 @@ class Compiler:
             if estimate:
                 out["estimate"] = estimate
         self.units, self._units_declared = saved_units, saved_declared
+        return out
+
+    def _sole_use(self, statements: list[Statement]) -> dict | None:
+        """A body that is only a 'use' line adopts the whole referenced workout."""
+        real = [s for s in statements if not isinstance(s, (MetaLine, CommentLine))]
+        if len(real) != 1 or not isinstance(real[0], UseLine):
+            return None
+        blocks = self._use(real[0])
+        return {"blocks": blocks, "used": real[0], "source": self._used_workout}
+
+    def _adopt(self, used: dict, title: str | None, meta: dict) -> dict:
+        source = used["source"] or {}
+        out: dict = {
+            "wodcraft": SPEC_VERSION,
+            "kind": "workout",
+            "title": title or source.get("title"),
+            "blocks": used["blocks"],
+            "score": source.get("score") or self._score(used["blocks"], meta),
+        }
+        for key in ("team", "levels", "estimate"):
+            if source.get(key):
+                out[key] = source[key]
+        merged = {**(source.get("meta") or {}), **{k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}}
+        if merged:
+            out["meta"] = merged
         return out
 
     # ------------------------------------------------------------------ meta
@@ -187,15 +216,24 @@ class Compiler:
             if isinstance(stmt, RestLine):
                 items.append({"type": "rest", "seconds": stmt.seconds, "source": stmt.span.to_dict()})
             elif isinstance(stmt, UseLine):
-                items.extend(self._use(stmt))
+                for block in self._use(stmt):
+                    if block.get("type") in ALLOWED_CHILDREN.get(parent, set()):
+                        items.append(block)
+                    else:
+                        self._err(
+                            "E015",
+                            f"{stmt.path!r} is a {_human(block.get('type', ''))} workout and cannot go inside {_human(parent)}.",
+                            stmt.span,
+                            "put the 'use' line on its own, at the top level",
+                        )
             elif isinstance(stmt, MovementLine):
                 item = self._movement(stmt, parent)
                 if item:
                     items.append(item)
             elif isinstance(stmt, Block):
-                block = self._block(stmt, parent)
-                if block:
-                    items.append(block)
+                compiled = self._block(stmt, parent)
+                if compiled:
+                    items.append(compiled)
         return items
 
     def _block(self, block: Block, parent: str) -> dict | None:
@@ -435,6 +473,7 @@ class Compiler:
             return []
         workout, diags = loaded
         self.diags.extend(diags)
+        self._used_workout = workout
         blocks = [dict(b) for b in workout.get("blocks", [])]
         for block in blocks:
             block["used"] = {"path": stmt.path, "title": workout.get("title")}
