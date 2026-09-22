@@ -103,8 +103,11 @@ def _block(block: dict, depth: int, width: int) -> list[str]:
     if kind == "rest":
         return [f"{pad}Rest {format_clock(block['seconds'])}"]
     head = _head(block)
+    items = block.get("items", [])
+    if head and block.get("type") in ("slot", "buy_in", "cash_out") and len(items) == 1 and items[0].get("type") == "movement":
+        return [f"{pad}{head} {_movement(items[0], width - len(pad) - len(head) - 1)}"]
     lines = [pad + head] if head else []
-    for item in block.get("items", []):
+    for item in items:
         lines += _block(item, depth + (1 if head else 0), width)
     return lines
 

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from wodcraft.catalog import load_catalog
 from wodcraft.emit.board import _head, _movement
+from wodcraft.semantics.estimate import item_seconds
 from wodcraft.syntax.units import format_clock
 
 
@@ -30,7 +32,8 @@ def _block(block: dict, document: dict) -> list[dict]:
     if kind == "rest":
         return [{"duration_s": block.get("seconds", 0), "label": "Rest", "kind": "rest"}]
     if kind == "movement":
-        return [{"duration_s": 0, "label": _movement(block, 40), "kind": "work"}]
+        seconds = item_seconds(block, load_catalog())
+        return [{"duration_s": seconds, "label": _movement(block, 40), "kind": "work", "open_ended": not seconds}]
     label = _head(block) or kind
     if kind in ("emom", "every"):
         interval = block.get("interval_s") or 60
