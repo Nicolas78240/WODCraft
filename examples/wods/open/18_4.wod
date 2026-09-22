@@ -1,5 +1,0 @@
-module open.wod_18_4 v1 {
-  // Open 18.4 — placeholder (fill exact details)
-  wod ForTime { }
-}
-

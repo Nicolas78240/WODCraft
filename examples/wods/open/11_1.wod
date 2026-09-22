@@ -1,5 +1,0 @@
-module open.wod_11_1 v1 {
-  // Open 11.1 — placeholder (fill exact details)
-  wod AMRAP 10:00 { }
-}
-
