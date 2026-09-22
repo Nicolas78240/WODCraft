@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tomllib
 from pathlib import Path
 
 from wodcraft import __version__, library
@@ -28,6 +29,18 @@ def main(argv: list[str] | None = None) -> int:
         return args.func(args)
     except FileNotFoundError as err:
         print(f"wodc: {err.filename}: no such file", file=sys.stderr)
+        return EXIT_USAGE
+    except IsADirectoryError as err:
+        print(f"wodc: {err.filename}: is a directory, not a .wod file", file=sys.stderr)
+        return EXIT_USAGE
+    except PermissionError as err:
+        print(f"wodc: {err.filename}: permission denied", file=sys.stderr)
+        return EXIT_USAGE
+    except UnicodeDecodeError:
+        print("wodc: this file is not UTF-8 text; a .wod file is plain text", file=sys.stderr)
+        return EXIT_USAGE
+    except tomllib.TOMLDecodeError as err:
+        print(f"wodc: the athlete profile is not valid TOML: {err}", file=sys.stderr)
         return EXIT_USAGE
     except BrokenPipeError:  # pragma: no cover - piping into head/less
         return EXIT_OK
