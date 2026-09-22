@@ -64,6 +64,7 @@ wodc timer fran.wod               # le déroulé du chrono, segment par segment
 wodc export ics semaine.wod       # une séance dans votre agenda
 wodc catalog thruster             # explorer le catalogue de mouvements
 wodc lib girls                    # la bibliothèque de référence
+wodc show girls/fran --lang fr    # …et n'importe lequel de ses WODs, par son nom
 ```
 
 Un profil d'athlète (`athlete.toml`, cherché dans le dossier courant, ses parents, puis

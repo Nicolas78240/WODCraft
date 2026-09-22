@@ -270,7 +270,15 @@ def cmd_lib(args) -> int:
 
 
 def _paths(args) -> list[str]:
-    return list(args.files)
+    """File paths, or names from the standard library ('girls/fran')."""
+    out: list[str] = []
+    for name in args.files:
+        if name == "-" or Path(name).exists():
+            out.append(name)
+            continue
+        candidate = LIBRARY_DIR / (name if name.endswith(".wod") else name + ".wod")
+        out.append(str(candidate) if candidate.is_file() else name)
+    return out
 
 
 def _results(args):

@@ -61,6 +61,7 @@ wodc timer fran.wod                 # what the clock does, segment by segment
 wodc export ics week.wod            # a session in your calendar
 wodc catalog thruster               # explore the movement catalog
 wodc lib girls                      # the benchmark library
+wodc show girls/fran --lang fr      # …and any of its workouts, by name
 ```
 
 An athlete profile (`athlete.toml`, found in the current directory, a parent, or `~/.config/wodcraft/`)
