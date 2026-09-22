@@ -98,7 +98,9 @@ def main() -> int:
                 expected = normalize(json.loads(json.dumps(mine.documents)))
                 found = normalize(theirs.get("documents", []))
                 if expected != found:
-                    mismatches.append(f"documents differ\n{source!r}\n  here:  {json.dumps(expected)[:400]}\n  there: {json.dumps(found)[:400]}")
+                    mismatches.append(
+                        f"documents differ\n{source!r}\n  here:  {json.dumps(expected)[:400]}\n  there: {json.dumps(found)[:400]}"
+                    )
             if len(mismatches) >= 5:
                 break
 
