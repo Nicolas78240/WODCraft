@@ -12,8 +12,11 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8000
 RUN useradd --create-home --uid 10001 wodcraft
 WORKDIR /home/wodcraft
-COPY --from=build /dist/*.whl /tmp/
-RUN pip install --no-cache-dir /tmp/*.whl[service] && rm /tmp/*.whl
+COPY --from=build /dist/ /tmp/dist/
+RUN set -eu; \
+    wheel="$(ls /tmp/dist/*.whl)"; \
+    pip install --no-cache-dir "${wheel}[service]"; \
+    rm -rf /tmp/dist
 USER wodcraft
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
