@@ -125,7 +125,7 @@ separate indented blocks:
 | Block | MAY contain |
 |---|---|
 | `rounds`, `reps` ladder (untimed) | anything |
-| `emom`, `enmom`, `every` | movements, rest, slot labels, `for_time`, `amrap`, untimed blocks |
+| `emom` (including `EnMOM`), `every` | movements, rest, slot labels, `for_time`, `amrap`, untimed blocks |
 | `for_time`, `amrap`, `tabata`, `death_by`, `max_load` | movements, rest, untimed blocks, `Buy-in:`/`Cash-out:` (`for_time`, `amrap` only) |
 
 Any other combination is an error (`E015`).
@@ -162,7 +162,7 @@ and MUST have a constant step: `3-6-9 ...` means 3, 6, 9, 12… until the cap is
 | `Buy-in:` / `Cash-out:` | workout body | work before / after the main block, inside the clock |
 | `Odd:` / `Even:` | EMOM, EnMOM | minutes 1, 3, 5… / 2, 4, 6… |
 | `Min N:` | EMOM, EnMOM, Every | the N-th interval of each cycle (cycle length = highest N) |
-| `Scaled:` / `Intermediate:` / `Foundations:` | workout body, after the Rx work | level adaptations (§8) |
+| `Scaled:` / `Intermediate:` / `Foundations:` | workout body, after the Rx work | level adaptations (§9) |
 
 **Meta lines** are `key: value` where the key is one of the following (case-insensitive; label and meta names never overlap):
 
@@ -196,8 +196,9 @@ An unknown key is an error (`E012`).
 | duration | `30 s`, `1:00`, `2 min` | time |
 | `max` [unit] | `max Burpee`, `max cal Row` | as many as possible in the interval, or to failure outside one |
 
-The quantity MAY be omitted inside a rep ladder, `Max load`, `Death by`, or for a movement
-whose catalog entry has no quantity (e.g. `Rest`). Otherwise omission is an error (`E030`).
+The quantity MAY be omitted inside a rep ladder (it takes the ladder value), inside `Max load`,
+`Death by` and `Tabata`, and for a movement the catalog measures in nothing at all. Otherwise
+omission is an error (`E030`).
 
 ### 7.2 Name
 
