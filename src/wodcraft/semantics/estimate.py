@@ -89,12 +89,13 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
         return float(block.get("seconds", 0))
     if kind == "movement":
         return item_seconds(block, catalog)
-    if kind in ("amrap", "emom", "tabata") and block.get("duration_s"):
+    if kind == "tabata":
+        movements = [i for i in block.get("items", []) if i.get("type") != "rest"] or [None]
+        return float(block.get("rounds", 8)) * 30.0 * len(movements)
+    if kind in ("amrap", "emom") and block.get("duration_s"):
         return float(block["duration_s"])
     if kind == "every" and block.get("interval_s") and block.get("rounds"):
         return float(block["interval_s"]) * float(block["rounds"])
-    if kind == "tabata":
-        return float(block.get("rounds", 8)) * 30.0
 
     items = block.get("items", [])
     # "Rest" as the last item of a repeated block happens between rounds only

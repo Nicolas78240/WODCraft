@@ -45,7 +45,16 @@ def _block(block: dict, document: dict) -> list[dict]:
             content = _slot_label(slots, index) if slots else _items_label(block.get("items", []))
             out.append({"duration_s": interval, "label": f"{label} · {index + 1}/{count}: {content}", "kind": "interval"})
         return out
-    if kind in ("amrap", "tabata") and block.get("duration_s"):
+    if kind == "tabata":
+        rounds = int(block.get("rounds") or 8)
+        movements = [i for i in block.get("items", []) if i.get("type") != "rest"]
+        out = []
+        for item in movements or [None]:
+            name = _items_label([item]) if item else ""
+            for index in range(rounds):
+                out.append({"duration_s": 30.0, "label": f"{label} · {index + 1}/{rounds}: {name}", "kind": "interval"})
+        return out
+    if kind == "amrap" and block.get("duration_s"):
         return [{"duration_s": block["duration_s"], "label": f"{label}: {_items_label(block.get('items', []))}", "kind": "work"}]
     duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
     return [

@@ -147,7 +147,7 @@ Any other combination is an error (`E015`).
 | EMOM | `EMOM DURATION` | every minute on the minute |
 | EnMOM | `E2MOM 20`, `E3MOM 15` | every *n* minutes; DURATION is the total |
 | Every | `Every DURATION x N` | N intervals of DURATION |
-| Tabata | `Tabata` · `Tabata N` | N rounds (default 8) of 20 s work / 10 s rest; children rotate |
+| Tabata | `Tabata` · `Tabata N` | N intervals (default 8) of 20 s work / 10 s rest, **per movement**, movements in order |
 | Death by | `Death by` | minute *k*: perform *k* reps of the (single) child movement, until failure |
 | Max load | `Max load` · `Max load, cap DURATION` | build to the heaviest load for the prescribed reps |
 | Sets | movement line with `NxM` / `N-N-N` (§7.3) | strength sets |
