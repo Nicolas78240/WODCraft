@@ -1,0 +1,59 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Cindy",
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "duration_s": 1200.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 5
+          },
+          "source": {
+            "line": 3,
+            "col": 5
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "push_up",
+          "name": "Push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "air_squat",
+          "name": "Air squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 15
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  }
+}

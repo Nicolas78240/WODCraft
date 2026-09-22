@@ -1,0 +1,67 @@
+[
+  {
+    "wodcraft": "1.0",
+    "kind": "workout",
+    "title": "Part A",
+    "blocks": [
+      {
+        "type": "amrap",
+        "source": {
+          "line": 2,
+          "col": 1
+        },
+        "duration_s": 300.0,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "burpee",
+            "name": "Burpee",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 3,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "score": {
+      "type": "rounds+reps"
+    }
+  },
+  {
+    "wodcraft": "1.0",
+    "kind": "workout",
+    "title": "Part B",
+    "blocks": [
+      {
+        "type": "for_time",
+        "source": {
+          "line": 6,
+          "col": 1
+        },
+        "items": [
+          {
+            "type": "movement",
+            "movement": "air_squat",
+            "name": "Air squat",
+            "quantity": {
+              "kind": "reps",
+              "reps": 50
+            },
+            "source": {
+              "line": 7,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "score": {
+      "type": "time"
+    }
+  }
+]

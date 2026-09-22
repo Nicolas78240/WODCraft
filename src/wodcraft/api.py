@@ -50,10 +50,10 @@ class Library:
                 return candidate
         return None
 
-    def load(self, path: str) -> tuple[dict, DiagnosticBag] | None:
+    def load(self, path: str) -> tuple[dict, DiagnosticBag] | str | None:
+        """The document and its diagnostics, None when unknown, or "cycle"."""
         if path in self._stack:
-            bag = DiagnosticBag()
-            return ({}, bag)
+            return "cycle"
         if path in self._cache:
             return self._cache[path]
         found = self.find(path)

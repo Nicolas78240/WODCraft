@@ -1,0 +1,63 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Fran twice",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "reps": [
+        21,
+        15,
+        9
+      ],
+      "cap_s": 600.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "thruster",
+          "name": "Thruster",
+          "load": {
+            "kg": {
+              "men": 43,
+              "women": 30
+            },
+            "lb": {
+              "men": 95,
+              "women": 65
+            },
+            "unit": "lb",
+            "written": {
+              "men": 95,
+              "women": 65
+            }
+          },
+          "source": {
+            "line": 5,
+            "col": 3
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "source": {
+            "line": 6,
+            "col": 3
+          }
+        }
+      ],
+      "used": {
+        "path": "girls/fran",
+        "title": "Fran"
+      }
+    }
+  ],
+  "score": {
+    "type": "time",
+    "capped": "reps"
+  }
+}

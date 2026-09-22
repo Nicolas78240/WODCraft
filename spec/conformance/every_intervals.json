@@ -1,0 +1,50 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "every",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "interval_s": 180.0,
+      "rounds": 5,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "kind": "calories",
+            "cal": {
+              "men": 15,
+              "women": 12
+            }
+          },
+          "source": {
+            "line": 2,
+            "col": 13
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "burpee",
+          "name": "Burpee",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "none"
+  }
+}

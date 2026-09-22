@@ -1,0 +1,44 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Notes",
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 6,
+        "col": 1
+      },
+      "duration_s": 900.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 7,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps",
+    "tiebreak": "time at the end of the last round of pull-ups"
+  },
+  "meta": {
+    "tiebreak": "time at the end of the last round of pull-ups",
+    "stimulus": [
+      "Steady engine."
+    ],
+    "notes": [
+      "Scale the loads to stay unbroken.",
+      "Keep the rower set at damper 5."
+    ]
+  }
+}

@@ -201,7 +201,7 @@ def cmd_timer(args) -> int:
 
 
 def cmd_export(args) -> int:
-    from wodcraft.emit.ics import to_ics
+    from wodcraft.emit.ics import IcsError, to_ics
     from wodcraft.emit.markdown import to_markdown
 
     profile = _profile(args)
@@ -215,7 +215,11 @@ def cmd_export(args) -> int:
         for document in result.documents:
             if profile is not None:
                 document = resolve(document, profile)
-            chunks.append(to_ics(document) if args.format == "ics" else to_markdown(document))
+            try:
+                chunks.append(to_ics(document) if args.format == "ics" else to_markdown(document))
+            except IcsError as err:
+                print(f"{result.path}: {err}", file=sys.stderr)
+                status = EXIT_DIAGNOSTICS
     if status == EXIT_OK:
         _write(args.output, "\n".join(chunks))
     return status

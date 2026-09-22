@@ -1,0 +1,34 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "tabata",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "interval_s": 30.0,
+      "rounds": 6,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "kind": "max",
+            "of": "calories"
+          },
+          "source": {
+            "line": 2,
+            "col": 11
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "reps"
+  }
+}

@@ -200,6 +200,14 @@ class Compiler:
         kind = block.kind
         if kind in ("rounds", "ladder") and block.for_time:
             kind = "for_time"
+        if kind == "slot" and parent not in INTERVALS:
+            self._err(
+                "E014",
+                "'Odd:', 'Even:' and 'Min N:' are only allowed inside an EMOM or an 'Every' block.",
+                block.span,
+                "indent it under the EMOM it belongs to",
+            )
+            return None
         allowed = ALLOWED_CHILDREN.get(parent, set())
         if kind not in allowed:
             self._err(
@@ -208,9 +216,6 @@ class Compiler:
                 block.span,
                 "indent it under an untimed block, e.g. '3 rounds'" if parent in TIMED else None,
             )
-            return None
-        if kind == "slot" and parent not in INTERVALS:
-            self._err("E014", "'Odd:', 'Even:' and 'Min N:' are only allowed inside an EMOM or an 'Every' block.", block.span)
             return None
         out: dict = {"type": kind, "source": block.span.to_dict()}
         if block.kind in ("rounds", "ladder") and block.for_time:
@@ -393,7 +398,10 @@ class Compiler:
             self._err("E050", f"No library configured to resolve {stmt.path!r}.", stmt.span)
             return []
         loaded = self.opt.load_library(stmt.path)
-        if loaded is None:
+        if loaded == "cycle":
+            self._err("E051", f"Circular use of {stmt.path!r}.", stmt.span)
+            return []
+        if loaded is None or isinstance(loaded, str):
             self._err("E050", f"Workout {stmt.path!r} not found.", stmt.span, "e.g. 'use girls/fran'")
             return []
         workout, diags = loaded

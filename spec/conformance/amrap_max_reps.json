@@ -1,0 +1,48 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Nicole",
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 3,
+        "col": 1
+      },
+      "duration_s": 1200.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "run",
+          "name": "Run",
+          "quantity": {
+            "m": 400,
+            "unit": "m",
+            "written": 400,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 4,
+            "col": 9
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "max",
+            "of": "reps"
+          },
+          "source": {
+            "line": 5,
+            "col": 7
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "reps"
+  }
+}

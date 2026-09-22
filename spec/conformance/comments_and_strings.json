@@ -1,0 +1,48 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Commented",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 3,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "burpee",
+          "name": "Burpee",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "modifiers": [
+            "chest to the floor"
+          ],
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "air_squat",
+          "name": "Air squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}
