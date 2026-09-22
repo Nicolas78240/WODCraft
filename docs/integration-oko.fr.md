@@ -6,6 +6,21 @@ Contexte oKo (fourni par l'équipe) : app iOS SwiftUI, iOS 17, Swift 6 en concur
 ligne obligatoire**, SwiftData en local et Supabase comme source de vérité, packages SwiftPM locaux
 `OkoCore` et `OkoData`, tests en Swift Testing, UI en français, identifiants en anglais.
 
+## 0. Pour le PO, en trois phrases
+
+Aujourd'hui, saisir un WOD dans oKo veut dire remplir une feuille : la partie, le format, les
+mouvements un par un, les charges, le score. Avec WODCraft, vous **collez le WOD tel qu'il est écrit
+au tableau de la box** (ou vous en choisissez un parmi les 40 benchmarks embarqués), l'app le vérifie
+en direct et hors ligne — mouvement inconnu, charge sur un box jump, EMOM intenable — et remplit
+elle-même le format, les mouvements, le cap et le type de score. Ensuite elle vous affiche **vos**
+charges, dans **votre** unité et en français, et ne vous demande à la fin que ce que le WOD mesure
+vraiment : un chrono pour un For time, des tours et des reps pour un AMRAP, une charge pour une
+partie de force.
+
+Ce que ça vous fait gagner, concrètement : moins de saisie, des mouvements enfin normalisés (donc des
+records qui cessent de se fragmenter entre « Back squat », « back squat » et « Squat arrière »), et
+la possibilité de partager un WOD en six lignes de texte.
+
 ## 1. Le principe : deux objets, jamais un seul
 
 WODCraft décrit **la prescription**. oKo enregistre **le réalisé**. Les deux ne se mélangent pas :
@@ -192,3 +207,50 @@ Bonus sans effort supplémentaire : l'athlète peut partir d'un des 40 benchmark
 
 Les étapes 1 et 2 ne touchent ni la base ni les écrans existants : elles sont réversibles en
 supprimant le package.
+
+## 9. Le coût d'intégration, fichier par fichier
+
+Compté sur le dépôt oKo tel qu'il est aujourd'hui (lecture seule, rien n'y a été modifié).
+
+**Étapes 1 et 2 — voir WODCraft à l'écran, sans toucher à la base : 3 fichiers.**
+
+| Fichier | Ce qu'il faut y faire |
+|---|---|
+| `app/project.yml` | référencer le package local |
+| une nouvelle vue (`Features/Activity/WodPreviewView.swift`) | coller un texte, afficher les diagnostics et le tableau blanc |
+| `Features/Activity/Support/ActivityNavigation.swift` | un point d'entrée vers cette vue |
+
+Réversible en supprimant le package. Aucune migration, aucun écran existant modifié.
+
+**Étape 3 — stocker le DSL : 4 fichiers Swift + 2 SQL.**
+
+| Fichier | Ce qu'il faut y faire |
+|---|---|
+| `supabase/migrations/<horodatage>_wods_wodcraft.sql` (nouveau) | `source_dsl`, `compiled`, `wodcraft_version` + la contrainte |
+| le test pgTAP associé (nouveau) | colonnes présentes et nullables, contrainte vérifiée, ligne historique acceptée |
+| `packages/OkoData/.../Activity/ActivityRows.swift` | 3 champs dans le DTO `wods` |
+| `packages/OkoData/.../Activity/ActivityModels.swift` | 3 attributs sur le `@Model` |
+| `packages/OkoData/.../Activity/ActivityStore.swift` | lecture, écriture, outbox |
+| `Features/Settings/SettingsExportService.swift` | inclure les nouveaux champs à l'export |
+
+**Étape 4 — la saisie assistée : 4 fichiers.** `WodEntryView.swift` (439 lignes, le gros morceau :
+un chemin « coller un WOD » à côté du formulaire actuel, et les suggestions du catalogue),
+`WodScoring.swift` (le type de score vient de `compiled`), `WorkoutDetailView.swift` et
+`WorkoutListView.swift` (afficher le tableau blanc et le format).
+
+**Étape 6 — étendre l'enum : 4 fichiers, en deux temps.** Deux migrations (ajouter les valeurs, puis
+s'en servir — voir §4), le test pgTAP, `ActivityRows.swift` (l'enum `WodFormat`) et les **deux**
+`switch` exhaustifs, tous deux dans `WodEntryView.swift`. C'est peu, parce que `WodFormat` n'est
+utilisé que dans 4 fichiers.
+
+**Total pour un premier jet utile (étapes 1 à 4) : une dizaine de fichiers touchés, 2 nouveaux, une
+migration.** Les étapes 5 (records), 6 (enum) et 7 (timer) viennent après, indépendamment.
+
+**Ce qui reste à faire côté UI, et que le package ne fait pas à votre place :** la feuille de collage
+et son affichage de diagnostics, le choix d'un benchmark dans la bibliothèque, la bascule du
+formulaire de score selon `score.type`, et l'affichage du tableau blanc dans le détail d'une séance.
+Le package fournit la matière (texte rendu, segments, diagnostics localisés) ; le SwiftUI reste chez
+vous, comme il se doit.
+
+**Contraintes respectées :** aucune dépendance tierce, `swift test` sur macOS sans simulateur, pas
+d'expression à inférence lourde pour le toolchain de votre CI, hors ligne de bout en bout.
