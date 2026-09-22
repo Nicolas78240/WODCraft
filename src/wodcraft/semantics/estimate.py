@@ -5,11 +5,14 @@ from __future__ import annotations
 from wodcraft.catalog import Catalog
 from wodcraft.diagnostics import DiagnosticBag, Span
 
-FATIGUE = 1.25  # transitions, breathing, set breaks
-SPREAD = 0.4  # ± around the central estimate: catalog paces describe an average Rx athlete
-LOAD_SENSITIVITY = 0.9  # a movement at its Rx load costs about twice its unloaded cadence
+FATIGUE = 1.6  # transitions, breathing, set breaks and the reps that fall apart late
+SPREAD = 0.3  # ± around the central estimate: catalog paces describe an average Rx athlete
+# Catalog paces describe an average Rx athlete, so the Rx load costs exactly its pace: the factor
+# is 1 there, drops a little when lighter, and climbs steeply when the bar gets heavy.
+LOAD_SENSITIVITY = 1.8
 MAX_LOAD_FACTOR = 3.5
-CAP_TOLERANCE = 1.5  # a cap cuts the workout off; warn only when the volume is far past it
+MIN_LOAD_FACTOR = 0.8
+CAP_TOLERANCE = 2.5  # a hard cap is a deliberate cut-off; warn only when the volume is wildly past it
 REFERENCE_KG = {"barbell": 50.0, "dumbbell": 22.5, "kettlebell": 24.0, "medicine_ball": 9.0, "sandbag": 45.0}
 DEFAULT_REP_PACE = 3.0
 DEFAULT_SET_REST = 120.0  # strength work: rest between sets unless the source says otherwise
@@ -33,7 +36,10 @@ def load_factor(item: dict, entry) -> float:
     reference = reference or REFERENCE_KG.get(entry.equipment)
     if not reference or not kg:
         return 1.0
-    return min(MAX_LOAD_FACTOR, 1.0 + LOAD_SENSITIVITY * (kg / reference))
+    ratio = kg / reference
+    if ratio <= 1:
+        return max(MIN_LOAD_FACTOR, 0.8 + 0.2 * ratio)
+    return min(MAX_LOAD_FACTOR, 1.0 + LOAD_SENSITIVITY * (ratio - 1))
 
 
 def item_seconds(item: dict, catalog: Catalog) -> float:
@@ -113,6 +119,28 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
     return max(0.0, total)
 
 
+def rest_seconds(block: dict) -> float:
+    """Prescribed rest inside a block: it is wall-clock time, so fatigue does not stretch it."""
+    kind = block.get("type")
+    if kind == "rest":
+        return float(block.get("seconds", 0))
+    if kind == "movement":
+        sets = block.get("sets")
+        if sets:
+            rest = _declared_rest(block)
+            rest = DEFAULT_SET_REST if rest is None else rest
+            return rest * max(0, len(sets["reps"]) - 1)
+        return 0.0
+    items = block.get("items", [])
+    inner = sum(rest_seconds(i) for i in items)
+    rounds = float(block.get("rounds") or 1)
+    reps = block.get("reps")
+    if reps:
+        return inner * len(reps)
+    trailing = items[-1].get("seconds", 0) if items and items[-1].get("type") == "rest" else 0
+    return max(0.0, inner * rounds - trailing)
+
+
 def estimate_workout(workout: dict, catalog: Catalog, diags: DiagnosticBag, file: str | None) -> dict | None:
     blocks = workout.get("blocks", [])
     if not blocks:
@@ -131,7 +159,8 @@ def estimate_workout(workout: dict, catalog: Catalog, diags: DiagnosticBag, file
             fixed = True
             total += seconds
         else:
-            total += seconds * FATIGUE
+            rest = rest_seconds(block)
+            total += max(0.0, seconds - rest) * FATIGUE + rest
         _interval_warning(block, catalog, diags, file)
     if total <= 0:
         return None
@@ -159,7 +188,7 @@ def _interval_warning(block: dict, catalog: Catalog, diags: DiagnosticBag, file:
     slots = [i for i in block.get("items", []) if i.get("type") == "slot"]
     groups = [i.get("items", []) for i in slots] if slots else [[i for i in block.get("items", []) if i.get("type") != "slot"]]
     for items in groups:
-        work = sum(block_seconds(i, catalog) for i in items)
+        work = sum(block_seconds(i, catalog) for i in items if i.get("type") != "rest")
         if work > interval * 0.9:
             source = (items[0] if items else block).get("source", {"line": 1, "col": 1})
             diags.add(

@@ -562,7 +562,13 @@ def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace
                 block.slot = name
                 block.kind = "slot"
             if rest:
-                block.children.append(parse_movement(line, rest, file, allow_replace))
+                if rest[0].is_word("rest"):
+                    inline = Cursor(rest, line)
+                    inline.next()
+                    block.children.append(RestLine(parse_duration(inline, bare_minutes=False), span))
+                    inline.expect_end()
+                else:
+                    block.children.append(parse_movement(line, rest, file, allow_replace))
             return block
         if tokens[0].is_word("rest"):
             cur = Cursor(tokens, line)

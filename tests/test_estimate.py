@@ -91,10 +91,13 @@ def test_an_unloaded_movement_has_a_neutral_load_factor(catalog):
 
 
 def test_a_heavier_load_slows_the_estimated_cadence(catalog):
-    thruster = catalog.movements["thruster"]
+    thruster = catalog.movements["thruster"]  # Rx 43 kg
     light = load_factor({"load": {"kg": 20}}, thruster)
+    at_rx = load_factor({"load": {"kg": 43}}, thruster)
     heavy = load_factor({"load": {"kg": 80}}, thruster)
-    assert 1.0 < light < heavy
+    # the catalog pace already describes the Rx load, so that is exactly 1
+    assert light < at_rx < heavy
+    assert at_rx == pytest.approx(1.0)
 
 
 def test_the_load_factor_is_capped(catalog):

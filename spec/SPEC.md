@@ -398,7 +398,7 @@ Errors make compilation fail; warnings and infos do not.
 | W100 | warning | implausible distance (e.g. `1 m Run`: did you mean `1 mi`?) |
 | W101 | warning | women value greater than men value (reversed dual?) |
 | W102 | warning | EMOM / interval work estimated above 90 % of the interval |
-| W103 | warning | estimated duration far beyond the cap (more than 1.5×) |
+| W103 | warning | estimated duration wildly beyond the cap (more than 2.5×), which usually means a typo |
 | W104 | warning | load far above the catalog reference (typo?) |
 | W105 | warning | implausible quantity (more than 1000 reps) |
 | I200 | info | estimated duration |
