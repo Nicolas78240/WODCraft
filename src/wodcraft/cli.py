@@ -9,7 +9,7 @@ from pathlib import Path
 
 from wodcraft import __version__
 from wodcraft.api import LIBRARY_DIR, compile_file, parse_file
-from wodcraft.catalog import load_catalog
+from wodcraft.catalog import load_catalog, normalize
 from wodcraft.emit import board
 from wodcraft.emit.source import format_source
 from wodcraft.profile import Profile
@@ -232,18 +232,15 @@ def cmd_export(args) -> int:
 
 def cmd_catalog(args) -> int:
     catalog = load_catalog()
-    query = (args.query or "").lower()
-    rows = [
-        movement
-        for movement in catalog.movements.values()
-        if (not args.family or movement.family == args.family)
-        and (
-            not query
-            or query in movement.name.lower()
-            or query in movement.id
-            or any(query in alias for alias in (*movement.aliases, *movement.fr))
-        )
-    ]
+    query = normalize(args.query) if args.query else ""
+
+    def matches(movement) -> bool:
+        if not query:
+            return True
+        haystack = [normalize(movement.name), movement.id.replace("_", " "), *(normalize(a) for a in (*movement.aliases, *movement.fr))]
+        return any(query in text for text in haystack)
+
+    rows = [m for m in catalog.movements.values() if (not args.family or m.family == args.family) and matches(m)]
     rows.sort(key=lambda m: m.id)
     if args.json:
         print(json.dumps([vars(m) for m in rows], ensure_ascii=False, indent=2, default=list))
