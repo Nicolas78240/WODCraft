@@ -221,12 +221,11 @@ Deadlift 5-5-3-3-1-1 @ RPE 8
 | Parameter | Example | Meaning |
 |---|---|---|
 | load | `43/30 kg`, `@ 95/65 lb`, `1.5/1 pood` | external load (the `@` is optional) |
-| target height | `10/9 ft`, `24/20 in` on a wall ball | movements whose catalog entry accepts both take a load **and** a height; a height MAY be written in feet |
+| height | `24/20 in`, `60/50 cm`, `10/9 ft` | box or target height; a movement whose catalog entry accepts both (a wall ball) takes a load **and** a height |
 | percent | `@ 75%`, `@ 75% Back squat` | share of a one-rep max (of the movement itself, or of the named lift) |
 | RPE | `@ RPE 8` | rate of perceived exertion (1–10) |
-| height | `24/20 in`, `60/50 cm` | target / box height |
 | bodyweight | `bw`, `@ 1.5 bw` | multiple of bodyweight |
-| distance, calories | as in 7.1 | only for movements whose quantity is reps (e.g. `Shuttle run`) |
+| distance, calories | `Row 500 m` | read as the quantity, when the movement accepts it and no quantity was written |
 
 A number without unit in parameter position is a load in the `units:` default unit; without a
 default it is an error (`E031`).
@@ -266,7 +265,10 @@ Scaled:
 
 ## 10. Use
 
-`use PATH` inserts a workout from a library, e.g. `use girls/fran`. PATH is resolved against, in
+`use PATH` inserts a workout from a library, e.g. `use girls/fran`. When a workout body (or a
+session section) contains nothing but a `use` line, it **adopts** the referenced workout entirely —
+its blocks, score, levels and notes — and keeps its own title. Elsewhere the referenced blocks are
+inserted where the line stands, and must be allowed there (§4.2). PATH is resolved against, in
 order: the directory of the current file, directories given to the compiler, the standard library.
 An unresolved path is an error (`E050`) with suggestions. Cycles are an error (`E051`).
 The standard library ships `girls/`, `heroes/` and `open/`.
