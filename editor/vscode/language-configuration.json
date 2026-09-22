@@ -1,0 +1,38 @@
+{
+  "comments": {
+    "lineComment": "//"
+  },
+  "brackets": [
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"", "notIn": ["comment"] }
+  ],
+  "surroundingPairs": [
+    ["(", ")"],
+    ["\"", "\""]
+  ],
+  "wordPattern": "(-?\\d+(?:[.:]\\d+)*)|([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9'’+-]*)",
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(?:[^/]*?:\\s*$|(?i:for\\s+time|amrap\\b|e\\d*mom\\b|every\\b|tabata\\b|death\\s+by\\b|max\\s+load\\b)|\\d+\\s*(?i:rounds?|rft)\\b|\\d+(?:-\\d+)+\\b)[^:]*$",
+    "decreaseIndentPattern": "^\\s*#"
+  },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(?:Buy-in|Cash-out|Odd|Even|Min \\d+|Scaled|Intermediate|Foundations)\\s*:\\s*$",
+      "action": { "indent": "indent" }
+    },
+    {
+      "beforeText": "^\\s*//.*$",
+      "action": { "indent": "none", "appendText": "// " }
+    }
+  ],
+  "folding": {
+    "offSide": true,
+    "markers": {
+      "start": "^\\s*//\\s*#region\\b",
+      "end": "^\\s*//\\s*#endregion\\b"
+    }
+  }
+}

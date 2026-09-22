@@ -1,0 +1,207 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "WODCraft",
+  "scopeName": "source.wod",
+  "fileTypes": ["wod"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#heading" },
+    { "include": "#meta" },
+    { "include": "#label" },
+    { "include": "#use" },
+    { "include": "#format" },
+    { "include": "#statement" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.double-slash.wod",
+      "begin": "(?:^|(?<=\\s))//",
+      "end": "$",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.wod" }
+      }
+    },
+    "heading": {
+      "patterns": [
+        {
+          "name": "markup.heading.2.wod",
+          "match": "^(##)\\s*(.*)$",
+          "captures": {
+            "1": { "name": "punctuation.definition.heading.wod" },
+            "2": { "name": "entity.name.section.wod" }
+          }
+        },
+        {
+          "name": "markup.heading.1.wod",
+          "match": "^(#)\\s*(.*)$",
+          "captures": {
+            "1": { "name": "punctuation.definition.heading.wod" },
+            "2": { "name": "entity.name.type.document.wod" }
+          }
+        }
+      ]
+    },
+    "meta": {
+      "name": "meta.meta-line.wod",
+      "begin": "^\\s*(?i:(cap|score|tiebreak|units|vest|stimulus|note|tags|date|time))\\s*(:)",
+      "end": "$",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.meta.wod" },
+        "2": { "name": "punctuation.separator.key-value.wod" }
+      },
+      "patterns": [
+        { "include": "#comment" },
+        {
+          "name": "constant.language.score.wod",
+          "match": "\\b(?i:time|rounds\\+reps|reps|load|distance|calories|none)\\b"
+        },
+        { "include": "#duration" },
+        { "include": "#dual" },
+        { "include": "#unit" },
+        { "name": "string.unquoted.meta.wod", "match": "[^/\\s](?:[^/]|/(?!/))*" }
+      ]
+    },
+    "label": {
+      "name": "meta.label-line.wod",
+      "match": "^\\s*(?i:(Buy-?in|Cash-?out|Odd|Even|Min\\s+\\d+|Scaled|Intermediate|Foundations))\\s*(:)",
+      "captures": {
+        "1": { "name": "keyword.control.label.wod" },
+        "2": { "name": "punctuation.separator.label.wod" }
+      }
+    },
+    "use": {
+      "match": "^\\s*(?i:(use))\\s+(\\S+)",
+      "captures": {
+        "1": { "name": "keyword.control.import.wod" },
+        "2": { "name": "string.unquoted.path.wod" }
+      }
+    },
+    "format": {
+      "patterns": [
+        {
+          "name": "keyword.control.format.wod",
+          "match": "^\\s*(?i:for\\s+time)\\b"
+        },
+        {
+          "name": "keyword.control.format.wod",
+          "match": "\\b(?i:AMRAP|EMOM|E\\d+MOM|Tabata|Every|Death\\s+by|Max\\s+load)\\b"
+        },
+        {
+          "match": "^\\s*(\\d+)\\s+(?i:(rounds?|rft))\\b",
+          "captures": {
+            "1": { "name": "constant.numeric.rounds.wod" },
+            "2": { "name": "keyword.control.format.wod" }
+          }
+        },
+        {
+          "name": "meta.ladder.wod",
+          "match": "^\\s*(\\d+(?:\\s*-\\s*\\d+)+)(\\s*(?:\\.\\.\\.|…))?",
+          "captures": {
+            "1": { "name": "constant.numeric.ladder.wod" },
+            "2": { "name": "keyword.operator.ellipsis.wod" }
+          }
+        },
+        {
+          "name": "keyword.other.option.wod",
+          "match": "\\b(?i:for\\s+time|cap|teams\\s+of|rounds?|rft|x)\\b"
+        }
+      ]
+    },
+    "statement": {
+      "patterns": [
+        { "include": "#rest" },
+        { "include": "#modifiers" },
+        { "include": "#arrow" },
+        { "include": "#percent" },
+        { "include": "#at" },
+        { "include": "#duration" },
+        { "include": "#sets" },
+        { "include": "#dual" },
+        { "include": "#relative" },
+        { "include": "#unit" },
+        { "include": "#max" },
+        { "include": "#number" },
+        { "include": "#movement" }
+      ]
+    },
+    "rest": {
+      "name": "keyword.control.rest.wod",
+      "match": "^\\s*(?i:rest)\\b"
+    },
+    "modifiers": {
+      "name": "meta.modifiers.wod",
+      "begin": "\\(",
+      "end": "\\)",
+      "beginCaptures": { "0": { "name": "punctuation.section.modifiers.begin.wod" } },
+      "endCaptures": { "0": { "name": "punctuation.section.modifiers.end.wod" } },
+      "patterns": [
+        {
+          "name": "support.function.modifier.wod",
+          "match": "\\b(?i:sync|split|each|alternating|unbroken|strict|per\\s+side|rest)\\b"
+        },
+        { "include": "#duration" },
+        { "name": "string.quoted.double.wod", "match": "\"[^\"]*\"" },
+        { "name": "punctuation.separator.modifier.wod", "match": "," }
+      ]
+    },
+    "arrow": {
+      "name": "keyword.operator.replace.wod",
+      "match": "->|→"
+    },
+    "at": {
+      "name": "keyword.operator.load.wod",
+      "match": "@"
+    },
+    "percent": {
+      "match": "(\\d+(?:\\.\\d+)?(?:\\s*/\\s*\\d+(?:\\.\\d+)?)?)\\s*(%)",
+      "captures": {
+        "1": { "name": "constant.numeric.percent.wod" },
+        "2": { "name": "keyword.operator.percent.wod" }
+      }
+    },
+    "duration": {
+      "name": "constant.numeric.duration.wod",
+      "match": "\\b\\d+:\\d{2}(?::\\d{2})?\\b"
+    },
+    "sets": {
+      "name": "constant.numeric.sets.wod",
+      "match": "\\b\\d+\\s*[xX×]\\s*\\d+\\b"
+    },
+    "dual": {
+      "match": "\\b(\\d+(?:\\.\\d+)?)\\s*(/)\\s*(\\d+(?:\\.\\d+)?)\\b",
+      "captures": {
+        "1": { "name": "constant.numeric.men.wod" },
+        "2": { "name": "punctuation.separator.dual.wod" },
+        "3": { "name": "constant.numeric.women.wod" }
+      }
+    },
+    "relative": {
+      "patterns": [
+        {
+          "match": "\\b(?i:(RPE))\\s+(\\d+(?:\\.\\d+)?)",
+          "captures": {
+            "1": { "name": "keyword.other.unit.wod" },
+            "2": { "name": "constant.numeric.wod" }
+          }
+        },
+        { "name": "keyword.other.unit.wod", "match": "\\b(?i:bw)\\b" }
+      ]
+    },
+    "unit": {
+      "name": "keyword.other.unit.wod",
+      "match": "(?<=[\\d\\s])(?i:kgs?|lbs?|poods?|inches|inch|in|cm|km|mi|miles|mile|ft|feet|foot|m|cals?|calories|calorie|secs?|seconds?|s|mins?|minutes?|minute)\\b"
+    },
+    "max": {
+      "name": "keyword.other.max.wod",
+      "match": "\\b(?i:max)\\b(?!\\s+load\\b)"
+    },
+    "number": {
+      "name": "constant.numeric.wod",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    },
+    "movement": {
+      "name": "entity.name.function.movement.wod",
+      "match": "[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'’-]*(?:\\s+[a-zà-ÿ][A-Za-zÀ-ÿ'’-]*)*"
+    }
+  }
+}

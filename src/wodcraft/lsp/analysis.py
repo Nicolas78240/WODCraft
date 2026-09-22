@@ -111,7 +111,7 @@ class Symbol:
     end_line: int  # 1-based, inclusive
     col: int = 1
     end_col: int = 0
-    children: list["Symbol"] = field(default_factory=list)
+    children: list[Symbol] = field(default_factory=list)
 
 
 def document_symbols(analysis: Analysis) -> list[Symbol]:

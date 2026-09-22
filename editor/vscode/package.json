@@ -1,0 +1,141 @@
+{
+  "name": "wodcraft",
+  "displayName": "WODCraft",
+  "description": "Write, check and format functional-fitness workouts (.wod) — syntax highlighting and the WODCraft language server.",
+  "version": "1.0.0",
+  "publisher": "wodcraft",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters"
+  ],
+  "keywords": [
+    "crossfit",
+    "wod",
+    "workout",
+    "dsl",
+    "fitness"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nicolas78240/WODCraft.git",
+    "directory": "editor/vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/Nicolas78240/WODCraft/issues"
+  },
+  "homepage": "https://github.com/Nicolas78240/WODCraft#readme",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:wodcraft"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Syntax highlighting and snippets work everywhere. The language server runs a Python interpreter, so in an untrusted workspace it only starts with the interpreter configured in your user settings.",
+      "restrictedConfigurations": [
+        "wodcraft.pythonPath"
+      ]
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "The language server needs a local Python interpreter and local files."
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "wodcraft",
+        "aliases": [
+          "WODCraft",
+          "wod"
+        ],
+        "extensions": [
+          ".wod"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/wod-light.svg",
+          "dark": "./icons/wod-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "wodcraft",
+        "scopeName": "source.wod",
+        "path": "./syntaxes/wodcraft.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "wodcraft",
+        "path": "./snippets/wodcraft.json"
+      }
+    ],
+    "configuration": {
+      "title": "WODCraft",
+      "properties": {
+        "wodcraft.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "scope": "machine",
+          "markdownDescription": "Python interpreter (3.11 or later) used to run the WODCraft language server (`python -m wodcraft.lsp`). It must have the `wodcraft` package and `pygls` installed."
+        },
+        "wodcraft.server.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Start the WODCraft language server. Turn this off to keep only syntax highlighting and snippets."
+        },
+        "wodcraft.server.arguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "machine",
+          "description": "Extra arguments passed to 'python -m wodcraft.lsp'."
+        },
+        "wodcraft.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "scope": "window",
+          "description": "Trace the messages exchanged with the WODCraft language server."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "wodcraft.restartServer",
+        "title": "WODCraft: Restart Language Server"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "typecheck": "tsc -p ./ --noEmit",
+    "clean": "rimraf out",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.5.0"
+  }
+}

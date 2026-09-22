@@ -1,0 +1,182 @@
+{
+  "For time": {
+    "prefix": "fortime",
+    "description": "A workout for time, with a cap.",
+    "body": [
+      "# ${1:Title}",
+      "For time, cap ${2:10:00}",
+      "  ${3:21} ${4:Thruster} ${5:43/30} kg",
+      "  ${6:21} ${7:Pull-up}"
+    ]
+  },
+  "AMRAP": {
+    "prefix": "amrap",
+    "description": "As many rounds (and reps) as possible.",
+    "body": [
+      "# ${1:Title}",
+      "AMRAP ${2:20:00}",
+      "  ${3:5} ${4:Pull-up}",
+      "  ${5:10} ${6:Push-up}",
+      "  ${7:15} ${8:Air squat}"
+    ]
+  },
+  "Rep ladder": {
+    "prefix": "ladder",
+    "description": "A rep ladder: one round per value.",
+    "body": [
+      "# ${1:Title}",
+      "${2:21-15-9} for time, cap ${3:10:00}",
+      "  ${4:Thruster} ${5:43/30} kg",
+      "  ${6:Pull-up}"
+    ]
+  },
+  "Rounds for time": {
+    "prefix": "rounds",
+    "description": "N rounds, on the clock.",
+    "body": [
+      "# ${1:Title}",
+      "${2:5} rounds for time",
+      "  ${3:400} m ${4:Run}",
+      "  ${5:15} ${6:Kettlebell swing} ${7:24/16} kg"
+    ]
+  },
+  "EMOM with odd and even minutes": {
+    "prefix": "emom",
+    "description": "Every minute on the minute, alternating the work.",
+    "body": [
+      "# ${1:Title}",
+      "EMOM ${2:12}",
+      "Odd: ${3:12/10} cal ${4:Row}",
+      "Even: ${5:10} ${6:Burpee}"
+    ]
+  },
+  "EnMOM": {
+    "prefix": "e2mom",
+    "description": "Every n minutes; the duration is the total.",
+    "body": [
+      "# ${1:Title}",
+      "E2MOM ${2:20}",
+      "  ${3:3} ${4:Power clean} ${5:70/50} kg",
+      "  ${6:6} ${7:Burpee}"
+    ]
+  },
+  "Every N x M": {
+    "prefix": "every",
+    "description": "M intervals of N.",
+    "body": [
+      "# ${1:Title}",
+      "Every ${2:2:00} x ${3:10}",
+      "  ${4:5} ${5:Power clean} ${6:60/40} kg"
+    ]
+  },
+  "Tabata": {
+    "prefix": "tabata",
+    "description": "20 s work / 10 s rest; the children rotate.",
+    "body": [
+      "# ${1:Title}",
+      "Tabata ${2:8}",
+      "  max ${3:Air squat}"
+    ]
+  },
+  "Death by": {
+    "prefix": "deathby",
+    "description": "Minute k: k reps, until failure.",
+    "body": [
+      "# ${1:Title}",
+      "Death by",
+      "  ${2:Burpee}"
+    ]
+  },
+  "Max load": {
+    "prefix": "maxload",
+    "description": "Build to the heaviest load for the prescribed reps.",
+    "body": [
+      "# ${1:Title}",
+      "Max load, cap ${2:15:00}",
+      "  ${3:1} ${4:Back squat}"
+    ]
+  },
+  "Strength sets": {
+    "prefix": "sets",
+    "description": "N sets of M reps at a percentage of the one-rep max.",
+    "body": [
+      "# ${1:Title}",
+      "${2:Back squat} ${3:5x5} @ ${4:75}%"
+    ]
+  },
+  "Buy-in and cash-out": {
+    "prefix": "buyin",
+    "description": "Work before and after the main block, inside the clock.",
+    "body": [
+      "# ${1:Title}",
+      "For time",
+      "  Buy-in: ${2:1} mi ${3:Run}",
+      "  ${4:100} ${5:Pull-up}",
+      "  Cash-out: ${6:1} mi ${7:Run}"
+    ]
+  },
+  "Scaled level": {
+    "prefix": "scaled",
+    "description": "Rx work plus a scaled level listing only the differences.",
+    "body": [
+      "# ${1:Title}",
+      "For time, cap ${2:10:00}",
+      "  ${3:21} ${4:Thruster} ${5:43/30} kg",
+      "  ${6:21} Pull-up",
+      "",
+      "Scaled:",
+      "  ${4:Thruster} ${7:30/20} kg",
+      "  Pull-up -> ${8:Jumping pull-up}"
+    ]
+  },
+  "Rest": {
+    "prefix": "rest",
+    "description": "Untimed parent holding two blocks separated by a rest.",
+    "body": [
+      "# ${1:Title}",
+      "${2:3} rounds",
+      "  AMRAP ${3:4:00}",
+      "    ${4:10} ${5:Burpee}",
+      "    ${6:10} ${7:Air squat}",
+      "  Rest ${8:1:00}"
+    ]
+  },
+  "Session": {
+    "prefix": "session",
+    "description": "A whole training session with sections.",
+    "body": [
+      "# ${1:Tuesday 23 September}",
+      "date: ${2:2026-09-23}",
+      "",
+      "## ${3:Warm-up}",
+      "${4:3} rounds",
+      "  ${5:10} ${6:Air squat}",
+      "  ${7:10} ${8:Push-up}",
+      "",
+      "## ${9:Metcon}",
+      "AMRAP ${10:12:00}",
+      "  ${11:10} ${12:Burpee}",
+      "  ${13:200} m ${14:Run}"
+    ]
+  },
+  "Use a library workout": {
+    "prefix": "use",
+    "description": "Insert a workout from the standard library.",
+    "body": [
+      "use ${1|girls/fran,girls/cindy,heroes/murph,open/24_1|}"
+    ]
+  },
+  "Meta lines": {
+    "prefix": "meta",
+    "description": "The usual meta lines of a workout.",
+    "body": [
+      "# ${1:Title}",
+      "tags: ${2:benchmark}",
+      "units: ${3|kg,lb|}",
+      "score: ${4|time,rounds+reps,reps,load,distance,calories,none|}",
+      "stimulus: ${5:Short and intense.}",
+      "For time, cap ${6:10:00}",
+      "  ${7:21} ${8:Thruster} ${9:43/30}"
+    ]
+  }
+}
