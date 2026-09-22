@@ -31,6 +31,10 @@ de mars » et « ma Fran de septembre » : les deux pointent le même texte.
 | `meta.vest`, `team` | le gilet lesté, la taille d'équipe |
 | catalogue | les suggestions de mouvements, en français, et la normalisation des records |
 
+Cas particulier utile pour votre `part = strength` : une partie de force s'écrit en une ligne —
+`Back squat 5x5 @ 75% (rest 2:30)` — et le compilateur en déduit `score.type = "load"`, les cinq
+séries, le repos entre séries, et la charge réelle une fois le 1RM de l'athlète connu.
+
 ## 3. Le raccordement au schéma existant
 
 `wods` porte aujourd'hui : `format` (enum `amrap | emom | for_time | strength`), `movements` (jsonb

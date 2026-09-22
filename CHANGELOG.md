@@ -37,7 +37,9 @@ Complete rewrite. WODCraft is now a specified language with a reference compiler
 - `swift/WODCraftKit`: the language in Swift for iOS, watchOS and macOS — compiled model, compiler,
   catalog, library, whiteboard and timeline, offline, validated by the conformance suite.
 - `wodcraft[service]`: a small HTTP compile service, with a Dockerfile that builds.
-- 1 559 tests, 64 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
+- 1 572 tests, 68 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
+- The two implementations are compared against each other on thousands of generated sources
+  (`make swift-diff`), not only on the conformance fixtures.
 
 ## 0.3.2 and earlier
 
