@@ -81,4 +81,12 @@ class DiagnosticBag:
         return any(d.severity is Severity.ERROR for d in self.items)
 
     def sorted(self) -> list[Diagnostic]:
-        return sorted(self.items, key=lambda d: (d.span.file or "", d.span.line, d.span.col, d.code))
+        """Sorted, and without the duplicates a workout used several times would produce."""
+        seen: set[tuple[str, int, int, str, str]] = set()
+        unique = []
+        for diagnostic in self.items:
+            key = (diagnostic.span.file or "", diagnostic.span.line, diagnostic.span.col, diagnostic.code, diagnostic.message)
+            if key not in seen:
+                seen.add(key)
+                unique.append(diagnostic)
+        return sorted(unique, key=lambda d: (d.span.file or "", d.span.line, d.span.col, d.code))

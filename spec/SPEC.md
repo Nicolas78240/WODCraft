@@ -401,10 +401,10 @@ Errors make compilation fail; warnings and infos do not.
 | W103 | warning | estimated duration wildly beyond the cap (more than 2.5×), which usually means a typo |
 | W104 | warning | load far above the catalog reference (typo?) |
 | W105 | warning | implausible quantity (more than 1000 reps) |
-| I200 | info | estimated duration |
 
-Duration estimates are **indicative**: they come from the average paces of the catalog and a load
-factor, and they are excluded from conformance (§16).
+Duration estimates are not diagnostics: they are part of the compiled document (`estimate`, §13).
+They are **indicative** — they come from the average paces of the catalog and a load factor — and
+they are excluded from conformance (§16).
 
 ## 16. Conformance
 

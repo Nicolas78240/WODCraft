@@ -53,22 +53,25 @@ class Library:
 
     def load(self, path: str) -> tuple[dict, DiagnosticBag] | str | None:
         """The document and its diagnostics, None when unknown, or "cycle"."""
-        if path in self._stack:
-            return "cycle"
-        if path in self._cache:
-            return self._cache[path]
         found = self.find(path)
         if found is None:
-            self._cache[path] = None
             return None
-        self._stack.append(path)
+        key = str(found)  # cycles and caching follow the file, not the way it was written
+        if key in self._stack:
+            return "cycle"
+        if key in self._cache:
+            return self._cache[key]
+        self._stack.append(key)
+        saved = self.paths
+        self.paths = [found.parent, *self.paths]  # a used file resolves its own 'use' lines first
         try:
-            result = _compile(found.read_text(encoding="utf-8"), str(found), self)
+            result = _compile(found.read_text(encoding="utf-8"), key, self)
         finally:
+            self.paths = saved
             self._stack.pop()
         bag = DiagnosticBag(list(result.diagnostics))
         out = (result.document or {}, bag)
-        self._cache[path] = out
+        self._cache[key] = out
         return out
 
 
