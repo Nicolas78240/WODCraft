@@ -1,114 +1,68 @@
 # CLAUDE.md
 
-Guidance for Claude Code when navigating the WODCraft repository.
+Guidance for Claude Code working in this repository.
 
-## Architecture Overview
+## What this is
 
-- **Python CLI (`src/wodcraft/cli.py`)** – entry point exposed as `wodc`; delegates to the language core for parsing, linting, session compilation, exports, and SDK helpers (`src/wodcraft/sdk.py`).
-- **Language core (`wodc_vnext/core.py`)** – authoritative grammar (Lark), AST transformer (`ToAST`), compiler utilities, resolver, and lint infrastructure.
-- **MCP server (`mcp/`)** – TypeScript bridge exposing tools such as `draft_wod`, `lint_wod`, `compile_wod`, and documentation resources for Claude Desktop.
-- **VS Code extension (`editor/wodcraft-vscode/`)** – syntax highlighting, snippets, schema completion, and CLI integration.
+WODCraft 1.0 is a language for prescribing functional-fitness workouts, plus its reference
+compiler. `spec/SPEC.md` is the source of truth for the language; the code implements it.
+If the two disagree, the spec wins — fix the code, or change the spec deliberately.
 
-## Day-to-day Commands
+## Layout
+
+```
+spec/            SPEC.md (language), workout.schema.json, conformance/ (NAME.wod + NAME.json|.diag)
+src/wodcraft/
+  syntax/        lexer.py (lines, tokens), lines.py (one line -> statement), parser.py (documents, block ownership)
+  semantics/     compiler.py (resolve + check + emit JSON), estimate.py, resolve.py (athlete), measures.py
+  emit/          source.py (canonical .wod = wodc fmt), board.py (whiteboard), markdown.py, ics.py, timeline.py
+  catalog/       movements.toml (the catalog IS part of the standard), equivalences.toml, loader
+  library/       girls/, heroes/, open/ — reachable from any file with `use girls/fran`
+  api.py         compile_source / compile_file -> Result(documents, diagnostics, ok)
+  cli.py         the `wodc` command      profile.py  athlete profile      diagnostics.py  codes
+  mcp/  lsp/     MCP server (FastMCP) and language server (pygls), optional extras
+tests/           pytest suite
+```
+
+## Commands
 
 ```bash
-# Lint / parse / run WODCraft files
-wodc lint examples/wod/progressive_farmer.wod
-wodc parse examples/wod/progressive_farmer.wod
-wodc session examples/session/sample_session.wod --modules-path modules --format json
-
-# Python tests
-pytest -q
-
-# MCP development
-cd mcp
-npm install
-npm run dev
-npm run build
-
-# Build & publish (Python)
-python3 -m build
-make publish-pypi
+pip install -e ".[dev]"                       # Python 3.11+, no runtime dependency
+pytest                                        # the whole suite, including conformance
+wodc check src/wodcraft/library/*/*.wod       # the library must always compile
+wodc fmt --check src/wodcraft/library/*/*.wod # and stay canonical
+python spec/validate_schema.py                # compiled output vs the JSON schema
+ruff check src tests && mypy
 ```
 
-## DSL Quick Reference
+## The language, in short
 
 ```wod
-module wod.sample.training v1 {
-  notes: {
-    stimulus: "Pull + engine",
-    focus: ["Limiter les pauses", "Respiration"]
-  }
+# Fran
+21-15-9 for time, cap 10:00
+  Thruster 95/65 lb
+  Pull-up
 
-  wod AMRAP 12:00 {
-    20/16 cal Row
-    REST 2:00
-    15m Farmer_Carry PROGRESS("+15m/round") @22.5kg/15kg
-  }
-
-  score AMRAP {
-    rounds: Rounds
-    reps: Reps
-  }
-}
+Scaled:
+  Thruster 65/45 lb
+  Pull-up -> Jumping pull-up
 ```
 
-- Quantités supportées : `10`, `200m`, `20/16 cal`, `MAXREP`…
-- Progression : `PROGRESS("+15m/round")`
-- Charges duales : `@43kg/30kg`
-- Repos internes : `REST 2:00`
-- Types de score : `Time`, `Rounds`, `Reps`, `Distance(unit)`, `Load(unit)`, `Calories`, `Tempo`, `Int`, `Float`, `Bool`, `String`
-- Pas de commentaires `#` – utiliser `//` ou `notes:`
+- `#` a document, `##` sections (a session). Meta lines: `cap:`, `score:`, `units:`, `vest:`,
+  `note:`, `stimulus:`, `tags:`, `date:`, `time:`.
+- Formats: `For time`, `N rounds [for time]`, `21-15-9`, `3-6-9 ...`, `AMRAP n`, `EMOM n`, `E2MOM n`,
+  `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, sets `5x5` / `5-5-3-3-1`.
+- Movement line: `[quantity] Name [sets] [params] [(modifiers)]` — `21 Kettlebell swing 24/16 kg (sync)`.
+- `43/30 kg` is men/women. `m` is always metres; minutes are `min` or `mm:ss`.
 
-### Sessions (assemblage de modules)
+## House rules
 
-```wod
-module wod.block.a v1 { wod AMRAP 7:00 { 10 Push_up 10 Sit_up 10 Pull_up } }
-module wod.block.b v1 { wod EMOM 10:00 { 5 Thruster @43kg/30kg 5 Burpee } }
-module wod.block.c v1 {
-  wod ForTime cap 10:00 {
-    21 Snatch @43kg/30kg
-    21 Pull_up
-    15 Snatch @43kg/30kg
-    15 Pull_up
-    9 Snatch @43kg/30kg
-    9 Pull_up
-  }
-}
-
-session "Pull Pyramid" {
-  components {
-    wod import wod.block.a@v1
-    wod import wod.block.b@v1
-    wod import wod.block.c@v1
-  }
-  scoring {
-    wod ForTime time+reps
-  }
-}
-```
-
-## Testing & Linting
-
-- `pytest` suite covers parser, transformer, resolver, compiler, lint rules, and SDK contracts.
-- `npm run test` in `mcp/` runs Vitest for MCP utilities.
-- `npm run lint`/`npm run typecheck` ensure the MCP stays healthy.
-
-## File Organization
-
-```
-src/wodcraft/        # CLI, SDK, high-level helpers
-wodc_vnext/          # Grammar + language core (to be migrated under src/)
-WODCraft_spec.md     # DSL specification
-mcp/                 # MCP server implementation
-editor/              # VS Code extension
-modules/             # Example module library
-examples/            # Example workouts & sessions
-tests/               # Pytest suite
-```
-
-## Notes for Claude
-
-- Always prefer generating modules/sessions that lint with `wodc lint`.
-- When drafting via MCP, fetch the structure guide (`wodcraft://guide/structure`) before producing DSL.
-- Respect dual loads, REST blocks, score definitions, and include notes when clarifying stimulus or pacing.
+- **Never write a DSL example you have not compiled.** Every snippet in docs, docstrings, prompts,
+  snippets and guides must pass `wodc check`. The previous version of this project drifted exactly
+  this way.
+- Diagnostics carry a code from SPEC §15, an exact line and column, and a suggestion when possible.
+  Add the code to the spec table when you add a check.
+- A movement name that is not in `catalog/movements.toml` is an error: add the movement rather than
+  loosening the resolver.
+- Changing the compiled JSON means changing `spec/workout.schema.json` and the conformance fixtures.
+- Keep the core dependency-free; `mcp` and `lsp` are optional extras.

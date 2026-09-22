@@ -8,6 +8,7 @@ from wodcraft.diagnostics import DiagnosticBag, Span
 FATIGUE = 1.25  # transitions, breathing, set breaks
 SPREAD = 0.35  # ± around the central estimate: catalog paces describe an average Rx athlete
 DEFAULT_REP_PACE = 3.0
+DEFAULT_SET_REST = 120.0  # strength work: rest between sets unless the source says otherwise
 
 
 def _pick(amount, category: str = "men") -> float:
@@ -36,7 +37,24 @@ def item_seconds(item: dict, catalog: Catalog) -> float:
     sets = item.get("sets")
     if sets:
         reps = float(sum(sets["reps"]))
+        rest = _declared_rest(item)
+        rest = DEFAULT_SET_REST if rest is None else rest
+        return reps * (pace or DEFAULT_REP_PACE) + rest * max(0, len(sets["reps"]) - 1)
     return reps * (pace or DEFAULT_REP_PACE)
+
+
+def _declared_rest(item: dict) -> float | None:
+    """A "(rest 2:00)" modifier overrides the default rest between sets."""
+    for modifier in item.get("modifiers", []):
+        if modifier.startswith("rest "):
+            from wodcraft.syntax.units import parse_clock
+
+            text = modifier.split(" ", 1)[1].strip()
+            try:
+                return parse_clock(text) if ":" in text else float(text.rstrip("s ")) 
+            except ValueError:
+                return None
+    return None
 
 
 def block_seconds(block: dict, catalog: Catalog) -> float:

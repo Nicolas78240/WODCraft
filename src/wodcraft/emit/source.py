@@ -154,8 +154,15 @@ def movement(mv: MovementLine) -> str:
     parts += [_param(p) for p in mv.params]
     text = " ".join(parts)
     if mv.modifiers:
-        text += " (" + ", ".join(mv.modifiers) + ")"
+        text += " (" + ", ".join(_modifier(m) for m in mv.modifiers) + ")"
     return text
+
+
+def _modifier(modifier: str) -> str:
+    from wodcraft.syntax.lines import MODIFIERS
+
+    known = modifier in MODIFIERS or modifier == "per side" or modifier.startswith("rest ")
+    return modifier if known else chr(34) + modifier + chr(34)
 
 
 def _meta(meta: MetaLine) -> str:

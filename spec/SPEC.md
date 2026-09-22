@@ -44,7 +44,7 @@ Out of scope for 1.0: multi-week programming, logged results.
 |---|---|
 | load | `kg`, `lb`, `pood` (1 pood = 16 kg) |
 | height | `in`, `cm` |
-| distance | `m`, `km`, `mi` |
+| distance | `m`, `km`, `mi`, `ft` |
 | energy | `cal` |
 | time | see 2.1 |
 | relative | `%` (of a one-rep max), `bw` (bodyweight), `RPE N` |
@@ -139,6 +139,7 @@ Any other combination is an error (`E015`).
 | For time | `For time` | complete the work as fast as possible |
 | Rounds | `N rounds` · `N rounds for time` | repeat the block N times (timed if `for time`) |
 | Rep ladder | `21-15-9` · `21-15-9 for time` | one round per value; each child movement *without* a quantity takes that value |
+| Open ladder | `3-6-9 ...` | a ladder with a constant step that keeps going until the cap |
 | AMRAP | `AMRAP DURATION` | as many rounds (and reps) as possible |
 | EMOM | `EMOM DURATION` | every minute on the minute |
 | EnMOM | `E2MOM 20`, `E3MOM 15` | every *n* minutes; DURATION is the total |
@@ -148,7 +149,8 @@ Any other combination is an error (`E015`).
 | Max load | `Max load` · `Max load, cap DURATION` | build to the heaviest load for the prescribed reps |
 | Sets | movement line with `NxM` / `N-N-N` (§7.3) | strength sets |
 
-A rep ladder MAY use any number of values (`10-9-8-7-6-5-4-3-2-1`).
+A rep ladder MAY use any number of values (`10-9-8-7-6-5-4-3-2-1`). An **open ladder** ends with `...`
+and MUST have a constant step: `3-6-9 ...` means 3, 6, 9, 12… until the cap is reached (`E035` otherwise).
 `Teams of N` MUST only appear on the outermost format line of a workout.
 
 ## 6. Label and meta lines
@@ -192,7 +194,7 @@ An unknown key is an error (`E012`).
 | distance | `400 m`, `1 mi`, `5 km` | distance |
 | calories | `15/12 cal` | calories |
 | duration | `30 s`, `1:00`, `2 min` | time |
-| `max` [unit] | `max Burpee`, `max cal Row` | as many as possible in the interval |
+| `max` [unit] | `max Burpee`, `max cal Row` | as many as possible in the interval, or to failure outside one |
 
 The quantity MAY be omitted inside a rep ladder, `Max load`, `Death by`, or for a movement
 whose catalog entry has no quantity (e.g. `Rest`). Otherwise omission is an error (`E030`).
@@ -218,6 +220,7 @@ Deadlift 5-5-3-3-1-1 @ RPE 8
 | Parameter | Example | Meaning |
 |---|---|---|
 | load | `43/30 kg`, `@ 95/65 lb`, `1.5/1 pood` | external load (the `@` is optional) |
+| target height | `10/9 ft` on a wall ball | movements whose catalog entry accepts both take a load **and** a height |
 | percent | `@ 75%`, `@ 75% Back squat` | share of a one-rep max (of the movement itself, or of the named lift) |
 | RPE | `@ RPE 8` | rate of perceived exertion (1–10) |
 | height | `24/20 in`, `60/50 cm` | target / box height |
@@ -232,12 +235,14 @@ on a thruster is an error (`E032`).
 
 ### 7.5 Modifiers
 
-In parentheses after the parameters: `sync`, `split`, `each`, `alternating`, `unbroken`,
-`rest DURATION`, `per side`, or free text in quotes (`"strict"`).
+In parentheses after the parameters: `sync`, `split`, `each`, `alternating`, `unbroken`, `strict`,
+`per side`, `rest DURATION`, or free text in quotes — `("lateral over the dumbbell")`. A quoted
+modifier may contain commas; commas outside quotes separate modifiers.
 
 ## 8. Rest
 
-`Rest DURATION` is a timed pause item. In a Sets context (`Back squat 5x5 (rest 2:00)`) use the modifier.
+`Rest DURATION` is a timed pause item. As the **last item of a repeated block** it is performed
+between rounds, not after the last one (5 rounds with a trailing `Rest 3:00` contain four rests). In a Sets context (`Back squat 5x5 (rest 2:00)`) use the modifier.
 
 ## 9. Levels
 
@@ -252,6 +257,10 @@ Scaled:
 
 - A line whose movement also appears in the Rx work replaces the parameters of **every** occurrence.
 - `A -> B` replaces every occurrence of A by B, keeping quantities.
+- To adapt only some occurrences, write the original parameters **before** the arrow; they select the
+  occurrences to change: `Deadlift 225 lb -> Deadlift 155 lb`.
+- A level block MAY also carry the meta lines `vest`, `cap` and `note`; `vest: none` removes the vest.
+- A level block never changes quantities (`E014`): a workout with half the reps is a different workout.
 - A movement that does not appear in the Rx work is an error (`E040`).
 
 ## 10. Use
@@ -281,10 +290,12 @@ The score of a workout is taken from the `score:` meta line, or inferred from it
 | `tabata` | `reps` |
 | `death_by` | `rounds+reps` |
 | `max_load`, sets | `load` |
-| untimed `rounds` / ladder | `none` |
+| untimed `rounds` / ladder | `none`, or the declared `score:` (`reps`, `load`…) |
+| several timed blocks in one workout | `multi`: one score per part |
 
 An explicit score that cannot be measured by the main block is an error (`E036`), e.g. `score: rounds+reps`
-on a `for_time` without cap.
+on a `for_time` without cap. A workout whose body holds several timed blocks (a metcon then a heavy
+single) scores `multi`, with one entry per part — that is also how a workout carries two scores.
 
 ## 13. Compiled output
 
@@ -294,6 +305,8 @@ Compiling a document produces a JSON object described by `spec/workout.schema.js
 - Workout: `blocks` (tree of blocks and items), `score`, `levels`, `meta`, `team`.
 - Session: `sections`, each `{ "title", "workout" }`, plus `date`, `time`, `meta`.
 - Every item has a `source` span `{ "line", "col" }` (1-based).
+- The canonical written form of a workout is the **compact** one: `21-15-9 for time, cap 10:00` rather
+  than `For time` followed by `21-15-9`. Both compile to the same JSON; the formatter produces the former.
 - Movements are catalog identifiers (`"pull_up"`). Loads, heights and distances are normalized:
   loads in kg **and** lb, heights in cm **and** in, distances in m, durations in seconds.
   Dual values become `{ "men": …, "women": … }`.

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main, v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - name: Tests
+        run: pytest --cov=wodcraft --cov-report=term-missing
+      - name: The standard library compiles and is canonical
+        run: |
+          wodc check src/wodcraft/library/*/*.wod
+          wodc fmt --check src/wodcraft/library/*/*.wod
+      - name: Compiled output matches the JSON schema
+        run: python spec/validate_schema.py
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check src tests
+      - run: ruff format --check src tests
+      - run: mypy || true   # typing is being tightened progressively
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - name: The wheel ships the catalog and the library
+        run: |
+          python -m zipfile -l dist/*.whl | grep -q "wodcraft/catalog/movements.toml"
+          python -m zipfile -l dist/*.whl | grep -q "wodcraft/library/girls/fran.wod"

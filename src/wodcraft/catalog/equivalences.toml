@@ -12,7 +12,7 @@ load = [
   { kg = 20, lb = 45 },
   # barbell metcon standards
   { kg = 25, lb = 55 },
-  { kg = 29, lb = 65 },
+  { kg = 30, lb = 65 },
   { kg = 34, lb = 75 },
   { kg = 38, lb = 85 },
   { kg = 43, lb = 95 },
