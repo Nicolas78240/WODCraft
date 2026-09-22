@@ -357,6 +357,7 @@ Errors make compilation fail; warnings and infos do not.
 | W102 | warning | EMOM / interval work estimated above 90 % of the interval |
 | W103 | warning | estimated duration above the cap |
 | W104 | warning | load far above the catalog reference (typo?) |
+| W105 | warning | implausible quantity (more than 1000 reps) |
 | I200 | info | estimated duration |
 
 Duration estimates are **indicative**: they come from the average paces of the catalog and a load

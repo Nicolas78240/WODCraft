@@ -253,6 +253,13 @@ class Compiler:
                 self._err("E034", "'Every' needs an interval.", span, "e.g. 'Every 3:00 x 5'")
             if out.get("rounds") is None:
                 self._err("E034", "'Every' needs a number of intervals.", span, "e.g. 'Every 3:00 x 5'")
+        for key, what in (("duration_s", "duration"), ("interval_s", "interval"), ("cap_s", "cap")):
+            if out.get(key) is not None and out[key] <= 0:
+                self._err("E035", f"The {what} must be greater than zero.", span)
+        if kind == "tabata" and (out.get("rounds") or 0) < 1:
+            self._err("E035", "A Tabata needs at least one round.", span)
+        if kind == "slot" and isinstance(out.get("slot"), int) and out["slot"] < 1:
+            self._err("E035", "Minutes are numbered from 1.", span)
         if kind in ("rounds", "for_time") and out.get("rounds") is not None and out["rounds"] < 1:
             self._err("E035", "The number of rounds must be at least 1.", span)
         for value in out.get("reps", []) or []:
@@ -310,6 +317,8 @@ class Compiler:
                 out["quantity"] = {"kind": "time", "s": measures.amount(quantity.value)}
             else:
                 out["quantity"] = {"kind": "reps", "reps": measures.amount(quantity.value)}
+                if max(quantity.value.men, quantity.value.women) > 1000:
+                    self._err("W105", "That is a lot of reps — is the number right?", quantity.span)
         elif mv.sets is None and parent not in ("ladder", "max_load", "death_by") and entry.quantities:
             self._err("E030", f"{entry.name} needs a quantity.", mv.name_span, "e.g. '21 " + entry.name + "'")
 
@@ -343,6 +352,9 @@ class Compiler:
                     param.span,
                     "write 'kg' or 'lb', or add 'units: kg' at the top of the workout",
                 )
+                return
+            if min(param.value.men, param.value.women) <= 0:
+                self._err("E035", "A load must be greater than zero.", param.span)
                 return
             out["load"] = measures.load_to_json(param.value, unit, eq)
             self._check_load(out["load"], entry, param.span)
