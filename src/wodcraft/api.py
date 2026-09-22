@@ -112,16 +112,20 @@ def check_file(path: str | Path, **kwargs) -> Result:
     return compile_file(path, **kwargs)
 
 
-def format_source(source: str, file: str | None = None) -> tuple[str, list[Diagnostic]]:
-    """The canonical form of a source, and the diagnostics found while parsing it.
+def format_source(source: str, file: str | None = None, **kwargs) -> tuple[str, list[Diagnostic]]:
+    """The canonical form of a source, and its diagnostics.
 
-    The text is returned unchanged when parsing failed."""
+    A source that does not compile is returned unchanged: formatting a broken workout would rewrite
+    what the author meant, so the formatter refuses rather than guesses."""
     from wodcraft.emit.source import format_source as _format
 
+    result = compile_source(source, file, estimate=False, **kwargs)
+    if not result.ok:
+        return source, result.diagnostics
     source_file, diags = parse_source(source, file)
-    if diags.has_errors:
+    if diags.has_errors:  # pragma: no cover - compile_source would have caught it
         return source, diags.sorted()
-    return _format(source_file), diags.sorted()
+    return _format(source_file), result.diagnostics
 
 
 def parse_file(path: str | Path):

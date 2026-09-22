@@ -109,13 +109,18 @@ def _block_head(block: Block) -> str:
     if kind == "for_time":
         parts.append("For time")
     elif kind == "amrap":
-        parts.append(f"AMRAP {_duration(block.duration_s or 0)}")
+        parts.append("AMRAP" + (f" {_duration(block.duration_s)}" if block.duration_s else ""))
     elif kind == "emom":
         interval = int((block.interval_s or 60) // 60)
         name = "EMOM" if interval <= 1 else f"E{interval}MOM"
-        parts.append(f"{name} {_duration(block.duration_s or 0)}")
+        parts.append(name + (f" {_duration(block.duration_s)}" if block.duration_s else ""))
     elif kind == "every":
-        parts.append(f"Every {format_clock(block.interval_s or 0)} x {block.rounds}")
+        head = "Every"
+        if block.interval_s:
+            head += f" {format_clock(block.interval_s)}"
+        if block.rounds is not None:
+            head += f" x {block.rounds}"
+        parts.append(head)
     elif kind == "tabata":
         parts.append("Tabata" + ("" if (block.rounds or 8) == 8 else f" {block.rounds}"))
     elif kind == "death_by":

@@ -73,7 +73,11 @@ def write_bundle(directory: str | Path, compact: bool = True) -> BundleReport:
         "catalog.json": catalog_json(),
         "library.json": workouts,
         "workout.schema.json": schema(),
-        "bundle.json": {"wodcraft": SPEC_VERSION, "wodcraft_version": __version__, "files": ["catalog.json", "library.json", "workout.schema.json"]},
+        "bundle.json": {
+            "wodcraft": SPEC_VERSION,
+            "wodcraft_version": __version__,
+            "files": ["catalog.json", "library.json", "workout.schema.json"],
+        },
     }
     written: dict[str, int] = {}
     for name, payload in documents.items():

@@ -105,9 +105,18 @@ def test_format_source_returns_the_input_unchanged_when_parsing_failed():
 
 
 def test_format_source_reports_warnings_without_giving_up():
+    # a warning is not a reason to refuse: the text is still canonical, the warning is reported
     text, diagnostics = api.format_source("for time\n  1 m Run\n")
     assert text == "For time\n  1 m Run\n"
-    assert diagnostics == []  # W100 is a compiler warning, not a parse one
+    assert [d.code for d in diagnostics] == ["W100"]
+
+
+def test_format_source_refuses_a_source_that_does_not_compile():
+    # "AMRAP" without a duration parses but does not compile: formatting it would invent "AMRAP 0:00"
+    source = "AMRAP\n  10 Burpee\n"
+    text, diagnostics = api.format_source(source)
+    assert text == source
+    assert [d.code for d in diagnostics] == ["E034"]
 
 
 def test_format_source_is_exported():

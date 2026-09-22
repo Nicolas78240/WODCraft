@@ -185,14 +185,15 @@ def cmd_show(args) -> int:
 def cmd_fmt(args) -> int:
     status = EXIT_OK
     for path in _paths(args):
-        source_file, diags = parse_file(path)
-        if diags.has_errors:
-            for diagnostic in diags.sorted():
-                print(diagnostic.format(source_file.lines), file=sys.stderr)
+        original = Path(path).read_text(encoding="utf-8")
+        result = compile_file(path, library_paths=[Path(p) for p in getattr(args, "lib", [])])
+        if not result.ok:
+            # a workout that does not compile is left alone: the formatter would rewrite a guess
+            print(result.report(), file=sys.stderr)
             status = EXIT_DIAGNOSTICS
             continue
+        source_file, _ = parse_file(path)
         formatted = format_source(source_file)
-        original = Path(path).read_text(encoding="utf-8")
         if args.check:
             if formatted != original:
                 print(f"{path}: not canonical", file=sys.stderr)
