@@ -88,6 +88,9 @@ def _workout(workout: dict, width: int, skip_title: bool = False) -> str:
         lines.append(f"Note: {note}")
     for stimulus in meta.get("stimulus", []):
         lines.append(f"Stimulus: {stimulus}")
+    levels = workout.get("levels")
+    if levels:
+        lines.append("Levels: " + ", ".join(sorted(levels)))
     resolved = workout.get("resolved")
     if resolved:
         lines.append(f"[{resolved['category']} · {resolved['level']} · {resolved['units']}]")
