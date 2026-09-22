@@ -13,8 +13,8 @@ from wodcraft.semantics.estimate import estimate_workout
 from wodcraft.syntax.ast import (
     Block,
     CommentLine,
-    Dual,
     Document,
+    Dual,
     MetaLine,
     MovementLine,
     RestLine,
