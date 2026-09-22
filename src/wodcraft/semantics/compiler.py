@@ -275,6 +275,8 @@ class Compiler:
                 out[key] = value
         if block.reps is not None and "reps" not in out:
             out["reps"] = block.reps
+        if block.reps_open:
+            out["reps_open"] = True
         if block.slot is not None:
             out["slot"] = block.slot
         if block.teams is not None:
@@ -655,7 +657,7 @@ def _normalize_block(block: dict) -> dict:
         child = block["items"][0]
         if child.get("type") in ("rounds", "ladder") and not {"cap_s", "duration_s", "teams"} & set(child):
             merged = dict(block)
-            for key in ("rounds", "reps"):
+            for key in ("rounds", "reps", "reps_open"):
                 if key in child and key not in merged:
                     merged[key] = child[key]
             merged["items"] = child["items"]
