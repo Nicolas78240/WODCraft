@@ -123,7 +123,7 @@ def _head(block: dict) -> str:
     ladder = "-".join(str(r) for r in block.get("reps", []) or [])
     rounds = block.get("rounds")
     if kind == "for_time":
-        core = ladder or (f"{rounds} rounds" if rounds else "")
+        core = ladder + (" …" if block.get("reps_open") else "") if ladder else (f"{rounds} rounds" if rounds else "")
         parts.append((core + " for time").strip() if core else "For time")
     elif kind == "amrap":
         parts.append(f"AMRAP {format_clock(block.get('duration_s', 0))}")

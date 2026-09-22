@@ -122,6 +122,11 @@ def estimate_workout(workout: dict, catalog: Catalog, diags: DiagnosticBag, file
     for block in blocks:
         kind = block.get("type")
         seconds = block_seconds(block, catalog)
+        if block.get("reps_open") and block.get("cap_s"):
+            # an open ladder runs until the cap: the clock, not the volume, sets the duration
+            fixed = True
+            total += float(block["cap_s"])
+            continue
         if kind in ("amrap", "emom", "every", "tabata") or (kind == "rest"):
             fixed = True
             total += seconds
