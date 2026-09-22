@@ -49,8 +49,12 @@ class Profile:
         """A copy with the given fields replaced — what a CLI flag or a tool argument does."""
         from dataclasses import replace
 
-        changes = {k: v for k, v in (("category", category), ("level", level and level.lower()), ("units", units)) if v}
-        return replace(self, **changes)
+        return replace(
+            self,
+            category=category or self.category,
+            level=(level or self.level).lower(),
+            units=units or self.units,
+        )
 
     def levels_to_try(self) -> list[str]:
         """The asked level, then the closest ones, ending with Rx (SPEC §14)."""

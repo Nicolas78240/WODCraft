@@ -60,7 +60,7 @@ SCORE_BY_FORMAT = {
 class Options:
     catalog: Catalog = field(default_factory=lambda: load_catalog())
     equivalences: Equivalences = field(default_factory=lambda: load_equivalences())
-    load_library: Callable[[str], tuple[dict, DiagnosticBag] | None] | None = None
+    load_library: Callable[[str], tuple[dict, DiagnosticBag] | str | None] | None = None
     estimate: bool = True
 
 
@@ -86,7 +86,7 @@ class Compiler:
         meta = self._meta({}, doc.meta)
         if "units" in meta:
             self.units, self._units_declared = meta["units"], True
-        sections = []
+        sections: list[dict] = []
         for section in doc.sections or []:
             workout = self._workout(section.body, section.title)
             sections.append({"title": section.title, "workout": workout, "source": section.span.to_dict()})
@@ -96,7 +96,7 @@ class Compiler:
             "title": doc.title,
             "sections": sections,
         }
-        estimates = [s["workout"].get("estimate") for s in sections if s["workout"].get("estimate")]
+        estimates = [section["workout"].get("estimate") for section in sections if section["workout"].get("estimate")]
         if estimates:
             out["estimate"] = {
                 "min_s": round(sum(e["min_s"] for e in estimates)),

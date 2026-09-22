@@ -331,7 +331,7 @@ def _fixes_for(analysis: Analysis, diagnostic: Diagnostic) -> list[Fix]:
     if code == "E012":
         return [
             Fix(f"Replace with '{key}:'", diagnostic, (_replace(text, diagnostic.span, f"{key}:"),), index == 0)
-            for index, key in enumerate(vocab.closest(_word(text, diagnostic.span), sorted(vocab.META_KEYS)))
+            for index, key in enumerate(vocab.closest(_word(text, diagnostic.span).rstrip(":"), sorted(vocab.META_KEYS)))
         ]
     if code == "E011":
         names = sorted(set(vocab.LABEL_DISPLAY.values()))

@@ -7,8 +7,9 @@ it must compile with no error. Never add an example without running the tests.
 from __future__ import annotations
 
 import re
+import textwrap
 
-SYNTAX_GUIDE = '''# WODCraft 1.0 — syntax guide
+SYNTAX_GUIDE = """# WODCraft 1.0 — syntax guide
 
 Write a workout the way it is written on a gym whiteboard. Everything ambiguous is rejected
 with a coded diagnostic, so check your draft with the `check_wod` tool before returning it.
@@ -247,9 +248,13 @@ Tabata 8
 2. Call `check_wod`; fix every diagnostic (each one carries a line, a column and a suggestion).
 3. Call `show_wod` to read the whiteboard, `timeline_wod` for the clock.
 4. Return the `.wod` source, not the JSON.
-'''
+"""
 
 
 def wod_examples(text: str) -> list[str]:
-    """Every ```wod fenced block of a Markdown or Python text, in order."""
-    return [block.strip("\n") for block in re.findall(r"```wod\n(.*?)```", text, re.DOTALL)]
+    """Every ```wod fenced block of a Markdown or Python text, in order, dedented.
+
+    Blocks indented inside a docstring are dedented so that they can be compiled as-is.
+    """
+    blocks = re.findall(r"^[ \t]*```wod[ \t]*\n(.*?)^[ \t]*```", text, re.DOTALL | re.MULTILINE)
+    return [textwrap.dedent(block).strip("\n") + "\n" for block in blocks]

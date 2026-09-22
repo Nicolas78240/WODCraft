@@ -185,6 +185,11 @@ _AFTER_NUMBER = re.compile(r"(?:^|[\s@(])\d+(?:\.\d+)?(?:\s*/\s*\d+(?:\.\d+)?)?\
 _META_START = re.compile(r"^\s*([A-Za-z][\w-]*)\s*:\s*(.*)$")
 _USE_START = re.compile(r"^\s*use\s+(\S*)$", re.IGNORECASE)
 _IN_MODIFIER = re.compile(r"\([^)]*$")
+_AT_SIGN = re.compile(r"@\s*$")
+_FORMAT_LINE = re.compile(
+    r"^\s*(?:for\s+time|amrap|e\d+mom|emom|every|tabata|death\s+by|max\s+load|teams\s+of|\d+\s*(?:rounds?|rft)|\d+(?:-\d+)+)\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -227,11 +232,19 @@ def line_context(prefix: str) -> LineContext:
     if not prefix.strip():
         return LineContext(frozenset({"format", "label", "meta", "movement"}), typed)
 
+    if _AT_SIGN.search(prefix):
+        return LineContext(frozenset({"unit"}), typed)
+
     if _QUANTITY_ONLY.match(prefix):
-        return LineContext(frozenset({"movement"}), typed)
+        # "400 " may still grow a unit ("400 m Run"); "400 m " cannot
+        has_unit = any(word.lower() in ALL_UNIT_WORDS for word in re.findall(r"[A-Za-z%]+", prefix))
+        return LineContext(frozenset({"movement"} if has_unit else {"movement", "unit"}), typed)
 
     if _AFTER_NUMBER.search(prefix):
         return LineContext(frozenset({"unit"}), typed)
+
+    if _FORMAT_LINE.match(prefix):
+        return LineContext(frozenset({"format", "unit"}), typed)
 
     # a bare word being typed at the start of a line may still become a format, label or meta key
     if re.fullmatch(r"\s*[A-Za-z][\w-]*", prefix):
