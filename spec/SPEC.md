@@ -220,7 +220,7 @@ Deadlift 5-5-3-3-1-1 @ RPE 8
 | Parameter | Example | Meaning |
 |---|---|---|
 | load | `43/30 kg`, `@ 95/65 lb`, `1.5/1 pood` | external load (the `@` is optional) |
-| target height | `10/9 ft` on a wall ball | movements whose catalog entry accepts both take a load **and** a height |
+| target height | `10/9 ft`, `24/20 in` on a wall ball | movements whose catalog entry accepts both take a load **and** a height; a height MAY be written in feet |
 | percent | `@ 75%`, `@ 75% Back squat` | share of a one-rep max (of the movement itself, or of the named lift) |
 | RPE | `@ RPE 8` | rate of perceived exertion (1–10) |
 | height | `24/20 in`, `60/50 cm` | target / box height |

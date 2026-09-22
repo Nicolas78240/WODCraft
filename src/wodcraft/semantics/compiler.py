@@ -13,6 +13,7 @@ from wodcraft.semantics.estimate import estimate_workout
 from wodcraft.syntax.ast import (
     Block,
     CommentLine,
+    Dual,
     Document,
     MetaLine,
     MovementLine,
@@ -319,7 +320,7 @@ class Compiler:
                 out["quantity"] = {"kind": "reps", "reps": measures.amount(quantity.value)}
                 if max(quantity.value.men, quantity.value.women) > 1000:
                     self._err("W105", "That is a lot of reps — is the number right?", quantity.span)
-        elif mv.sets is None and parent not in ("ladder", "max_load", "death_by") and entry.quantities:
+        elif mv.sets is None and parent not in ("ladder", "max_load", "death_by", "tabata") and entry.quantities:
             self._err("E030", f"{entry.name} needs a quantity.", mv.name_span, "e.g. '21 " + entry.name + "'")
 
         if mv.sets is not None:
@@ -338,6 +339,21 @@ class Compiler:
         if param.kind in ("load", "percent", "rpe", "bw") and "load" not in entry.params:
             expected = "a height (in, cm)" if "height" in entry.params else "no load"
             self._err("E032", f"{entry.name} takes {expected}, not a load.", param.span)
+            return
+        if param.kind == "distance" and "height" in entry.params:
+            # a target height written in feet ("10/9 ft") rather than in inches
+            from wodcraft.syntax.ast import Param as _Param
+            from wodcraft.syntax.units import M_PER
+
+            centimetres = Dual(param.value.men * M_PER[param.unit or "m"] * 100, param.value.women * M_PER[param.unit or "m"] * 100, param.value.is_dual)
+            param = _Param("height", centimetres, "cm", param.span)
+        if param.kind in ("distance", "calories"):
+            self._err(
+                "E032",
+                f"{entry.name} does not take a {param.kind} parameter.",
+                param.span,
+                "write it as the quantity, before the movement name",
+            )
             return
         if param.kind == "height" and "height" not in entry.params:
             expected = "a load (kg, lb)" if "load" in entry.params else "no height"
