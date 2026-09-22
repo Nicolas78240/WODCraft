@@ -9,6 +9,7 @@ FATIGUE = 1.25  # transitions, breathing, set breaks
 SPREAD = 0.4  # ± around the central estimate: catalog paces describe an average Rx athlete
 LOAD_SENSITIVITY = 0.9  # a movement at its Rx load costs about twice its unloaded cadence
 MAX_LOAD_FACTOR = 3.5
+CAP_TOLERANCE = 1.5  # a cap cuts the workout off; warn only when the volume is far past it
 REFERENCE_KG = {"barbell": 50.0, "dumbbell": 22.5, "kettlebell": 24.0, "medicine_ball": 9.0, "sandbag": 45.0}
 DEFAULT_REP_PACE = 3.0
 DEFAULT_SET_REST = 120.0  # strength work: rest between sets unless the source says otherwise
@@ -131,7 +132,8 @@ def estimate_workout(workout: dict, catalog: Catalog, diags: DiagnosticBag, file
         return None
     low, high = (total, total) if fixed and len(blocks) == 1 else (total * (1 - SPREAD), total * (1 + SPREAD))
     cap = blocks[0].get("cap_s") or workout.get("meta", {}).get("cap_s")
-    if cap and low > cap:
+    # a cap is a cut-off, not a target: only warn when the work is far beyond it
+    if cap and low > cap * CAP_TOLERANCE:
         source = blocks[0].get("source", {"line": 1, "col": 1})
         diags.add(
             "W103",

@@ -517,9 +517,11 @@ def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace
         return CommentLine(line.comment or "", Span(line.number, line.col0, file=file)) if line.comment else None
     scratch = DiagnosticBag()
     tokens = tokenize(line, scratch, file)
-    # a meta value is free text: it must not go through the lexer's expectations
-    is_meta = bool(tokens) and _meta_or_label(line, tokens, file) == ("meta", tokens[0].lower, 1)
-    if not is_meta:
+    # meta values and library paths are free text: they must not go through the lexer's expectations
+    free_text = bool(tokens) and (
+        _meta_or_label(line, tokens, file) == ("meta", tokens[0].lower, 1) or tokens[0].is_word("use")
+    )
+    if not free_text:
         diags.extend(scratch)
     if not tokens:
         return None
