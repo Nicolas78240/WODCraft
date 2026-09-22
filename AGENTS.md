@@ -5,14 +5,14 @@ the layout, the commands and the house rules. This file adds what matters when a
 
 ## Before you change anything
 
-1. `pip install -e ".[dev]"` then `pytest` — the suite must be green before you start.
+1. `pip install -e ".[dev,mcp,lsp]"` then `pytest` — the suite must be green before you start.
 2. Read `spec/SPEC.md`. The language is specified, not improvised: a behaviour that is not in the
    spec is not a feature, it is a bug in one of the two.
 
 ## Definition of done
 
 - `pytest` green, including `tests/test_conformance.py`.
-- `wodc check src/wodcraft/library/*/*.wod` and `wodc fmt --check …` both clean.
+- `wodc check src/wodcraft/library/*/*.wod examples/*.wod` and `wodc fmt --check …` both clean.
 - `python spec/validate_schema.py` clean.
 - `ruff check src tests` clean.
 - Every DSL snippet you wrote — documentation, docstring, MCP guide, editor snippet — verified with

@@ -3,7 +3,7 @@
 ## Getting set up
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev,mcp,lsp]"
 pytest
 ```
 
@@ -38,8 +38,8 @@ A behaviour that is not in the specification is a bug in one of the two.
 
 ```bash
 pytest
-wodc check src/wodcraft/library/*/*.wod
-wodc fmt --check src/wodcraft/library/*/*.wod
+wodc check src/wodcraft/library/*/*.wod examples/*.wod
+wodc fmt --check src/wodcraft/library/*/*.wod examples/*.wod
 python spec/validate_schema.py
 ruff check src tests
 ```

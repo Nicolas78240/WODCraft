@@ -21,16 +21,18 @@ src/wodcraft/
   api.py         compile_source / compile_file -> Result(documents, diagnostics, ok)
   cli.py         the `wodc` command      profile.py  athlete profile      diagnostics.py  codes
   mcp/  lsp/     MCP server (FastMCP) and language server (pygls), optional extras
-tests/           pytest suite
+tests/           pytest suite, including test_docs.py: every documented snippet and console
+                 transcript is run and compared
+examples/        a workout and an athlete profile used by the README
 ```
 
 ## Commands
 
 ```bash
-pip install -e ".[dev]"                       # Python 3.11+, no runtime dependency
+pip install -e ".[dev,mcp,lsp]"                       # Python 3.11+, no runtime dependency
 pytest                                        # the whole suite, including conformance
-wodc check src/wodcraft/library/*/*.wod       # the library must always compile
-wodc fmt --check src/wodcraft/library/*/*.wod # and stay canonical
+wodc check src/wodcraft/library/*/*.wod examples/*.wod       # the library must always compile
+wodc fmt --check src/wodcraft/library/*/*.wod examples/*.wod # and stay canonical
 python spec/validate_schema.py                # compiled output vs the JSON schema
 ruff check src tests && mypy
 ```
