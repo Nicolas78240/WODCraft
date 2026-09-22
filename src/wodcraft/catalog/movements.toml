@@ -1,0 +1,2193 @@
+# WODCraft 1.0 — movement catalog
+#
+# Part of the WODCraft standard (see spec/SPEC.md §11). Implementations MUST accept
+# every entry below and MUST NOT accept movement names outside this catalog.
+#
+# One TOML table per movement, keyed by a unique snake_case identifier:
+#
+#   [movements.thruster]
+#   name       = "Thruster"        canonical English name, sentence case
+#   aliases    = [...]             English aliases, lowercase. Simple plurals ("s") are
+#                                  handled by the resolver and are NOT listed. Spelling
+#                                  variants and abbreviations are ("pullup", "pull up",
+#                                  "t2b", "hspu", "du", "c2b"...).
+#   fr         = [...]             common French aliases, lowercase
+#   family     = "W"               M = monostructural, G = gymnastics, W = weightlifting/loaded
+#   quantities = ["reps"]          ordered subset of reps | distance | calories | time
+#   param      = "load"            what the movement expects after its name:
+#                                  load | height | none, or a list when both are
+#                                  accepted (wall ball: ball weight and target height)
+#   equipment  = "barbell"         barbell | dumbbell | kettlebell | medicine_ball |
+#                                  bodyweight | rower | bike | ski | rope | box | rings |
+#                                  bar | sandbag | sled | other
+#   rx         = { men = 43, women = 30, unit = "kg" }
+#                                  OPTIONAL usual Rx reference: load in kg, or height in cm
+#                                  when param = "height". Omitted for max-effort lifts
+#                                  (deadlift, back squat...) where no standard Rx exists.
+#   pace       = { rep = 2.5 }     average seconds per unit for an average Rx athlete in a
+#                                  metcon. Keys: rep | m | cal, one per non-time quantity.
+#
+# No alias (English or French) may be shared by two movements, nor equal another
+# movement's canonical name, after lowercasing and removing a trailing "s".
+# `Rest` is NOT a movement: it is a language construct (spec §8).
+
+[movements.snatch]
+name = "Snatch"
+aliases = ["full snatch", "barbell snatch"]
+fr = ["arraché"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.power_snatch]
+name = "Power snatch"
+aliases = ["psn"]
+fr = ["arraché debout", "arraché en puissance"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 43, women = 30, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.squat_snatch]
+name = "Squat snatch"
+aliases = ["full squat snatch"]
+fr = ["arraché complet"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 43, women = 30, unit = "kg" }
+pace = { rep = 4 }
+
+[movements.hang_snatch]
+name = "Hang snatch"
+aliases = []
+fr = ["arraché suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.hang_power_snatch]
+name = "Hang power snatch"
+aliases = ["hps"]
+fr = ["arraché debout suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 34, women = 25, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.hang_squat_snatch]
+name = "Hang squat snatch"
+aliases = []
+fr = ["arraché complet suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.snatch_balance]
+name = "Snatch balance"
+aliases = []
+fr = ["équilibre arraché"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.overhead_squat]
+name = "Overhead squat"
+aliases = ["ohs"]
+fr = ["squat bras tendus", "squat overhead"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 43, women = 30, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.clean]
+name = "Clean"
+aliases = ["full clean", "barbell clean"]
+fr = ["épaulé"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3.5 }
+
+[movements.power_clean]
+name = "Power clean"
+aliases = ["pc"]
+fr = ["épaulé debout", "épaulé en puissance"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.squat_clean]
+name = "Squat clean"
+aliases = ["full squat clean"]
+fr = ["épaulé complet"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.hang_clean]
+name = "Hang clean"
+aliases = []
+fr = ["épaulé suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3.5 }
+
+[movements.hang_power_clean]
+name = "Hang power clean"
+aliases = ["hpc"]
+fr = ["épaulé debout suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.hang_squat_clean]
+name = "Hang squat clean"
+aliases = []
+fr = ["épaulé complet suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3.5 }
+
+[movements.clean_and_jerk]
+name = "Clean and jerk"
+aliases = ["c&j", "cj", "clean & jerk", "clean-and-jerk"]
+fr = ["épaulé-jeté", "épaulé jeté"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 5 }
+
+[movements.power_clean_and_jerk]
+name = "Power clean and jerk"
+aliases = ["pc&j", "power clean & jerk"]
+fr = ["épaulé-jeté debout"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 4.5 }
+
+[movements.jerk]
+name = "Jerk"
+aliases = ["barbell jerk"]
+fr = ["jeté"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3 }
+
+[movements.push_jerk]
+name = "Push jerk"
+aliases = ["pj"]
+fr = ["jeté poussé"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.split_jerk]
+name = "Split jerk"
+aliases = []
+fr = ["jeté fendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3 }
+
+[movements.shoulder_to_overhead]
+name = "Shoulder to overhead"
+aliases = ["s2oh", "sto", "stoh", "shoulder-to-overhead"]
+fr = ["épaules au-dessus de la tête", "épaule-tête"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.ground_to_overhead]
+name = "Ground to overhead"
+aliases = ["g2oh", "gtoh", "ground-to-overhead"]
+fr = ["sol-tête", "sol au-dessus de la tête"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.thruster]
+name = "Thruster"
+aliases = ["barbell thruster"]
+fr = ["thruster barre"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 43, women = 30, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.cluster]
+name = "Cluster"
+aliases = ["squat clean thruster"]
+fr = ["cluster barre"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 61, women = 43, unit = "kg" }
+pace = { rep = 4 }
+
+[movements.strict_press]
+name = "Strict press"
+aliases = ["press", "shoulder press", "overhead press", "military press", "ohp"]
+fr = ["développé militaire", "développé épaules"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.push_press]
+name = "Push press"
+aliases = ["pp"]
+fr = ["développé poussé"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 52, women = 34, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.bench_press]
+name = "Bench press"
+aliases = ["bench", "bp"]
+fr = ["développé couché"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.deadlift]
+name = "Deadlift"
+aliases = ["dl", "conventional deadlift", "barbell deadlift"]
+fr = ["soulevé de terre", "sdt"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.sumo_deadlift]
+name = "Sumo deadlift"
+aliases = ["sdl"]
+fr = ["soulevé de terre sumo"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.romanian_deadlift]
+name = "Romanian deadlift"
+aliases = ["rdl", "stiff leg deadlift"]
+fr = ["soulevé de terre roumain", "sdt roumain"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.sumo_deadlift_high_pull]
+name = "Sumo deadlift high pull"
+aliases = ["sdhp", "sumo high pull", "sumo dl high pull"]
+fr = ["tirage menton sumo"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 43, women = 30, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.back_squat]
+name = "Back squat"
+aliases = ["bs", "barbell back squat"]
+fr = ["squat arrière", "squat barre dos"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3 }
+
+[movements.front_squat]
+name = "Front squat"
+aliases = ["fs", "barbell front squat"]
+fr = ["squat avant"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3 }
+
+[movements.barbell_lunge]
+name = "Barbell lunge"
+aliases = ["back rack lunge", "front rack lunge", "barbell walking lunge"]
+fr = ["fentes avec barre", "fentes barre"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.overhead_lunge]
+name = "Overhead lunge"
+aliases = ["oh lunge", "ohl", "overhead walking lunge"]
+fr = ["fentes bras tendus", "fentes overhead"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+rx = { men = 20, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.good_morning]
+name = "Good morning"
+aliases = []
+fr = ["bonjour", "good morning barre"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.barbell_row]
+name = "Barbell row"
+aliases = ["bent over row", "pendlay row"]
+fr = ["rowing barre", "tirage buste penché"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.hip_thrust]
+name = "Hip thrust"
+aliases = ["barbell hip thrust"]
+fr = ["poussée de hanche"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.bear_complex]
+name = "Bear complex"
+aliases = []
+fr = ["complexe de l'ours"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 15 }
+
+[movements.burpee_over_the_bar]
+name = "Burpee over the bar"
+aliases = ["bar facing burpee", "burpee over bar", "bfb", "lateral burpee over bar"]
+fr = ["burpee par-dessus la barre"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.zercher_squat]
+name = "Zercher squat"
+aliases = []
+fr = ["squat zercher"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 3 }
+
+[movements.dumbbell_snatch]
+name = "Dumbbell snatch"
+aliases = ["db snatch", "alternating dumbbell snatch", "single arm dumbbell snatch"]
+fr = ["arraché haltère", "arraché dumbbell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_clean]
+name = "Dumbbell clean"
+aliases = ["db clean", "db power clean", "dumbbell power clean"]
+fr = ["épaulé haltère"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_hang_clean]
+name = "Dumbbell hang clean"
+aliases = ["db hang clean"]
+fr = ["épaulé haltère suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_clean_and_jerk]
+name = "Dumbbell clean and jerk"
+aliases = ["db clean and jerk", "db c&j", "dumbbell c&j"]
+fr = ["épaulé-jeté haltère"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.dumbbell_thruster]
+name = "Dumbbell thruster"
+aliases = ["db thruster"]
+fr = ["thruster haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_push_press]
+name = "Dumbbell push press"
+aliases = ["db push press"]
+fr = ["développé poussé haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_shoulder_to_overhead]
+name = "Dumbbell shoulder to overhead"
+aliases = ["db shoulder to overhead", "db s2oh", "db stoh"]
+fr = ["épaule-tête haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_strict_press]
+name = "Dumbbell strict press"
+aliases = ["db press", "db strict press", "dumbbell shoulder press"]
+fr = ["développé militaire haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+pace = { rep = 2.5 }
+
+[movements.dumbbell_bench_press]
+name = "Dumbbell bench press"
+aliases = ["db bench press", "db bench"]
+fr = ["développé couché haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+pace = { rep = 2.5 }
+
+[movements.dumbbell_deadlift]
+name = "Dumbbell deadlift"
+aliases = ["db deadlift"]
+fr = ["soulevé de terre haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2 }
+
+[movements.dumbbell_front_squat]
+name = "Dumbbell front squat"
+aliases = ["db front squat", "db squat"]
+fr = ["squat avant haltères", "squat haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_lunge]
+name = "Dumbbell lunge"
+aliases = ["db lunge", "db walking lunge", "dumbbell walking lunge", "front rack dumbbell lunge"]
+fr = ["fentes haltères", "fentes avec haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_overhead_lunge]
+name = "Dumbbell overhead lunge"
+aliases = ["db overhead lunge", "db oh lunge", "single arm overhead lunge"]
+fr = ["fentes haltère bras tendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.dumbbell_box_step_over]
+name = "Dumbbell box step-over"
+aliases = ["db box step over", "db box step-over", "dumbbell box step over"]
+fr = ["passage de box haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 4 }
+
+[movements.dumbbell_step_up]
+name = "Dumbbell step-up"
+aliases = ["db step up", "db step-up", "dumbbell step up", "weighted step up"]
+fr = ["montée sur box haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.dumbbell_row]
+name = "Dumbbell row"
+aliases = ["db row", "single arm row"]
+fr = ["rowing haltère"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+pace = { rep = 2 }
+
+[movements.renegade_row]
+name = "Renegade row"
+aliases = ["db renegade row", "plank row"]
+fr = ["rowing renégat"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.devil_press]
+name = "Devil press"
+aliases = ["db devil press", "devils press"]
+fr = ["devil press haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 6 }
+
+[movements.man_maker]
+name = "Man maker"
+aliases = ["manmaker", "man-maker"]
+fr = ["man maker haltères"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 8 }
+
+[movements.dumbbell_curl]
+name = "Dumbbell curl"
+aliases = ["db curl", "bicep curl", "biceps curl"]
+fr = ["curl haltères", "curl biceps"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+pace = { rep = 2 }
+
+[movements.dumbbell_hang_clean_and_jerk]
+name = "Dumbbell hang clean and jerk"
+aliases = ["db hang clean and jerk"]
+fr = ["épaulé-jeté haltère suspendu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.kettlebell_swing]
+name = "Kettlebell swing"
+aliases = ["kb swing", "american swing", "american kettlebell swing", "kbs"]
+fr = ["swing kettlebell", "swing"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2 }
+
+[movements.russian_kettlebell_swing]
+name = "Russian kettlebell swing"
+aliases = ["russian swing", "russian kb swing"]
+fr = ["swing russe"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 1.8 }
+
+[movements.kettlebell_snatch]
+name = "Kettlebell snatch"
+aliases = ["kb snatch"]
+fr = ["arraché kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.kettlebell_clean]
+name = "Kettlebell clean"
+aliases = ["kb clean"]
+fr = ["épaulé kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.kettlebell_clean_and_jerk]
+name = "Kettlebell clean and jerk"
+aliases = ["kb clean and jerk", "kb c&j"]
+fr = ["épaulé-jeté kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 3.5 }
+
+[movements.kettlebell_thruster]
+name = "Kettlebell thruster"
+aliases = ["kb thruster"]
+fr = ["thruster kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.kettlebell_deadlift]
+name = "Kettlebell deadlift"
+aliases = ["kb deadlift"]
+fr = ["soulevé de terre kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2 }
+
+[movements.kettlebell_press]
+name = "Kettlebell press"
+aliases = ["kb press"]
+fr = ["développé kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+pace = { rep = 2.5 }
+
+[movements.kettlebell_lunge]
+name = "Kettlebell lunge"
+aliases = ["kb lunge", "kb walking lunge"]
+fr = ["fentes kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.goblet_squat]
+name = "Goblet squat"
+aliases = ["kb goblet squat", "kettlebell goblet squat", "db goblet squat"]
+fr = ["squat gobelet"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.turkish_get_up]
+name = "Turkish get-up"
+aliases = ["tgu", "turkish get up", "get-up", "get up"]
+fr = ["relevé turc"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+rx = { men = 24, women = 16, unit = "kg" }
+pace = { rep = 20 }
+
+[movements.kettlebell_windmill]
+name = "Kettlebell windmill"
+aliases = ["kb windmill", "windmill"]
+fr = ["moulin kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+pace = { rep = 4 }
+
+[movements.kettlebell_halo]
+name = "Kettlebell halo"
+aliases = ["kb halo", "halo"]
+fr = ["halo kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+pace = { rep = 3 }
+
+[movements.wall_ball]
+name = "Wall ball"
+aliases = ["wall ball shot", "wallball", "wb", "wall-ball"]
+fr = ["lancer de medecine ball", "lancer de médecine-ball"]
+family = "W"
+quantities = ["reps"]
+param = ["load", "height"]  # ball weight and target height
+equipment = "medicine_ball"
+rx = { men = 9, women = 6, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.medicine_ball_clean]
+name = "Medicine ball clean"
+aliases = ["med ball clean", "mb clean", "medball clean"]
+fr = ["épaulé medecine ball", "épaulé médecine-ball"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "medicine_ball"
+rx = { men = 9, women = 6, unit = "kg" }
+pace = { rep = 2.5 }
+
+[movements.ball_slam]
+name = "Ball slam"
+aliases = ["slam ball", "med ball slam", "slam", "slam ball slam"]
+fr = ["slam ball au sol", "lancer au sol"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "medicine_ball"
+rx = { men = 14, women = 9, unit = "kg" }
+pace = { rep = 2 }
+
+[movements.sandbag_clean]
+name = "Sandbag clean"
+aliases = ["sandbag to shoulder", "sandbag shouldering"]
+fr = ["épaulé sac de sable"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "sandbag"
+pace = { rep = 4 }
+
+[movements.sandbag_carry]
+name = "Sandbag carry"
+aliases = ["sandbag walk", "bear hug carry"]
+fr = ["portage sac de sable"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "sandbag"
+pace = { m = 1 }
+
+[movements.sandbag_lunge]
+name = "Sandbag lunge"
+aliases = ["sandbag walking lunge"]
+fr = ["fentes sac de sable"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "sandbag"
+pace = { rep = 3 }
+
+[movements.sandbag_squat]
+name = "Sandbag squat"
+aliases = ["sandbag front squat"]
+fr = ["squat sac de sable"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "sandbag"
+pace = { rep = 3 }
+
+[movements.sled_push]
+name = "Sled push"
+aliases = ["prowler push", "prowler"]
+fr = ["poussée de traîneau", "traîneau poussé"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "sled"
+pace = { m = 1.5 }
+
+[movements.sled_pull]
+name = "Sled pull"
+aliases = ["sled drag", "sled row"]
+fr = ["tirage de traîneau", "traîneau tiré"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "sled"
+pace = { m = 1.5 }
+
+[movements.farmer_carry]
+name = "Farmer carry"
+aliases = ["farmers carry", "farmer walk", "farmers walk", "farmer's carry", "farmer's walk"]
+fr = ["marche du fermier", "portage fermier"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+rx = { men = 32, women = 24, unit = "kg" }
+pace = { m = 0.8 }
+
+[movements.front_rack_carry]
+name = "Front rack carry"
+aliases = ["front rack walk", "kb front rack carry"]
+fr = ["portage en rack"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+pace = { m = 0.8 }
+
+[movements.overhead_carry]
+name = "Overhead carry"
+aliases = ["overhead walk", "waiter walk", "waiter carry"]
+fr = ["portage au-dessus de la tête", "marche du serveur"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+pace = { m = 0.9 }
+
+[movements.yoke_carry]
+name = "Yoke carry"
+aliases = ["yoke", "yoke walk"]
+fr = ["portage joug"]
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+pace = { m = 1 }
+
+[movements.tire_flip]
+name = "Tire flip"
+aliases = ["tyre flip"]
+fr = ["retournement de pneu"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "other"
+pace = { rep = 8 }
+
+[movements.plate_ground_to_overhead]
+name = "Plate ground to overhead"
+aliases = ["plate g2oh", "plate over head"]
+fr = ["disque sol-tête"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "other"
+rx = { men = 20, women = 15, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.weighted_pull_up]
+name = "Weighted pull-up"
+aliases = ["weighted pullup", "weighted pull up"]
+fr = ["tractions lestées"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "bar"
+pace = { rep = 3 }
+
+[movements.pull_up]
+name = "Pull-up"
+aliases = ["pullup", "pull up", "kipping pull-up", "kipping pullup"]
+fr = ["traction"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.5 }
+
+[movements.strict_pull_up]
+name = "Strict pull-up"
+aliases = ["strict pullup", "strict pull up", "dead hang pull-up"]
+fr = ["traction stricte", "tractions strictes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2.5 }
+
+[movements.butterfly_pull_up]
+name = "Butterfly pull-up"
+aliases = ["butterfly pullup", "bf pull-up"]
+fr = ["traction papillon", "tractions papillon"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.2 }
+
+[movements.chest_to_bar_pull_up]
+name = "Chest-to-bar pull-up"
+aliases = ["c2b", "ctb", "chest to bar", "chest-to-bar", "c2b pull-up", "chest to bar pull up"]
+fr = ["traction poitrine barre", "tractions poitrine"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.chin_up]
+name = "Chin-up"
+aliases = ["chinup", "chin up", "supinated pull-up"]
+fr = ["traction supination", "tractions supination"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.jumping_pull_up]
+name = "Jumping pull-up"
+aliases = ["jumping pullup", "jumping pull up"]
+fr = ["traction sautée", "tractions sautées"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.5 }
+
+[movements.banded_pull_up]
+name = "Banded pull-up"
+aliases = ["assisted pull-up", "band assisted pull-up", "banded pullup"]
+fr = ["traction élastique", "tractions avec élastique"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.ring_row]
+name = "Ring row"
+aliases = ["inverted row", "body row"]
+fr = ["rowing anneaux", "tirage anneaux"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 2 }
+
+[movements.bar_muscle_up]
+name = "Bar muscle-up"
+aliases = ["bmu", "bar muscle up", "bar mu"]
+fr = ["muscle-up à la barre", "muscle up barre"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 4 }
+
+[movements.ring_muscle_up]
+name = "Ring muscle-up"
+aliases = ["rmu", "ring muscle up", "muscle-up", "muscle up", "mu"]
+fr = ["muscle-up aux anneaux", "muscle up anneaux"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 5 }
+
+[movements.ring_dip]
+name = "Ring dip"
+aliases = []
+fr = ["dips anneaux"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 2.5 }
+
+[movements.bar_dip]
+name = "Bar dip"
+aliases = ["dip", "parallette dip"]
+fr = ["dips barres"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.push_up]
+name = "Push-up"
+aliases = ["pushup", "push up", "press-up"]
+fr = ["pompe"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.hand_release_push_up]
+name = "Hand-release push-up"
+aliases = ["hand release push up", "hr push-up", "hrpu"]
+fr = ["pompe mains levées", "pompes mains décollées"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.handstand_push_up]
+name = "Handstand push-up"
+aliases = ["hspu", "handstand pushup", "handstand push up", "kipping hspu"]
+fr = ["pompe en équilibre", "pompes poirier", "hspu français"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.strict_handstand_push_up]
+name = "Strict handstand push-up"
+aliases = ["strict hspu", "shspu", "strict handstand pushup"]
+fr = ["pompe équilibre stricte", "pompes poirier strictes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 4 }
+
+[movements.deficit_handstand_push_up]
+name = "Deficit handstand push-up"
+aliases = ["deficit hspu"]
+fr = ["pompe équilibre avec déficit"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 5 }
+
+[movements.wall_walk]
+name = "Wall walk"
+aliases = ["wall climb"]
+fr = ["montée au mur", "marche au mur"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 10 }
+
+[movements.handstand_walk]
+name = "Handstand walk"
+aliases = ["hs walk", "handstand walking"]
+fr = ["marche en équilibre", "marche sur les mains"]
+family = "G"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 2 }
+
+[movements.handstand_hold]
+name = "Handstand hold"
+aliases = ["hs hold", "wall facing handstand hold"]
+fr = ["équilibre tenu", "tenue en équilibre"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.toes_to_bar]
+name = "Toes-to-bar"
+aliases = ["t2b", "ttb", "toes to bar", "ttb reps"]
+fr = ["pieds à la barre", "orteils à la barre"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.knees_to_elbow]
+name = "Knees-to-elbow"
+aliases = ["k2e", "kte", "knees to elbows"]
+fr = ["genoux aux coudes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.8 }
+
+[movements.hanging_knee_raise]
+name = "Hanging knee raise"
+aliases = ["knee raise"]
+fr = ["relevé de genoux suspendu"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.8 }
+
+[movements.sit_up]
+name = "Sit-up"
+aliases = ["situp", "sit up", "abmat sit-up", "abmat situp"]
+fr = ["abdo", "redressement assis"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.8 }
+
+[movements.ghd_sit_up]
+name = "GHD sit-up"
+aliases = ["ghd situp", "ghd sit up", "ghd"]
+fr = ["ghd abdos", "relevé ghd"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 2.5 }
+
+[movements.hip_extension]
+name = "Hip extension"
+aliases = ["back extension", "ghd hip extension"]
+fr = ["extension lombaire", "extension de hanche"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 2 }
+
+[movements.v_up]
+name = "V-up"
+aliases = ["v up", "vup"]
+fr = ["v-up abdos", "relevé en v"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.tuck_up]
+name = "Tuck-up"
+aliases = ["tuck up"]
+fr = ["groupé abdos"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.8 }
+
+[movements.hollow_rock]
+name = "Hollow rock"
+aliases = []
+fr = ["balancement gainage", "hollow rock bascule"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.2 }
+
+[movements.hollow_hold]
+name = "Hollow hold"
+aliases = ["hollow body hold"]
+fr = ["gainage creux", "position creuse"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.arch_hold]
+name = "Arch hold"
+aliases = ["superman hold", "arch body hold"]
+fr = ["gainage arqué", "position arquée"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.plank]
+name = "Plank"
+aliases = ["plank hold", "front plank"]
+fr = ["gainage", "planche"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.side_plank]
+name = "Side plank"
+aliases = ["side plank hold"]
+fr = ["gainage latéral", "planche latérale"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.dead_hang]
+name = "Dead hang"
+aliases = ["bar hang", "hang"]
+fr = ["suspension à la barre", "suspension"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bar"
+
+[movements.l_sit]
+name = "L-sit"
+aliases = ["l sit", "lsit"]
+fr = ["l-sit gainage", "équerre"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "other"
+
+[movements.air_squat]
+name = "Air squat"
+aliases = ["bodyweight squat", "squat"]
+fr = ["squat au poids du corps", "squat à vide"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.jumping_squat]
+name = "Jumping squat"
+aliases = ["squat jump", "jump squat"]
+fr = ["squat sauté", "saut squat"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.pistol]
+name = "Pistol"
+aliases = ["pistol squat", "single leg squat", "single-leg squat"]
+fr = ["squat pistolet", "pistolet"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.lunge]
+name = "Lunge"
+aliases = ["walking lunge", "bodyweight lunge", "alternating lunge"]
+fr = ["fente", "fentes marchées"]
+family = "G"
+quantities = ["reps", "distance"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.8 }
+
+[movements.reverse_lunge]
+name = "Reverse lunge"
+aliases = ["backward lunge"]
+fr = ["fente arrière", "fentes arrière"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.jumping_lunge]
+name = "Jumping lunge"
+aliases = ["lunge jump", "split jump"]
+fr = ["fente sautée", "fentes sautées"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.burpee]
+name = "Burpee"
+aliases = ["standard burpee"]
+fr = ["burpee simple"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3.5 }
+
+[movements.bar_facing_burpee]
+name = "Bar-facing burpee"
+aliases = ["burpee facing bar"]
+fr = ["burpee face à la barre"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "barbell"
+pace = { rep = 4 }
+
+[movements.burpee_box_jump_over]
+name = "Burpee box jump-over"
+aliases = ["bbjo", "burpee box jump over", "burpee over box"]
+fr = ["burpee passage de box"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 6 }
+
+[movements.burpee_box_jump]
+name = "Burpee box jump"
+aliases = ["burpee to box jump"]
+fr = ["burpee saut sur box"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 5.5 }
+
+[movements.burpee_pull_up]
+name = "Burpee pull-up"
+aliases = ["burpee pullup"]
+fr = ["burpee traction"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 5 }
+
+[movements.burpee_broad_jump]
+name = "Burpee broad jump"
+aliases = ["broad jump burpee"]
+fr = ["burpee saut en longueur"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 6 }
+
+[movements.bar_hop]
+name = "Bar hop"
+aliases = ["lateral bar hop"]
+fr = ["saut latéral par-dessus la barre"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "barbell"
+pace = { rep = 1.5 }
+
+[movements.box_jump]
+name = "Box jump"
+aliases = ["bj"]
+fr = ["saut sur box", "saut de box"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 3 }
+
+[movements.box_jump_over]
+name = "Box jump-over"
+aliases = ["bjo", "box jump over", "box over"]
+fr = ["passage de box", "saut par-dessus la box"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 3.5 }
+
+[movements.box_step_over]
+name = "Box step-over"
+aliases = ["step over", "box step over"]
+fr = ["passage de box en marchant"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 3.5 }
+
+[movements.step_up]
+name = "Step-up"
+aliases = ["step up", "box step-up", "box step up"]
+fr = ["montée sur box", "step up box"]
+family = "G"
+quantities = ["reps"]
+param = "height"
+equipment = "box"
+rx = { men = 60, women = 50, unit = "cm" }
+pace = { rep = 2.5 }
+
+[movements.broad_jump]
+name = "Broad jump"
+aliases = ["standing broad jump", "long jump"]
+fr = ["saut en longueur"]
+family = "G"
+quantities = ["reps", "distance"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3, m = 1.5 }
+
+[movements.rope_climb]
+name = "Rope climb"
+aliases = []
+fr = ["montée de corde", "grimper de corde"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 15 }
+
+[movements.legless_rope_climb]
+name = "Legless rope climb"
+aliases = ["legless"]
+fr = ["montée de corde sans les jambes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 20 }
+
+[movements.rope_pull]
+name = "Rope pull"
+aliases = ["seated rope pull", "rope pull-up from floor"]
+fr = ["tirage à la corde"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 3 }
+
+[movements.pegboard]
+name = "Pegboard"
+aliases = ["peg board", "pegboard ascent"]
+fr = ["pegboard montée"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 25 }
+
+[movements.bear_crawl]
+name = "Bear crawl"
+aliases = []
+fr = ["marche de l'ours"]
+family = "G"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 1.5 }
+
+[movements.crab_walk]
+name = "Crab walk"
+aliases = []
+fr = ["marche du crabe"]
+family = "G"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 1.6 }
+
+[movements.inchworm]
+name = "Inchworm"
+aliases = ["inch worm", "inchworm walkout", "walkout"]
+fr = ["chenille", "marche de la chenille"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 5 }
+
+[movements.mountain_climber]
+name = "Mountain climber"
+aliases = []
+fr = ["montée de genoux au sol", "grimpeur"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.8 }
+
+[movements.jumping_jack]
+name = "Jumping jack"
+aliases = ["star jump"]
+fr = ["jumping jack français", "saut étoile"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.8 }
+
+[movements.scapular_pull_up]
+name = "Scapular pull-up"
+aliases = ["scap pull-up", "scap pullup", "scapular pullup"]
+fr = ["traction scapulaire", "tractions scapulaires"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 2 }
+
+[movements.kip_swing]
+name = "Kip swing"
+aliases = ["kipping swing", "beat swing"]
+fr = ["balancement kipping", "kip"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 1.2 }
+
+[movements.skin_the_cat]
+name = "Skin the cat"
+aliases = []
+fr = ["passage arrière aux anneaux"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 8 }
+
+[movements.shoulder_tap]
+name = "Shoulder tap"
+aliases = ["plank shoulder tap"]
+fr = ["touche d'épaule en gainage"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.sit_to_stand]
+name = "Sit-to-stand"
+aliases = ["sit to stand"]
+fr = ["passage assis-debout"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.nordic_curl]
+name = "Nordic curl"
+aliases = ["nordic hamstring curl", "ghd nordic curl"]
+fr = ["curl nordique"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 5 }
+
+[movements.glute_bridge]
+name = "Glute bridge"
+aliases = ["hip bridge"]
+fr = ["pont fessier"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.bird_dog]
+name = "Bird dog"
+aliases = []
+fr = ["chien d'arrêt gainage"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.superman]
+name = "Superman"
+aliases = ["superman rock"]
+fr = ["superman gainage"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.run]
+name = "Run"
+aliases = ["running", "jog"]
+fr = ["course", "courir", "course à pied"]
+family = "M"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 0.3 }
+
+[movements.shuttle_run]
+name = "Shuttle run"
+aliases = ["shuttle sprint", "suicide run"]
+fr = ["navette", "course navette"]
+family = "M"
+quantities = ["reps", "distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 8, m = 0.35 }
+
+[movements.sprint]
+name = "Sprint"
+aliases = ["sprint run"]
+fr = ["sprint course"]
+family = "M"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 0.2 }
+
+[movements.row]
+name = "Row"
+aliases = ["rowing", "erg row", "concept2 row"]
+fr = ["rameur", "ramer"]
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "rower"
+pace = { m = 0.24, cal = 3.5 }
+
+[movements.bike_erg]
+name = "Bike erg"
+aliases = ["bike", "bikeerg", "c2 bike", "erg bike"]
+fr = ["vélo erg", "vélo"]
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "bike"
+pace = { m = 0.1, cal = 3.2 }
+
+[movements.assault_bike]
+name = "Assault bike"
+aliases = ["air bike", "echo bike", "fan bike", "assault air bike"]
+fr = ["assault bike vélo", "vélo à air"]
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "bike"
+pace = { m = 0.12, cal = 4 }
+
+[movements.ski_erg]
+name = "Ski erg"
+aliases = ["ski", "skierg", "ski ergometer"]
+fr = ["ski erg machine", "skieur"]
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "ski"
+pace = { m = 0.26, cal = 3.6 }
+
+[movements.swim]
+name = "Swim"
+aliases = ["swimming"]
+fr = ["natation", "nage", "nager"]
+family = "M"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "other"
+pace = { m = 1.3 }
+
+[movements.double_under]
+name = "Double-under"
+aliases = ["du", "dubs", "double under"]
+fr = ["double saut", "corde à sauter double", "double unders français"]
+family = "M"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 0.6 }
+
+[movements.single_under]
+name = "Single-under"
+aliases = ["su", "single under", "jump rope", "skipping"]
+fr = ["corde à sauter", "saut simple"]
+family = "M"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 0.4 }
+
+[movements.triple_under]
+name = "Triple-under"
+aliases = ["triple under"]
+fr = ["triple saut à la corde"]
+family = "M"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 1.5 }
+
+[movements.crossover]
+name = "Crossover"
+aliases = ["cross over", "jump rope crossover"]
+fr = ["croisé à la corde"]
+family = "M"
+quantities = ["reps"]
+param = "none"
+equipment = "rope"
+pace = { rep = 0.8 }
+
+[movements.sled_sprint]
+name = "Sled sprint"
+aliases = ["weighted sprint"]
+fr = ["sprint traîneau"]
+family = "M"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "sled"
+pace = { m = 1.2 }
+
+[movements.stair_climb]
+name = "Stair climb"
+aliases = ["stairs", "stair climber", "step mill"]
+fr = ["montée d'escaliers", "escaliers"]
+family = "M"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "other"
+pace = { m = 1.2 }
+
+[movements.versa_climber]
+name = "Versa climber"
+aliases = ["versaclimber"]
+fr = ["versa climber machine"]
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "other"
+pace = { m = 1.2, cal = 3.5 }
+
+[movements.ruck]
+name = "Ruck"
+aliases = ["ruck march", "rucking walk", "ruck walk"]
+fr = ["marche avec sac", "randonnée lestée"]
+family = "M"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+pace = { m = 0.75 }
+
+[movements.walk]
+name = "Walk"
+aliases = ["walking"]
+fr = ["marche", "marcher"]
+family = "M"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 0.75 }
+
+[movements.high_knee]
+name = "High knee"
+aliases = []
+fr = ["montées de genoux"]
+family = "G"
+quantities = ["reps", "distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.6, m = 1.2 }
+
+[movements.butt_kick]
+name = "Butt kick"
+aliases = ["heel kicks"]
+fr = ["talons-fesses"]
+family = "G"
+quantities = ["reps", "distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.6, m = 1.2 }
+
+[movements.side_shuffle]
+name = "Side shuffle"
+aliases = ["lateral shuffle"]
+fr = ["pas chassés"]
+family = "G"
+quantities = ["reps", "distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1, m = 1.1 }
+
+[movements.karaoke]
+name = "Karaoke"
+aliases = ["grapevine", "carioca"]
+fr = ["pas croisés"]
+family = "G"
+quantities = ["distance", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { m = 1.1 }
+
+[movements.pogo_hop]
+name = "Pogo hop"
+aliases = ["ankle pogo", "pogo jump"]
+fr = ["sautillements"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.6 }
+
+[movements.arm_circle]
+name = "Arm circle"
+aliases = []
+fr = ["cercles de bras", "rotations de bras"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1 }
+
+[movements.pvc_pass_through]
+name = "PVC pass-through"
+aliases = ["pass through", "pvc pass through", "shoulder pass-through", "pass-through"]
+fr = ["passage de barre pvc", "rotation d'épaules pvc"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 3 }
+
+[movements.banded_pull_apart]
+name = "Banded pull-apart"
+aliases = ["band pull-apart", "banded pull apart", "pull apart"]
+fr = ["écartés élastique"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 1.5 }
+
+[movements.banded_face_pull]
+name = "Banded face pull"
+aliases = ["face pull", "band face pull"]
+fr = ["tirage nuque élastique"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 2 }
+
+[movements.banded_external_rotation]
+name = "Banded external rotation"
+aliases = ["external rotation", "banded er", "band external rotations"]
+fr = ["rotation externe élastique"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 2 }
+
+[movements.cuban_rotation]
+name = "Cuban rotation"
+aliases = ["cuban press"]
+fr = ["rotation cubaine"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 3 }
+
+[movements.wall_slide]
+name = "Wall slide"
+aliases = ["wall angel"]
+fr = ["glissés au mur"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.ytwl_raise]
+name = "Y-T-W-L raise"
+aliases = ["ytwl", "y t w l raise", "ytwl raises"]
+fr = ["élévations ytwl"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+pace = { rep = 4 }
+
+[movements.scapular_push_up]
+name = "Scapular push-up"
+aliases = ["scap push-up", "scap pushup"]
+fr = ["pompe scapulaire", "pompes scapulaires"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2 }
+
+[movements.worlds_greatest_stretch]
+name = "World's greatest stretch"
+aliases = ["wgs", "worlds greatest stretch", "greatest stretch"]
+fr = ["meilleur étirement du monde"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 8 }
+
+[movements.samson_stretch]
+name = "Samson stretch"
+aliases = []
+fr = ["étirement samson"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 8 }
+
+[movements.couch_stretch]
+name = "Couch stretch"
+aliases = []
+fr = ["étirement du canapé"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.pigeon_pose]
+name = "Pigeon pose"
+aliases = ["pigeon stretch"]
+fr = ["posture du pigeon"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.hamstring_stretch]
+name = "Hamstring stretch"
+aliases = ["hamstring stretches"]
+fr = ["étirement ischio-jambiers", "étirement des ischios"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.quad_stretch]
+name = "Quad stretch"
+aliases = ["quadriceps stretch"]
+fr = ["étirement quadriceps"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.calf_stretch]
+name = "Calf stretch"
+aliases = []
+fr = ["étirement mollets"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.hip_flexor_stretch]
+name = "Hip flexor stretch"
+aliases = []
+fr = ["étirement psoas", "étirement fléchisseurs de hanche"]
+family = "G"
+quantities = ["time"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.ankle_mobility]
+name = "Ankle mobility"
+aliases = ["ankle dorsiflexion drill", "ankle mob"]
+fr = ["mobilité cheville", "mobilité de cheville"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.thoracic_rotation]
+name = "Thoracic rotation"
+aliases = ["t-spine rotation", "open book"]
+fr = ["rotation thoracique"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.cat_cow]
+name = "Cat-cow"
+aliases = ["cat cow", "cat camel"]
+fr = ["chat-vache"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.hip_opener]
+name = "Hip opener"
+aliases = ["hip circle"]
+fr = ["ouverture de hanches"]
+family = "G"
+quantities = ["reps", "time"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 3 }
+
+[movements.leg_swing]
+name = "Leg swing"
+aliases = []
+fr = ["balancement de jambe", "balancements de jambes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.air_bike_crunch]
+name = "Air bike crunch"
+aliases = ["bicycle crunch", "bicycle crunches"]
+fr = ["abdos bicyclette"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.2 }
+
+[movements.russian_twist]
+name = "Russian twist"
+aliases = []
+fr = ["twist russe"]
+family = "G"
+quantities = ["reps"]
+param = "load"
+equipment = "other"
+pace = { rep = 1.2 }
+
+[movements.flutter_kick]
+name = "Flutter kick"
+aliases = []
+fr = ["battements de jambes"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 0.8 }
+
+[movements.toe_touch]
+name = "Toe touch"
+aliases = ["toe touches", "tuck crunch"]
+fr = ["touche d'orteils"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.knee_push_up]
+name = "Knee push-up"
+aliases = ["knee pushup", "push-up from the knees", "knee push up"]
+fr = ["pompe sur les genoux"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 1.5 }
+
+[movements.bench_dip]
+name = "Bench dip"
+aliases = ["box dip", "bench tricep dip"]
+fr = ["dips sur banc"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "box"
+pace = { rep = 1.5 }
+
+[movements.dumbbell_hang_clean_to_overhead]
+name = "Dumbbell hang clean-to-overhead"
+aliases = ["db hang clean to overhead", "dumbbell hang clean and jerk", "hang clean-to-overhead"]
+fr = ["épaulé suspendu haltère au-dessus de la tête"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3.0 }
