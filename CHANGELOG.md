@@ -25,10 +25,15 @@ Complete rewrite. WODCraft is now a specified language with a reference compiler
 - Duration estimates for workouts and sessions.
 
 ### Tooling
-- `wodc check | build | show | fmt | timer | export | catalog | lib`, with a canonical formatter.
-- Python API (`wodcraft.api`), MCP server (`wodcraft[mcp]`) and language server (`wodcraft[lsp]`).
-- Standard library of 40 benchmark workouts (Girls, Heroes, Open).
-- CI on Python 3.11–3.13; the package ships with no runtime dependency.
+- `wodc check | build | show | fmt | timer | export | catalog | lib`, with a canonical formatter,
+  an athlete profile (`--me`), French movement names (`--lang fr`) and library names
+  (`wodc show girls/fran`).
+- Python API (`wodcraft.api`, `wodcraft.library`, `wodcraft.resources`), MCP server with 8 tools
+  (`wodcraft[mcp]`) and a language server with diagnostics, completion, hover, formatting and quick
+  fixes (`wodcraft[lsp]`), plus a VS Code extension.
+- Standard library of 40 benchmark workouts (Girls, Heroes, Open); the specification and the JSON
+  schema ship inside the package.
+- 1 507 tests, 64 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
 
 ## 0.3.2 and earlier
 
