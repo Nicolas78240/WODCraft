@@ -1,7 +1,8 @@
 # WODCraft 1.0 — Proposition
 
 > Statut : **mise en œuvre** — la spec vit désormais dans `spec/SPEC.md` et le compilateur dans `src/wodcraft/`.
-> Ce document reste la note d'intention d'origine (2026-09-22).
+> Ce document reste la note d'intention d'origine (2026-09-22) : ses exemples sont des esquisses,
+> la syntaxe qui fait foi est celle de `spec/SPEC.md`.
 > Objet : refonte complète du langage et du compilateur WODCraft, avec l'objectif d'en faire un standard ouvert.
 
 ## 1. L'idée de départ, conservée

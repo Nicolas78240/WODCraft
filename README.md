@@ -22,7 +22,8 @@ FRAN
   Thruster ............................. 30 kg
   Pull-up
 Score: time (capped: reps)
-Estimate: 2:26–5:04
+Estimate: 3:31–8:12
+Stimulus: Short and intense; unbroken or near-unbroken sets.
 ```
 
 WODCraft is an open language for **prescribing** functional-fitness workouts, plus a compiler that
@@ -130,7 +131,7 @@ if not result.ok:
 workout = resolve(result.document, Profile(category="women", units="kg"))
 print(board.render(workout))
 print(workout["score"])          # {'type': 'time', 'capped': 'reps'}
-print(workout["estimate"])       # {'min_s': 146, 'max_s': 304, ...}
+print(workout["estimate"])       # {'min_s': 211, 'max_s': 492, ...}
 ```
 
 ## In your editor

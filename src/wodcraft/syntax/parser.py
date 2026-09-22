@@ -116,7 +116,10 @@ def _group(
                 i += 1
             first_format_used = True
         else:
-            while i < len(nodes) and kinds[i] not in ("format", "format_timed", "label", "level"):
+            # a format block also owns the labels that follow it (Buy-in:, Odd:, …);
+            # a label block stops at the next label, which starts a sibling of its own
+            stop = ("format", "format_timed", "label", "level") if stmt.is_label else ("format", "format_timed", "level")
+            while i < len(nodes) and kinds[i] not in stop:
                 owned.append(nodes[i])
                 i += 1
             if i < len(nodes) and kinds[i] == "format" and not stmt.is_label and not owned:

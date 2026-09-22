@@ -95,8 +95,9 @@ A format line or a label line opens a **block**. The block owns, by the first ru
    the body, up to the first level label (`Scaled:`…) — the whole workout hangs off its main format;
    a meta line is transparent here: it never owns the indented lines that follow it, they belong to
    the block above it;
-3. otherwise, the **following sibling lines** at the same indentation, up to the next format line,
-   label line, level label, heading, or end of body.
+3. otherwise, the **following sibling lines** at the same indentation. A format block also takes the
+   label lines that follow it (`Buy-in:`, `Odd:`…) and stops at the next format line, level label,
+   heading or end of body; a label block stops at the next label as well.
 
 Rules 2 and 3 let the common cases be written without indentation:
 
@@ -251,10 +252,15 @@ between rounds, not after the last one (5 rounds with a trailing `Rest 3:00` con
 A workout written without level labels is **Rx**. A level block lists only the differences:
 
 ```wod
+21-15-9 for time
+  Thruster 43/30 kg
+  Pull-up
+  Box jump 60/50 cm
+
 Scaled:
   Thruster 30/20 kg              // same movement: replace its parameters
   Pull-up -> Jumping pull-up     // replace the movement (parameters MAY follow)
-  Box jump -> Step-up 20/16 in
+  Box jump -> Step-up 50/40 cm
 ```
 
 - A line whose movement also appears in the Rx work replaces the parameters of **every** occurrence.

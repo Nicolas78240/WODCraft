@@ -249,12 +249,22 @@ def test_rule_3_stops_at_the_next_format_line():
     assert names(block["items"][1]["items"]) == ["air_squat"]
 
 
-def test_rule_3_stops_at_a_label_line():
+def test_rule_3_gives_a_format_block_the_labels_that_follow_it():
+    # SPEC §4.1 rule 3: "Buy-in:" belongs to the For time it follows, not to the rounds above it.
     source = "3 rounds\n  For time\n  10 Burpee\n  Buy-in: 20 Double-under\n"
 
     block = first_block(source)
 
-    assert types(block["items"]) == ["for_time", "buy_in"]
+    assert types(block["items"]) == ["for_time"]
+    assert types(block["items"][0]["items"]) == ["movement", "buy_in"]
+
+
+def test_rule_3_stops_a_label_block_at_the_next_label():
+    source = "3 rounds\n  Buy-in: 20 Double-under\n  Cash-out: 20 Sit-up\n"
+
+    block = first_block(source)
+
+    assert types(block["items"]) == ["buy_in", "cash_out"]
 
 
 def test_a_label_takes_its_inline_movement_only():
