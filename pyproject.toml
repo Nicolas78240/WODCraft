@@ -46,7 +46,7 @@ where = ["src"]
 include = ["wodcraft*"]
 
 [tool.setuptools.package-data]
-wodcraft = ["catalog/*.toml", "library/**/*.wod", "library/*.md"]
+wodcraft = ["catalog/*.toml", "library/**/*.wod", "library/*.md", "spec/*.md", "spec/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "src/wodcraft"]

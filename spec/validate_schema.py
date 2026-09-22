@@ -2,19 +2,16 @@
 
 from __future__ import annotations
 
-import json
 import sys
-from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
 from wodcraft.api import LIBRARY_DIR, compile_file
-
-SCHEMA = Path(__file__).parent / "workout.schema.json"
+from wodcraft.resources import schema
 
 
 def main() -> int:
-    validator = Draft202012Validator(json.loads(SCHEMA.read_text(encoding="utf-8")))
+    validator = Draft202012Validator(schema())
     failures = 0
     files = sorted(LIBRARY_DIR.rglob("*.wod"))
     for path in files:
