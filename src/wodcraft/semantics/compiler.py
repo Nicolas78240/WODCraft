@@ -143,7 +143,8 @@ class Compiler:
     # ------------------------------------------------------------------ meta
 
     def _meta(self, out: dict, metas: list[MetaLine]) -> dict:
-        for meta in metas:
+        # 'units' first: it decides how a load written without a unit is read
+        for meta in sorted(metas, key=lambda m: m.key != "units"):
             key, value = meta.key, meta.value.strip()
             if key == "units":
                 if value.lower() not in ("kg", "lb"):
@@ -167,7 +168,7 @@ class Compiler:
                     self._err("E013", f"Invalid vest load {value!r}.", meta.value_span, "e.g. 'vest: 20/14 lb'")
                 else:
                     value_dual, unit = dual
-                    out["vest"] = measures.load_to_json(value_dual, unit or self.units, self.opt.equivalences)
+                    out["vest"] = measures.load_to_json(value_dual, unit or out.get("units", self.units), self.opt.equivalences)
             elif key == "tags":
                 out["tags"] = [t.strip() for t in value.split(",") if t.strip()]
             elif key in ("note", "stimulus"):
