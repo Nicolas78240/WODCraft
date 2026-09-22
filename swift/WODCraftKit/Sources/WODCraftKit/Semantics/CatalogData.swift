@@ -3,27 +3,27 @@
 /// The TOML files of the reference implementation are shipped here as one `catalog.json`.
 import Foundation
 
-public struct MovementEntry: Sendable, Equatable {
-    public let id: String
-    public let name: String
+struct MovementEntry: Sendable, Equatable {
+    let id: String
+    let name: String
     /// M monostructural | G gymnastics | W weightlifting
-    public let family: String
+    let family: String
     /// reps | distance | calories | time
-    public let quantities: [String]
+    let quantities: [String]
     /// accepted parameter kinds: load, height (empty = none)
-    public let params: [String]
-    public let equipment: String
-    public let aliases: [String]
-    public let fr: [String]
+    let params: [String]
+    let equipment: String
+    let aliases: [String]
+    let fr: [String]
     /// French display name; defaults to the first French alias
-    public let frName: String?
+    let frName: String?
     /// `["men": 43, "women": 30]` plus `unit`
-    public let rx: [String: Double]?
-    public let rxUnit: String?
+    let rx: [String: Double]?
+    let rxUnit: String?
     /// seconds per rep / m / cal
-    public let pace: [String: Double]
+    let pace: [String: Double]
 
-    public func displayName(lang: String = "en") -> String {
+    func displayName(lang: String = "en") -> String {
         if lang == "fr" {
             if let frName { return frName }
             if let first = fr.first {
@@ -45,13 +45,13 @@ public struct MovementEntry: Sendable, Equatable {
     }
 }
 
-public struct Equivalences: Sendable, Equatable {
+struct Equivalences: Sendable, Equatable {
     /// (kg, lb)
-    public let load: [(kg: Double, lb: Double)]
+    let load: [(kg: Double, lb: Double)]
     /// (cm, in)
-    public let height: [(cm: Double, inches: Double)]
+    let height: [(cm: Double, inches: Double)]
 
-    public static func == (lhs: Equivalences, rhs: Equivalences) -> Bool {
+    static func == (lhs: Equivalences, rhs: Equivalences) -> Bool {
         lhs.load.map(\.kg) == rhs.load.map(\.kg) && lhs.height.map(\.cm) == rhs.height.map(\.cm)
     }
 
@@ -74,23 +74,23 @@ public struct Equivalences: Sendable, Equatable {
     }
 }
 
-public struct MovementCatalog: Sendable {
-    public let movements: [String: MovementEntry]
+struct MovementCatalog: Sendable {
+    let movements: [String: MovementEntry]
     /// normalized alias -> movement id
     let index: [String: String]
     /// insertion order of `index`, so suggestions are stable
     let indexOrder: [String]
-    public let equivalences: Equivalences
+    let equivalences: Equivalences
 
-    public var count: Int { movements.count }
+    var count: Int { movements.count }
 
-    public func get(_ name: String) -> MovementEntry? {
+    func get(_ name: String) -> MovementEntry? {
         guard let id = index[MovementCatalog.normalize(name)] else { return nil }
         return movements[id]
     }
 
     /// Lower-case, collapse spaces/hyphens and drop a trailing plural 's'.
-    public static func normalize(_ name: String) -> String {
+    static func normalize(_ name: String) -> String {
         var lowered: String = name.lowercased()
         lowered = lowered.replacingOccurrences(of: "-", with: " ")
         lowered = lowered.replacingOccurrences(of: "\u{2019}", with: "'")
@@ -102,7 +102,7 @@ public struct MovementCatalog: Sendable {
         return words.joined(separator: " ")
     }
 
-    public func suggest(_ name: String, _ n: Int = 3) -> [String] {
+    func suggest(_ name: String, _ n: Int = 3) -> [String] {
         let needle: String = MovementCatalog.normalize(name)
         var scored: [(score: Double, alias: String)] = []
         for alias in indexOrder {
@@ -165,7 +165,7 @@ public struct MovementCatalog: Sendable {
 // MARK: - loading
 
 extension MovementCatalog {
-    public static let shared: MovementCatalog = load()
+    static let shared: MovementCatalog = load()
 
     static func load() -> MovementCatalog {
         guard let data = ResourceLoader.data(named: "catalog") else {

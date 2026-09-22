@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -7,10 +7,15 @@ let package = Package(
     products: [
         .library(name: "WODCraftKit", targets: ["WODCraftKit"])
     ],
+    swiftLanguageModes: [.v6],
     targets: [
         .target(
             name: "WODCraftKit",
-            resources: [.copy("Resources/catalog.json"), .copy("Resources/library.json")]
+            resources: [
+                .copy("Resources/catalog.json"),
+                .copy("Resources/library.json"),
+                .copy("Resources/workout.schema.json"),
+            ]
         ),
         .testTarget(
             name: "WODCraftKitTests",

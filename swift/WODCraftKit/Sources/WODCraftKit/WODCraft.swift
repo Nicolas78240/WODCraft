@@ -48,7 +48,7 @@ public enum WODCraft {
     }
 
     /// The movement catalog shipped with the package (SPEC §11).
-    public static var catalog: MovementCatalog { .shared }
+    public static var catalog: Catalog { .shared }
 
     static func decodeDocument(_ object: JSONObject) -> Document? {
         guard let data = try? JSONSerialization.data(withJSONObject: JSONValue.object(object).foundation) else {
