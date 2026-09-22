@@ -1,6 +1,7 @@
 # WODCraft 1.0 — Proposition
 
-> Statut : brouillon pour validation · 2026-09-22
+> Statut : **mise en œuvre** — la spec vit désormais dans `spec/SPEC.md` et le compilateur dans `src/wodcraft/`.
+> Ce document reste la note d'intention d'origine (2026-09-22).
 > Objet : refonte complète du langage et du compilateur WODCraft, avec l'objectif d'en faire un standard ouvert.
 
 ## 1. L'idée de départ, conservée
@@ -231,7 +232,7 @@ Fran compilé (extrait) :
 
 Le standard publié se compose de :
 
-1. **La spécification** (`spec/`) : grammaire formelle (EBNF), sémantique, tableau des diagnostics. Licence CC-BY 4.0.
+1. **La spécification** (`spec/`) : grammaire formelle (EBNF), sémantique, tableau des diagnostics. Licence CC BY-SA 4.0.
 2. **Le JSON Schema** du format compilé, versionné.
 3. **Le catalogue de mouvements**, ouvert, alias FR/EN.
 4. **La suite de conformité** : pour chaque `.wod`, le JSON attendu ou les diagnostics attendus. Toute implémentation (Python, TypeScript, Swift…) se valide contre elle.
