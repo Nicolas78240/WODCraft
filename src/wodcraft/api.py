@@ -7,10 +7,11 @@ from pathlib import Path
 
 from wodcraft.catalog import load_catalog, load_equivalences
 from wodcraft.diagnostics import Diagnostic, DiagnosticBag
+from wodcraft.library import LIBRARY_DIR
 from wodcraft.semantics.compiler import Compiler, Options
 from wodcraft.syntax.parser import parse_source
 
-LIBRARY_DIR = Path(__file__).parent / "library"
+__all__ = ["LIBRARY_DIR", "Library", "Result", "check_file", "compile_file", "compile_source", "format_source", "parse_file"]
 
 
 @dataclass
@@ -106,6 +107,18 @@ def compile_file(path: str | Path, **kwargs) -> Result:
 
 def check_file(path: str | Path, **kwargs) -> Result:
     return compile_file(path, **kwargs)
+
+
+def format_source(source: str, file: str | None = None) -> tuple[str, list[Diagnostic]]:
+    """The canonical form of a source, and the diagnostics found while parsing it.
+
+    The text is returned unchanged when parsing failed."""
+    from wodcraft.emit.source import format_source as _format
+
+    source_file, diags = parse_source(source, file)
+    if diags.has_errors:
+        return source, diags.sorted()
+    return _format(source_file), diags.sorted()
 
 
 def parse_file(path: str | Path):

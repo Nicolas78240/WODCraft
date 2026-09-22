@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-from wodcraft import __version__
+from wodcraft import __version__, library
 from wodcraft.api import LIBRARY_DIR, compile_file, parse_file
 from wodcraft.catalog import load_catalog, normalize
 from wodcraft.emit import board
@@ -256,13 +256,8 @@ def cmd_catalog(args) -> int:
 
 
 def cmd_lib(args) -> int:
-    query = (args.query or "").lower()
-    for path in sorted(LIBRARY_DIR.rglob("*.wod")):
-        name = path.relative_to(LIBRARY_DIR).with_suffix("").as_posix()
-        if query and query not in name:
-            continue
-        title = next((line[1:].strip() for line in path.read_text(encoding="utf-8").splitlines() if line.startswith("# ")), name)
-        print(f"{name:24} {title}")
+    for entry in library.entries(args.query):
+        print(f"{entry.path:24} {entry.title}")
     return EXIT_OK
 
 
@@ -297,13 +292,7 @@ def _profile(args) -> Profile | None:
     if not (args.me or args.profile or overrides):
         return None
     profile = Profile.load(args.profile) if args.profile else (Profile.discover() or Profile())
-    if args.category:
-        profile.category = args.category
-    if args.level:
-        profile.level = args.level.lower()
-    if args.units:
-        profile.units = args.units
-    return profile
+    return profile.with_overrides(args.category, args.level, args.units)
 
 
 def _write(output: str | None, text: str) -> None:

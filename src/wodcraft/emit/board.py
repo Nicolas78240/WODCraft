@@ -17,12 +17,12 @@ SCORE_LABEL = {
 }
 
 
-def render(document: dict, width: int = 46, lang: str = "en") -> str:
+def render(document: dict, width: int = 46, lang: str = "en", show_profile: bool = True) -> str:
     if lang != "en":
         document = localize(document, lang)
     if document.get("kind") == "session":
-        return _session(document, width)
-    return _workout(document, width)
+        return _session(document, width, show_profile)
+    return _workout(document, width, show_profile=show_profile)
 
 
 def localize(document: dict, lang: str) -> dict:
@@ -50,7 +50,7 @@ def localize(document: dict, lang: str) -> dict:
     return out
 
 
-def _session(session: dict, width: int) -> str:
+def _session(session: dict, width: int, show_profile: bool = True) -> str:
     lines = [_title(session.get("title") or "Session")]
     head = " · ".join(x for x in (session.get("date"), session.get("time")) if x)
     if head:
@@ -58,14 +58,14 @@ def _session(session: dict, width: int) -> str:
     for section in session.get("sections", []):
         lines.append("")
         lines.append(section["title"].upper())
-        lines.append(_workout(section["workout"], width, skip_title=True))
+        lines.append(_workout(section["workout"], width, skip_title=True, show_profile=show_profile))
     if session.get("estimate"):
         lines.append("")
         lines.append(f"Session estimate: {_range(session['estimate'])}")
     return "\n".join(lines).rstrip() + "\n"
 
 
-def _workout(workout: dict, width: int, skip_title: bool = False) -> str:
+def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: bool = True) -> str:
     lines: list[str] = []
     if not skip_title and workout.get("title"):
         lines.append(_title(workout["title"]))
@@ -90,7 +90,7 @@ def _workout(workout: dict, width: int, skip_title: bool = False) -> str:
     levels = workout.get("levels")
     if levels:
         lines.append("Levels: " + ", ".join(sorted(levels)))
-    resolved = workout.get("resolved")
+    resolved = workout.get("resolved") if show_profile else None
     if resolved:
         lines.append(f"[{resolved['category']} · {resolved['level']} · {resolved['units']}]")
     return "\n".join(lines)
