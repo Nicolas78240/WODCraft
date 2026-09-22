@@ -67,3 +67,42 @@ def test_every_documented_snippet_is_canonical_or_explicitly_loose(name, line, s
     assert not [d for d in diagnostics if d.severity.value == "error"]
     again, _ = format_source(formatted, f"{name}:{line}")
     assert again == formatted, f"{name} line {line}: formatting is not a fixed point"
+
+
+# --------------------------------------------------------------------------- console transcripts
+
+CONSOLE = re.compile(r"^```console\n\$ (wodc [^\n]*)\n(.*?)^```", re.MULTILINE | re.DOTALL)
+
+
+def transcripts() -> list[tuple[str, int, str, str]]:
+    found = []
+    for path in MARKDOWN:
+        text = path.read_text(encoding="utf-8")
+        for match in CONSOLE.finditer(text):
+            if "\n$ " in match.group(2):  # a block with several commands: skipped, one command per block
+                continue
+            line = text[: match.start()].count("\n") + 1
+            found.append((path.relative_to(ROOT).as_posix(), line, match.group(1), match.group(2)))
+    return found
+
+
+TRANSCRIPTS = transcripts()
+
+
+@pytest.mark.parametrize(
+    ("name", "line", "command", "expected"),
+    TRANSCRIPTS,
+    ids=[f"{name}:{line}" for name, line, _, _ in TRANSCRIPTS],
+)
+def test_every_console_transcript_matches_the_real_output(name, line, command, expected, capsys, monkeypatch):
+    """A README transcript is a promise: run the command and compare, word for word."""
+    from wodcraft.cli import main
+
+    monkeypatch.chdir(ROOT)
+    argv = command.split()[1:]
+    if any(Path(argument).suffix == ".wod" for argument in argv):
+        pytest.skip(f"{name}:{line} uses a file of its own")
+
+    assert main(argv) == 0
+    printed = capsys.readouterr().out
+    assert printed.strip() == expected.strip(), f"{name} line {line}: the transcript no longer matches"

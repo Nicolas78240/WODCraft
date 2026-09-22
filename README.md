@@ -16,14 +16,15 @@ Scaled:
 ```
 
 ```console
-$ wodc show fran.wod --category women --units kg
+$ wodc show girls/fran --category women --units kg
 FRAN
 21-15-9 for time · cap 10:00
   Thruster ............................. 30 kg
   Pull-up
 Score: time (capped: reps)
-Estimate: 3:31–8:12
+Estimate: 3:22–6:14
 Stimulus: Short and intense; unbroken or near-unbroken sets.
+[women · rx · kg]
 ```
 
 WODCraft is an open language for **prescribing** functional-fitness workouts, plus a compiler that
@@ -131,7 +132,7 @@ if not result.ok:
 workout = resolve(result.document, Profile(category="women", units="kg"))
 print(board.render(workout))
 print(workout["score"])          # {'type': 'time', 'capped': 'reps'}
-print(workout["estimate"])       # {'min_s': 211, 'max_s': 492, ...}
+print(workout["estimate"])       # {'min_s': 202, 'max_s': 374, ...}
 ```
 
 ## In your editor
