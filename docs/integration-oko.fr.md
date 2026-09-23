@@ -6,6 +6,9 @@ Contexte oKo (fourni par l'équipe) : app iOS SwiftUI, iOS 17, Swift 6 en concur
 ligne obligatoire**, SwiftData en local et Supabase comme source de vérité, packages SwiftPM locaux
 `OkoCore` et `OkoData`, tests en Swift Testing, UI en français, identifiants en anglais.
 
+> Pour décider sur pièces plutôt que sur une note d'architecture : **[docs/demo-oko.fr.md](demo-oko.fr.md)**
+> montre un WOD collé, ce que l'app en tire et ce qu'elle écrit en base — sorties réelles.
+
 ## 0. Pour le PO, en trois phrases
 
 Aujourd'hui, saisir un WOD dans oKo veut dire remplir une feuille : la partie, le format, les
