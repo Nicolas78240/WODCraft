@@ -233,3 +233,11 @@ def test_there_and_back_is_written_back_in_english():
 
     text = "For time, cap 25:00, aller-retour\n  50 cal Row\n  10 Wall walk\n"
     assert format_source(parse_source(text)[0]).splitlines()[0] == "For time, cap 25:00, there and back"
+
+
+def test_an_amrap_ladder_keeps_its_amrap_line():
+    from wodcraft.emit.source import format_source
+    from wodcraft.syntax.parser import parse_source
+
+    text = "AMRAP 5:00\n  1-2-3 ...\n    Wall walk\n    Pull-up\n"
+    assert format_source(parse_source(text)[0]) == text

@@ -82,8 +82,9 @@ def _statement(stmt: Statement, depth: int) -> list[str]:
 
 
 def _merge(block: Block) -> Block:
-    """'For time' + a single untimed child becomes one canonical line (SPEC §13)."""
-    if block.kind in ("for_time", "amrap") and len(block.children) == 1:
+    """'For time' + a single untimed child becomes one canonical line (SPEC §13). An AMRAP keeps its
+    own line: '1-2-3 ...' alone would lose the clock."""
+    if block.kind == "for_time" and len(block.children) == 1:
         child = block.children[0]
         blocked = child.cap_s or child.teams or child.there_and_back or block.there_and_back if isinstance(child, Block) else True
         if isinstance(child, Block) and child.kind in ("rounds", "ladder") and not blocked:
