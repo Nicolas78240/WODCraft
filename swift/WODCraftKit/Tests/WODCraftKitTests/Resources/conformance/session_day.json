@@ -1,0 +1,183 @@
+{
+  "wodcraft": "1.0",
+  "kind": "session",
+  "title": "Tuesday 23 September",
+  "sections": [
+    {
+      "title": "Warm-up",
+      "workout": {
+        "wodcraft": "1.0",
+        "kind": "workout",
+        "title": "Warm-up",
+        "blocks": [
+          {
+            "type": "rounds",
+            "source": {
+              "line": 8,
+              "col": 1
+            },
+            "rounds": 3,
+            "items": [
+              {
+                "type": "movement",
+                "movement": "air_squat",
+                "name": "Air squat",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "source": {
+                  "line": 9,
+                  "col": 6
+                }
+              },
+              {
+                "type": "movement",
+                "movement": "push_up",
+                "name": "Push-up",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "source": {
+                  "line": 10,
+                  "col": 6
+                }
+              }
+            ]
+          }
+        ],
+        "score": {
+          "type": "none"
+        }
+      },
+      "source": {
+        "line": 7,
+        "col": 1
+      }
+    },
+    {
+      "title": "Strength",
+      "workout": {
+        "wodcraft": "1.0",
+        "kind": "workout",
+        "title": "Strength",
+        "blocks": [
+          {
+            "type": "max_load",
+            "source": {
+              "line": 13,
+              "col": 1
+            },
+            "items": [
+              {
+                "type": "movement",
+                "movement": "back_squat",
+                "name": "Back squat",
+                "sets": {
+                  "reps": [
+                    5,
+                    5,
+                    5,
+                    5,
+                    5
+                  ]
+                },
+                "percent": {
+                  "value": 75,
+                  "of": "back_squat"
+                },
+                "source": {
+                  "line": 14,
+                  "col": 3
+                }
+              }
+            ]
+          }
+        ],
+        "score": {
+          "type": "load"
+        }
+      },
+      "source": {
+        "line": 12,
+        "col": 1
+      }
+    },
+    {
+      "title": "Metcon",
+      "workout": {
+        "wodcraft": "1.0",
+        "kind": "workout",
+        "title": "Metcon",
+        "blocks": [
+          {
+            "type": "amrap",
+            "source": {
+              "line": 17,
+              "col": 1
+            },
+            "duration_s": 720.0,
+            "items": [
+              {
+                "type": "movement",
+                "movement": "thruster",
+                "name": "Thruster",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "load": {
+                  "kg": {
+                    "men": 43,
+                    "women": 30
+                  },
+                  "lb": {
+                    "men": 95,
+                    "women": 65
+                  },
+                  "unit": "kg",
+                  "written": {
+                    "men": 43,
+                    "women": 30
+                  }
+                },
+                "source": {
+                  "line": 18,
+                  "col": 6
+                }
+              },
+              {
+                "type": "movement",
+                "movement": "pull_up",
+                "name": "Pull-up",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "source": {
+                  "line": 19,
+                  "col": 6
+                }
+              }
+            ]
+          }
+        ],
+        "score": {
+          "type": "rounds+reps"
+        }
+      },
+      "source": {
+        "line": 16,
+        "col": 1
+      }
+    }
+  ],
+  "date": "2026-09-23",
+  "time": "18:00",
+  "units": "kg",
+  "tags": [
+    "class",
+    "conditioning"
+  ]
+}

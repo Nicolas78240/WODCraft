@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [main, v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev,mcp,lsp]"
+      - name: Tests
+        run: pytest --cov=wodcraft --cov-report=term-missing
+      - name: The standard library compiles and is canonical
+        run: |
+          wodc check src/wodcraft/library/*/*.wod examples/*.wod
+          wodc fmt --check src/wodcraft/library/*/*.wod examples/*.wod
+      - name: Compiled output matches the JSON schema
+        run: python spec/validate_schema.py
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check src tests
+      - run: ruff format --check src tests
+      - run: mypy
+
+  swift:
+    name: WODCraftKit (the second implementation)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      # The runner's Homebrew Python refuses global installs (PEP 668): use a managed interpreter.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Swift version
+        run: swift --version
+      - name: Build and test
+        working-directory: swift/WODCraftKit
+        run: swift test
+      - name: The embedded resources match the Python implementation
+        run: |
+          python3 -m pip install --quiet -e .
+          python3 -m wodcraft.cli bundle /tmp/bundle
+          for file in catalog.json library.json workout.schema.json; do
+            diff -q "/tmp/bundle/$file" "swift/WODCraftKit/Sources/WODCraftKit/Resources/$file" \
+              || { echo "::error::$file is stale, run make swift-resources"; exit 1; }
+          done
+      - name: The two implementations agree, source by source
+        working-directory: swift/WODCraftKit
+        run: swift build -c release --product wodcraftc
+      - name: Differential check
+        run: python3 scripts/differential_check.py "$(cd swift/WODCraftKit && swift build -c release --show-bin-path)/wodcraftc"
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - name: The wheel ships the catalog and the library
+        run: |
+          python -m zipfile -l dist/*.whl | grep -q "wodcraft/catalog/movements.toml"
+          python -m zipfile -l dist/*.whl | grep -q "wodcraft/library/girls/fran.wod"

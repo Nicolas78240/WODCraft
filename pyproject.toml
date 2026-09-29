@@ -1,40 +1,80 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "wodcraft"
-version = "0.3.2"
-description = "Write, lint, and compile CrossFit workouts (WODs) with a simple language and CLI. Export JSON/ICS, build a movements catalog, and get a quick timeline."
-authors = [
-  { name = "WODCraft Authors" }
-]
+version = "1.1.0"
+description = "A whiteboard-readable language and compiler for functional-fitness workouts (WODs)."
 readme = "README.md"
-license = { file = "LICENSE" }
-keywords = ["crossfit", "dsl", "wod", "fitness", "parser", "lark"]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Nicolas Caussin", email = "caussin@aumana-consulting.com" }]
+keywords = ["crossfit", "wod", "dsl", "fitness", "compiler", "workout"]
 classifiers = [
-  "Programming Language :: Python :: 3",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
   "Programming Language :: Python :: 3 :: Only",
-  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Operating System :: OS Independent",
   "Topic :: Text Processing :: Linguistic",
   "Topic :: Software Development :: Compilers",
 ]
-requires-python = ">=3.9"
-dependencies = [
-  "lark>=1.1",
-]
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp>=2.2,<3"]
+lsp = ["pygls>=2,<3"]
+service = ["fastapi>=0.115", "uvicorn[standard]>=0.30"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.11", "jsonschema>=4.22", "build>=1.2", "twine>=5"]
 
 [project.scripts]
 wodc = "wodcraft.cli:main"
+wodcraft-mcp = "wodcraft.mcp.server:main"
+wodcraft-lsp = "wodcraft.lsp.server:main"
+wodcraft-service = "wodcraft.service:main"
 
 [project.urls]
-# Update to your public repository URLs before releasing
 Homepage = "https://github.com/Nicolas78240/WODCraft"
 Repository = "https://github.com/Nicolas78240/WODCraft"
+Specification = "https://github.com/Nicolas78240/WODCraft/blob/main/spec/SPEC.md"
 Issues = "https://github.com/Nicolas78240/WODCraft/issues"
 
 [tool.setuptools.packages.find]
-# Include both src/ and the current language-core shim until consolidation completes
-where = ["src", "."]
-include = ["wodcraft*", "wodc_vnext*"]
+where = ["src"]
+include = ["wodcraft*"]
+exclude = ["wodcraft.*.tests", "wodcraft.*.tests.*", "wodcraft.tests", "wodcraft.tests.*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests/*", "*/tests/*", "__pycache__/*"]
+
+[tool.setuptools.package-data]
+wodcraft = ["catalog/*.toml", "library/**/*.wod", "library/*.md", "spec/*.md", "spec/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src/wodcraft"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 140
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/wodcraft"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# The MCP and LSP layers hand dynamic dictionaries to typed SDK models; the core is what is checked.
+module = ["wodcraft.mcp.*", "wodcraft.lsp.*", "wodcraft.service"]
+ignore_errors = true

@@ -1,0 +1,93 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "emom",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "duration_s": 900.0,
+      "interval_s": 60.0,
+      "items": [
+        {
+          "type": "slot",
+          "source": {
+            "line": 2,
+            "col": 1
+          },
+          "slot": 1,
+          "items": [
+            {
+              "type": "movement",
+              "movement": "burpee",
+              "name": "Burpee",
+              "quantity": {
+                "kind": "reps",
+                "reps": 10
+              },
+              "source": {
+                "line": 2,
+                "col": 11
+              }
+            }
+          ]
+        },
+        {
+          "type": "slot",
+          "source": {
+            "line": 3,
+            "col": 1
+          },
+          "slot": 2,
+          "items": [
+            {
+              "type": "movement",
+              "movement": "air_squat",
+              "name": "Air squat",
+              "quantity": {
+                "kind": "reps",
+                "reps": 15
+              },
+              "source": {
+                "line": 3,
+                "col": 11
+              }
+            }
+          ]
+        },
+        {
+          "type": "slot",
+          "source": {
+            "line": 4,
+            "col": 1
+          },
+          "slot": 3,
+          "items": [
+            {
+              "type": "movement",
+              "movement": "row",
+              "name": "Row",
+              "quantity": {
+                "kind": "calories",
+                "cal": {
+                  "men": 12,
+                  "women": 10
+                }
+              },
+              "source": {
+                "line": 4,
+                "col": 18
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "none"
+  }
+}

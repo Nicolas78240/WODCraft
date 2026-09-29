@@ -1,0 +1,54 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "rounds": 5,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "source": {
+            "line": 2,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "push_up",
+          "name": "Push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 30
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 180.0,
+          "source": {
+            "line": 4,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

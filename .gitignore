@@ -2,33 +2,31 @@
 __pycache__/
 *.py[cod]
 *.egg-info/
-
-# Virtual env
 .venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
 
-# OS/editor
+# Node (VS Code extension)
+node_modules/
+*.vsix
+editor/vscode/out/
+
+# OS / editors
 .DS_Store
 .idea/
 .vscode/
 
-# Build/outputs
-out/
-exports/
-*.html
-*.ics
-out.json
-wod.html
-*.vsix
-*.zip
-
-# Private product docs (not versioned)
-PRD*.md
-docs/private/
-
-# Local packaging secrets (do not commit)
+# Local secrets
 .pypirc
 .pypirc.local
-.pypi_token
 .env
 .env.*
-.python-version
+
+# Swift
+.build/
+.swiftpm/

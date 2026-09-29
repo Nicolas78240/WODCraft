@@ -1,443 +1,337 @@
-#!/usr/bin/env python3
+"""The ``wodc`` command line."""
+
+from __future__ import annotations
+
 import argparse
 import json
 import sys
+import tomllib
 from pathlib import Path
-import os
+
+from wodcraft import __version__, library
+from wodcraft.api import LIBRARY_DIR, compile_file, parse_file
+from wodcraft.catalog import load_catalog, normalize
+from wodcraft.emit import board
+from wodcraft.emit.source import format_source
+from wodcraft.profile import Profile
+from wodcraft.semantics.resolve import resolve
+
+EXIT_OK, EXIT_DIAGNOSTICS, EXIT_USAGE = 0, 1, 2
 
 
-def detect_mode_from_text(text: str) -> str:
-    t = text
-    if any(kw in t for kw in ("programming",)):
-        return "vnext"
-    if any(kw in t for kw in ("module ", "session ", "vars {", "imports ", "components {", "realized {", "achievements {")):
-        return "vnext"
-    if any(kw in t for kw in ("WOD ", "BLOCK ", "AMRAP", "EMOM", "RFT", "FT")):
-        return "legacy"
-    return "legacy"
-
-
-def cmd_lint(args):
-    p = Path(args.file)
-    text = p.read_text()
-    mode = args.mode or detect_mode_from_text(text)
-    # language-first only
-    # Prefer programming lint if block present; else validate
-    from wodcraft.core import ProgrammingLinter, parse_vnext
-    if "programming" in text:
-        ast = parse_vnext(text)
-        reports = []
-        for blk in ast.get("programming", []):
-            data = blk.get("data", {})
-            issues = ProgrammingLinter().lint(data)
-            reports.append({"programming": data.get("macrocycle", {}).get("name"), "issues": issues})
-        print(json.dumps({"reports": reports}, indent=2))
-        return 2 if any(any(i.get("level") == "error" for i in r.get("issues", [])) for r in reports) else 0
-    else:
-        # Lint modules: find common structural issues
-        try:
-            ast = parse_vnext(text)
-        except Exception as e:
-            print(f"✗ Invalid syntax: {e}")
-            return 1
-        issues = []
-        modules = ast.get("modules", [])
-        for m in modules:
-            mid = m.get("id", "<module>")
-            body = m.get("body")
-            comps = []
-            # Flatten containers
-            def collect(node):
-                if isinstance(node, dict):
-                    t = node.get("type")
-                    if t in ("WARMUP","WOD","SKILL","STRENGTH"):
-                        comps.append(node)
-                    elif t in ("MODULE_BODY","BODY"):
-                        for ch in node.get("children", []):
-                            collect(ch)
-                    else:
-                        # attempt to collect nested dicts
-                        for v in node.values():
-                            collect(v)
-                elif isinstance(node, list):
-                    for v in node: collect(v)
-            collect(body)
-            if not comps:
-                issues.append(("warning","M101", f"Module '{mid}' has no components"))
-            for c in comps:
-                ct = c.get("type")
-                if ct == "WOD":
-                    mv = c.get("movements") or []
-                    if not mv:
-                        issues.append(("warning","M102", f"WOD in '{mid}' has no movements"))
-                elif ct == "WARMUP":
-                    bl = c.get("blocks") or []
-                    if not bl:
-                        issues.append(("warning","M103", f"Warmup in '{mid}' has no blocks"))
-                elif ct in ("SKILL","STRENGTH"):
-                    wk = c.get("work") or {}
-                    lines = wk.get("lines") or []
-                    if not lines:
-                        issues.append(("warning","M104", f"{ct.title()} in '{mid}' has no work lines"))
-        if issues:
-            for lvl, code, msg in issues:
-                print(f"{lvl.upper()} {code} {args.file}: {msg}")
-        else:
-            print("✓ Valid WODCraft syntax")
-        # Treat warnings as success
-        return 0
-
-
-def cmd_parse(args):
-    text = Path(args.file).read_text()
-    mode = args.mode or detect_mode_from_text(text)
-    if mode == "legacy":
-        # Legacy not supported in clean mode — fallback to language parser
-        from wodcraft.core import parse_vnext
-        ast = parse_vnext(text)
-    else:
-        from wodcraft.core import parse_vnext
-        ast = parse_vnext(text)
-    print(json.dumps(ast, indent=2))
-    return 0
-
-
-def _to_seconds(tok: str) -> int:
-    s = str(tok).strip()
-    if ":" in s:
-        try:
-            m, sec = s.split(":", 1)
-            return int(m) * 60 + int(sec)
-        except Exception:
-            return 0
-    if s.endswith("min"):
-        try:
-            return int(s[:-3]) * 60
-        except Exception:
-            return 0
-    if s.endswith("m"):
-        try:
-            return int(s[:-1]) * 60
-        except Exception:
-            return 0
-    if s.endswith("h"):
-        try:
-            return int(s[:-1]) * 3600
-        except Exception:
-            return 0
-    if s.endswith("s"):
-        try:
-            return int(s[:-1])
-        except Exception:
-            return 0
+def main(argv: list[str] | None = None) -> int:
+    parser = _parser()
+    args = parser.parse_args(argv)
+    if not getattr(args, "func", None):
+        parser.print_help()
+        return EXIT_USAGE
     try:
-        return int(s)
-    except Exception:
-        return 0
+        return args.func(args)
+    except FileNotFoundError as err:
+        print(f"wodc: {err.filename}: no such file", file=sys.stderr)
+        return EXIT_USAGE
+    except IsADirectoryError as err:
+        print(f"wodc: {err.filename}: is a directory, not a .wod file", file=sys.stderr)
+        return EXIT_USAGE
+    except PermissionError as err:
+        print(f"wodc: {err.filename}: permission denied", file=sys.stderr)
+        return EXIT_USAGE
+    except UnicodeDecodeError:
+        print("wodc: this file is not UTF-8 text; a .wod file is plain text", file=sys.stderr)
+        return EXIT_USAGE
+    except tomllib.TOMLDecodeError as err:
+        print(f"wodc: the athlete profile is not valid TOML: {err}", file=sys.stderr)
+        return EXIT_USAGE
+    except BrokenPipeError:  # pragma: no cover - piping into head/less
+        return EXIT_OK
 
 
-def _flatten_form(node):
-    if isinstance(node, (str, int, float)):
-        yield str(node)
-    elif isinstance(node, dict):
-        # Try explicit keys first
-        if "type" in node and isinstance(node["type"], str) and node["type"] not in ("WOD", "WOD_FORM"):
-            yield str(node["type"])
-        for v in node.values():
-            if isinstance(v, (list, dict, str, int, float)):
-                yield from _flatten_form(v)
-    elif isinstance(node, list):
-        for v in node:
-            yield from _flatten_form(v)
-
-
-def _infer_wod_form(form) -> tuple[str, int | None]:
-    # Returns (form_type, duration_seconds or None)
-    toks = list(_flatten_form(form))
-    ftype = None
-    dur = None
-    # pick first known keyword
-    for kw in ("AMRAP", "EMOM", "ForTime", "RFT", "TABATA"):
-        if any(kw.lower() == t.lower() for t in toks):
-            ftype = kw
-            break
-    # look for duration-like tokens
-    for t in toks:
-        if any(ch.isdigit() for ch in t) and any(ch in t for ch in (":", "m", "min", "s", "h")):
-            sec = _to_seconds(t)
-            if sec:
-                dur = sec
-                break
-    # ForTime can specify cap after 'cap'
-    if (ftype == "ForTime" or (ftype is None and any("ForTime" in t for t in toks))) and dur is None:
-        # scan for token 'cap' then next duration token
-        for i, t in enumerate(toks):
-            if t.lower() == "cap" and i + 1 < len(toks):
-                sec = _to_seconds(toks[i + 1])
-                if sec:
-                    dur = sec
-                    break
-    return (ftype or "WOD", dur)
-
-
-def cmd_run(args):
-    # Unified WODCraft run: compile session and emit a simple timeline
-    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler
-    p = Path(args.file)
-    text = p.read_text()
-    ast = parse_vnext(text)
-    if not ast.get("sessions"):
-        print("✗ No session found in file")
-        return 1
-    resolver = FileSystemResolver(Path(args.modules_path))
-    compiler = SessionCompiler(resolver)
-    session_ast = ast["sessions"][0]
-    compiled = compiler.compile_session(session_ast)
-    sess = compiled.get("session", {})
-    comps = sess.get("components", {})
-    t = 0
-    total = 0
-    unknown = False
-    segments = []
-    order = ["warmup", "skill", "strength", "wod"]
-    for kind in order:
-        if kind in comps:
-            comp = comps[kind].get("component", {})
-            title = comp.get("title") or kind.title()
-            seg = {"kind": kind, "title": title, "start_s": t}
-            dur = None
-            if kind == "wod":
-                form = comp.get("form")
-                ftype, fdur = _infer_wod_form(form)
-                seg["form"] = ftype
-                if fdur:
-                    dur = fdur
-            # Accumulate
-            seg["duration_s"] = dur
-            segments.append(seg)
-            if dur is None:
-                unknown = True
-            else:
-                t += dur
-                total += dur
-    timeline = {
-        "session_title": sess.get("title"),
-        "total_duration_s": None if unknown else total,
-        "segments": segments,
-    }
-    if args.format == "json":
-        print(json.dumps({"timeline": timeline}, indent=2))
-    else:
-        # text
-        lines = [f"Session: {timeline['session_title']}"]
-        for seg in segments:
-            base = f"- {seg['kind'].title()}: {seg['title']}"
-            if seg.get("form"):
-                base += f" ({seg['form']})"
-            if seg.get("duration_s"):
-                base += f" — {seg['duration_s']}s"
-            lines.append(base)
-        if timeline["total_duration_s"] is not None:
-            lines.append(f"Total: {timeline['total_duration_s']}s")
-        print("\n".join(lines))
-    return 0
-
-
-def cmd_export(args):
-    # legacy only, thin shim to JSON/HTML/ICS via existing module
-    print("Legacy 'export' not supported in clean language-first mode.")
-    return 1
-
-
-def cmd_validate(args):
-    text = Path(args.file).read_text()
-    from wodcraft.core import parse_vnext
-    try:
-        parse_vnext(text)
-        print("✓ Valid WODCraft syntax")
-        return 0
-    except Exception as e:
-        print(f"✗ Invalid syntax: {e}")
-        return 1
-
-
-def cmd_session(args):
-    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler
-    text = Path(args.file).read_text()
-    ast = parse_vnext(text)
-    if not ast.get("sessions"):
-        print("✗ No session found in file")
-        return 1
-    resolver = FileSystemResolver(Path(args.modules_path))
-    compiler = SessionCompiler(resolver)
-    session_ast = ast["sessions"][0]
-    compiled = compiler.compile_session(session_ast)
-    if args.format == "json":
-        print(compiler.export_json(compiled))
-    elif args.format == "ics":
-        print(compiler.export_ics(compiled))
-    else:
-        print(json.dumps(compiled, indent=2))
-    return 0
-
-
-def cmd_results(args):
-    from wodcraft.core import parse_vnext, FileSystemResolver, SessionCompiler, TeamRealizedAggregator
-    text = Path(args.file).read_text()
-    ast = parse_vnext(text)
-    if not ast.get("sessions"):
-        print("✗ No session found in file")
-        return 1
-    resolver = FileSystemResolver(Path(args.modules_path))
-    compiler = SessionCompiler(resolver)
-    session_ast = ast["sessions"][0]
-    compiled = compiler.compile_session(session_ast)
-    results = compiled.get("session", {}).get("results")
-    if not results:
-        results = TeamRealizedAggregator().aggregate(session_ast, compiled.get("session", {})) or {}
-    print(json.dumps({"results": results}, indent=2))
-    return 0
-
-
-def cmd_catalog_build(args):
-    # thin wrapper
-    from scripts.build_catalog import main as build
-    build()
-    return 0
-
-
-REPO_URL = os.environ.get("WODCRAFT_DOCS_URL", "https://github.com/Nicolas78240/WODCraft")
-
-
-def main(argv=None):
-    ap = argparse.ArgumentParser(
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
         prog="wodc",
-        description=(
-            "WODCraft CLI — parse, lint, run, and export WODCraft sessions.\n\n"
-            "Common tasks:\n"
-            "  - Validate syntax:      wodc validate file.wod\n"
-            "  - Parse to JSON AST:    wodc parse file.wod\n"
-            "  - Build catalog:        wodc catalog build\n"
-            "  - Compile a session:    wodc session file.wod --modules-path modules --format json\n"
-            "  - Timeline summary:     wodc run file.wod --modules-path modules --format text\n\n"
-            f"Docs & issues: {REPO_URL}\n"
-        ),
-        formatter_class=argparse.RawTextHelpFormatter,
+        description=f"Write, check and compile functional-fitness workouts (WODCraft {__version__}).",
+        epilog="Specification: spec/SPEC.md · https://github.com/Nicolas78240/WODCraft",
     )
-    # --version support
-    try:
-        from importlib.metadata import version as _pkg_version  # type: ignore
-        ap.add_argument("--version", action="version", version=f"wodc {_pkg_version('wodcraft')}")
-    except Exception:
-        ap.add_argument("--version", action="version", version="wodc")
-    sub = ap.add_subparsers(dest="cmd")
+    parser.add_argument("--version", action="version", version=f"wodc {__version__} (spec 1.0)")
+    subparsers = parser.add_subparsers(dest="command")
 
-    p_parse = sub.add_parser(
-        "parse",
-        help="Parse a WODCraft file and print its JSON AST",
-        description=(
-            "Parse a WODCraft source file and emit a JSON AST.\n\n"
-            "Examples:\n  wodc parse examples/language/team_realized_session.wod"
-        ),
-    )
-    p_parse.add_argument("file", help="Path to .wod file")
-    p_parse.add_argument("--mode", choices=["legacy", "vnext"], help=argparse.SUPPRESS)
-    p_parse.set_defaults(func=cmd_parse)
+    check = subparsers.add_parser("check", help="check files and report diagnostics")
+    _add_input(check)
+    check.add_argument("--json", action="store_true", help="machine-readable diagnostics")
+    check.add_argument("--quiet", "-q", action="store_true", help="only report errors")
+    check.add_argument("--strict", action="store_true", help="treat warnings as errors")
+    check.set_defaults(func=cmd_check)
 
-    p_lint = sub.add_parser(
-        "lint",
-        help="Lint WODCraft (programming or module structure) and report issues",
-        description=(
-            "Lint the file. If a programming block is present, runs the programming linter;\n"
-            "otherwise, performs structural checks on modules.\n\n"
-            "Examples:\n  wodc lint examples/language/programming_plan.wod"
-        ),
-    )
-    p_lint.add_argument("file", help="Path to .wod file")
-    p_lint.add_argument("--mode", choices=["legacy", "vnext"], help=argparse.SUPPRESS)
-    p_lint.set_defaults(func=cmd_lint)
+    build = subparsers.add_parser("build", help="compile to JSON")
+    _add_input(build)
+    build.add_argument("-o", "--output", help="write to this file instead of stdout")
+    build.add_argument("--compact", action="store_true", help="single-line JSON")
+    build.set_defaults(func=cmd_build)
 
-    p_run = sub.add_parser(
-        "run",
-        help="Produce a simple timeline summary from a session",
-        description=(
-            "Compile the session and emit a simple, best-effort timeline summary\n"
-            "for warmup/skill/strength/wod segments.\n\n"
-            "Examples:\n  wodc run file.wod --modules-path modules --format text"
-        ),
-    )
-    p_run.add_argument("file", help="Path to .wod file with a session block")
-    p_run.add_argument("--modules-path", default="modules", help="Path to modules directory")
-    p_run.add_argument("--format", choices=["text", "json"], default="text", help="Output format")
-    p_run.set_defaults(func=cmd_run)
+    show = subparsers.add_parser("show", help="print the whiteboard view")
+    _add_input(show)
+    _add_profile(show)
+    show.set_defaults(func=cmd_show)
 
-    p_export = sub.add_parser(
-        "export",
-        help="(Reserved) Additional export formats",
-        description=(
-            "Reserved for future export formats beyond session JSON/ICS.\n"
-            "Use `wodc session ... --format json|ics` for session exports."
-        ),
-    )
-    p_export.add_argument("file", help="Path to .wod file")
-    p_export.add_argument("--to", choices=["json", "html", "ics"], required=True, help="Target format")
-    p_export.set_defaults(func=cmd_export)
+    fmt = subparsers.add_parser("fmt", help="rewrite files in canonical form")
+    _add_input(fmt)
+    fmt.add_argument("--write", "-w", action="store_true", help="rewrite the files in place")
+    fmt.add_argument("--check", action="store_true", help="exit 1 if a file is not canonical")
+    fmt.set_defaults(func=cmd_fmt)
 
-    p_validate = sub.add_parser(
-        "validate",
-        help="Validate WODCraft syntax",
-        description=(
-            "Validate the file against the WODCraft grammar.\n\n"
-            "Examples:\n  wodc validate file.wod"
-        ),
-    )
-    p_validate.add_argument("file", help="Path to .wod file")
-    p_validate.set_defaults(func=cmd_validate)
+    timer = subparsers.add_parser("timer", help="print the timeline of a workout")
+    _add_input(timer)
+    _add_profile(timer)
+    timer.set_defaults(func=cmd_timer)
 
-    p_session = sub.add_parser(
-        "session",
-        help="Compile a session (resolve modules) and export JSON or ICS",
-        description=(
-            "Compile the first session in the file: resolves module imports, applies overrides,\n"
-            "and exports a structured session JSON or an ICS calendar event.\n\n"
-            "Examples:\n  wodc session file.wod --modules-path modules --format json"
-        ),
-    )
-    p_session.add_argument("file", help="Path to .wod file with a session block")
-    p_session.add_argument("--modules-path", default="modules", help="Path to modules directory")
-    p_session.add_argument("--format", choices=["json", "ics"], default="json", help="Export format")
-    p_session.set_defaults(func=cmd_session)
+    export = subparsers.add_parser("export", help="export to another format")
+    export.add_argument("format", choices=["ics", "markdown", "md"])
+    _add_input(export)
+    _add_profile(export)
+    export.add_argument("-o", "--output", help="write to this file instead of stdout")
+    export.set_defaults(func=cmd_export)
 
-    p_results = sub.add_parser(
-        "results",
-        help="Aggregate team realized events into a score",
-        description=(
-            "Aggregate team realized events (if present) per session scoring policy.\n\n"
-            "Examples:\n  wodc results file.wod --modules-path modules"
-        ),
-    )
-    p_results.add_argument("file", help="Path to .wod file with a session block")
-    p_results.add_argument("--modules-path", default="modules", help="Path to modules directory")
-    p_results.set_defaults(func=cmd_results)
+    catalog = subparsers.add_parser("catalog", help="explore the movement catalog")
+    catalog.add_argument("query", nargs="?", help="search term (name, alias, French name)")
+    catalog.add_argument("--family", choices=["M", "G", "W"], help="filter by family")
+    catalog.add_argument("--json", action="store_true")
+    catalog.set_defaults(func=cmd_catalog)
 
-    p_cat = sub.add_parser(
-        "catalog",
-        help="Catalog utilities (build movements catalog)",
-        description=(
-            "Utilities around the movements catalog.\n\n"
-            "Examples:\n  wodc catalog build"
-        ),
-    )
-    p_cat_sub = p_cat.add_subparsers(dest="cat_cmd")
-    p_cat_build = p_cat_sub.add_parser("build", help="Build movements catalog from sources")
-    p_cat_build.set_defaults(func=cmd_catalog_build)
+    bundle = subparsers.add_parser("bundle", help="write the JSON bundle an application embeds")
+    bundle.add_argument("directory", nargs="?", default="bundle", help="where to write (default: ./bundle)")
+    bundle.add_argument("--pretty", action="store_true", help="indent the JSON")
+    bundle.set_defaults(func=cmd_bundle)
 
-    args = ap.parse_args(argv)
-    if not hasattr(args, "func"):
-        ap.print_help()
-        return 1
-    return args.func(args)
+    library = subparsers.add_parser("lib", help="list the standard workout library")
+    library.add_argument("query", nargs="?", help="filter by name")
+    library.set_defaults(func=cmd_lib)
+    return parser
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+def _add_input(sub: argparse.ArgumentParser) -> None:
+    sub.add_argument("files", nargs="+", help="one or more .wod files ('-' for stdin)")
+    sub.add_argument("--lib", action="append", default=[], metavar="DIR", help="extra directory for 'use'")
+
+
+def _add_profile(sub: argparse.ArgumentParser) -> None:
+    sub.add_argument("--me", action="store_true", help="resolve with the athlete profile (athlete.toml)")
+    sub.add_argument("--profile", metavar="FILE", help="use this athlete profile")
+    sub.add_argument("--category", choices=["men", "women"])
+    sub.add_argument("--level", help="rx, intermediate, scaled, foundations")
+    sub.add_argument("--units", choices=["kg", "lb"])
+    sub.add_argument("--lang", choices=["en", "fr"], default="en", help="language of the movement names")
+
+
+# --------------------------------------------------------------------------- commands
+
+
+def cmd_check(args) -> int:
+    status = EXIT_OK
+    payload: list[dict] = []
+    for result in _results(args):
+        if args.json:
+            payload += [dict(d.to_dict(), file=d.span.file or result.path) for d in result.diagnostics]
+        else:
+            for diagnostic in result.diagnostics:
+                if args.quiet and diagnostic.severity.value != "error":
+                    continue
+                print(diagnostic.format(result.source_lines))
+            warnings = len([d for d in result.diagnostics if d.severity.value != "error"])
+            if result.ok and not args.quiet:
+                if args.strict and warnings:
+                    print(f"✗ {result.path}: {warnings} warning{'s' if warnings > 1 else ''} (--strict)")
+                else:
+                    print(f"✓ {result.path}: valid" + (f" ({warnings} warning{'s' if warnings > 1 else ''})" if warnings else ""))
+        if not result.ok or (args.strict and result.diagnostics):
+            status = EXIT_DIAGNOSTICS
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    return status
+
+
+def cmd_build(args) -> int:
+    documents: list[dict] = []
+    status = EXIT_OK
+    for result in _results(args):
+        if not result.ok:
+            print(result.report(), file=sys.stderr)
+            status = EXIT_DIAGNOSTICS
+            continue
+        documents += result.documents
+    if status != EXIT_OK:
+        return status
+    payload = documents[0] if len(documents) == 1 else documents
+    text = json.dumps(payload, ensure_ascii=False, separators=(",", ":") if args.compact else None, indent=None if args.compact else 2)
+    _write(args.output, text)
+    return status
+
+
+def cmd_show(args) -> int:
+    profile = _profile(args)
+    status = EXIT_OK
+    for result in _results(args):
+        if not result.ok:
+            print(result.report(), file=sys.stderr)
+            status = EXIT_DIAGNOSTICS
+            continue
+        for document in result.documents:
+            if profile is not None:
+                document = resolve(document, profile)
+            print(board.render(document, lang=getattr(args, "lang", "en")))
+            print()
+    return status
+
+
+def cmd_fmt(args) -> int:
+    status = EXIT_OK
+    for path in _paths(args):
+        original = Path(path).read_text(encoding="utf-8")
+        result = compile_file(path, library_paths=[Path(p) for p in getattr(args, "lib", [])])
+        if not result.ok:
+            # a workout that does not compile is left alone: the formatter would rewrite a guess
+            print(result.report(), file=sys.stderr)
+            status = EXIT_DIAGNOSTICS
+            continue
+        source_file, _ = parse_file(path)
+        formatted = format_source(source_file)
+        if args.check:
+            if formatted != original:
+                print(f"{path}: not canonical", file=sys.stderr)
+                status = EXIT_DIAGNOSTICS
+        elif args.write:
+            if formatted != original:
+                Path(path).write_text(formatted, encoding="utf-8")
+                print(f"{path}: formatted")
+        else:
+            sys.stdout.write(formatted)
+    return status
+
+
+def cmd_timer(args) -> int:
+    from wodcraft.emit.timeline import render_timeline, timeline
+
+    profile = _profile(args)
+    status = EXIT_OK
+    for result in _results(args):
+        if not result.ok:
+            print(result.report(), file=sys.stderr)
+            status = EXIT_DIAGNOSTICS
+            continue
+        for document in result.documents:
+            if profile is not None:
+                document = resolve(document, profile)
+            print(render_timeline(timeline(document)))
+    return status
+
+
+def cmd_export(args) -> int:
+    from wodcraft.emit.ics import IcsError, to_ics
+    from wodcraft.emit.markdown import to_markdown
+
+    profile = _profile(args)
+    chunks: list[str] = []
+    status = EXIT_OK
+    for result in _results(args):
+        if not result.ok:
+            print(result.report(), file=sys.stderr)
+            status = EXIT_DIAGNOSTICS
+            continue
+        for document in result.documents:
+            if profile is not None:
+                document = resolve(document, profile)
+            try:
+                chunks.append(to_ics(document) if args.format == "ics" else to_markdown(document))
+            except IcsError as err:
+                print(f"{result.path}: {err}", file=sys.stderr)
+                status = EXIT_DIAGNOSTICS
+    if status == EXIT_OK:
+        _write(args.output, "\n".join(chunks))
+    return status
+
+
+def cmd_catalog(args) -> int:
+    catalog = load_catalog()
+    query = normalize(args.query) if args.query else ""
+
+    def matches(movement) -> bool:
+        if not query:
+            return True
+        haystack = [normalize(movement.name), movement.id.replace("_", " "), *(normalize(a) for a in (*movement.aliases, *movement.fr))]
+        return any(query in text for text in haystack)
+
+    rows = [m for m in catalog.movements.values() if (not args.family or m.family == args.family) and matches(m)]
+    rows.sort(key=lambda m: m.id)
+    if args.json:
+        print(json.dumps([vars(m) for m in rows], ensure_ascii=False, indent=2, default=list))
+        return EXIT_OK
+    for movement in rows:
+        rx = ""
+        if movement.rx:
+            unit = movement.rx.get("unit", "kg")
+            rx = f"  Rx {movement.rx.get('men')}/{movement.rx.get('women')} {unit}"
+        print(f"{movement.id:34} {movement.family}  {', '.join(movement.quantities):24} {movement.name}{rx}")
+    print(f"\n{len(rows)} movement{'s' if len(rows) > 1 else ''}" + (f" of {len(catalog)}" if query or args.family else ""))
+    return EXIT_OK
+
+
+def cmd_bundle(args) -> int:
+    from wodcraft.bundle import write_bundle
+
+    report = write_bundle(args.directory, compact=not args.pretty)
+    for path, size in report.files.items():
+        print(f"{path:44} {size / 1024:6.1f} kB")
+    print(f"{report.workouts} workouts, {report.movements} movements")
+    for failure in report.failures:
+        print(f"wodc: {failure}: does not compile, left out of the bundle", file=sys.stderr)
+    return EXIT_DIAGNOSTICS if report.failures else EXIT_OK
+
+
+def cmd_lib(args) -> int:
+    for entry in library.entries(args.query):
+        print(f"{entry.path:24} {entry.title}")
+    return EXIT_OK
+
+
+# --------------------------------------------------------------------------- helpers
+
+
+def _paths(args) -> list[str]:
+    """File paths, or names from the standard library ('girls/fran')."""
+    out: list[str] = []
+    for name in args.files:
+        if name == "-" or Path(name).exists():
+            out.append(name)
+            continue
+        candidate = LIBRARY_DIR / (name if name.endswith(".wod") else name + ".wod")
+        out.append(str(candidate) if candidate.is_file() else name)
+    return out
+
+
+def _results(args):
+    library_paths = [Path(p) for p in getattr(args, "lib", [])]
+    for path in _paths(args):
+        if path == "-":
+            from wodcraft.api import compile_source
+
+            yield compile_source(sys.stdin.read(), "<stdin>", library_paths=library_paths)
+        else:
+            yield compile_file(path, library_paths=library_paths)
+
+
+def _profile(args) -> Profile | None:
+    overrides = any(getattr(args, key, None) for key in ("category", "level", "units"))
+    if not (args.me or args.profile or overrides):
+        return None
+    profile = Profile.load(args.profile) if args.profile else (Profile.discover() or Profile())
+    return profile.with_overrides(args.category, args.level, args.units)
+
+
+def _write(output: str | None, text: str) -> None:
+    if output:
+        Path(output).write_text(text + ("" if text.endswith("\n") else "\n"), encoding="utf-8")
+    else:
+        print(text)
+
+
+if __name__ == "__main__":  # pragma: no cover
+    raise SystemExit(main())

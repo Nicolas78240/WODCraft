@@ -1,8 +1,4 @@
-"""Unified WODCraft package and CLI integrations.
+"""WODCraft — write, check and compile functional-fitness workouts."""
 
-This package exposes the WODCraft CLI (`wodc`) along with helper shims
-used by the MCP server, SDK, and editor tooling while the language core
-continues to be consolidated under ``src/wodcraft``.
-"""
-
-from .cli import main  # noqa: F401
+__version__ = "1.1.0"
+SPEC_VERSION = "1.1"

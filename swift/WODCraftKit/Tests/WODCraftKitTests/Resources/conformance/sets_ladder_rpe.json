@@ -1,0 +1,39 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "max_load",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "deadlift",
+          "name": "Deadlift",
+          "sets": {
+            "reps": [
+              5,
+              5,
+              3,
+              3,
+              1,
+              1
+            ]
+          },
+          "rpe": 8,
+          "source": {
+            "line": 2,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "load"
+  }
+}

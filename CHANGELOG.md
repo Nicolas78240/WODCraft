@@ -1,0 +1,83 @@
+# Changelog
+
+## 1.1.0 — unreleased
+
+Additions for real training sessions (the whiteboard of 29 September: warm-up, skill, team chipper,
+core work). Every 1.0 document still compiles to exactly the same JSON, stamped `"wodcraft": "1.0"`;
+a document that uses a 1.1 construct is stamped `"1.1"`, and the schema accepts both.
+
+### The language
+- **Generic ergometer**: `ergometer` (`ergo`, `cal ergo`, `machine`, `ergomètre`), in calories,
+  distance or time; the machine is chosen when the score is logged. Also `yoga push-up` and the
+  `scap pull` alias.
+- **`hold`**, a standard modifier: `1 Wall walk (hold 10 s)`; the duration adds to every rep in
+  estimates.
+- **Alternatives**: `10 Ring row | 8 Scapular pull-up`. The item is the first option, the others go
+  in `or`; an option without a quantity takes the first one's; levels apply to every option; the board
+  says "or" ("ou" in French).
+- **Level quantities**, after the arrow only: `Chest-to-bar pull-up -> 2x Ring row` (factor),
+  `Wall walk -> 3 Inchworm` (new quantity). Any other quantity in a level block is still `E014`.
+- **There and back**: `For time, teams of 2, cap 25:00, there and back` (`aller-retour` accepted) —
+  the list in order, then back without repeating the last line. The block and its score carry
+  `there_and_back`; estimates count the whole path.
+- **`Adapted:`**: what one athlete actually did, with the same lines as a level plus bare counts
+  (`5 Wall walk`). Compiled in `adapted`; resolution applies it after the chosen level and sets
+  `resolved.adapted`.
+
+### Fixes
+- `wodc fmt` no longer turns `AMRAP 5:00` + `1-2-3 ...` into a bare ladder (it dropped the clock).
+- The board shows the ladder of an AMRAP: `AMRAP 5:00 · 1-2-3 …`.
+
+### Tooling
+- Schema `spec/workout.schema.json` moves to `…/schema/1.1/`: `or`, `factor`, `quantity` on level
+  operations, `there_and_back`, `adapted`, `resolved.adapted`; every expected conformance document is
+  now validated against it.
+- `swift/WODCraftKit` implements all of the above (`Movement.or` / `options`, `Movement.factor`,
+  `LevelOperation.factor` / `quantity`, `Block.thereAndBack`, `Score.thereAndBack`,
+  `Workout.adapted`, `Resolved.adapted`), with the same conformance suite.
+- New example: `examples/session-2026-09-29.wod`.
+
+## 1.0.0 — unreleased
+
+Complete rewrite. WODCraft is now a specified language with a reference compiler, and the old
+`module … { wod ForTime { … } }` syntax is gone (the previous implementation is archived under the
+`v0.3-legacy` tag).
+
+### The language
+- New whiteboard-first syntax: `21-15-9 for time, cap 10:00`, `AMRAP 12`, `EMOM 10`, `E2MOM 20`,
+  `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, `5x5 @ 75%`, `Buy-in:` / `Cash-out:`,
+  `Odd:` / `Even:` / `Min N:`, levels `Scaled:` / `Intermediate:` / `Foundations:`, sessions with
+  `#` and `##`, and `use girls/fran` for the standard library.
+- Dual men/women values (`95/65 lb`), `m` always means metres, and `mi`, `ft`, `pood`, `cal`, `%`,
+  `bw` and `RPE` are part of the language.
+- Specification: `spec/SPEC.md`, with a JSON Schema for the compiled document and a conformance suite.
+
+### The compiler
+- Diagnostics with a code, an exact line and column, and a suggestion — including movement typos,
+  wrong parameter kinds (a load on a box jump), incoherent scores, implausible distances, reversed
+  men/women loads, overloaded EMOM intervals and caps shorter than the estimate.
+- Movement catalog of 200+ entries with French and English aliases; kg ↔ lb and cm ↔ in conversions
+  use the equivalences boxes actually use.
+- Athlete resolution: category, level, preferred units, one-rep maxes and bodyweight.
+- Duration estimates for workouts and sessions.
+
+### Tooling
+- `wodc check | build | show | fmt | timer | export | catalog | lib`, with a canonical formatter,
+  an athlete profile (`--me`), French movement names (`--lang fr`) and library names
+  (`wodc show girls/fran`).
+- Python API (`wodcraft.api`, `wodcraft.library`, `wodcraft.resources`), MCP server with 8 tools
+  (`wodcraft[mcp]`) and a language server with diagnostics, completion, hover, formatting and quick
+  fixes (`wodcraft[lsp]`), plus a VS Code extension.
+- Standard library of 40 benchmark workouts (Girls, Heroes, Open); the specification and the JSON
+  schema ship inside the package.
+- `wodc bundle` writes the JSON an application embeds (catalog, library, schema: 115 kB).
+- `swift/WODCraftKit`: the language in Swift for iOS, watchOS and macOS — compiled model, compiler,
+  catalog, library, whiteboard and timeline, offline, validated by the conformance suite.
+- `wodcraft[service]`: a small HTTP compile service, with a Dockerfile that builds.
+- 1 572 tests, 68 conformance cases, 98 % coverage; CI on Python 3.11–3.13; no runtime dependency.
+- The two implementations are compared against each other on thousands of generated sources
+  (`make swift-diff`), not only on the conformance fixtures.
+
+## 0.3.2 and earlier
+
+See the `v0.3-legacy` tag.

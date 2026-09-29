@@ -1,0 +1,61 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Linda",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "reps": [
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "items": [
+        {
+          "type": "movement",
+          "movement": "deadlift",
+          "name": "Deadlift",
+          "bodyweight": 1.5,
+          "source": {
+            "line": 3,
+            "col": 3
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "bench_press",
+          "name": "Bench press",
+          "bodyweight": 1,
+          "source": {
+            "line": 4,
+            "col": 3
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "clean",
+          "name": "Clean",
+          "bodyweight": 0.75,
+          "source": {
+            "line": 5,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

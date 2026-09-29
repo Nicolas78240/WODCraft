@@ -1,0 +1,12 @@
+# An athlete profile: `wodc show --profile examples/athlete.toml`, or drop it as `athlete.toml`
+# in your own directory and use `--me`.
+category = "men"      # men | women
+level = "rx"          # rx | intermediate | scaled | foundations
+units = "kg"          # switch to "lb" when you train in North America
+bodyweight_kg = 78
+
+[1rm]
+back_squat = 140
+clean = 100
+snatch = 80
+deadlift = 180

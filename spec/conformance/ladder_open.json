@@ -1,0 +1,60 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "reps": [
+        3,
+        6,
+        9
+      ],
+      "cap_s": 1200.0,
+      "reps_open": true,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "burpee",
+          "name": "Burpee",
+          "source": {
+            "line": 2,
+            "col": 3
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "dumbbell_hang_clean_to_overhead",
+          "name": "Dumbbell hang clean-to-overhead",
+          "load": {
+            "kg": {
+              "men": 22.5,
+              "women": 15
+            },
+            "lb": {
+              "men": 50,
+              "women": 35
+            },
+            "unit": "lb",
+            "written": {
+              "men": 50,
+              "women": 35
+            }
+          },
+          "source": {
+            "line": 3,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time",
+    "capped": "reps"
+  }
+}

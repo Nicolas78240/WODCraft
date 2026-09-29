@@ -1,0 +1,51 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "thruster",
+          "name": "Thruster",
+          "quantity": {
+            "kind": "reps",
+            "reps": 21
+          },
+          "load": {
+            "kg": 43,
+            "lb": 95,
+            "unit": "lb",
+            "written": 95
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 21
+          },
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

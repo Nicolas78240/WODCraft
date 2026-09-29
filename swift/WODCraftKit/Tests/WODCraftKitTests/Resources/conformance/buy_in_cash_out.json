@@ -1,0 +1,123 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": "Murph",
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 3,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "buy_in",
+          "source": {
+            "line": 4,
+            "col": 3
+          },
+          "items": [
+            {
+              "type": "movement",
+              "movement": "run",
+              "name": "Run",
+              "quantity": {
+                "m": 1609.344,
+                "unit": "mi",
+                "written": 1,
+                "kind": "distance"
+              },
+              "source": {
+                "line": 4,
+                "col": 16
+              }
+            }
+          ]
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 100
+          },
+          "source": {
+            "line": 5,
+            "col": 7
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "push_up",
+          "name": "Push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 200
+          },
+          "source": {
+            "line": 6,
+            "col": 7
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "air_squat",
+          "name": "Air squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 300
+          },
+          "source": {
+            "line": 7,
+            "col": 7
+          }
+        },
+        {
+          "type": "cash_out",
+          "source": {
+            "line": 8,
+            "col": 3
+          },
+          "items": [
+            {
+              "type": "movement",
+              "movement": "run",
+              "name": "Run",
+              "quantity": {
+                "m": 1609.344,
+                "unit": "mi",
+                "written": 1,
+                "kind": "distance"
+              },
+              "source": {
+                "line": 8,
+                "col": 18
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  },
+  "meta": {
+    "vest": {
+      "kg": {
+        "men": 9,
+        "women": 6
+      },
+      "lb": {
+        "men": 20,
+        "women": 14
+      },
+      "unit": "lb",
+      "written": {
+        "men": 20,
+        "women": 14
+      }
+    }
+  }
+}

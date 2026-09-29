@@ -1,204 +1,221 @@
 # WODCraft
 
-WODCraft est un DSL (Domain‑Specific Language) pour décrire, valider et exporter des WODs (Workouts of the Day). Il fournit un outil CLI unifié pour parser, linter, compiler des sessions et exporter (JSON/ICS), avec prise en charge des niveaux et genres via un catalogue de mouvements.
+[English](README.md) | Français
+
+**Écrivez un WOD comme il s'écrit au tableau blanc. Laissez un compilateur le vérifier.**
+
+```wod
+# Fran
+21-15-9 for time, cap 10:00
+  Thruster 95/65 lb
+  Pull-up
+
+Scaled:
+  Thruster 65/45 lb
+  Pull-up -> Jumping pull-up
+```
+
+```console
+$ wodc show girls/fran --category women --units kg
+FRAN
+21-15-9 for time · cap 10:00
+  Thruster ............................. 30 kg
+  Pull-up
+Score: time (capped: reps)
+Estimate: 3:22–6:14
+Stimulus: Short and intense; unbroken or near-unbroken sets.
+[women · rx · kg]
+```
+
+WODCraft est un langage ouvert pour **prescrire** des séances de fitness fonctionnel, accompagné d'un
+compilateur qui les transforme en JSON exploitable par n'importe quelle application. Il est strict là
+où ça compte — unités, noms de mouvements, cohérence du score, plausibilité — et souple là où les
+coachs en ont besoin : vous écrivez `Pull-up`, `pull ups` ou `tractions`, et `95/65 lb` reste
+`95/65 lb`.
 
 ## Pourquoi
-- Standardiser l’écriture des WODs, lisible par les coachs et les outils.
-- Automatiser la génération de formats utiles (timer, calendrier, web, API).
-- Normaliser les variantes (tracks, dual reps/cals/charges) via un catalogue JSON.
-- Servir de base à des agents IA pour analyser/générer des WODs.
 
-## Aperçu du DSL
+- **Lisible par les athlètes.** Tout fichier valide peut être affiché tel quel au mur de la box.
+- **Vérifié par un compilateur.** `10 Box jump 24 kg` est refusé : un box jump attend une hauteur.
+  `1 m Run` demande si vous vouliez écrire `1 mi`. Un EMOM avec 25 thrusters par minute vous prévient
+  qu'il n'est pas tenable.
+- **Un seul format d'échange.** Le JSON compilé est décrit par un
+  [JSON Schema](spec/workout.schema.json) versionné : c'est lui que s'échangent les timers, les
+  applications et les agents IA.
+- **Converti pour vous.** Les charges portent les kilos et les livres, avec les équivalences
+  réellement utilisées en box (95 lb ↔ 43 kg, 24 in ↔ 60 cm), et `--units lb` bascule tout l'affichage.
+
+## Installation
+
+```bash
+pip install wodcraft          # le langage, la CLI, le catalogue et la bibliothèque
+pip install "wodcraft[mcp]"   # + le serveur MCP pour Claude et les autres agents IA
+pip install "wodcraft[lsp]"   # + le serveur de langage utilisé par l'extension VS Code
+```
+
+Python 3.11+, aucune dépendance à l'exécution.
+
+## Utilisation
+
+```bash
+wodc check mardi.wod              # diagnostics, avec ligne, colonne et suggestion
+wodc show  mardi.wod --me         # la vue tableau blanc, résolue pour votre profil
+wodc build mardi.wod -o out.json  # le document compilé
+wodc fmt --write mardi.wod        # forme canonique, comme gofmt
+wodc timer fran.wod               # le déroulé du chrono, segment par segment
+wodc export ics semaine.wod       # une séance dans votre agenda
+wodc catalog thruster             # explorer le catalogue de mouvements
+wodc lib girls                    # la bibliothèque de référence
+wodc show girls/fran --lang fr    # …et n'importe lequel de ses WODs, par son nom
+```
+
+Un profil d'athlète (`athlete.toml`, cherché dans le dossier courant, ses parents, puis
+`~/.config/wodcraft/`) transforme les prescriptions en vos charges — il y en a un dans [`examples/`](examples/) :
+
+```toml
+category = "men"     # men | women
+level     = "rx"     # rx | intermediate | scaled | foundations
+units     = "kg"     # passez à "lb" quand vous vous entraînez en Amérique du Nord
+bodyweight_kg = 78
+
+[1rm]
+back_squat = 140
+clean = 100
+```
+
+```console
+$ wodc show examples/strength.wod --profile examples/athlete.toml
+BACK SQUAT
+Back squat ............ 5x5 105 kg (rest 2:30)
+Score: load
+Estimate: 8:24–15:36
+Note: Add 2.5 kg next week if every set moves well.
+[men · rx · kg]
+```
+
+## Le langage en une minute
+
 ```wod
-WOD "Team Mixer"
-TEAM 2
-TRACKS [RX, INTERMEDIATE, SCALED]
-CAP 20:00
+# Mardi 23 septembre           // une séance : titre '#', sections '##'
+date: 2026-09-23
 
-BUYIN {
-  400m run;
-}
+## Warm-up
+2 rounds
+  200 m Run
+  10 Air squat
 
-BLOCK AMRAP 12:00 WORK split:any {
-  12 wall_balls @9kg SYNC;
-  10 box_jumps @24in;
-  200m run;
-}
+## Strength
+Back squat 5x5 @ 75%          // les pourcentages se résolvent avec votre 1RM
 
-CASHOUT {
-  50 double_unders @each;
-}
-```
-La grammaire complète et les règles sont décrites dans WODCraft_spec.md (source de vérité).
+## Metcon
+use girls/fran                // la bibliothèque standard
 
-## Fonctionnalités
-
-### 🔍 **Analyse & Validation**
-- **Parser** → AST JSON structuré avec messages d'erreur enrichis
-- **Linter** → validation sémantique spécifique CrossFit :
-  - ✅ Erreurs de syntaxe avec ligne/colonne + suggestions
-  - ⚠️ Avertissements sécurité (charges lourdes, deadlifts haute répétition)
-  - 📊 Analyse structure WOD (équilibre mouvements, domaines temporels)
-  - 🏃 Sémantique mouvements (faisabilité EMOM, validation REST)
-- **Cache intelligent** → 80%+ compilation plus rapide
-
-### ⚙️ **Compilation & Résolution**
-- **Système de modules** → import/override avec versioning
-- **Compilation sessions** → résolution composants vers JSON exécutable
-- **Résolution tracks/genres** → applique variantes du catalogue mouvements
-- **Agrégation équipe** → scoring AMRAP/ForTime/MaxLoad
-
-### 📤 **Export & Timeline**
-- **Génération timeline** → résumés WOD pour coachs
-- **Formats export** → JSON, calendrier ICS, HTML
-- **Agrégation résultats** → analytics performance équipe
-
-## Installation rapide
-- Python 3 recommandé. Environnement isolé:
-  - `make install` (crée `.venv` et installe `requirements.txt`)
-  - ou `pip install -r requirements.txt`
-
-## Utilisation CLI (unifiée)
-
-### 🔍 **Analyse & Validation** (Développement)
-```bash
-# Lint: analyse statique avec validation spécifique CrossFit
-wodc lint examples/wod/progressive_farmer.wod
-# ✓ Vérifie syntaxe, structure, sémantique mouvements
-# ✓ Signale avertissements charges dangereuses, timing impossible
-# ✓ Suggère améliorations pour coaching
-
-# Parse: conversion vers AST structuré (debug)
-wodc parse examples/language/team_realized_session.wod
+## Extra
+EMOM 12
+Odd: 12/10 cal Row            // les valeurs doubles sont hommes/femmes
+Even: 10 Burpee
 ```
 
-### ⚙️ **Compilation & Export** (Production)
-```bash
-# Session: résolution imports & compilation vers JSON exécutable
-wodc session examples/language/team_realized_session.wod --modules-path modules --format json
+Formats : `For time`, `N rounds [for time]`, échelles de reps (`21-15-9`, `3-6-9 ...`), `AMRAP`,
+`EMOM`, `E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, séries de force (`5x5`,
+`5-5-3-3-1`). Labels : `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`,
+`Foundations:`, `Adapted:`. Unités : `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — et
+`m` signifie toujours mètres, jamais minutes.
 
-# Results: agrégation données performance équipe
-wodc results examples/language/team_realized_session.wod --modules-path modules
+Les mots-clés restent en anglais, comme au tableau blanc dans les box francophones ; les noms de
+mouvements, eux, sont reconnus en français comme en anglais (`Tractions`, `Pompes`, `Fentes`…).
 
-# Run: génération résumé timeline pour coachs
-wodc run examples/language/team_realized_session.wod --modules-path modules
+### Nouveautés de la 1.1
+
+```wod
+# Chipper en équipe
+For time, teams of 2, cap 25:00, aller-retour   // A, B, C… puis retour jusqu'à A
+  50 cal Ergo (split)             // ergomètre générique : la machine se choisit au moment du score
+  40 Tractions (split)
+  10 Ring row | Scap pull         // une alternative : l'un ou l'autre
+  1 Wall walk (hold 10 s)         // hold, un modificateur standard
+
+Scaled:
+  Tractions -> 2x Ring row        // un niveau peut changer les quantités, explicitement
+
+Adapted:                          // ce qu'un athlète a réellement fait, appliqué après le niveau
+  Tractions -> Jumping pull-up
 ```
 
-### 🛠️ **Utilitaires**
-```bash
-# Construction catalogue mouvements
-wodc catalog build
+L'ergomètre (`ergo`, `machine`, `ergomètre`), les alternatives (`|`, affichées « ou » en français),
+les quantités de niveau (`-> 2x`, `-> 10`), l'aller-retour (`there and back`, `aller-retour` accepté)
+et `Adapted:` sont spécifiés aux §5, §7.5, §7.6, §9 et §9.1 de la spec. Un document qui n'en utilise
+aucun compile exactement vers le même JSON qu'en 1.0 (toujours marqué `"wodcraft": "1.0"`) ; un
+document qui en utilise un est marqué `"1.1"`. La séance complète du 29 septembre est dans
+[`examples/session-2026-09-29.wod`](examples/session-2026-09-29.wod).
 
-# Validation syntaxe de base (vérification rapide)
-wodc validate examples/language/team_realized_session.wod
-```
+La grammaire complète, la sémantique et tous les diagnostics sont dans **[spec/SPEC.md](spec/SPEC.md)**.
 
-### **Quand utiliser quoi ?**
-
-| **Commande** | **Objectif** | **Cas d'usage** |
-|--------------|-------------|-----------------|
-| `wodc lint` | Analyse statique | **Développement**: détecter erreurs, valider logique CrossFit |
-| `wodc session` | Compilation JSON/ICS | **Production**: générer formats finaux pour apps |
-| `wodc run` | Génération timeline | **Coaching**: aperçu rapide WOD |
-| `wodc results` | Agrégation équipe | **Analyse**: calculer performance équipe |
-
-### **Exemple: Workflow Lint vs Compile**
-
-```bash
-# 1. Pendant développement : lint pour feedback immédiat
-$ wodc lint my_wod.wod
-WARNING: Deadlifts lourds (150kg) - vérifier progression sécurité
-INFO: WOD mouvement unique - considérer options pacing
-✓ Syntaxe WODCraft valide
-
-# 2. Pour production : compilation vers formats exécutables
-$ wodc session my_session.wod --format json
-{
-  "session": {
-    "title": "Focus Force",
-    "components": { ... },
-    "timeline": [ ... ]
-  }
-}
-
-# 3. Pour coaching : timeline rapide
-$ wodc run my_session.wod
-Session: Focus Force
-- Warmup: Mouvement Dynamique — 300s
-- Strength: Back Squat (5x5) — 1200s
-- WOD: AMRAP 12:00 (Push-ups, Air Squats) — 720s
-Total: 2220s (37 minutes)
-```
-
-Raccourcis Makefile: `make help` (venv, install, test, catalog-build, vnext-validate, vnext-session, vnext-results, build-dist).
-
-## Intégration Développeur
-- Installer: `pip install wodcraft`
-- Importer le SDK: `from wodcraft import sdk`
-- Usage courant:
+## API Python
 
 ```python
-from pathlib import Path
-from wodcraft import sdk
+from wodcraft.api import compile_source
+from wodcraft.emit import board
+from wodcraft.profile import Profile
+from wodcraft.semantics.resolve import resolve
 
-text = Path("examples/language/team_realized_session.wod").read_text()
+result = compile_source(open("fran.wod").read())
+if not result.ok:
+    raise SystemExit(result.report())
 
-# Valider
-ok, err = sdk.validate(text)
-if not ok:
-    raise ValueError(err)
-
-# Parser en AST (dict)
-ast = sdk.parse(text)
-
-# Compiler la première session (résolution des modules depuis ./modules)
-compiled = sdk.compile_session(text, modules_path="modules")
-
-# Exporter ICS (nécessite exports.ics dans la session)
-ics_str = sdk.export_ics(compiled)
-
-# Agréger le réalisé d’équipe si présent
-agg = sdk.results(text, modules_path="modules")
-
-# Produire un résumé timeline
-timeline = sdk.run(text, modules_path="modules")
+workout = resolve(result.document, Profile(category="women", units="kg"))
+print(board.render(workout))
+print(workout["score"])          # {'type': 'time', 'capped': 'reps'}
+print(workout["estimate"])       # {'min_s': 202, 'max_s': 374, ...}
 ```
 
-La façade `sdk` offre une surface stable. Pour les usages avancés, les APIs de bas niveau sont sous `wodcraft.lang.core`.
+## Dans votre éditeur
 
-## Tests
-- Lancer: `make test` ou `pytest -q`
-- Couverture incluse: parse, lint (E/W), résolution (catalog/gender), timeline, formatter.
+L'extension VS Code de [`editor/vscode/`](editor/vscode/) colore les fichiers `.wod` toute seule, et
+active les diagnostics en direct, la complétion des mouvements, le survol, le formatage et les
+corrections rapides dès qu'un interpréteur Python avec `wodcraft[lsp]` est disponible. Le serveur de
+langage est `python -m wodcraft.lsp` : n'importe quel éditeur compatible LSP peut s'en servir.
 
-## Spécification et architecture
-- Spécification DSL: voir `WODCraft_spec.md`.
-- CLI unifiée: `src/wodcraft/cli.py` (entrypoint `wodc`).
-- Façade du cœur langage: `src/wodcraft/lang/core.py`.
-- Grammaire/transformer de référence: `wodc_vnext/core.py` (en cours de migration sous `src/`).
-- Exemples sous `examples/` et modules sous `modules/`. Catalogue de mouvements: `data/movements_catalog.json`.
+## Dans une application
 
-## Exemples (Langage / Programmation)
-- `examples/language/programming_plan.wod`: bloc “Coach Programming” minimal
-- `examples/language/team_realized_session.wod`: session avec `team` + `realized` pour l’agrégation
+```bash
+wodc bundle            # catalog.json, library.json et le schéma : 115 Ko à embarquer
+```
 
-## Roadmap
-- Formatter avancé (indentation/blocs), macros et shorthands (`21-15-9`).
-- Versionner la grammaire et `wodc fmt` canonique.
-- Timer exécutable pour usage en box.
+- **Plateformes Apple** — [`swift/WODCraftKit`](swift/WODCraftKit) est un package SwiftPM sans aucune
+  dépendance tierce : le modèle compilé, le compilateur, le catalogue, les 40 benchmarks, le tableau
+  blanc et une timeline qui pilote un timer. Il compile **hors ligne** et passe la même suite de
+  conformité que l'implémentation de référence.
+- **Le reste** — `pip install "wodcraft[service]"` lance un petit service HTTP (`/compile`, `/check`,
+  `/format`, `/show`, `/catalog`, `/library`). Voir [docs/service.md](docs/service.md).
+
+## Pour les agents IA
+
+`wodcraft[mcp]` fournit un serveur MCP qui expose le compilateur lui-même — sans sous-processus ni
+fichier temporaire : `check_wod`, `compile_wod`, `show_wod`, `format_wod`, `timeline_wod`,
+`search_movements`, `library_get`. L'agent rédige un WOD, le compilateur répond par des diagnostics
+précis, l'agent corrige. Voir [docs/mcp.md](docs/mcp.md).
+
+## Le standard
+
+WODCraft est fait pour être réimplémenté par d'autres :
+
+| Élément | Où |
+|---|---|
+| Spécification du langage | [spec/SPEC.md](spec/SPEC.md) (CC BY-SA 4.0) |
+| Schéma du document compilé | [spec/workout.schema.json](spec/workout.schema.json) |
+| Suite de conformité | [spec/conformance/](spec/conformance/) — `.wod` + `.json` ou `.diag` attendus |
+| Catalogue de mouvements | [src/wodcraft/catalog/movements.toml](src/wodcraft/catalog/movements.toml) — 200+ mouvements, alias FR/EN |
+| Bibliothèque de référence | [src/wodcraft/library/](src/wodcraft/library/) — Girls, Heroes, Open |
+| Implémentation de référence | ce dépôt (Apache-2.0) |
+| Seconde implémentation | [`swift/WODCraftKit`](swift/WODCraftKit) — en Swift, validée par la même suite de conformité |
 
 ## Contribuer
-- Lisez `AGENTS.md` (conventions, structure, commandes).
-- Ouvrez des PRs focalisées avec exemples CLI et artefacts d’export.
 
-## 📜 License
+Ajouter un mouvement, un WOD de référence ou un alias français est la porte d'entrée la plus simple :
+modifiez le catalogue ou déposez un `.wod` dans la bibliothèque, puis lancez `pytest`. Les évolutions
+du langage passent d'abord par la spécification.
 
-- **Code (DSL, outils, générateurs)** : [Apache 2.0](./LICENSE)  
-- **Contenus (docs, liste de mouvements, exemples, images/vidéos)** : [CC-BY-SA 4.0](./LICENSE-docs)  
+## Licence
 
-En résumé :  
-Vous pouvez utiliser librement WODCraft dans vos projets, y compris commerciaux, tant que vous citez la source.  
-Les contenus (mouvements, docs, etc.) doivent rester ouverts et sous la même licence CC-BY-SA.
-
----
-
-© 2025 Nicolas Caussin - caussin@aumana-consulting.com
+Code : Apache-2.0. Spécification et documentation : CC BY-SA 4.0 (voir `LICENSE-docs`).

@@ -1,0 +1,198 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "duration_s": 720.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "box_jump",
+          "name": "Box jump",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "height": {
+            "cm": {
+              "men": 60,
+              "women": 50
+            },
+            "in": {
+              "men": 24,
+              "women": 20
+            },
+            "unit": "in",
+            "written": {
+              "men": 24,
+              "women": 20
+            }
+          },
+          "source": {
+            "line": 2,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "wall_ball",
+          "name": "Wall ball",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "load": {
+            "kg": {
+              "men": 9,
+              "women": 6
+            },
+            "lb": {
+              "men": 20,
+              "women": 14
+            },
+            "unit": "lb",
+            "written": {
+              "men": 20,
+              "women": 14
+            }
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  },
+  "levels": {
+    "intermediate": [
+      {
+        "movement": "box_jump",
+        "height": {
+          "cm": {
+            "men": 50,
+            "women": 40
+          },
+          "in": {
+            "men": 20,
+            "women": 16
+          },
+          "unit": "in",
+          "written": {
+            "men": 20,
+            "women": 16
+          }
+        },
+        "source": {
+          "line": 6,
+          "col": 3
+        }
+      }
+    ],
+    "scaled": [
+      {
+        "movement": "box_jump",
+        "replace_with": "step_up",
+        "name": "Step-up",
+        "height": {
+          "cm": {
+            "men": 50,
+            "women": 40
+          },
+          "in": {
+            "men": 20,
+            "women": 16
+          },
+          "unit": "in",
+          "written": {
+            "men": 20,
+            "women": 16
+          }
+        },
+        "source": {
+          "line": 9,
+          "col": 3
+        }
+      },
+      {
+        "movement": "wall_ball",
+        "load": {
+          "kg": {
+            "men": 6,
+            "women": 4
+          },
+          "lb": {
+            "men": 14,
+            "women": 10
+          },
+          "unit": "lb",
+          "written": {
+            "men": 14,
+            "women": 10
+          }
+        },
+        "source": {
+          "line": 10,
+          "col": 3
+        }
+      }
+    ],
+    "foundations": [
+      {
+        "movement": "box_jump",
+        "replace_with": "step_up",
+        "name": "Step-up",
+        "height": {
+          "cm": {
+            "men": 30,
+            "women": 30
+          },
+          "in": {
+            "men": 12,
+            "women": 12
+          },
+          "unit": "in",
+          "written": {
+            "men": 12,
+            "women": 12
+          }
+        },
+        "source": {
+          "line": 13,
+          "col": 3
+        }
+      },
+      {
+        "movement": "wall_ball",
+        "load": {
+          "kg": {
+            "men": 4,
+            "women": 2.5
+          },
+          "lb": {
+            "men": 9,
+            "women": 6
+          },
+          "unit": "lb",
+          "written": {
+            "men": 9,
+            "women": 6
+          }
+        },
+        "source": {
+          "line": 14,
+          "col": 3
+        }
+      }
+    ]
+  }
+}

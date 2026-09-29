@@ -1,0 +1,61 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "reps": [
+        21,
+        18,
+        15,
+        12,
+        9,
+        6,
+        3
+      ],
+      "items": [
+        {
+          "type": "movement",
+          "movement": "thruster",
+          "name": "Thruster",
+          "load": {
+            "kg": {
+              "men": 43,
+              "women": 30
+            },
+            "lb": {
+              "men": 95,
+              "women": 65
+            },
+            "unit": "lb",
+            "written": {
+              "men": 95,
+              "women": 65
+            }
+          },
+          "source": {
+            "line": 2,
+            "col": 3
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "burpee_over_the_bar",
+          "name": "Burpee over the bar",
+          "source": {
+            "line": 3,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

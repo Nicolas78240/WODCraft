@@ -1,0 +1,64 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "duration_s": 1200.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "wall_ball",
+          "name": "Wall ball",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "load": {
+            "kg": {
+              "men": 9,
+              "women": 6
+            },
+            "lb": {
+              "men": 20,
+              "women": 14
+            },
+            "unit": "lb",
+            "written": {
+              "men": 20,
+              "women": 14
+            }
+          },
+          "source": {
+            "line": 2,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "kind": "calories",
+            "cal": 20
+          },
+          "source": {
+            "line": 3,
+            "col": 10
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  },
+  "team": {
+    "size": 2
+  }
+}

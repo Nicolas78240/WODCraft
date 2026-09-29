@@ -1,0 +1,64 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "rounds",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "rounds": 3,
+      "items": [
+        {
+          "type": "amrap",
+          "source": {
+            "line": 2,
+            "col": 3
+          },
+          "duration_s": 240.0,
+          "items": [
+            {
+              "type": "movement",
+              "movement": "burpee",
+              "name": "Burpee",
+              "quantity": {
+                "kind": "reps",
+                "reps": 10
+              },
+              "source": {
+                "line": 3,
+                "col": 8
+              }
+            },
+            {
+              "type": "movement",
+              "movement": "air_squat",
+              "name": "Air squat",
+              "quantity": {
+                "kind": "reps",
+                "reps": 10
+              },
+              "source": {
+                "line": 4,
+                "col": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "rest",
+          "seconds": 60.0,
+          "source": {
+            "line": 5,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "none"
+  }
+}

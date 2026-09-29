@@ -1,0 +1,46 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "rounds",
+      "source": {
+        "line": 1,
+        "col": 1
+      },
+      "rounds": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "air_squat",
+          "name": "Air squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 2,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "push_up",
+          "name": "Push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "none"
+  }
+}

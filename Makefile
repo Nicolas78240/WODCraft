@@ -1,75 +1,53 @@
 PY ?= python3
-WOD ?= examples/language/team_realized_session.wod
-OUT ?= out
 VENV ?= .venv
-PYBIN ?= $(VENV)/bin/python
-PIP ?= $(VENV)/bin/pip
+# works from a checkout without installing: the package lives in src/
+WODC ?= PYTHONPATH=src $(PY) -m wodcraft.cli
 
-.PHONY: help venv install test clean catalog-build vnext-validate vnext-session vnext-results build-dist publish-testpypi publish-pypi fmt-py
+.PHONY: help install test lint bundle swift-resources swift-test check
 
 help:
-	@echo "Available targets:"
-	@echo "  venv            Create virtualenv in $(VENV)"
-	@echo "  install         Install requirements and package (editable)"
-	@echo "  test            Run pytest"
-	@echo "  catalog-build   Build movements catalog -> data/movements_catalog.json"
-	@echo "  vnext-validate  Validate a .wod file (language-first)"
-	@echo "  vnext-session   Compile session to JSON/ICS"
-	@echo "  vnext-results   Aggregate team realized results"
-	@echo "  build-dist      Build sdist+wheel into dist/"
-	@echo "  publish-testpypi  Upload to TestPyPI (requires .pypirc.local)"
-	@echo "  publish-pypi      Upload to PyPI (requires .pypirc.local)"
-	@echo "Variables: file=<path>, modules=<dir>, format=json|ics"
+	@echo "install         create .venv and install the package with its dev extras"
+	@echo "test            pytest"
+	@echo "lint            ruff + mypy"
+	@echo "check           the whole gate: tests, library, schema, lint"
+	@echo "bundle          write the JSON bundle an application embeds (bundle/)"
+	@echo "swift-resources refresh swift/WODCraftKit resources from this implementation"
+	@echo "swift-test      swift test in swift/WODCraftKit"
+	@echo "swift-diff      compile the same sources with both implementations and compare"
 
-$(OUT):
-	@mkdir -p $(OUT)
-
-venv:
-	@test -d $(VENV) || $(PY) -m venv $(VENV)
-	@echo "Virtualenv ready at $(VENV)"
-
-install: venv
-	$(PIP) install -U pip
-	$(PIP) install -r requirements.txt || true
-	$(PIP) install -e .
+install:
+	$(PY) -m venv $(VENV)
+	$(VENV)/bin/pip install -U pip
+	$(VENV)/bin/pip install -e ".[dev,mcp,lsp]"
 
 test:
-	@command -v pytest >/dev/null 2>&1 && pytest -q || echo "pytest not installed or no tests."
+	pytest
 
-clean:
-	@rm -rf $(OUT) dist build *.egg-info
+lint:
+	ruff check src tests
+	ruff format --check src tests
+	mypy
 
-catalog-build:
-	$(PY) -m wodcraft.cli catalog build
+bundle:
+	$(WODC) bundle bundle
 
-vnext-validate:
-	wodc validate $(file)
+check: test
+	$(WODC) check src/wodcraft/library/*/*.wod examples/*.wod
+	$(WODC) fmt --check src/wodcraft/library/*/*.wod examples/*.wod
+	PYTHONPATH=src $(PY) spec/validate_schema.py
+	$(MAKE) lint
 
-vnext-session:
-	wodc session $(file) --modules-path $(or $(modules),modules) --format $(or $(format),json)
+swift-resources:
+	$(WODC) bundle swift/WODCraftKit/Sources/WODCraftKit/Resources
+	@rm -f swift/WODCraftKit/Sources/WODCraftKit/Resources/bundle.json
+	@rm -rf swift/WODCraftKit/Tests/WODCraftKitTests/Resources/conformance
+	@cp -R spec/conformance swift/WODCraftKit/Tests/WODCraftKitTests/Resources/
+	$(PY) scripts/generate_swift_view_fixtures.py
+	@echo "Swift resources refreshed"
 
-vnext-results:
-	wodc results $(file) --modules-path $(or $(modules),modules)
+swift-test:
+	cd swift/WODCraftKit && swift test
 
-build-dist:
-	$(PIP) install build twine
-	$(PYBIN) -m build
-	@echo "Dist built in ./dist"
-
-publish-testpypi:
-	@echo "Using .pypirc.local (TestPyPI)"
-	@TWINE_PASSWORD=$$(awk -F= '/password/ {print $$2}' .pypirc.local | tr -d ' ') $(PYBIN) -m twine upload --repository testpypi dist/* -u __token__
-
-publish-pypi:
-	@echo "Using .pypirc.local (PyPI)"
-	@TWINE_PASSWORD=$$(awk -F= '/password/ {print $$2}' .pypirc.local | tr -d ' ') $(PYBIN) -m twine upload dist/* -u __token__
-
-# Python formatting (if black installed)
-fmt-py:
-	@if command -v black >/dev/null 2>&1; then \
-	  echo "Running system black..."; black src scripts wodc_vnext tests; \
-	elif [ -x "$(VENV)/bin/black" ]; then \
-	  echo "Running venv black..."; $(VENV)/bin/black src scripts wodc_vnext tests; \
-	else \
-	  echo "black not found. Run 'make install' to install dev tools."; \
-	fi
+swift-diff:
+	cd swift/WODCraftKit && swift build -c release --product wodcraftc
+	$(PY) scripts/differential_check.py "$$(cd swift/WODCraftKit && swift build -c release --show-bin-path)/wodcraftc" --cases 400
