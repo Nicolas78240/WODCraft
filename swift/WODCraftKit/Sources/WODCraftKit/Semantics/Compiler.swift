@@ -9,6 +9,8 @@ let baseVersion: String = "1.0"
 let timedKinds: Set<String> = ["for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"]
 let intervalKinds: Set<String> = ["emom", "every"]
 let untimedKinds: Set<String> = ["rounds", "ladder"]
+/// The formats that can be done "there and back" (SPEC §5).
+let thereAndBackKinds: Set<String> = ["for_time", "amrap", "rounds", "ladder"]
 
 let allowedChildren: [String: Set<String>] = {
     var table: [String: Set<String>] = [:]
@@ -343,9 +345,10 @@ func normalizeBlock(_ block: JSONObject) -> JSONObject {
     }
     let childKind: String = child["type"]?.stringValue ?? ""
     guard childKind == "rounds" || childKind == "ladder" else { return out }
-    for blocker in ["cap_s", "duration_s", "teams"] where child.has(blocker) {
+    for blocker in ["cap_s", "duration_s", "teams", "there_and_back"] where child.has(blocker) {
         return out
     }
+    if block.has("there_and_back") { return out }
     var merged: JSONObject = out
     for key in ["rounds", "reps", "reps_open"] where child.has(key) && !merged.has(key) {
         merged[key] = child[key]

@@ -1,0 +1,218 @@
+[
+  {
+    "wodcraft": "1.1",
+    "kind": "workout",
+    "title": "Chipper",
+    "blocks": [
+      {
+        "type": "for_time",
+        "source": {
+          "line": 3,
+          "col": 1
+        },
+        "cap_s": 1500.0,
+        "there_and_back": true,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "row",
+            "name": "Row",
+            "quantity": {
+              "kind": "calories",
+              "cal": 50
+            },
+            "modifiers": [
+              "split"
+            ],
+            "source": {
+              "line": 4,
+              "col": 10
+            }
+          },
+          {
+            "type": "movement",
+            "movement": "pull_up",
+            "name": "Pull-up",
+            "quantity": {
+              "kind": "reps",
+              "reps": 40
+            },
+            "modifiers": [
+              "split"
+            ],
+            "source": {
+              "line": 5,
+              "col": 6
+            }
+          },
+          {
+            "type": "movement",
+            "movement": "wall_walk",
+            "name": "Wall walk",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "modifiers": [
+              "split"
+            ],
+            "source": {
+              "line": 6,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "score": {
+      "type": "time",
+      "capped": "reps",
+      "there_and_back": true
+    },
+    "team": {
+      "size": 2
+    }
+  },
+  {
+    "wodcraft": "1.1",
+    "kind": "workout",
+    "title": "Out and back AMRAP",
+    "blocks": [
+      {
+        "type": "amrap",
+        "source": {
+          "line": 9,
+          "col": 1
+        },
+        "duration_s": 720.0,
+        "there_and_back": true,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "burpee",
+            "name": "Burpee",
+            "quantity": {
+              "kind": "reps",
+              "reps": 5
+            },
+            "source": {
+              "line": 10,
+              "col": 5
+            }
+          },
+          {
+            "type": "movement",
+            "movement": "air_squat",
+            "name": "Air squat",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 11,
+              "col": 6
+            }
+          },
+          {
+            "type": "movement",
+            "movement": "sit_up",
+            "name": "Sit-up",
+            "quantity": {
+              "kind": "reps",
+              "reps": 15
+            },
+            "source": {
+              "line": 12,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "score": {
+      "type": "rounds+reps",
+      "there_and_back": true
+    }
+  },
+  {
+    "wodcraft": "1.1",
+    "kind": "workout",
+    "title": "Two parts",
+    "blocks": [
+      {
+        "type": "for_time",
+        "source": {
+          "line": 15,
+          "col": 1
+        },
+        "rounds": 3,
+        "there_and_back": true,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "push_up",
+            "name": "Push-up",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 16,
+              "col": 6
+            }
+          },
+          {
+            "type": "movement",
+            "movement": "sit_up",
+            "name": "Sit-up",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 17,
+              "col": 6
+            }
+          }
+        ]
+      },
+      {
+        "type": "amrap",
+        "source": {
+          "line": 18,
+          "col": 1
+        },
+        "duration_s": 300.0,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "burpee",
+            "name": "Burpee",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 19,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "score": {
+      "type": "multi",
+      "parts": [
+        {
+          "type": "time",
+          "block": 0,
+          "there_and_back": true
+        },
+        {
+          "type": "rounds+reps",
+          "block": 1
+        }
+      ]
+    }
+  }
+]

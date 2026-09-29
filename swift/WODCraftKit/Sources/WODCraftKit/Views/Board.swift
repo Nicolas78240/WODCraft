@@ -318,6 +318,9 @@ public enum Board {
         if let cap = block.capS, cap != 0 {
             parts.append("cap " + formatClock(cap))
         }
+        if block.thereAndBack == true {
+            parts.append(word("there and back", language))
+        }
         if let teams = block.teams, teams != 0 {
             parts.insert("Teams of " + String(teams), at: 0)
         }

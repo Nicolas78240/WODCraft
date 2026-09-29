@@ -75,4 +75,23 @@ struct LanguageOneOneTests {
             + "  Burpee -> 0x Air squat\n  Pull-up -> 400 m Ring row\n"
         #expect(Self.codes(errors) == ["E014 6", "E035 7", "E033 8"])
     }
+
+    @Test("there and back: the block and the score carry it, the estimate counts the way back")
+    func thereAndBack() throws {
+        let source = "For time, cap 25:00, teams of 2, there and back\n  50 cal Row\n  40 Pull-up\n  10 Wall walk\n"
+        let workout = try Self.workout(source)
+        #expect(workout.wodcraft == "1.1")
+        let block = try #require(workout.blocks.first?.asBlock)
+        #expect(block.thereAndBack == true)
+        #expect(workout.score.thereAndBack == true)
+        #expect(workout.score.capped == .reps)
+        let once = try Self.workout(source.replacingOccurrences(of: ", there and back", with: ""))
+        let there = try #require(workout.estimate)
+        let single = try #require(once.estimate)
+        #expect(there.minS > single.minS * 1.5)
+        #expect(workout.whiteboard(language: .fr).contains("For time · cap 25:00 · aller-retour"))
+        let french = try Self.workout(source.replacingOccurrences(of: "there and back", with: "aller-retour"))
+        #expect(french.blocks.first?.asBlock?.thereAndBack == true)
+        #expect(Self.codes("EMOM 10, there and back\n  5 Burpee\n  5 Air squat\n") == ["E014 1"])
+    }
 }

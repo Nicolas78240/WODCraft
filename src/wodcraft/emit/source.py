@@ -85,7 +85,8 @@ def _merge(block: Block) -> Block:
     """'For time' + a single untimed child becomes one canonical line (SPEC §13)."""
     if block.kind in ("for_time", "amrap") and len(block.children) == 1:
         child = block.children[0]
-        if isinstance(child, Block) and child.kind in ("rounds", "ladder") and not child.cap_s and not child.teams:
+        blocked = child.cap_s or child.teams or child.there_and_back or block.there_and_back if isinstance(child, Block) else True
+        if isinstance(child, Block) and child.kind in ("rounds", "ladder") and not blocked:
             merged = Block(
                 child.kind,
                 block.span,
@@ -142,6 +143,8 @@ def _block_head(block: Block) -> str:
         parts.append(f"teams of {block.teams}")
     if block.cap_s:
         parts.append(f"cap {format_clock(block.cap_s)}")
+    if block.there_and_back:
+        parts.append("there and back")
     return ", ".join(parts)
 
 

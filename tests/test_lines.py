@@ -276,7 +276,7 @@ def test_unknown_option_is_e001_with_the_list_of_options():
     result = compile_wod("AMRAP 10, banana\n  10 Burpee\n")
     diagnostic = only(result)
     assert diagnostic.code == "E001"
-    assert diagnostic.suggestion == "options are: cap, teams of N, for time"
+    assert diagnostic.suggestion == "options are: cap, teams of N, for time, there and back"
 
 
 def test_a_line_with_only_options_is_e010():

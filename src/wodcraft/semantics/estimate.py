@@ -117,6 +117,8 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
         return float(block["interval_s"]) * float(block["rounds"])
 
     items = block.get("items", [])
+    if block.get("there_and_back"):
+        items = items + items[-2::-1]  # the list, then back without its last line (SPEC §5)
     # "Rest" as the last item of a repeated block happens between rounds only
     rounds = float(block.get("rounds") or 1)
     reps = block.get("reps")
@@ -152,6 +154,8 @@ def rest_seconds(block: dict) -> float:
             return rest * max(0, len(sets["reps"]) - 1)
         return 0.0
     items = block.get("items", [])
+    if block.get("there_and_back"):
+        items = items + items[-2::-1]
     inner = sum(rest_seconds(i) for i in items)
     rounds = float(block.get("rounds") or 1)
     reps = block.get("reps")

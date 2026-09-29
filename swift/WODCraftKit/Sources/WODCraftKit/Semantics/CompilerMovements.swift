@@ -432,6 +432,9 @@ extension Compiler {
                 var part = JSONObject()
                 part["type"] = .string(scoreByFormat[kind] ?? "none")
                 part["block"] = .number(Double(index))
+                if case .bool(true)? = blocks[index]["there_and_back"] {
+                    part["there_and_back"] = .bool(true)
+                }
                 parts.append(.object(part))
             }
             var out = JSONObject()
@@ -484,6 +487,10 @@ extension Compiler {
         }
         if let tiebreak = meta["tiebreak"], !tiebreak.isNull {
             out["tiebreak"] = tiebreak
+        }
+        if case .bool(true)? = main?["there_and_back"], out["type"]?.stringValue != "none" {
+            // a round is the whole path, and a capped athlete counts the reps done along it
+            out["there_and_back"] = .bool(true)
         }
         return out
     }

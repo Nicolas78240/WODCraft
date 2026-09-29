@@ -420,3 +420,26 @@ def test_names_aliases_and_plurals_resolve_to_the_catalog_id(written, movement_i
 def test_the_canonical_name_is_stored_next_to_the_id():
     item = first_item("For time\n  10 t2b\n")
     assert (item["movement"], item["name"]) == ("toes_to_bar", "Toes-to-bar")
+
+
+THERE_AND_BACK = "For time, cap 25:00, teams of 2, there and back\n  50 cal Row\n  40 Pull-up\n  10 Wall walk\n"
+
+
+def test_there_and_back_is_a_block_option_that_the_score_carries():
+    document = compile_wod(THERE_AND_BACK).document
+    block = document["blocks"][0]
+    assert block["there_and_back"] is True
+    assert document["score"] == {"type": "time", "capped": "reps", "there_and_back": True}
+    assert document["wodcraft"] == "1.1"
+    assert compile_wod(THERE_AND_BACK.replace("there and back", "aller-retour")).document["blocks"][0]["there_and_back"]
+
+
+def test_there_and_back_counts_the_whole_path_in_the_estimate():
+    there = compile_wod(THERE_AND_BACK, estimate=True).document["estimate"]
+    once = compile_wod(THERE_AND_BACK.replace(", there and back", ""), estimate=True).document["estimate"]
+    assert there["min_s"] > once["min_s"] * 1.5
+
+
+def test_there_and_back_does_not_merge_a_ladder_into_its_parent():
+    block = compile_wod("For time, there and back\n  21-15-9\n    Thruster 43/30 kg\n    Pull-up\n").document["blocks"][0]
+    assert block["there_and_back"] and block["items"][0]["type"] == "ladder"

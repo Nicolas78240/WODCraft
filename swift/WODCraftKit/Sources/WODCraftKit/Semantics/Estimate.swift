@@ -100,6 +100,14 @@ enum Estimator {
         return nil
     }
 
+    /// The items of a block in the order they are done: "there and back" adds the way back,
+    /// without repeating the last line (SPEC §5).
+    static func path(of block: JSONObject) -> [JSONObject] {
+        let list: [JSONObject] = items(of: block)
+        guard case .bool(true)? = block["there_and_back"], list.count > 1 else { return list }
+        return list + list.dropLast().reversed()
+    }
+
     /// Seconds of the first `hold DURATION` modifier (`hold 10 s`, `hold 0:30`), 0 without one.
     static func holdSeconds(_ modifiers: [String]) -> Double {
         for modifier in modifiers {
@@ -143,7 +151,7 @@ enum Estimator {
             return interval * rounds
         }
 
-        let children: [JSONObject] = items(of: block)
+        let children: [JSONObject] = path(of: block)
         // "Rest" as the last item of a repeated block happens between rounds only
         let rounds: Double = block["rounds"]?.doubleValue ?? 1
         let reps: [JSONValue]? = block["reps"]?.arrayValue
@@ -187,7 +195,7 @@ enum Estimator {
             }
             return 0.0
         }
-        let children: [JSONObject] = items(of: block)
+        let children: [JSONObject] = path(of: block)
         let inner: Double = children.reduce(0.0) { $0 + restSeconds($1) }
         let rounds: Double = block["rounds"]?.doubleValue ?? 1
         if let reps = block["reps"]?.arrayValue, !reps.isEmpty {

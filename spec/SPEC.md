@@ -136,7 +136,7 @@ Any other combination is an error (`E015`).
 
 ## 5. Format lines
 
-`FORMAT [, OPTION]*`. Options: `cap DURATION`, `teams of N`, `for time`.
+`FORMAT [, OPTION]*`. Options: `cap DURATION`, `teams of N`, `for time`, `there and back`.
 
 | Format | Syntax | Semantics |
 |---|---|---|
@@ -156,6 +156,23 @@ Any other combination is an error (`E015`).
 A rep ladder MAY use any number of values (`10-9-8-7-6-5-4-3-2-1`). An **open ladder** ends with `...`
 and MUST have a constant step: `3-6-9 ...` means 3, 6, 9, 12… until the cap is reached (`E035` otherwise).
 `Teams of N` MUST only appear on the outermost format line of a workout.
+
+**There and back** (1.1; French `aller-retour` is accepted and written back as `there and back`)
+applies to `For time`, `AMRAP`, `N rounds` and rep ladders: the list is done in order, then in reverse
+order back to the first line, **without repeating the last one**. Lines A, B, C are done
+A, B, C, B, A — one round of an AMRAP is that whole path. On any other format it is an error
+(`E014`).
+
+```wod
+For time, cap 25:00, teams of 2, there and back
+  50 cal Row (split)
+  40 Pull-up (split)
+  10 Wall walk (split)
+```
+
+The score (§12) carries `there_and_back: true`: a round is the whole path, and an athlete stopped
+by the cap counts the reps done along it (50 + 40 + 10 + 40 + 50 reps and calories for the path
+above). Duration estimates count the whole path.
 
 ## 6. Label and meta lines
 

@@ -301,3 +301,14 @@ def test_an_open_ended_segment_is_marked_with_a_tilde():
 def test_a_zero_length_segment_is_shown_as_a_dash():
     rendered = render_timeline([{"at_s": 0, "duration_s": 0, "label": "x"}])
     assert "—" in rendered
+
+
+def test_the_french_board_says_aller_retour_and_ou():
+    from conftest import compile_wod
+    from wodcraft.emit import board
+
+    document = compile_wod("For time, there and back\n  10 Ring row | Scap pull\n  5 Burpee\n").document
+    french = board.render(document, lang="fr")
+    assert "For time · aller-retour" in french
+    assert "10 Tirage aux anneaux ou 10 Traction scapulaire" in french
+    assert "there and back" in board.render(document)

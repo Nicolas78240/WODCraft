@@ -153,6 +153,18 @@ extension Compiler {
         } else if let minute = node.slotMinute {
             out["slot"] = .number(Double(minute))
         }
+        if node.thereAndBack {
+            if thereAndBackKinds.contains(kind) {
+                out["there_and_back"] = .bool(true)
+            } else {
+                err(
+                    "E014",
+                    "'there and back' does not apply to \(humanName(kind)).",
+                    node.span,
+                    "use it on For time, AMRAP, N rounds or a rep ladder"
+                )
+            }
+        }
         if let teams = node.teams {
             if parent != "root" {
                 err("E014", "'Teams of N' is only allowed on the main format line.", node.span)

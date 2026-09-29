@@ -225,3 +225,11 @@ def test_level_quantities_survive_formatting():
 
     text = "For time\n  20 Pull-up\n  10 Burpee\n\nScaled:\n  Pull-up -> 2x Ring row\n  Burpee -> 15 Air squat\n"
     assert format_source(parse_source(text)[0]) == text
+
+
+def test_there_and_back_is_written_back_in_english():
+    from wodcraft.emit.source import format_source
+    from wodcraft.syntax.parser import parse_source
+
+    text = "For time, cap 25:00, aller-retour\n  50 cal Row\n  10 Wall walk\n"
+    assert format_source(parse_source(text)[0]).splitlines()[0] == "For time, cap 25:00, there and back"

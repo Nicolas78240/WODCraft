@@ -167,6 +167,8 @@ public struct Block: Codable, Equatable, Sendable {
     public var capS: Double?
     public var teams: Int?
     public var slot: Slot?
+    /// 1.1 — the items in order, then back to the first one without repeating the last.
+    public var thereAndBack: Bool?
     public var used: UsedFrom?
     public var items: [Item]
     public var source: SourceSpan?
@@ -296,12 +298,17 @@ public struct Score: Codable, Equatable, Sendable {
         public var type: Kind
         /// Index of the block this part scores.
         public var block: Int
+        /// 1.1 — that block is done there and back.
+        public var thereAndBack: Bool?
     }
 
     public var type: Kind
     /// What an athlete who hits the cap scores instead.
     public var capped: Kind?
     public var tiebreak: String?
+    /// 1.1 — the scored block is done there and back: a round is the whole path, and a capped
+    /// athlete counts the reps done along it.
+    public var thereAndBack: Bool?
     public var parts: [Part]?
 }
 

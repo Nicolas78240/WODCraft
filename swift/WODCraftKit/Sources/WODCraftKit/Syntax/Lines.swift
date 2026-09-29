@@ -269,13 +269,20 @@ func parseFormat(_ line: SourceLine, _ tokens: [Token], _ file: String?) throws 
                 throw LineError("E001", "Expected 'for time'.", segment[0].col, segment[segment.count - 1].endCol)
             }
             block.forTime = true
+        } else if cur.acceptWord("there") != nil {
+            guard cur.acceptWord("and") != nil, cur.acceptWord("back") != nil else {
+                throw LineError("E001", "Expected 'there and back'.", segment[0].col, segment[segment.count - 1].endCol)
+            }
+            block.thereAndBack = true
+        } else if cur.acceptWord("aller-retour") != nil {
+            block.thereAndBack = true
         } else {
             throw LineError(
                 "E001",
                 "Unknown option '\(segment[0].text)'.",
                 segment[0].col,
                 segment[segment.count - 1].endCol,
-                "options are: cap, teams of N, for time"
+                "options are: cap, teams of N, for time, there and back"
             )
         }
         try cur.expectEnd()

@@ -1867,6 +1867,61 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "there_and_back[0]",
+  "board": "CHIPPER\nTeams of 2 · For time · cap 25:00 · there and back\n  50 cal Row ......................... (split)\n  40 Pull-up ......................... (split)\n  10 Wall walk ....................... (split)\nScore: time (capped: reps)",
+  "boardFr": "CHIPPER\nTeams of 2 · For time · cap 25:00 · aller-retour\n  50 cal Rameur ...................... (split)\n  40 Traction ........................ (split)\n  10 Montée au mur ................... (split)\nScore: time (capped: reps)",
+  "markdown": "# Chipper\n\n```\nFor time · cap 25:00 · there and back\n  50 cal Row ................... (split)\n  40 Pull-up ................... (split)\n  10 Wall walk ................. (split)\n```\n\n**Score** — time\n",
+  "timer": "    0:00   25:00  For time · cap 25:00 · there and back: 50 cal Row (split) + 40 Pull-up (split) + 10 Wall walk (split)\n           25:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1500.0,
+    "label": "For time · cap 25:00 · there and back: 50 cal Row (split) + 40 Pull-up (split) + 10 Wall walk (split)",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
+  "path": "there_and_back[1]",
+  "board": "OUT AND BACK AMRAP\nAMRAP 12:00 · there and back\n  5 Burpee\n  10 Air squat\n  15 Sit-up\nScore: rounds + reps",
+  "boardFr": "OUT AND BACK AMRAP\nAMRAP 12:00 · aller-retour\n  5 Burpee\n  10 Squat à vide\n  15 Relevé de buste\nScore: rounds + reps",
+  "markdown": "# Out and back AMRAP\n\n```\nAMRAP 12:00 · there and back\n  5 Burpee\n  10 Air squat\n  15 Sit-up\n```\n\n**Score** — rounds + reps\n",
+  "timer": "    0:00   12:00  AMRAP 12:00 · there and back: 5 Burpee + 10 Air squat + 15 Sit-up\n           12:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 720.0,
+    "label": "AMRAP 12:00 · there and back: 5 Burpee + 10 Air squat + 15 Sit-up",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
+  "path": "there_and_back[2]",
+  "board": "TWO PARTS\n3 rounds for time · there and back\n  10 Push-up\n  10 Sit-up\nAMRAP 5:00\n  10 Burpee\nScore: one score per part",
+  "boardFr": "TWO PARTS\n3 rounds for time · aller-retour\n  10 Pompe\n  10 Relevé de buste\nAMRAP 5:00\n  10 Burpee\nScore: one score per part",
+  "markdown": "# Two parts\n\n```\n3 rounds for time · there and back\n  10 Push-up\n  10 Sit-up\nAMRAP 5:00\n  10 Burpee\n```\n\n**Score** — one score per part\n",
+  "timer": "    0:00       —~ 3 rounds for time · there and back: 10 Push-up + 10 Sit-up\n    0:00    5:00  AMRAP 5:00: 10 Burpee\n            5:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 0,
+    "label": "3 rounds for time · there and back: 10 Push-up + 10 Sit-up",
+    "kind": "work",
+    "openEnded": true
+   },
+   {
+    "at": 0.0,
+    "duration": 300.0,
+    "label": "AMRAP 5:00: 10 Burpee",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "units_default_lb",
   "board": "For time\n  21 Thruster .......................... 95 lb\n  21 Pull-up\nScore: time",
   "boardFr": "For time\n  21 Thruster .......................... 95 lb\n  21 Traction\nScore: time",

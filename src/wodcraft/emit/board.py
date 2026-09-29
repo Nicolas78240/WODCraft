@@ -163,6 +163,8 @@ def _head(block: dict, lang: str = "en") -> str:
         return "Cash-out:"
     if block.get("cap_s"):
         parts.append(f"cap {format_clock(block['cap_s'])}")
+    if block.get("there_and_back"):
+        parts.append(word("there and back", lang))
     if block.get("teams"):
         parts.insert(0, f"Teams of {block['teams']}")
     used = block.get("used")

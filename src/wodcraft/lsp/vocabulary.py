@@ -35,6 +35,7 @@ FORMATS: tuple[tuple[str, str, str], ...] = (
     ("for time", "option", "Puts an `N rounds` or ladder block on the clock."),
     ("cap ", "option · duration", "Time cap: `For time, cap 10:00`."),
     ("teams of ", "option · N", "Team size; only on the outermost format line."),
+    ("there and back", "option", "The list in order, then back without repeating the last line (A B C B A)."),
     ("Rest ", "rest line", "A timed pause: `Rest 2:00`."),
     ("use ", "use line", "Insert a workout from the library: `use girls/fran`."),
 )

@@ -29,6 +29,7 @@ LATEST_VERSION = SPEC_VERSION  # the language this compiler implements
 TIMED = {"for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"}
 INTERVALS = {"emom", "every"}
 UNTIMED = {"rounds", "ladder"}
+THERE_AND_BACK = {"for_time", "amrap", "rounds", "ladder"}
 ALLOWED_CHILDREN = {
     "rounds": TIMED | UNTIMED | {"buy_in", "cash_out"},
     "ladder": TIMED | UNTIMED,
@@ -285,6 +286,16 @@ class Compiler:
             out["reps_open"] = True
         if block.slot is not None:
             out["slot"] = block.slot
+        if block.there_and_back:
+            if kind not in THERE_AND_BACK:
+                self._err(
+                    "E014",
+                    f"'there and back' does not apply to {_human(kind)}.",
+                    block.span,
+                    "use it on For time, AMRAP, N rounds or a rep ladder",
+                )
+            else:
+                out["there_and_back"] = True
         if block.teams is not None:
             if parent != "root":
                 self._err("E014", "'Teams of N' is only allowed on the main format line.", block.span)
@@ -610,7 +621,7 @@ class Compiler:
         if len(parts) > 1 and "score" not in meta:
             return {
                 "type": "multi",
-                "parts": [{"type": SCORE_BY_FORMAT.get(b["type"], "none"), "block": i} for i, b in enumerate(blocks) if b in parts],
+                "parts": [_part(b, i) for i, b in enumerate(blocks) if b in parts],
             }
         main = blocks[0] if blocks else None
         kind = main["type"] if main else "none"
@@ -639,12 +650,22 @@ class Compiler:
             score["capped"] = "reps"
         if meta.get("tiebreak"):
             score["tiebreak"] = meta["tiebreak"]
+        if main and main.get("there_and_back") and score["type"] != "none":
+            # a round is the whole path, and a capped athlete counts the reps done along it
+            score["there_and_back"] = True
         return score
 
     # ------------------------------------------------------------------ helpers
 
     def _err(self, code: str, message: str, span: Span, suggestion: str | None = None) -> None:
         self.diags.add(code, message, Span(span.line, span.col, span.end_col, self.file), suggestion)
+
+
+def _part(block: dict, index: int) -> dict:
+    part: dict = {"type": SCORE_BY_FORMAT.get(block["type"], "none"), "block": index}
+    if block.get("there_and_back"):
+        part["there_and_back"] = True
+    return part
 
 
 def compiled_version(workout: dict) -> str:
@@ -731,7 +752,8 @@ def _normalize_block(block: dict) -> dict:
     block["items"] = [_normalize_block(i) if i.get("type") in ALLOWED_CHILDREN else i for i in block["items"]]
     if block["type"] in ("for_time", "amrap") and len(block["items"]) == 1:
         child = block["items"][0]
-        if child.get("type") in ("rounds", "ladder") and not {"cap_s", "duration_s", "teams"} & set(child):
+        blocked = {"cap_s", "duration_s", "teams", "there_and_back"} & set(child) or block.get("there_and_back")
+        if child.get("type") in ("rounds", "ladder") and not blocked:
             merged = dict(block)
             for key in ("rounds", "reps", "reps_open"):
                 if key in child and key not in merged:

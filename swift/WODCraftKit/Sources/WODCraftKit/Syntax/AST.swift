@@ -163,6 +163,8 @@ final class BlockNode: Statement {
     var slotName: String?
     /// N for "Min N:"
     var slotMinute: Int?
+    /// "there and back": the list in order, then back without the last line
+    var thereAndBack: Bool = false
     var isLabel: Bool = false
 
     init(_ kind: String, _ span: Span) {

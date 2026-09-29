@@ -206,9 +206,19 @@ def parse_format(line: Line, tokens: list[Token], file: str | None) -> Block:
             if not cur.accept_word("time"):
                 raise LineError("E001", "Expected 'for time'.", seg[0].col, seg[-1].end_col)
             block.for_time = True
+        elif cur.accept_word("there"):
+            if not (cur.accept_word("and") and cur.accept_word("back")):
+                raise LineError("E001", "Expected 'there and back'.", seg[0].col, seg[-1].end_col)
+            block.there_and_back = True
+        elif cur.accept_word("aller-retour"):
+            block.there_and_back = True
         else:
             raise LineError(
-                "E001", f"Unknown option {seg[0].text!r}.", seg[0].col, seg[-1].end_col, "options are: cap, teams of N, for time"
+                "E001",
+                f"Unknown option {seg[0].text!r}.",
+                seg[0].col,
+                seg[-1].end_col,
+                "options are: cap, teams of N, for time, there and back",
             )
         cur.expect_end()
     return block
