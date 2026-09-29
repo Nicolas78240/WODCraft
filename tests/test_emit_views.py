@@ -312,3 +312,11 @@ def test_the_french_board_says_aller_retour_and_ou():
     assert "For time · aller-retour" in french
     assert "10 Tirage aux anneaux ou 10 Traction scapulaire" in french
     assert "there and back" in board.render(document)
+
+
+def test_an_amrap_ladder_shows_its_reps_on_the_board():
+    from conftest import compile_wod
+    from wodcraft.emit import board
+
+    document = compile_wod("AMRAP 5:00\n  1-2-3 ...\n    Wall walk\n    Pull-up\n").document
+    assert board.render(document).splitlines()[0] == "AMRAP 5:00 · 1-2-3 …"

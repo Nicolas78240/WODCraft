@@ -304,6 +304,9 @@ public enum Board {
             }
         case .amrap:
             parts.append("AMRAP " + formatClock(block.durationS ?? 0))
+            if !ladder.isEmpty {  // a ladder merged into its AMRAP (SPEC §13): the reps still belong on the board
+                parts.append(ladder + (repsOpen ? " …" : ""))
+            }
         case .emom:
             let interval = Int((block.intervalS ?? 60) / 60)
             let name = interval <= 1 ? "EMOM" : "E" + String(interval) + "MOM"

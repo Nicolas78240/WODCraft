@@ -160,6 +160,8 @@ def _head(block: dict, lang: str = "en") -> str:
         parts.append((core + " for time").strip() if core else "For time")
     elif kind == "amrap":
         parts.append(f"AMRAP {format_clock(block.get('duration_s', 0))}")
+        if ladder:  # a ladder merged into its AMRAP (SPEC §13): the reps still belong on the board
+            parts.append(ladder + (" …" if block.get("reps_open") else ""))
     elif kind == "emom":
         interval = int((block.get("interval_s") or 60) // 60)
         parts.append(("EMOM" if interval <= 1 else f"E{interval}MOM") + f" {format_clock(block.get('duration_s', 0))}")
