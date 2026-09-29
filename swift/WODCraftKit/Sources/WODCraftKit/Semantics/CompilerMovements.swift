@@ -57,50 +57,8 @@ extension Compiler {
         }
 
         if let quantity {
-            var kind: String = quantity.kind == "max" && quantity.unit == nil ? "reps" : quantity.kind
-            if quantity.kind == "max" {
-                switch quantity.unit {
-                case "cal": kind = "calories"
-                case "m": kind = "distance"
-                default: kind = "reps"
-                }
-            }
-            if !entry.quantities.contains(kind) {
-                let measured: String = entry.quantities.map(quantityWord).joined(separator: " or ")
-                err(
-                    "E033",
-                    "\(entry.name) is not measured in \(quantityWord(kind)).",
-                    quantity.span,
-                    "it is measured in " + measured
-                )
-            } else if quantity.kind == "max" || quantity.value == nil {
-                var out2 = JSONObject()
-                out2["kind"] = .string("max")
-                out2["of"] = .string(kind)
-                out["quantity"] = .object(out2)
-            } else if kind == "distance" {
-                var measure: JSONObject = Measures.distanceToJSON(quantity.value!, quantity.unit ?? "m")
-                measure["kind"] = .string("distance")
-                out["quantity"] = .object(measure)
-                checkDistance(measure, entry, quantity.span)
-            } else if kind == "calories" {
-                var measure = JSONObject()
-                measure["kind"] = .string("calories")
-                measure["cal"] = Measures.amount(quantity.value!)
-                out["quantity"] = .object(measure)
-            } else if kind == "time" {
-                var measure = JSONObject()
-                measure["kind"] = .string("time")
-                measure["s"] = Measures.amount(quantity.value!)
-                out["quantity"] = .object(measure)
-            } else {
-                var measure = JSONObject()
-                measure["kind"] = .string("reps")
-                measure["reps"] = Measures.amount(quantity.value!)
-                out["quantity"] = .object(measure)
-                if max(quantity.value!.men, quantity.value!.women) > 1000 {
-                    err("W105", "That is a lot of reps — is the number right?", quantity.span)
-                }
+            if let compiled = compileQuantity(quantity, entry) {
+                out["quantity"] = .object(compiled)
             }
         } else if mv.sets == nil,
                   !["ladder", "max_load", "death_by", "tabata"].contains(parent),
@@ -123,6 +81,57 @@ extension Compiler {
         }
         out["source"] = sourceDict(mv.nameSpan)
         return out
+    }
+
+    /// The compiled quantity of a movement line, checked against its catalog entry.
+    func compileQuantity(_ quantity: QuantityNode, _ entry: MovementEntry) -> JSONObject? {
+        var out = JSONObject()
+        var kind: String = quantity.kind == "max" && quantity.unit == nil ? "reps" : quantity.kind
+        if quantity.kind == "max" {
+            switch quantity.unit {
+            case "cal": kind = "calories"
+            case "m": kind = "distance"
+            default: kind = "reps"
+            }
+        }
+        if !entry.quantities.contains(kind) {
+            let measured: String = entry.quantities.map(quantityWord).joined(separator: " or ")
+            err(
+                "E033",
+                "\(entry.name) is not measured in \(quantityWord(kind)).",
+                quantity.span,
+                "it is measured in " + measured
+            )
+        } else if quantity.kind == "max" || quantity.value == nil {
+            var out2 = JSONObject()
+            out2["kind"] = .string("max")
+            out2["of"] = .string(kind)
+            out["quantity"] = .object(out2)
+        } else if kind == "distance" {
+            var measure: JSONObject = Measures.distanceToJSON(quantity.value!, quantity.unit ?? "m")
+            measure["kind"] = .string("distance")
+            out["quantity"] = .object(measure)
+            checkDistance(measure, entry, quantity.span)
+        } else if kind == "calories" {
+            var measure = JSONObject()
+            measure["kind"] = .string("calories")
+            measure["cal"] = Measures.amount(quantity.value!)
+            out["quantity"] = .object(measure)
+        } else if kind == "time" {
+            var measure = JSONObject()
+            measure["kind"] = .string("time")
+            measure["s"] = Measures.amount(quantity.value!)
+            out["quantity"] = .object(measure)
+        } else {
+            var measure = JSONObject()
+            measure["kind"] = .string("reps")
+            measure["reps"] = Measures.amount(quantity.value!)
+            out["quantity"] = .object(measure)
+            if max(quantity.value!.men, quantity.value!.women) > 1000 {
+                err("W105", "That is a lot of reps — is the number right?", quantity.span)
+            }
+        }
+        return out["quantity"]?.objectValue
     }
 
     func param(_ out: inout JSONObject, _ original: ParamNode, _ entry: MovementEntry) {
@@ -392,7 +401,18 @@ extension Compiler {
             self.param(&params, param, target)
         }
         if let quantity = mv.quantity {
-            err("E014", "A level block does not change quantities.", quantity.span)
+            err(
+                "E014",
+                "A level block only changes quantities after the arrow.",
+                quantity.span,
+                "e.g. '\(entry.name) -> 2x \(target.name)'"
+            )
+        }
+        if let factor = mv.factor {
+            operation["factor"] = .number(factor)
+        }
+        if let replaceQuantity = mv.replaceQuantity, let quantity = compileQuantity(replaceQuantity, target) {
+            operation["quantity"] = .object(quantity)
         }
         for key in params.keys {
             operation[key] = params[key]

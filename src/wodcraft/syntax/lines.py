@@ -498,6 +498,16 @@ def _parse_one_movement(line: Line, tokens: list[Token], file: str | None, allow
         arrow = cur.next()
         if not allow_replace:
             raise LineError("E014", "'->' is only allowed in a level block (Scaled:, …).", arrow.col, arrow.end_col)
+        # "A -> 2x B" multiplies the quantities, "A -> 10 B" sets them (SPEC §9)
+        tok, after = cur.peek(), cur.peek(1)
+        if tok is not None and tok.kind == "NUM" and after is not None and after.is_word("x") and after.glued:
+            cur.next()
+            cur.next()
+            mv.factor = _number(tok)
+            if mv.factor <= 0:
+                raise LineError("E035", "A factor must be greater than zero.", tok.col, after.end_col)
+        else:
+            mv.replace_quantity = _parse_quantity(cur, file)
         rname, r0, r1 = _parse_name(cur)
         mv.replace_with, mv.replace_span = rname, Span(line.number, r0, r1, file)
         mv.sets = _parse_sets(cur, file) or mv.sets

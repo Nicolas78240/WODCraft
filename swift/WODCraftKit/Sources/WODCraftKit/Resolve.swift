@@ -180,6 +180,8 @@ struct Resolver {
             if let percent = operation.percent { item.percent = percent }
             if let rpe = operation.rpe { item.rpe = rpe }
             if let bodyweight = operation.bodyweight { item.bodyweight = bodyweight }
+            if let quantity = operation.quantity { item.quantity = quantity }
+            if let factor = operation.factor { multiply(&item, by: factor) }
             break
         }
 
@@ -195,6 +197,28 @@ struct Resolver {
             item.or = options.map { movement($0, operations: operations) }
         }
         return item
+    }
+
+    /// `A -> 2x B`: the quantity is multiplied; a movement that takes its reps from a ladder keeps
+    /// the factor, and does factor × the ladder value.
+    func multiply(_ item: inout Movement, by factor: Double) {
+        guard var quantity = item.quantity, quantity.kind != .max else {
+            item.factor = tidy(factor * (item.factor ?? 1))
+            return
+        }
+        func scaled(_ amount: Amount?) -> Amount? {
+            switch amount {
+            case let .single(value)?: return .single(tidy(value * factor))
+            case let .dual(men, women)?: return .dual(men: tidy(men * factor), women: tidy(women * factor))
+            case nil: return nil
+            }
+        }
+        quantity.reps = scaled(quantity.reps)
+        quantity.cal = scaled(quantity.cal)
+        quantity.s = scaled(quantity.s)
+        quantity.m = scaled(quantity.m)
+        quantity.written = scaled(quantity.written)
+        item.quantity = quantity
     }
 
     func matches(_ item: Movement, _ when: LevelOperation.When) -> Bool {

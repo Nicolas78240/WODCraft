@@ -217,3 +217,11 @@ def test_a_single_line_foundations_block_survives_formatting():
     once = fmt(source)
 
     assert compile_wod(once).ok, compile_wod(once).report()
+
+
+def test_level_quantities_survive_formatting():
+    from wodcraft.emit.source import format_source
+    from wodcraft.syntax.parser import parse_source
+
+    text = "For time\n  20 Pull-up\n  10 Burpee\n\nScaled:\n  Pull-up -> 2x Ring row\n  Burpee -> 15 Air squat\n"
+    assert format_source(parse_source(text)[0]) == text

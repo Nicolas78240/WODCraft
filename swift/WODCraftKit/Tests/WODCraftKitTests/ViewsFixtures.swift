@@ -1410,6 +1410,22 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "levels_quantities",
+  "board": "AMRAP 5:00\n  1-2-3 …\n    Wall walk\n    Chest-to-bar pull-up ............ (strict)\n  10 cal Row\nScore: rounds + reps\nLevels: intermediate, scaled",
+  "boardFr": "AMRAP 5:00\n  1-2-3 …\n    Montée au mur\n    Traction poitrine-barre ......... (strict)\n  10 cal Rameur\nScore: rounds + reps\nLevels: intermediate, scaled",
+  "markdown": "# Workout\n\n```\nAMRAP 5:00\n  1-2-3 …\n    Wall walk\n    Chest-to-bar pull-up ...... (strict)\n  10 cal Row\n```\n\n**Score** — rounds + reps\n",
+  "timer": "    0:00    5:00  AMRAP 5:00: 1-2-3 … Wall walk + Chest-to-bar pull-up (strict) + 10 cal Row\n            5:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 300.0,
+    "label": "AMRAP 5:00: 1-2-3 … Wall walk + Chest-to-bar pull-up (strict) + 10 cal Row",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "levels_scaled",
   "board": "21-15-9 for time\n  Thruster .......................... 95/65 lb\n  Pull-up\nScore: time\nLevels: scaled",
   "boardFr": "21-15-9 for time\n  Thruster .......................... 95/65 lb\n  Traction\nScore: time\nLevels: scaled",

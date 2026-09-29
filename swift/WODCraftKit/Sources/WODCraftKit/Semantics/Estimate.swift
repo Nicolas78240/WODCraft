@@ -161,7 +161,8 @@ enum Estimator {
                 if type(of: item) == "movement", item["quantity"] == nil {
                     let entry: MovementEntry? = catalog.movements[item["movement"]?.stringValue ?? ""]
                     let pace: Double = entry?.pace(for: "reps") ?? defaultRepPace
-                    perRepCost += pace * loadFactor(item, entry) + declaredHold(item)
+                    let factor: Double = item["factor"]?.doubleValue ?? 1
+                    perRepCost += (pace * loadFactor(item, entry) + declaredHold(item)) * factor
                 } else {
                     fixed += blockSeconds(item, catalog)
                 }

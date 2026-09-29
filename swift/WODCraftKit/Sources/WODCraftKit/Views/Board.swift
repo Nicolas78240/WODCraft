@@ -342,7 +342,8 @@ public enum Board {
             return texts.joined(separator: " " + word("or", language) + " ")
         }
         var leftParts: [String] = []
-        let quantity = quantityText(item.quantity)
+        var quantity = quantityText(item.quantity)
+        if quantity.isEmpty, let factor = item.factor, factor != 0 { quantity = fmtNum(factor) + "x" }
         if !quantity.isEmpty { leftParts.append(quantity) }
         if !item.name.isEmpty { leftParts.append(item.name) }
         let left = leftParts.joined(separator: " ")

@@ -176,7 +176,8 @@ def _movement(item: dict, width: int, dots: bool = True, lang: str = "en") -> st
         options = [_movement({k: v for k, v in item.items() if k != "or"}, 0, dots=False)]
         options += [_movement(option, 0, dots=False) for option in item["or"]]
         return f" {word('or', lang)} ".join(options)
-    left = " ".join(x for x in (_quantity(item.get("quantity")), item.get("name", item.get("movement", "?"))) if x)
+    quantity = _quantity(item.get("quantity")) or (f"{fmt_num(item['factor'])}x" if item.get("factor") else "")
+    left = " ".join(x for x in (quantity, item.get("name", item.get("movement", "?"))) if x)
     right_parts = []
     if item.get("sets"):
         right_parts.append(_sets(item["sets"]))

@@ -85,6 +85,11 @@
           "required": ["reps"]
         },
         "modifiers": { "type": "array", "items": { "type": "string" } },
+        "factor": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "1.1, resolved workouts only — a movement without a quantity (it takes the ladder value) done factor times"
+        },
         "or": {
           "type": "array",
           "description": "1.1 — the other options of an alternative (10 Ring row | 8 Scapular pull-up): the athlete does this movement or one of these",
@@ -182,6 +187,12 @@
         "percent": { "type": "object" },
         "rpe": { "$ref": "#/$defs/amount" },
         "bodyweight": { "$ref": "#/$defs/amount" },
+        "factor": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "1.1 — A -> 2x B: the quantities of every occurrence are multiplied"
+        },
+        "quantity": { "$ref": "#/$defs/quantity", "description": "1.1 — A -> 10 B: the quantity of every occurrence is replaced" },
         "meta": { "type": "object" },
         "source": { "$ref": "#/$defs/source" }
       }

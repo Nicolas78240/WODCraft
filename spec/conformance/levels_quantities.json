@@ -1,0 +1,117 @@
+{
+  "wodcraft": "1.1",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "duration_s": 300.0,
+      "items": [
+        {
+          "type": "ladder",
+          "source": {
+            "line": 3,
+            "col": 3
+          },
+          "reps": [
+            1,
+            2,
+            3
+          ],
+          "reps_open": true,
+          "items": [
+            {
+              "type": "movement",
+              "movement": "wall_walk",
+              "name": "Wall walk",
+              "source": {
+                "line": 4,
+                "col": 5
+              }
+            },
+            {
+              "type": "movement",
+              "movement": "chest_to_bar_pull_up",
+              "name": "Chest-to-bar pull-up",
+              "modifiers": [
+                "strict"
+              ],
+              "source": {
+                "line": 5,
+                "col": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "kind": "calories",
+            "cal": 10
+          },
+          "source": {
+            "line": 6,
+            "col": 10
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  },
+  "levels": {
+    "intermediate": [
+      {
+        "movement": "chest_to_bar_pull_up",
+        "replace_with": "pull_up",
+        "name": "Pull-up",
+        "source": {
+          "line": 9,
+          "col": 3
+        }
+      }
+    ],
+    "scaled": [
+      {
+        "movement": "chest_to_bar_pull_up",
+        "replace_with": "ring_row",
+        "name": "Ring row",
+        "factor": 2,
+        "source": {
+          "line": 12,
+          "col": 3
+        }
+      },
+      {
+        "movement": "wall_walk",
+        "replace_with": "inchworm",
+        "name": "Inchworm",
+        "quantity": {
+          "kind": "reps",
+          "reps": 3
+        },
+        "source": {
+          "line": 13,
+          "col": 3
+        }
+      },
+      {
+        "movement": "row",
+        "replace_with": "row",
+        "name": "Row",
+        "factor": 0.5,
+        "source": {
+          "line": 14,
+          "col": 3
+        }
+      }
+    ]
+  }
+}

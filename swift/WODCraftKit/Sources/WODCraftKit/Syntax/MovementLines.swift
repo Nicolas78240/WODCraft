@@ -279,6 +279,18 @@ private func parseOneMovement(
         guard allowReplace else {
             throw LineError("E014", "'->' is only allowed in a level block (Scaled:, …).", arrow.col, arrow.endCol)
         }
+        // "A -> 2x B" multiplies the quantities, "A -> 10 B" sets them (SPEC §9)
+        if let tok = cur.peek(), let after = cur.peek(1), tok.kind == .number, after.isWord("x"), after.glued {
+            _ = try cur.next()
+            _ = try cur.next()
+            let factor: Double = number(tok)
+            if factor <= 0 {
+                throw LineError("E035", "A factor must be greater than zero.", tok.col, after.endCol)
+            }
+            mv.factor = factor
+        } else {
+            mv.replaceQuantity = try parseQuantity(cur, file)
+        }
         let replacement = try parseName(cur)
         mv.replaceWith = replacement.name
         mv.replaceSpan = Span(line.number, replacement.startCol, replacement.endCol, file)

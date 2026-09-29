@@ -123,6 +123,8 @@ public struct Movement: Codable, Equatable, Sendable {
     public var bodyweight: Amount?
     public var sets: Sets?
     public var modifiers: [String]?
+    /// 1.1, resolved workouts only — a movement that takes its reps from a ladder, done `factor` times.
+    public var factor: Double?
     /// 1.1 — the other options of an alternative (`10 Ring row | 8 Scapular pull-up`).
     public var or: [Movement]?
     public var source: SourceSpan?
@@ -313,6 +315,10 @@ public struct LevelOperation: Codable, Equatable, Sendable {
     public var percent: Percent?
     public var rpe: Amount?
     public var bodyweight: Amount?
+    /// 1.1 — `A -> 2x B`: the quantities of every occurrence are multiplied.
+    public var factor: Double?
+    /// 1.1 — `A -> 10 B`: the quantity of every occurrence is replaced.
+    public var quantity: Quantity?
     public var meta: [String: MetaValue]?
     public var source: SourceSpan?
 

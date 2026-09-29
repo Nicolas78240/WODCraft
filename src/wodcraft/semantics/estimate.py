@@ -131,7 +131,7 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
             if item.get("type") == "movement" and not item.get("quantity"):
                 entry = catalog.movements.get(item.get("movement", ""))
                 pace = (entry.pace_for("reps") if entry else None) or DEFAULT_REP_PACE
-                per_rep_cost += pace * load_factor(item, entry) + declared_hold(item)
+                per_rep_cost += (pace * load_factor(item, entry) + declared_hold(item)) * item.get("factor", 1)
             else:
                 fixed += block_seconds(item, catalog)
         return sum(reps) * per_rep_cost + fixed * len(reps)

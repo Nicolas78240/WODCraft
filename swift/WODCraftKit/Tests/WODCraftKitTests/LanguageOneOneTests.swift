@@ -50,4 +50,29 @@ struct LanguageOneOneTests {
         #expect(item.or?.map { $0.movement } == ["jumping_pull_up"])
         #expect(workout.whiteboard(language: .fr).contains("10 Tirage aux anneaux ou 8 Traction"))
     }
+
+    static let ladder: String = "AMRAP 5:00\n  1-2-3 ...\n    Wall walk\n    Chest-to-bar pull-up\n  10/8 cal Row\n\n"
+        + "Scaled:\n  Chest-to-bar pull-up -> 2x Ring row\n  Wall walk -> 3 Inchworm\n  Row -> 0.5x Row\n"
+
+    @Test("a level changes quantities after the arrow: a factor, or a new quantity")
+    func levelQuantities() throws {
+        let workout = try Self.workout(Self.ladder)
+        #expect(workout.wodcraft == "1.1")
+        let operations = try #require(workout.levels?["scaled"])
+        #expect(operations.map { $0.factor } == [2, nil, 0.5])
+        #expect(operations[1].quantity?.reps?.value() == 3)
+        let scaled: Workout = workout.resolved(for: AthleteProfile(category: .women, level: .scaled, units: .kg))
+        let amrap = try #require(scaled.blocks.first?.asBlock)
+        let ladder = try #require(amrap.items.first?.asBlock)
+        let pull = try #require(ladder.items.last?.asMovement)
+        #expect(pull.movement == "ring_row")
+        #expect(pull.factor == 2)
+        #expect(pull.quantity == nil)
+        let row = try #require(amrap.items.last?.asMovement)
+        #expect(row.quantity?.cal?.value() == 4)
+        #expect(scaled.whiteboard().contains("2x Ring row"))
+        let errors = "For time\n  20 Pull-up\n  10 Burpee\n\nScaled:\n  10 Pull-up -> Ring row\n"
+            + "  Burpee -> 0x Air squat\n  Pull-up -> 400 m Ring row\n"
+        #expect(Self.codes(errors) == ["E014 6", "E035 7", "E033 8"])
+    }
 }

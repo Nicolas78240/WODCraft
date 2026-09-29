@@ -154,6 +154,10 @@ def movement(mv: MovementLine) -> str:
         parts += [_param(p) for p in mv.selector_params]
     if mv.replace_with:
         parts.append("->")
+        if mv.factor is not None:
+            parts.append(f"{fmt_num(mv.factor)}x")
+        if mv.replace_quantity is not None:
+            parts.append(_quantity(mv.replace_quantity))
         parts.append(mv.replace_with)
     if mv.sets is not None:
         parts.append(_sets(mv.sets))

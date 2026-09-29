@@ -69,6 +69,10 @@ def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivale
         for key in ("load", "height", "percent", "rpe", "bodyweight"):
             if key in operation:
                 item[key] = copy.deepcopy(operation[key])
+        if "quantity" in operation:
+            item["quantity"] = copy.deepcopy(operation["quantity"])
+        if "factor" in operation:
+            _multiply(item, operation["factor"])
         break
 
     if "quantity" in item:
@@ -87,6 +91,19 @@ def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivale
     if "or" in item:  # every option of an alternative is resolved the same way
         item["or"] = [_movement(option, operations, profile, eq) for option in item["or"]]
     return item
+
+
+def _multiply(item: dict, factor: float) -> None:
+    """ "A -> 2x B": the quantity is multiplied; a movement that takes its reps from a ladder keeps
+    the factor, and does factor × the ladder value."""
+    quantity = item.get("quantity")
+    if not quantity or quantity.get("kind") == "max":
+        item["factor"] = _tidy(factor * item.get("factor", 1))
+        return
+    for key in ("reps", "cal", "s", "m", "written"):
+        if key in quantity:
+            value = quantity[key]
+            quantity[key] = {k: _tidy(v * factor) for k, v in value.items()} if isinstance(value, dict) else _tidy(value * factor)
 
 
 def _matches(item: dict, when: dict) -> bool:

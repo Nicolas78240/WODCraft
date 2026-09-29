@@ -366,29 +366,9 @@ class Compiler:
                     break
 
         if quantity is not None:
-            kind = "reps" if quantity.kind == "max" and quantity.unit is None else quantity.kind
-            if quantity.kind == "max":
-                kind = {"cal": "calories", "m": "distance"}.get(quantity.unit or "", "reps")
-            if kind not in entry.quantities:
-                self._err(
-                    "E033",
-                    f"{entry.name} is not measured in {_quantity_word(kind)}.",
-                    quantity.span,
-                    "it is measured in " + " or ".join(_quantity_word(q) for q in entry.quantities),
-                )
-            elif quantity.kind == "max" or quantity.value is None:
-                out["quantity"] = {"kind": "max", "of": kind}
-            elif kind == "distance":
-                out["quantity"] = dict(measures.distance_to_json(quantity.value, quantity.unit or "m"), kind="distance")
-                self._check_distance(out["quantity"], entry, quantity.span)
-            elif kind == "calories":
-                out["quantity"] = {"kind": "calories", "cal": measures.amount(quantity.value)}
-            elif kind == "time":
-                out["quantity"] = {"kind": "time", "s": measures.amount(quantity.value)}
-            else:
-                out["quantity"] = {"kind": "reps", "reps": measures.amount(quantity.value)}
-                if max(quantity.value.men, quantity.value.women) > 1000:
-                    self._err("W105", "That is a lot of reps — is the number right?", quantity.span)
+            compiled = self._quantity(quantity, entry)
+            if compiled is not None:
+                out["quantity"] = compiled
         elif mv.sets is None and parent not in ("ladder", "max_load", "death_by", "tabata") and entry.quantities:
             self._err("E030", f"{entry.name} needs a quantity.", mv.name_span, "e.g. '21 " + entry.name + "'")
 
@@ -402,6 +382,34 @@ class Compiler:
             out["modifiers"] = mv.modifiers
         out["source"] = mv.name_span.to_dict()
         return out
+
+    def _quantity(self, quantity, entry) -> dict | None:
+        """The compiled quantity of a movement line, checked against its catalog entry."""
+        out: dict = {}
+        kind = "reps" if quantity.kind == "max" and quantity.unit is None else quantity.kind
+        if quantity.kind == "max":
+            kind = {"cal": "calories", "m": "distance"}.get(quantity.unit or "", "reps")
+        if kind not in entry.quantities:
+            self._err(
+                "E033",
+                f"{entry.name} is not measured in {_quantity_word(kind)}.",
+                quantity.span,
+                "it is measured in " + " or ".join(_quantity_word(q) for q in entry.quantities),
+            )
+        elif quantity.kind == "max" or quantity.value is None:
+            out["quantity"] = {"kind": "max", "of": kind}
+        elif kind == "distance":
+            out["quantity"] = dict(measures.distance_to_json(quantity.value, quantity.unit or "m"), kind="distance")
+            self._check_distance(out["quantity"], entry, quantity.span)
+        elif kind == "calories":
+            out["quantity"] = {"kind": "calories", "cal": measures.amount(quantity.value)}
+        elif kind == "time":
+            out["quantity"] = {"kind": "time", "s": measures.amount(quantity.value)}
+        else:
+            out["quantity"] = {"kind": "reps", "reps": measures.amount(quantity.value)}
+            if max(quantity.value.men, quantity.value.women) > 1000:
+                self._err("W105", "That is a lot of reps — is the number right?", quantity.span)
+        return out.get("quantity")
 
     def _param(self, out: dict, param, entry, mv: MovementLine) -> None:
         eq = self.opt.equivalences
@@ -579,7 +587,18 @@ class Compiler:
                 for param in stmt.params:
                     self._param(params, param, target, stmt)
                 if stmt.quantity is not None:
-                    self._err("E014", "A level block does not change quantities.", stmt.quantity.span)
+                    self._err(
+                        "E014",
+                        "A level block only changes quantities after the arrow.",
+                        stmt.quantity.span,
+                        f"e.g. '{entry.name} -> 2x {target.name}'",
+                    )
+                if stmt.factor is not None:
+                    operation["factor"] = int(stmt.factor) if float(stmt.factor).is_integer() else stmt.factor
+                if stmt.replace_quantity is not None:
+                    quantity = self._quantity(stmt.replace_quantity, target)
+                    if quantity is not None:
+                        operation["quantity"] = quantity
                 operation.update(params)
                 operation["source"] = stmt.name_span.to_dict()
                 operations.append(operation)

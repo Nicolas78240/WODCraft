@@ -289,3 +289,25 @@ def test_a_level_applies_to_every_option_of_an_alternative():
     item = resolved_items(Profile(level="scaled"), source)[0]
     assert item["movement"] == "ring_row"
     assert [(o["movement"], o["quantity"]["reps"]) for o in item["or"]] == [("jumping_pull_up", 8)]
+
+
+LADDER = (
+    "AMRAP 5:00\n  1-2-3 ...\n    Wall walk\n    Chest-to-bar pull-up\n  10/8 cal Row\n\n"
+    "Scaled:\n  Chest-to-bar pull-up -> 2x Ring row\n  Wall walk -> 3 Inchworm\n  Row -> 0.5x Row\n"
+)
+
+
+def test_a_level_factor_multiplies_the_quantity_or_is_kept_for_a_ladder():
+    items = resolved_items(Profile(level="scaled", category="women"), LADDER)
+    ladder, row = items
+    walk, pull = ladder["items"]
+    assert (walk["movement"], walk["quantity"]) == ("inchworm", {"kind": "reps", "reps": 3})
+    assert (pull["movement"], pull["factor"]) == ("ring_row", 2)
+    assert "quantity" not in pull
+    assert row["quantity"] == {"kind": "calories", "cal": 4}
+
+
+def test_a_level_without_quantities_leaves_them_alone():
+    items = resolved_items(Profile(level="rx"), LADDER)
+    assert "factor" not in items[0]["items"][1]
+    assert items[1]["quantity"]["cal"] == 10

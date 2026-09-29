@@ -287,7 +287,13 @@ Scaled:
 - To adapt only some occurrences, write the original parameters **before** the arrow; they select the
   occurrences to change: `Deadlift 225 lb -> Deadlift 155 lb`.
 - A level block MAY also carry the meta lines `vest`, `cap` and `note`; `vest: none` removes the vest.
-- A level block never changes quantities (`E014`): a workout with half the reps is a different workout.
+- A level block changes quantities only with an explicit form, right after the arrow (1.1):
+  `Chest-to-bar pull-up -> 2x Ring row` multiplies the quantities of every occurrence (a movement that
+  takes its reps from a ladder does twice the ladder value), and `Wall walk -> 5 Inchworm` sets them.
+  The factor MUST be greater than zero (`E035`); the new quantity MUST be one the movement accepts
+  (`E033`). A quantity written anywhere else in a level block — before the arrow, or on a line
+  without one — is an error (`E014`): a level adapts the movement, it does not silently rewrite the
+  workout.
 - A movement that does not appear in the Rx work is an error (`E040`).
 
 ## 10. Use
