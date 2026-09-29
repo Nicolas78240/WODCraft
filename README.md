@@ -115,9 +115,33 @@ Even: 10 Burpee
 
 Formats: `For time`, `N rounds [for time]`, rep ladders (`21-15-9`, `3-6-9 ...`), `AMRAP`, `EMOM`,
 `E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, strength sets (`5x5`, `5-5-3-3-1`).
-Labels: `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`, `Foundations:`.
+Labels: `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`, `Foundations:`,
+`Adapted:`.
 Units: `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — and `m` always
 means metres, never minutes.
+
+### New in 1.1
+
+```wod
+# Team chipper
+For time, teams of 2, cap 25:00, there and back   // A, B, C… then back to A
+  50 cal Ergo (split)             // a generic ergometer: the machine is picked when you log
+  40 Pull-up (split)
+  10 Ring row | Scap pull         // an alternative: either one
+  1 Wall walk (hold 10 s)         // hold, a standard modifier
+
+Scaled:
+  Pull-up -> 2x Ring row          // a level may change quantities, explicitly
+
+Adapted:                          // what one athlete actually did, applied after the level
+  Pull-up -> Jumping pull-up
+```
+
+The ergometer (`ergo`, `machine`, `ergomètre`), alternatives (`|`, shown "or", "ou" in French),
+level quantities (`-> 2x`, `-> 10`), `there and back` (`aller-retour`) and `Adapted:` are specified
+in SPEC §5, §7.5, §7.6, §9 and §9.1. A document that uses none of them compiles to exactly the same
+JSON as in 1.0 (still stamped `"wodcraft": "1.0"`); one that does is stamped `"1.1"`. The whole
+29 September session is in [`examples/session-2026-09-29.wod`](examples/session-2026-09-29.wod).
 
 The full grammar, the semantics and every diagnostic are in **[spec/SPEC.md](spec/SPEC.md)**.
 

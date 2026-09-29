@@ -44,7 +44,8 @@ with a coded diagnostic, so check your draft with the `check_wod` tool before re
 | Death by | `Death by` | rounds+reps |
 | Max load | `Max load` / `Max load, cap 15:00` | load |
 
-Options after a comma: `cap DURATION`, `teams of N`, `for time`.
+Options after a comma: `cap DURATION`, `teams of N`, `for time`, `there and back` (For time,
+AMRAP, rounds, ladders: the list in order, then back to the first line without repeating the last).
 
 A bare number is minutes **only** in a format line (`AMRAP 20` = 20 minutes). Everywhere else
 write `2 min`, `30 s` or `1:30`.
@@ -183,6 +184,12 @@ every movement it names must already appear in the Rx work (E040).
 
 - same movement, new parameters: `Thruster 30/20 kg`
 - swap the movement: `Pull-up -> Jumping pull-up`
+- change quantities, only after the arrow: `Chest-to-bar pull-up -> 2x Ring row` (twice the reps),
+  `Wall walk -> 3 Inchworm` (three reps); a quantity anywhere else in a level is E014
+- `Adapted:` records what one athlete actually did, with the same lines plus bare counts
+  (`5 Wall walk`); it is applied after the chosen level
+- an alternative in the Rx work: `10 Ring row | Scap pull` (either one; an option without a
+  quantity takes the first one's)
 
 ```wod
 # Levels

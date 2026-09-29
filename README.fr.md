@@ -119,11 +119,35 @@ Even: 10 Burpee
 Formats : `For time`, `N rounds [for time]`, échelles de reps (`21-15-9`, `3-6-9 ...`), `AMRAP`,
 `EMOM`, `E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, séries de force (`5x5`,
 `5-5-3-3-1`). Labels : `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`,
-`Foundations:`. Unités : `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — et
+`Foundations:`, `Adapted:`. Unités : `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — et
 `m` signifie toujours mètres, jamais minutes.
 
 Les mots-clés restent en anglais, comme au tableau blanc dans les box francophones ; les noms de
 mouvements, eux, sont reconnus en français comme en anglais (`Tractions`, `Pompes`, `Fentes`…).
+
+### Nouveautés de la 1.1
+
+```wod
+# Chipper en équipe
+For time, teams of 2, cap 25:00, aller-retour   // A, B, C… puis retour jusqu'à A
+  50 cal Ergo (split)             // ergomètre générique : la machine se choisit au moment du score
+  40 Tractions (split)
+  10 Ring row | Scap pull         // une alternative : l'un ou l'autre
+  1 Wall walk (hold 10 s)         // hold, un modificateur standard
+
+Scaled:
+  Tractions -> 2x Ring row        // un niveau peut changer les quantités, explicitement
+
+Adapted:                          // ce qu'un athlète a réellement fait, appliqué après le niveau
+  Tractions -> Jumping pull-up
+```
+
+L'ergomètre (`ergo`, `machine`, `ergomètre`), les alternatives (`|`, affichées « ou » en français),
+les quantités de niveau (`-> 2x`, `-> 10`), l'aller-retour (`there and back`, `aller-retour` accepté)
+et `Adapted:` sont spécifiés aux §5, §7.5, §7.6, §9 et §9.1 de la spec. Un document qui n'en utilise
+aucun compile exactement vers le même JSON qu'en 1.0 (toujours marqué `"wodcraft": "1.0"`) ; un
+document qui en utilise un est marqué `"1.1"`. La séance complète du 29 septembre est dans
+[`examples/session-2026-09-29.wod`](examples/session-2026-09-29.wod).
 
 La grammaire complète, la sémantique et tous les diagnostics sont dans **[spec/SPEC.md](spec/SPEC.md)**.
 

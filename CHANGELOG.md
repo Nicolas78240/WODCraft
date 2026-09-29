@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.1.0 — unreleased
+
+Additions for real training sessions (the whiteboard of 29 September: warm-up, skill, team chipper,
+core work). Every 1.0 document still compiles to exactly the same JSON, stamped `"wodcraft": "1.0"`;
+a document that uses a 1.1 construct is stamped `"1.1"`, and the schema accepts both.
+
+### The language
+- **Generic ergometer**: `ergometer` (`ergo`, `cal ergo`, `machine`, `ergomètre`), in calories,
+  distance or time; the machine is chosen when the score is logged. Also `yoga push-up` and the
+  `scap pull` alias.
+- **`hold`**, a standard modifier: `1 Wall walk (hold 10 s)`; the duration adds to every rep in
+  estimates.
+- **Alternatives**: `10 Ring row | 8 Scapular pull-up`. The item is the first option, the others go
+  in `or`; an option without a quantity takes the first one's; levels apply to every option; the board
+  says "or" ("ou" in French).
+- **Level quantities**, after the arrow only: `Chest-to-bar pull-up -> 2x Ring row` (factor),
+  `Wall walk -> 3 Inchworm` (new quantity). Any other quantity in a level block is still `E014`.
+- **There and back**: `For time, teams of 2, cap 25:00, there and back` (`aller-retour` accepted) —
+  the list in order, then back without repeating the last line. The block and its score carry
+  `there_and_back`; estimates count the whole path.
+- **`Adapted:`**: what one athlete actually did, with the same lines as a level plus bare counts
+  (`5 Wall walk`). Compiled in `adapted`; resolution applies it after the chosen level and sets
+  `resolved.adapted`.
+
+### Fixes
+- `wodc fmt` no longer turns `AMRAP 5:00` + `1-2-3 ...` into a bare ladder (it dropped the clock).
+- The board shows the ladder of an AMRAP: `AMRAP 5:00 · 1-2-3 …`.
+
+### Tooling
+- Schema `spec/workout.schema.json` moves to `…/schema/1.1/`: `or`, `factor`, `quantity` on level
+  operations, `there_and_back`, `adapted`, `resolved.adapted`; every expected conformance document is
+  now validated against it.
+- `swift/WODCraftKit` implements all of the above (`Movement.or` / `options`, `Movement.factor`,
+  `LevelOperation.factor` / `quantity`, `Block.thereAndBack`, `Score.thereAndBack`,
+  `Workout.adapted`, `Resolved.adapted`), with the same conformance suite.
+- New example: `examples/session-2026-09-29.wod`.
+
 ## 1.0.0 — unreleased
 
 Complete rewrite. WODCraft is now a specified language with a reference compiler, and the old
