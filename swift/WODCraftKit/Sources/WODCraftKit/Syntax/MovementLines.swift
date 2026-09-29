@@ -397,7 +397,7 @@ func parseLine(_ line: SourceLine, _ diags: DiagnosticBag, _ file: String?, _ al
                     "Unknown label '\(head.text)'.",
                     head.col,
                     colonEnd,
-                    "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations"
+                    "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations, Adapted"
                 )
             }
             if found.kind == .meta {

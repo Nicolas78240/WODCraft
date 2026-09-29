@@ -179,7 +179,7 @@
     },
     "level_operation": {
       "type": "object",
-      "description": "One adaptation applied by a level (Scaled:, Foundations:…).",
+      "description": "One adaptation applied by a level (Scaled:, Foundations:…) or by the athlete's Adapted: block.",
       "properties": {
         "movement": { "type": "string" },
         "replace_with": { "type": "string" },
@@ -240,6 +240,11 @@
           "propertyNames": { "enum": ["scaled", "intermediate", "foundations"] },
           "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/level_operation" } }
         },
+        "adapted": {
+          "type": "array",
+          "description": "1.1 — the athlete's Adapted: block, applied after the chosen level (SPEC §9.1)",
+          "items": { "$ref": "#/$defs/level_operation" }
+        },
         "meta": { "$ref": "#/$defs/meta" },
         "estimate": {
           "type": "object",
@@ -256,7 +261,8 @@
           "properties": {
             "category": { "enum": ["men", "women"] },
             "level": { "type": "string" },
-            "units": { "enum": ["kg", "lb"] }
+            "units": { "enum": ["kg", "lb"] },
+            "adapted": { "const": true, "description": "1.1 — the Adapted: block was applied after the level" }
           },
           "required": ["category", "level", "units"]
         }

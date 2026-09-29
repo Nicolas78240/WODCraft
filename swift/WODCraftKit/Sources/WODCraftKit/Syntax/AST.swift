@@ -175,7 +175,8 @@ final class BlockNode: Statement {
     var hasSlot: Bool { slotName != nil || slotMinute != nil }
 }
 
-let levelLabels: [String] = ["scaled", "intermediate", "foundations"]
+/// `adapted` is the athlete's own block (SPEC §9.1), grouped like a level.
+let levelLabels: [String] = ["scaled", "intermediate", "foundations", "adapted"]
 
 final class WorkoutBody {
     var statements: [Statement] = []

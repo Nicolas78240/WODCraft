@@ -94,4 +94,32 @@ struct LanguageOneOneTests {
         #expect(french.blocks.first?.asBlock?.thereAndBack == true)
         #expect(Self.codes("EMOM 10, there and back\n  5 Burpee\n  5 Air squat\n") == ["E014 1"])
     }
+
+    static let adapted: String = "For time\n  20 Bar muscle-up\n  30 Chest-to-bar pull-up\n  10 Wall walk\n\n"
+        + "Scaled:\n  Bar muscle-up -> Jumping pull-up\n\n"
+        + "Adapted:\n  Bar muscle-up -> 2x Chest-to-bar pull-up\n  Jumping pull-up -> Ring row\n  5 Wall walk\n  note: shoulder\n"
+
+    @Test("Adapted: exposed apart from the levels, applied after the chosen level")
+    func adaptedBlock() throws {
+        let workout = try Self.workout(Self.adapted)
+        #expect(workout.wodcraft == "1.1")
+        #expect(workout.levels.map { Array($0.keys) } == ["scaled"])
+        let operations = try #require(workout.adapted)
+        #expect(operations.map { $0.replaceWith } == ["chest_to_bar_pull_up", "ring_row", nil, nil])
+        #expect(operations[2].quantity?.reps?.value() == 5)
+        for (level, expected) in [(AthleteLevel.rx, [("chest_to_bar_pull_up", 40.0), ("chest_to_bar_pull_up", 30), ("wall_walk", 5)]),
+                                  (.scaled, [("ring_row", 20.0), ("chest_to_bar_pull_up", 30), ("wall_walk", 5)])] {
+            let resolved: Workout = workout.resolved(for: AthleteProfile(category: .men, level: level, units: .kg))
+            let items = try #require(resolved.blocks.first?.asBlock?.items)
+            let got = items.compactMap { $0.asMovement }.map { ($0.movement, $0.quantity?.reps?.value() ?? 0) }
+            #expect(got.map { $0.0 } == expected.map { $0.0 })
+            #expect(got.map { $0.1 } == expected.map { $0.1 })
+            #expect(resolved.resolved?.adapted == true)
+            #expect(resolved.adapted == nil)
+            #expect(resolved.meta?.notes == ["shoulder"])
+        }
+        let errors = "For time\n  20 Pull-up\n  10 Burpee\n\nAdapted:\n  Thruster -> Air squat\n  10 Pull-up -> Ring row\n\n"
+            + "Adapted:\n  Burpee -> Air squat\n"
+        #expect(Self.codes(errors) == ["E040 6", "E014 7", "E041 9"])
+    }
 }

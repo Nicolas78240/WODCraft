@@ -63,7 +63,7 @@
     },
     "label": {
       "name": "meta.label-line.wod",
-      "match": "^\\s*(?i:(Buy-?in|Cash-?out|Odd|Even|Min\\s+\\d+|Scaled|Intermediate|Foundations))\\s*(:)",
+      "match": "^\\s*(?i:(Buy-?in|Cash-?out|Odd|Even|Min\\s+\\d+|Scaled|Intermediate|Foundations|Adapted))\\s*(:)",
       "captures": {
         "1": { "name": "keyword.control.label.wod" },
         "2": { "name": "punctuation.separator.label.wod" }

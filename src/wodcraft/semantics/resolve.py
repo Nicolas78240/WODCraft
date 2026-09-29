@@ -20,18 +20,22 @@ def resolve(workout: dict, profile: Profile, equivalences: Equivalences | None =
 
     level = _applied_level(out, profile)
     operations = (out.get("levels") or {}).get(level, []) if level else []
+    adapted = out.pop("adapted", None)
+    stages = [operations, adapted or []]  # the level first, then the athlete's adaptation (§9.1)
     meta = out.setdefault("meta", {})
-    for operation in operations:
+    for operation in operations + (adapted or []):
         if "meta" in operation:
             for key, value in operation["meta"].items():
                 if value is None:
                     meta.pop(key, None)
                 else:
                     meta[key] = value
-    out["blocks"] = [_block(b, operations, profile, eq) for b in out.get("blocks", [])]
+    out["blocks"] = [_block(b, stages, profile, eq) for b in out.get("blocks", [])]
     if meta.get("vest"):
         meta["vest"] = _flatten_load(meta["vest"], profile, eq)
     out["resolved"] = {"category": profile.category, "level": level or "rx", "units": profile.units}
+    if adapted is not None:
+        out["resolved"]["adapted"] = True
     out.pop("levels", None)
     return out
 
@@ -46,15 +50,25 @@ def _applied_level(workout: dict, profile: Profile) -> str | None:
     return None
 
 
-def _block(block: dict, operations: list[dict], profile: Profile, eq: Equivalences) -> dict:
+def _block(block: dict, stages: list[list[dict]], profile: Profile, eq: Equivalences) -> dict:
     if block.get("type") == "movement":
-        return _movement(block, operations, profile, eq)
+        return _movement(block, stages, profile, eq)
     if "items" in block:
-        block["items"] = [_block(i, operations, profile, eq) for i in block["items"]]
+        block["items"] = [_block(i, stages, profile, eq) for i in block["items"]]
     return block
 
 
-def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivalences) -> dict:
+def _movement(item: dict, stages: list[list[dict]], profile: Profile, eq: Equivalences) -> dict:
+    for operations in stages:
+        _apply(item, operations)
+    _flatten(item, profile, eq)
+    if "or" in item:  # every option of an alternative is resolved the same way
+        item["or"] = [_movement(option, stages, profile, eq) for option in item["or"]]
+    return item
+
+
+def _apply(item: dict, operations: list[dict]) -> None:
+    """The first operation that matches the movement adapts it."""
     for operation in operations:
         if operation.get("movement") != item.get("movement"):
             continue
@@ -75,6 +89,8 @@ def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivale
             _multiply(item, operation["factor"])
         break
 
+
+def _flatten(item: dict, profile: Profile, eq: Equivalences) -> None:
     if "quantity" in item:
         item["quantity"] = _flatten_quantity(item["quantity"], profile)
     if "load" in item:
@@ -88,9 +104,6 @@ def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivale
     if "bodyweight" in item and profile.bodyweight_kg:
         factor = _pick(item["bodyweight"], profile)
         item["load"] = _round_load({"kg": profile.bodyweight_kg * factor}, profile, eq)
-    if "or" in item:  # every option of an alternative is resolved the same way
-        item["or"] = [_movement(option, operations, profile, eq) for option in item["or"]]
-    return item
 
 
 def _multiply(item: dict, factor: float) -> None:

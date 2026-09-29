@@ -142,9 +142,11 @@ class Compiler:
         }
         if team:
             out["team"] = team
-        levels = self._levels(body.levels)
+        levels, adapted = self._levels(body.levels)
         if levels:
             out["levels"] = levels
+        if adapted is not None:
+            out["adapted"] = adapted
         rest = {k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}
         if rest:
             out["meta"] = rest
@@ -538,9 +540,15 @@ class Compiler:
             block["source"] = stmt.span.to_dict()
         return blocks
 
-    def _levels(self, levels: list[Block]) -> dict:
+    def _levels(self, levels: list[Block]) -> tuple[dict, list[dict] | None]:
+        """The level blocks, then the athlete's 'Adapted:' block, which may also adapt what a level
+        put in (SPEC §9.1)."""
         out: dict = {}
-        for level in levels:
+        for level in sorted(levels, key=lambda block: block.kind == "adapted"):
+            adapted = level.kind == "adapted"
+            known = set(self._movement_ids)
+            if adapted:
+                known |= {op["replace_with"] for ops in out.values() for op in ops if "replace_with" in op}
             if level.kind in out:
                 self._err("E041", f"Duplicate '{level.kind.title()}:' block.", level.span)
                 continue
@@ -562,7 +570,7 @@ class Compiler:
                 if entry is None:
                     self._err("E020", f"Unknown movement {stmt.name!r}.", stmt.name_span, None)
                     continue
-                if entry.id not in self._movement_ids:
+                if entry.id not in known:
                     self._err(
                         "E040",
                         f"{entry.name} does not appear in the Rx work.",
@@ -597,7 +605,12 @@ class Compiler:
                 params: dict = {}
                 for param in stmt.params:
                     self._param(params, param, target, stmt)
-                if stmt.quantity is not None:
+                if stmt.quantity is not None and adapted and not stmt.replace_with:
+                    # the athlete's own count: "5 Wall walk" — what was actually done
+                    quantity = self._quantity(stmt.quantity, entry)
+                    if quantity is not None:
+                        operation["quantity"] = quantity
+                elif stmt.quantity is not None:
                     self._err(
                         "E014",
                         "A level block only changes quantities after the arrow.",
@@ -614,7 +627,8 @@ class Compiler:
                 operation["source"] = stmt.name_span.to_dict()
                 operations.append(operation)
             out[level.kind] = operations
-        return out
+        adapted_operations = out.pop("adapted", None)
+        return out, adapted_operations
 
     def _score(self, blocks: list[dict], meta: dict) -> dict:
         parts = [b for b in blocks if b.get("type") in TIMED]

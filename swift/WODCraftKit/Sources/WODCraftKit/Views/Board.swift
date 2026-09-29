@@ -209,10 +209,29 @@ public enum Board {
         if let levels = workout.levels, !levels.isEmpty {
             lines.append("Levels: " + levels.keys.sorted().joined(separator: ", "))
         }
+        let changes: [String] = (workout.adapted ?? []).compactMap { adaptationText($0, language: language) }
+        if !changes.isEmpty {
+            lines.append("Adapted: " + changes.joined(separator: "; "))
+        }
         if showProfile, let resolved = workout.resolved {
-            lines.append("[" + resolved.category.rawValue + " · " + resolved.level + " · " + resolved.units + "]")
+            let level = resolved.level + (resolved.adapted == true ? " + adapted" : "")
+            lines.append("[" + resolved.category.rawValue + " · " + level + " · " + resolved.units + "]")
         }
         return lines.joined(separator: "\n")
+    }
+
+    /// One change of the athlete's `Adapted:` block: `Bar muscle-up -> 2x Chest-to-bar pull-up`.
+    static func adaptationText(_ operation: LevelOperation, language: Language, catalog: Catalog = .shared) -> String? {
+        guard let movement = operation.movement else { return nil }
+        func name(_ identifier: String) -> String {
+            catalog.movement(id: identifier)?.displayName(language) ?? identifier
+        }
+        let source = name(movement)
+        let target = name(operation.replaceWith ?? movement)
+        var amount = quantityText(operation.quantity)
+        if amount.isEmpty, let factor = operation.factor, factor != 0 { amount = fmtNum(factor) + "x" }
+        let changed = amount.isEmpty ? target : amount + " " + target
+        return changed == source ? changed : source + " -> " + changed
     }
 
     static func titleText(_ title: String) -> String {

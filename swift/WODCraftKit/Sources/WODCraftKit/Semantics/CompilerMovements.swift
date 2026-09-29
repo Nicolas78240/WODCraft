@@ -299,9 +299,22 @@ extension Compiler {
 
     // MARK: - levels
 
-    func levels(_ blocks: [BlockNode]) -> JSONObject {
+    /// The level blocks, then the athlete's `Adapted:` block, which may also adapt what a level
+    /// put in (SPEC §9.1).
+    func levels(_ blocks: [BlockNode]) -> (levels: JSONObject, adapted: [JSONValue]?) {
         var out = JSONObject()
-        for level in blocks {
+        let ordered: [BlockNode] = blocks.filter { $0.kind != "adapted" } + blocks.filter { $0.kind == "adapted" }
+        for level in ordered {
+            var known: Set<String> = Set(movementIds)
+            if level.kind == "adapted" {
+                for key in out.keys {
+                    for operation in out[key]?.arrayValue ?? [] {
+                        if let replacement = operation.objectValue?["replace_with"]?.stringValue {
+                            known.insert(replacement)
+                        }
+                    }
+                }
+            }
             if out.has(level.kind) {
                 let shown: String = level.kind.prefix(1).uppercased() + level.kind.dropFirst()
                 err("E041", "Duplicate '\(shown):' block.", level.span)
@@ -341,21 +354,22 @@ extension Compiler {
                     err("E014", "A level block only contains movement lines.", span)
                     continue
                 }
-                if let operation = levelOperation(mv, level) {
+                if let operation = levelOperation(mv, level, known) {
                     operations.append(.object(operation))
                 }
             }
             out[level.kind] = .array(operations)
         }
-        return out
+        let adapted: [JSONValue]? = out.removeValue(forKey: "adapted")?.arrayValue
+        return (out, adapted)
     }
 
-    private func levelOperation(_ mv: MovementLine, _ level: BlockNode) -> JSONObject? {
+    private func levelOperation(_ mv: MovementLine, _ level: BlockNode, _ known: Set<String>) -> JSONObject? {
         guard let entry = opt.catalog.get(mv.name) else {
             err("E020", "Unknown movement '\(mv.name)'.", mv.nameSpan)
             return nil
         }
-        if !movementIds.contains(entry.id) {
+        if !known.contains(entry.id) {
             err(
                 "E040",
                 "\(entry.name) does not appear in the Rx work.",
@@ -400,7 +414,12 @@ extension Compiler {
         for param in mv.params {
             self.param(&params, param, target)
         }
-        if let quantity = mv.quantity {
+        if let quantity = mv.quantity, level.kind == "adapted", mv.replaceWith == nil {
+            // the athlete's own count: "5 Wall walk" — what was actually done
+            if let compiled = compileQuantity(quantity, entry) {
+                operation["quantity"] = .object(compiled)
+            }
+        } else if let quantity = mv.quantity {
             err(
                 "E014",
                 "A level block only changes quantities after the arrow.",

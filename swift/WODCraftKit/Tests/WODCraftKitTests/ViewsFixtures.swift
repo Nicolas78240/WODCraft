@@ -856,6 +856,22 @@ enum ViewsFixtures {
     static let conformanceJSON: String = #"""
 [
  {
+  "path": "adapted",
+  "board": "For time\n  20 Bar muscle-up\n  30 Chest-to-bar pull-up\n  10 Wall walk\nScore: time\nLevels: scaled\nAdapted: Bar muscle-up -> 2x Chest-to-bar pull-up; Jumping pull-up -> Ring row; Wall walk -> 5 Wall walk",
+  "boardFr": "For time\n  20 Muscle-up à la barre\n  30 Traction poitrine-barre\n  10 Montée au mur\nScore: time\nLevels: scaled\nAdapted: Muscle-up à la barre -> 2x Traction poitrine-barre; Traction sautée -> Tirage aux anneaux; Montée au mur -> 5 Montée au mur",
+  "markdown": "# Workout\n\n```\nFor time\n  20 Bar muscle-up\n  30 Chest-to-bar pull-up\n  10 Wall walk\n```\n\n**Score** — time\n",
+  "timer": "    0:00       —~ For time: 20 Bar muscle-up + 30 Chest-to-bar pull-up + 10 Wall walk\n            0:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 0,
+    "label": "For time: 20 Bar muscle-up + 30 Chest-to-bar pull-up + 10 Wall walk",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "alternatives",
   "board": "For time\n  10 Ring row or 10 Scapular pull-up\n  12/10 cal Row or 15/12 cal Bike erg or 200 m Run\n  21-15-9\n    Pull-up or Ring row (strict)\nScore: time\nLevels: scaled",
   "boardFr": "For time\n  10 Tirage aux anneaux ou 10 Traction scapulaire\n  12/10 cal Rameur ou 15/12 cal Vélo erg ou 200 m Course\n  21-15-9\n    Traction ou Tirage aux anneaux (strict)\nScore: time\nLevels: scaled",

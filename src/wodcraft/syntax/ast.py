@@ -110,7 +110,7 @@ class Block:
 
 Statement = Block | MovementLine | RestLine | UseLine | MetaLine | CommentLine
 
-LEVEL_LABELS = ("scaled", "intermediate", "foundations")
+LEVEL_LABELS = ("scaled", "intermediate", "foundations", "adapted")  # "adapted": the athlete's own (SPEC §9.1)
 
 
 @dataclass

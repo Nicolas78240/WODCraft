@@ -65,7 +65,10 @@ struct Resolver {
         }
 
         var meta = out.meta
-        for operation in operations {
+        let adapted: [LevelOperation]? = input.adapted
+        // the level first, then the athlete's adaptation (SPEC §9.1)
+        let stages: [[LevelOperation]] = [operations, adapted ?? []]
+        for operation in operations + (adapted ?? []) {
             guard let changes = operation.meta else { continue }
             var current = meta ?? Meta()
             for key in changes.keys.sorted() {
@@ -75,7 +78,7 @@ struct Resolver {
         }
 
         var blocks: [Item] = []
-        for item in out.blocks { blocks.append(self.item(item, operations: operations)) }
+        for item in out.blocks { blocks.append(self.item(item, stages: stages)) }
         out.blocks = blocks
 
         if var current = meta, let vest = current.vest {
@@ -88,7 +91,9 @@ struct Resolver {
             level: level?.rawValue ?? AthleteLevel.rx.rawValue,
             units: profile.units.rawValue
         )
+        if adapted != nil { out.resolved?.adapted = true }
         out.levels = nil
+        out.adapted = nil
         return out
     }
 
@@ -139,33 +144,41 @@ struct Resolver {
     // MARK: Blocks
 
     func block(_ input: Block) -> Block {
-        return block(input, operations: [])
+        return block(input, stages: [])
     }
 
-    func block(_ input: Block, operations: [LevelOperation]) -> Block {
+    func block(_ input: Block, stages: [[LevelOperation]]) -> Block {
         var out = input
         var items: [Item] = []
-        for item in out.items { items.append(self.item(item, operations: operations)) }
+        for item in out.items { items.append(self.item(item, stages: stages)) }
         out.items = items
         return out
     }
 
     /// A body holds items, not only blocks: a strength line stands on its own.
-    func item(_ input: Item, operations: [LevelOperation]) -> Item {
+    func item(_ input: Item, stages: [[LevelOperation]]) -> Item {
         switch input {
         case let .movement(movement):
-            return .movement(self.movement(movement, operations: operations))
+            return .movement(self.movement(movement, stages: stages))
         case .rest:
             return input
         case let .block(nested):
-            return .block(block(nested, operations: operations))
+            return .block(block(nested, stages: stages))
         }
     }
 
     // MARK: Movements
 
-    func movement(_ input: Movement, operations: [LevelOperation]) -> Movement {
+    func movement(_ input: Movement, stages: [[LevelOperation]]) -> Movement {
         var item = input
+        for operations in stages {
+            apply(operations, to: &item)
+        }
+        return flattened(item, stages: stages)
+    }
+
+    /// The first operation that matches the movement adapts it.
+    func apply(_ operations: [LevelOperation], to item: inout Movement) {
         for operation in operations {
             guard operation.movement == item.movement else { continue }
             if let when = operation.when, !matches(item, when) { continue }
@@ -184,6 +197,10 @@ struct Resolver {
             if let factor = operation.factor { multiply(&item, by: factor) }
             break
         }
+    }
+
+    func flattened(_ input: Movement, stages: [[LevelOperation]]) -> Movement {
+        var item = input
 
         if let quantity = item.quantity { item.quantity = flatten(quantity: quantity) }
         if let load = item.load { item.load = flatten(load: load) }
@@ -194,7 +211,7 @@ struct Resolver {
             item.load = roundToPlate(kilograms: weight * factor)
         }
         if let options = item.or {  // every option of an alternative is resolved the same way
-            item.or = options.map { movement($0, operations: operations) }
+            item.or = options.map { movement($0, stages: stages) }
         }
         return item
     }

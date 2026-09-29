@@ -13,6 +13,7 @@ let labelNames: [String: String] = [
     "scaled": "scaled",
     "intermediate": "intermediate",
     "foundations": "foundations",
+    "adapted": "adapted",
 ]
 
 let modifierWords: Set<String> = ["sync", "split", "each", "alternating", "unbroken", "strict"]

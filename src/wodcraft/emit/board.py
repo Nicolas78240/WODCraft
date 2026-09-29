@@ -102,10 +102,31 @@ def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: 
     levels = workout.get("levels")
     if levels:
         lines.append("Levels: " + ", ".join(sorted(levels)))
+    changes = [_adaptation(op, lang) for op in workout.get("adapted") or [] if op.get("movement")]
+    if changes:
+        lines.append("Adapted: " + "; ".join(changes))
     resolved = workout.get("resolved") if show_profile else None
     if resolved:
-        lines.append(f"[{resolved['category']} · {resolved['level']} · {resolved['units']}]")
+        level = resolved["level"] + (" + adapted" if resolved.get("adapted") else "")
+        lines.append(f"[{resolved['category']} · {level} · {resolved['units']}]")
     return "\n".join(lines)
+
+
+def _adaptation(operation: dict, lang: str = "en") -> str:
+    """One change of the athlete's 'Adapted:' block: 'Bar muscle-up -> 2x Chest-to-bar pull-up'."""
+    from wodcraft.catalog import load_catalog
+
+    catalog = load_catalog()
+
+    def name(identifier: str) -> str:
+        entry = catalog.movements.get(identifier)
+        return entry.display_name(lang) if entry else identifier
+
+    source = name(operation["movement"])
+    target = name(operation.get("replace_with", operation["movement"]))
+    amount = _quantity(operation.get("quantity")) or (f"{fmt_num(operation['factor'])}x" if operation.get("factor") else "")
+    changed = " ".join(x for x in (amount, target) if x)
+    return changed if changed == source else f"{source} -> {changed}"
 
 
 def _title(title: str) -> str:

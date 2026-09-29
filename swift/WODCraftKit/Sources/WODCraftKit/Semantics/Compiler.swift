@@ -158,9 +158,12 @@ final class Compiler {
         if let team {
             out["team"] = .object(team)
         }
-        let levels: JSONObject = self.levels(body.levels)
+        let (levels, adapted) = self.levels(body.levels)
         if !levels.isEmpty {
             out["levels"] = .object(levels)
+        }
+        if let adapted {
+            out["adapted"] = .array(adapted)
         }
         var rest = JSONObject()
         for key in meta.keys where !["units", "cap_s", "score"].contains(key) {

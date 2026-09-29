@@ -1,0 +1,110 @@
+{
+  "wodcraft": "1.1",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "bar_muscle_up",
+          "name": "Bar muscle-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "chest_to_bar_pull_up",
+          "name": "Chest-to-bar pull-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 30
+          },
+          "source": {
+            "line": 4,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "wall_walk",
+          "name": "Wall walk",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  },
+  "levels": {
+    "scaled": [
+      {
+        "movement": "bar_muscle_up",
+        "replace_with": "jumping_pull_up",
+        "name": "Jumping pull-up",
+        "source": {
+          "line": 8,
+          "col": 3
+        }
+      }
+    ]
+  },
+  "adapted": [
+    {
+      "movement": "bar_muscle_up",
+      "replace_with": "chest_to_bar_pull_up",
+      "name": "Chest-to-bar pull-up",
+      "factor": 2,
+      "source": {
+        "line": 11,
+        "col": 3
+      }
+    },
+    {
+      "movement": "jumping_pull_up",
+      "replace_with": "ring_row",
+      "name": "Ring row",
+      "source": {
+        "line": 12,
+        "col": 3
+      }
+    },
+    {
+      "movement": "wall_walk",
+      "quantity": {
+        "kind": "reps",
+        "reps": 5
+      },
+      "source": {
+        "line": 13,
+        "col": 5
+      }
+    },
+    {
+      "meta": {
+        "notes": [
+          "shoulder pain, no kipping"
+        ]
+      }
+    }
+  ]
+}

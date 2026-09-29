@@ -392,6 +392,8 @@ public struct Resolved: Codable, Equatable, Sendable {
     public var category: Amount.Category
     public var level: String
     public var units: String
+    /// 1.1 — the `Adapted:` block was applied after the level.
+    public var adapted: Bool?
 }
 
 // MARK: - Documents
@@ -405,6 +407,8 @@ public struct Workout: Codable, Equatable, Sendable {
     public var score: Score
     public var team: Team?
     public var levels: [String: [LevelOperation]]?
+    /// 1.1 — the athlete's `Adapted:` block, applied after the chosen level (SPEC §9.1).
+    public var adapted: [LevelOperation]?
     public var meta: Meta?
     public var estimate: Estimate?
     public var resolved: Resolved?

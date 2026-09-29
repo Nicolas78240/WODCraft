@@ -311,3 +311,33 @@ def test_a_level_without_quantities_leaves_them_alone():
     items = resolved_items(Profile(level="rx"), LADDER)
     assert "factor" not in items[0]["items"][1]
     assert items[1]["quantity"]["cal"] == 10
+
+
+ADAPTED = (
+    "For time\n  20 Bar muscle-up\n  30 Chest-to-bar pull-up\n  10 Wall walk\n\n"
+    "Scaled:\n  Bar muscle-up -> Jumping pull-up\n\n"
+    "Adapted:\n  Bar muscle-up -> 2x Chest-to-bar pull-up\n  Jumping pull-up -> Ring row\n  5 Wall walk\n  note: shoulder\n"
+)
+
+
+def test_adapted_is_exposed_apart_from_the_levels():
+    document = compiled(ADAPTED)
+    assert set(document["levels"]) == {"scaled"}
+    assert [op.get("replace_with") for op in document["adapted"]] == ["chest_to_bar_pull_up", "ring_row", None, None]
+    assert document["adapted"][0]["factor"] == 2
+    assert document["adapted"][2]["quantity"] == {"kind": "reps", "reps": 5}
+
+
+@pytest.mark.parametrize(
+    ("level", "expected"),
+    [
+        ("rx", [("chest_to_bar_pull_up", 40), ("chest_to_bar_pull_up", 30), ("wall_walk", 5)]),
+        ("scaled", [("ring_row", 20), ("chest_to_bar_pull_up", 30), ("wall_walk", 5)]),
+    ],
+)
+def test_adapted_applies_after_the_chosen_level(level, expected):
+    workout = resolve(compiled(ADAPTED), Profile(level=level))
+    assert [(i["movement"], i["quantity"]["reps"]) for i in workout["blocks"][0]["items"]] == expected
+    assert workout["resolved"]["adapted"] is True
+    assert "adapted" not in workout
+    assert workout["meta"]["notes"] == ["shoulder"]

@@ -184,6 +184,7 @@ above). Duration estimates count the whole path.
 | `Odd:` / `Even:` | EMOM, EnMOM | minutes 1, 3, 5… / 2, 4, 6… |
 | `Min N:` | EMOM, EnMOM, Every | the N-th interval of each cycle (cycle length = highest N) |
 | `Scaled:` / `Intermediate:` / `Foundations:` | workout body, after the Rx work | level adaptations (§9) |
+| `Adapted:` | workout body, after the Rx work | what one athlete actually did (§9.1, 1.1) |
 
 **Meta lines** are `key: value` where the key is one of the following (case-insensitive; label and meta names never overlap):
 
@@ -313,6 +314,37 @@ Scaled:
   workout.
 - A movement that does not appear in the Rx work is an error (`E040`).
 
+### 9.1 Adapted (1.1)
+
+`Adapted:` records how **one athlete** actually did the workout — the moves they replaced, the counts
+they did. It is written like a level block, after the Rx work and the levels, and accepts the same
+lines (`A -> B`, `A -> 2x B`, `A -> 10 B`, parameters, `vest`, `cap`, `note`), plus a quantity on a
+line without an arrow: `5 Wall walk` means five wall walks were done instead of the prescription.
+
+```wod
+For time
+  20 Bar muscle-up
+  30 Chest-to-bar pull-up
+  10 Wall walk
+
+Scaled:
+  Bar muscle-up -> Jumping pull-up
+
+Adapted:
+  Bar muscle-up -> 2x Chest-to-bar pull-up
+  Jumping pull-up -> Ring row
+  5 Wall walk
+  note: shoulder pain, no kipping
+```
+
+- An `Adapted:` line may name a movement of the Rx work or one that a level puts in (`Jumping pull-up`
+  above); anything else is an error (`E040`). A second `Adapted:` block is an error (`E041`).
+- The compiled workout exposes the operations in `adapted` (the same shape as a level's operations),
+  not in `levels`: `Adapted` is not a level an athlete can ask for.
+- Resolution (§14) applies it **after** the chosen level: each movement is first adapted by the level,
+  then by the first `Adapted:` line that matches the movement as the level left it. The resolved
+  workout says so with `resolved.adapted: true`.
+
 ## 10. Use
 
 `use PATH` inserts a workout from a library, e.g. `use girls/fran`. When a workout body (or a
@@ -408,8 +440,10 @@ several timed blocks scores `{"type": "multi", "parts": [{"type": "…", "block"
 
 A compiled workout MAY be resolved for an athlete profile: `category` (`men` | `women`), `level`
 (`rx` | `scaled` | `intermediate` | `foundations`), `units` (`kg` | `lb`) and one-rep maxes.
-Resolution applies the level block, selects the category value of every dual, converts to the
-preferred units and turns percentages into loads rounded to the nearest 2.5 kg / 5 lb.
+Resolution applies the level block, then the `Adapted:` block when there is one (§9.1), selects the
+category value of every dual, converts to the preferred units and turns percentages into loads
+rounded to the nearest 2.5 kg / 5 lb. A level factor (`A -> 2x B`) multiplies the quantity; on a
+movement that takes its reps from a ladder it stays on the item as `factor`.
 
 When the asked level is missing from the workout, resolution walks the levels from the asked one
 **towards the easiest** (`rx` → `intermediate` → `scaled` → `foundations`), then back up towards Rx:

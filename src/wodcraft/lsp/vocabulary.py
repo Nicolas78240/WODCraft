@@ -50,6 +50,7 @@ LABEL_ITEMS: tuple[tuple[str, str, str], ...] = (
     ("Scaled:", "level", "Level adaptations; list only the differences with the Rx work."),
     ("Intermediate:", "level", "Level adaptations; list only the differences with the Rx work."),
     ("Foundations:", "level", "Level adaptations; list only the differences with the Rx work."),
+    ("Adapted:", "athlete", "What one athlete actually did: same lines as a level, plus counts (`5 Wall walk`)."),
 )
 
 #: ``key -> (detail, documentation)`` — SPEC §6.

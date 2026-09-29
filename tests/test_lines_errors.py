@@ -159,7 +159,7 @@ def test_the_meta_keys_are_the_ones_of_the_spec():
 
 
 def test_the_labels_cover_the_spec_and_their_spellings():
-    assert set(LABELS.values()) == {"buy_in", "cash_out", "odd", "even", "scaled", "intermediate", "foundations"}
+    assert set(LABELS.values()) == {"buy_in", "cash_out", "odd", "even", "scaled", "intermediate", "foundations", "adapted"}
     assert LABELS["buyin"] == LABELS["buy-in"] == "buy_in"
     assert LABELS["cashout"] == LABELS["cash-out"] == "cash_out"
 

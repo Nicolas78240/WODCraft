@@ -20,6 +20,7 @@ LABELS = {
     "scaled": "scaled",
     "intermediate": "intermediate",
     "foundations": "foundations",
+    "adapted": "adapted",
 }
 MODIFIERS = {"sync", "split", "each", "alternating", "unbroken", "strict"}
 _ENMOM = re.compile(r"^e(\d+)mom$", re.IGNORECASE)
@@ -593,7 +594,7 @@ def parse_line(line: Line, diags: DiagnosticBag, file: str | None, allow_replace
                     f"Unknown label {tokens[0].text!r}.",
                     tokens[0].col,
                     tokens[colon].end_col,
-                    "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations",
+                    "known labels: Buy-in, Cash-out, Odd, Even, Min N, Scaled, Intermediate, Foundations, Adapted",
                 )
             if kind == "meta":
                 raw = line.text.split(":", 1)[1].strip()
