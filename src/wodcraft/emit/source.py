@@ -167,7 +167,7 @@ def movement(mv: MovementLine) -> str:
 def _modifier(modifier: str) -> str:
     from wodcraft.syntax.lines import MODIFIERS
 
-    known = modifier in MODIFIERS or modifier == "per side" or modifier.startswith("rest ")
+    known = modifier in MODIFIERS or modifier == "per side" or modifier.startswith("rest ") or modifier.split(" ")[0] == "hold"
     return modifier if known else chr(34) + modifier + chr(34)
 
 

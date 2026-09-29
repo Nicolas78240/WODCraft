@@ -77,7 +77,7 @@ enum Estimator {
             return pick(quantity["cal"]) * (pace ?? 3.5)
         }
         var reps: Double = kind == "reps" ? pick(quantity["reps"]) : 0.0
-        let perRep: Double = (pace ?? defaultRepPace) * loadFactor(item, entry)
+        let perRep: Double = (pace ?? defaultRepPace) * loadFactor(item, entry) + declaredHold(item)
         if let sets = item["sets"]?.objectValue, let list = sets["reps"]?.arrayValue {
             reps = list.reduce(0.0) { $0 + ($1.doubleValue ?? 0) }
             let rest: Double = declaredRest(item) ?? defaultSetRest
@@ -98,6 +98,27 @@ enum Estimator {
             return Double(trimmed)
         }
         return nil
+    }
+
+    /// Seconds of the first `hold DURATION` modifier (`hold 10 s`, `hold 0:30`), 0 without one.
+    static func holdSeconds(_ modifiers: [String]) -> Double {
+        for modifier in modifiers {
+            let words: [Substring] = modifier.split(separator: " ", maxSplits: 1)
+            guard words.first == "hold", words.count == 2 else { continue }
+            let text: String = words[1].trimmingCharacters(in: .whitespaces)
+            if text.contains(":") { return Units.parseClock(text) }
+            let parts: [Substring] = text.split(separator: " ", maxSplits: 1)
+            guard let value = Double(parts.first ?? "") else { return 0 }
+            let unit: String = parts.count > 1 ? parts[1].trimmingCharacters(in: .whitespaces) : ""
+            return value * (unit == "min" ? 60.0 : 1.0)
+        }
+        return 0
+    }
+
+    /// A `(hold 10 s)` modifier holds every rep: its duration adds to each rep.
+    static func declaredHold(_ item: JSONObject) -> Double {
+        let modifiers: [String] = (item["modifiers"]?.arrayValue ?? []).compactMap(\.stringValue)
+        return holdSeconds(modifiers)
     }
 
     static func blockSeconds(_ block: JSONObject, _ catalog: MovementCatalog) -> Double {
@@ -140,7 +161,7 @@ enum Estimator {
                 if type(of: item) == "movement", item["quantity"] == nil {
                     let entry: MovementEntry? = catalog.movements[item["movement"]?.stringValue ?? ""]
                     let pace: Double = entry?.pace(for: "reps") ?? defaultRepPace
-                    perRepCost += pace * loadFactor(item, entry)
+                    perRepCost += pace * loadFactor(item, entry) + declaredHold(item)
                 } else {
                     fixed += blockSeconds(item, catalog)
                 }

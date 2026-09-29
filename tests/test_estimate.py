@@ -228,3 +228,11 @@ def test_the_whole_library_gets_an_estimate_or_is_pure_max_effort(library_files)
                 if "estimate" not in workout:
                     without.append(path.stem)
     assert without == ["lynne"]
+
+
+def test_a_hold_adds_its_duration_to_every_rep(catalog):
+    item = {"type": "movement", "movement": "wall_walk", "quantity": {"kind": "reps", "reps": 3}}
+    held = dict(item, modifiers=["hold 10 s"])
+    assert item_seconds(held, catalog) == pytest.approx(item_seconds(item, catalog) + 30)
+    assert item_seconds(dict(item, modifiers=["hold 0:05"]), catalog) == pytest.approx(item_seconds(item, catalog) + 15)
+    assert item_seconds(dict(item, modifiers=["hold"]), catalog) == item_seconds(item, catalog)

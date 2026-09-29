@@ -84,7 +84,7 @@ AMRAP 20
   is an error (E032), and so is a height on a thruster.
 - `a/b` is always *men/women*, in that order. A single value applies to both.
 - Modifiers, in parentheses: `sync`, `split`, `each`, `alternating`, `unbroken`,
-  `rest DURATION`, `per side`, or free text in quotes.
+  `rest DURATION`, `per side`, `hold` or `hold DURATION` (`1 Wall walk (hold 10 s)`), or free text in quotes.
 
 ```wod
 # Modifiers and parameters

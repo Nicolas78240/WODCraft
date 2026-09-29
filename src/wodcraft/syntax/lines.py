@@ -450,12 +450,18 @@ def _modifier_text(toks: list[Token]) -> str:
         return text
     if toks[0].is_word("rest"):
         return "rest " + " ".join(words[1:])
+    if toks[0].is_word("hold"):
+        rest = toks[1:]
+        timed = len(rest) == 2 and rest[0].kind == "NUM" and (unit_kind(rest[1].text) or ("", ""))[0] == "time"
+        if rest and not timed and not (len(rest) == 1 and rest[0].kind == "CLOCK"):
+            raise LineError("E001", "'hold' takes a duration.", rest[0].col, rest[-1].end_col, "e.g. '(hold 10 s)' or '(hold 0:30)'")
+        return " ".join(["hold", *words[1:]])
     raise LineError(
         "E001",
         f"Unknown modifier {' '.join(words)!r}.",
         toks[0].col,
         toks[-1].end_col,
-        'known modifiers: sync, split, each, alternating, unbroken, strict, per side, rest DURATION — or free text in quotes: ("tempo 3-1-1")',
+        'known modifiers: sync, split, each, alternating, unbroken, strict, per side, rest DURATION, hold [DURATION] — or free text in quotes: ("tempo 3-1-1")',
     )
 
 

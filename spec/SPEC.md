@@ -239,7 +239,9 @@ on a thruster is an error (`E032`).
 ### 7.5 Modifiers
 
 In parentheses after the parameters: `sync`, `split`, `each`, `alternating`, `unbroken`, `strict`,
-`per side`, `rest DURATION`, or free text in quotes — `("lateral over the dumbbell")`. A quoted
+`per side`, `rest DURATION`, `hold` or `hold DURATION` (each rep is held, e.g. `1 Wall walk (hold 10 s)`;
+the duration is added to every rep in estimates, and anything but a duration after `hold` is an
+error, `E001`), or free text in quotes — `("lateral over the dumbbell")`. A quoted
 modifier may contain commas; commas outside quotes separate modifiers.
 
 ## 8. Rest

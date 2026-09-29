@@ -1458,6 +1458,22 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "modifier_hold",
+  "board": "AMRAP 10:00\n  1 Wall walk .................... (hold 10 s)\n  5 Push-up ................... (hold, strict)\n  3 Inchworm ..................... (hold 0:05)\nScore: rounds + reps",
+  "boardFr": "AMRAP 10:00\n  1 Montée au mur ................ (hold 10 s)\n  5 Pompe ..................... (hold, strict)\n  3 Chenille ..................... (hold 0:05)\nScore: rounds + reps",
+  "markdown": "# Workout\n\n```\nAMRAP 10:00\n  1 Wall walk .............. (hold 10 s)\n  5 Push-up ............. (hold, strict)\n  3 Inchworm ............... (hold 0:05)\n```\n\n**Score** — rounds + reps\n",
+  "timer": "    0:00   10:00  AMRAP 10:00: 1 Wall walk (hold 10 s) + 5 Push-up (hold, strict) + 3 Inchworm (hold 0:05)\n           10:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 600.0,
+    "label": "AMRAP 10:00: 1 Wall walk (hold 10 s) + 5 Push-up (hold, strict) + 3 Inchworm (hold 0:05)",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "modifiers",
   "board": "AMRAP 10:00\n  10 Thruster ............ 43/30 kg (unbroken)\n  10 Dumbbell snatch . 22.5/15 kg (alternating, one arm per set)\n  20 Lunge ........................ (per side)\nScore: rounds + reps",
   "boardFr": "AMRAP 10:00\n  10 Thruster ............ 43/30 kg (unbroken)\n  10 Arraché haltère . 22.5/15 kg (alternating, one arm per set)\n  20 Fente ........................ (per side)\nScore: rounds + reps",

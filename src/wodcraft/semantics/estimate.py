@@ -59,7 +59,7 @@ def item_seconds(item: dict, catalog: Catalog) -> float:
     if kind == "calories":
         return _pick(quantity.get("cal", 0)) * (pace or 3.5)
     reps = _pick(quantity.get("reps", 0)) if kind == "reps" else 0.0
-    per_rep = (pace or DEFAULT_REP_PACE) * load_factor(item, entry)
+    per_rep = (pace or DEFAULT_REP_PACE) * load_factor(item, entry) + declared_hold(item)
     sets = item.get("sets")
     if sets:
         reps = float(sum(sets["reps"]))
@@ -81,6 +81,25 @@ def _declared_rest(item: dict) -> float | None:
             except ValueError:
                 return None
     return None
+
+
+def declared_hold(item: dict) -> float:
+    """A "(hold 10 s)" modifier holds every rep: its duration adds to each rep."""
+    for modifier in item.get("modifiers", []):
+        words = modifier.split(" ", 1)
+        if words[0] != "hold" or len(words) == 1:
+            continue
+        from wodcraft.syntax.units import parse_clock
+
+        text = words[1].strip()
+        try:
+            if ":" in text:
+                return parse_clock(text)
+            number, _, unit = text.partition(" ")
+            return float(number) * (60.0 if unit.strip() == "min" else 1.0)
+        except ValueError:
+            return 0.0
+    return 0.0
 
 
 def block_seconds(block: dict, catalog: Catalog) -> float:
@@ -112,7 +131,7 @@ def block_seconds(block: dict, catalog: Catalog) -> float:
             if item.get("type") == "movement" and not item.get("quantity"):
                 entry = catalog.movements.get(item.get("movement", ""))
                 pace = (entry.pace_for("reps") if entry else None) or DEFAULT_REP_PACE
-                per_rep_cost += pace * load_factor(item, entry)
+                per_rep_cost += pace * load_factor(item, entry) + declared_hold(item)
             else:
                 fixed += block_seconds(item, catalog)
         return sum(reps) * per_rep_cost + fixed * len(reps)

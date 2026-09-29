@@ -364,7 +364,7 @@ enum Estimation {
         var reps: Double = 0
         if kind == .reps { reps = quantity?.reps?.value(for: .men) ?? 0 }
         let base = (pace ?? 0) != 0 ? (pace ?? defaultRepPace) : defaultRepPace
-        let perRep = base * loadFactor(item, entry: entry)
+        let perRep = base * loadFactor(item, entry: entry) + Estimator.holdSeconds(item.modifiers ?? [])
 
         if let sets = item.sets, !sets.reps.isEmpty {
             var total: Double = 0

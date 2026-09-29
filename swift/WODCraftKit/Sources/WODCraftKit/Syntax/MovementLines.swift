@@ -202,12 +202,29 @@ private func modifierText(_ toks: [Token]) throws -> String {
     if toks[0].isWord("rest") {
         return "rest " + words.dropFirst().joined(separator: " ")
     }
+    if toks[0].isWord("hold") {
+        let rest: [Token] = Array(toks.dropFirst())
+        var timed: Bool = rest.count == 1 && rest[0].kind == .clock
+        if rest.count == 2, rest[0].kind == .number, Units.unitKind(rest[1].text)?.kind == "time" {
+            timed = true
+        }
+        if !rest.isEmpty, !timed {
+            throw LineError(
+                "E001",
+                "'hold' takes a duration.",
+                rest[0].col,
+                rest[rest.count - 1].endCol,
+                "e.g. '(hold 10 s)' or '(hold 0:30)'"
+            )
+        }
+        return (["hold"] + words.dropFirst()).joined(separator: " ")
+    }
     throw LineError(
         "E001",
         "Unknown modifier '\(words.joined(separator: " "))'.",
         toks[0].col,
         toks[toks.count - 1].endCol,
-        "known modifiers: sync, split, each, alternating, unbroken, strict, per side, rest DURATION"
+        "known modifiers: sync, split, each, alternating, unbroken, strict, per side, rest DURATION, hold [DURATION]"
             + " — or free text in quotes: (\"tempo 3-1-1\")"
     )
 }

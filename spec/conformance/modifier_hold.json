@@ -1,0 +1,69 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "amrap",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "duration_s": 600.0,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "wall_walk",
+          "name": "Wall walk",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "modifiers": [
+            "hold 10 s"
+          ],
+          "source": {
+            "line": 3,
+            "col": 5
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "push_up",
+          "name": "Push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 5
+          },
+          "modifiers": [
+            "hold",
+            "strict"
+          ],
+          "source": {
+            "line": 4,
+            "col": 5
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "inchworm",
+          "name": "Inchworm",
+          "quantity": {
+            "kind": "reps",
+            "reps": 3
+          },
+          "modifiers": [
+            "hold 0:05"
+          ],
+          "source": {
+            "line": 5,
+            "col": 5
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "rounds+reps"
+  }
+}

@@ -137,7 +137,7 @@
       "patterns": [
         {
           "name": "support.function.modifier.wod",
-          "match": "\\b(?i:sync|split|each|alternating|unbroken|strict|per\\s+side|rest)\\b"
+          "match": "\\b(?i:sync|split|each|alternating|unbroken|strict|per\\s+side|rest|hold)\\b"
         },
         { "include": "#duration" },
         { "name": "string.quoted.double.wod", "match": "\"[^\"]*\"" },

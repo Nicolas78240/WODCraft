@@ -502,3 +502,14 @@ def _block(text: str):
     statement = parse_line(line, bag, None)
     assert not bag.items, [(d.code, d.message) for d in bag.items]
     return statement
+
+
+@pytest.mark.parametrize(("written", "kept"), [("hold", "hold"), ("hold 10 s", "hold 10 s"), ("hold 0:30", "hold 0:30")])
+def test_hold_modifier_keeps_its_duration(written, kept):
+    item = first_item(f"AMRAP 10\n  1 Wall walk ({written})\n")
+    assert item["modifiers"] == [kept]
+
+
+def test_hold_takes_a_duration_or_nothing():
+    result = compile_wod("AMRAP 10\n  5 Burpee\n  1 Wall walk (hold ten)\n")
+    assert (only(result).code, only(result).span.line) == ("E001", 3)
