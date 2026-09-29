@@ -1254,6 +1254,22 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "ergometer",
+  "board": "For time\n  50/40 cal Ergometer\n  1000 m Ergometer\n  20 Yoga push-up\n  2:00 Ergometer\nScore: time",
+  "boardFr": "For time\n  50/40 cal Ergomètre\n  1000 m Ergomètre\n  20 Pompe yoga\n  2:00 Ergomètre\nScore: time",
+  "markdown": "# Workout\n\n```\nFor time\n  50/40 cal Ergometer\n  1000 m Ergometer\n  20 Yoga push-up\n  2:00 Ergometer\n```\n\n**Score** — time\n",
+  "timer": "    0:00       —~ For time: 50/40 cal Ergometer + 1000 m Ergometer + 20 Yoga push-up + 2:00 Ergometer\n            0:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 0,
+    "label": "For time: 50/40 cal Ergometer + 1000 m Ergometer + 20 Yoga push-up + 2:00 Ergometer",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "every_intervals",
   "board": "Every 3:00 x 5\n  15/12 cal Row\n  10 Burpee",
   "boardFr": "Every 3:00 x 5\n  15/12 cal Rameur\n  10 Burpee",

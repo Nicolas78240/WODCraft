@@ -1142,6 +1142,17 @@ param = "none"
 equipment = "bodyweight"
 pace = { rep = 1.5 }
 
+[movements.yoga_push_up]
+name = "Yoga push-up"
+aliases = ["yoga pushup", "yoga push up", "push-up to down dog", "downward dog push-up"]
+fr = ["pompe yoga", "pompes yoga"]
+fr_name = "Pompe yoga"
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+pace = { rep = 2.5 }
+
 [movements.hand_release_push_up]
 name = "Hand-release push-up"
 aliases = ["hand release push up", "hr push-up", "hrpu"]
@@ -1648,7 +1659,7 @@ pace = { rep = 0.8 }
 
 [movements.scapular_pull_up]
 name = "Scapular pull-up"
-aliases = ["scap pull-up", "scap pullup", "scapular pullup"]
+aliases = ["scap pull-up", "scap pullup", "scapular pullup", "scap pull"]
 fr = ["traction scapulaire", "tractions scapulaires"]
 family = "G"
 quantities = ["reps"]
@@ -1799,6 +1810,17 @@ quantities = ["calories", "distance", "time"]
 param = "none"
 equipment = "bike"
 pace = { m = 0.12, cal = 4 }
+
+[movements.ergometer]
+name = "Ergometer"
+aliases = ["ergo", "cal ergo", "machine", "erg"]
+fr = ["ergomètre"]
+fr_name = "Ergomètre"
+family = "M"
+quantities = ["calories", "distance", "time"]
+param = "none"
+equipment = "other"
+pace = { m = 0.2, cal = 3.4 }
 
 [movements.ski_erg]
 name = "Ski erg"

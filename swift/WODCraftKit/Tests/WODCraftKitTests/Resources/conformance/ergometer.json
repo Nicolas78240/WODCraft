@@ -1,0 +1,76 @@
+{
+  "wodcraft": "1.0",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "ergometer",
+          "name": "Ergometer",
+          "quantity": {
+            "kind": "calories",
+            "cal": {
+              "men": 50,
+              "women": 40
+            }
+          },
+          "source": {
+            "line": 3,
+            "col": 13
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "ergometer",
+          "name": "Ergometer",
+          "quantity": {
+            "m": 1000,
+            "unit": "m",
+            "written": 1000,
+            "kind": "distance"
+          },
+          "source": {
+            "line": 4,
+            "col": 10
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "yoga_push_up",
+          "name": "Yoga push-up",
+          "quantity": {
+            "kind": "reps",
+            "reps": 20
+          },
+          "source": {
+            "line": 5,
+            "col": 6
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "ergometer",
+          "name": "Ergometer",
+          "quantity": {
+            "kind": "time",
+            "s": 120
+          },
+          "source": {
+            "line": 6,
+            "col": 8
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  }
+}

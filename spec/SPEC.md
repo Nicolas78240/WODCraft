@@ -290,6 +290,10 @@ parameter kind it expects (load, height, none), and an average pace used for dur
 Implementations MUST accept every catalog entry and MUST NOT accept names outside the catalog.
 The first French alias is also the French display name (`wodc show --lang fr`).
 
+The catalog has a generic **ergometer** (`ergometer`, alias `ergo`, `cal ergo`, `machine`, French
+`ergomètre`), measured in calories, distance or time: the board leaves the choice of the machine
+(rower, bike, ski) to the athlete, and the machine actually used is recorded with the score.
+
 ## 12. Score
 
 The score of a workout is taken from the `score:` meta line, or inferred from its main block:

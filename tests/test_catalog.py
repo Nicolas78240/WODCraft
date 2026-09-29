@@ -50,6 +50,19 @@ def test_a_movement_is_found_by_its_aliases(catalog, alias):
     assert catalog.get(alias).id == "pull_up"
 
 
+@pytest.mark.parametrize("alias", ["ergometer", "ergo", "cal ergo", "machine", "Ergomètre"])
+def test_the_generic_ergometer_answers_to_its_aliases(catalog, alias):
+    entry = catalog.get(alias)
+    assert entry.id == "ergometer"
+    assert entry.quantities == ("calories", "distance", "time")
+
+
+def test_yoga_push_up_and_scap_pull_are_catalog_movements(catalog):
+    assert catalog.get("yoga push-up").id == "yoga_push_up"
+    assert catalog.get("pompe yoga").id == "yoga_push_up"
+    assert catalog.get("scap pull").id == "scapular_pull_up"
+
+
 def test_an_unknown_name_returns_none(catalog):
     assert catalog.get("Frobnicate") is None
 

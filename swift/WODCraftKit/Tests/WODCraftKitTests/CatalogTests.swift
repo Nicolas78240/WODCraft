@@ -7,11 +7,11 @@ import Testing
 struct CatalogTests {
     let catalog = Catalog.shared
 
-    @Test("the embedded catalog holds the 212 movements of WODCraft 1.0")
+    @Test("the embedded catalog holds the 214 movements of WODCraft 1.1")
     func loadsEveryMovement() {
-        #expect(catalog.count == 212)
-        #expect(catalog.identifiers.count == 212)
-        #expect(catalog.all.count == 212)
+        #expect(catalog.count == 214)
+        #expect(catalog.identifiers.count == 214)
+        #expect(catalog.all.count == 214)
     }
 
     @Test("a movement is found by identifier")
@@ -31,6 +31,16 @@ struct CatalogTests {
         #expect(catalog.resolve(name: "pull_up") == nil)
         #expect(catalog.resolve(name: "deadlift")?.id == "deadlift")
         #expect(catalog.resolve(name: "Wall balls")?.id == "wall_ball")
+    }
+
+    @Test("the generic ergometer, the yoga push-up and the scap pull resolve")
+    func resolvesLotBMovements() {
+        for alias in ["ergometer", "ergo", "cal ergo", "machine", "Ergomètre"] {
+            #expect(catalog.resolve(name: alias)?.id == "ergometer")
+        }
+        #expect(catalog.resolve(name: "ergo")?.quantities == ["calories", "distance", "time"])
+        #expect(catalog.resolve(name: "yoga push-up")?.id == "yoga_push_up")
+        #expect(catalog.resolve(name: "scap pull")?.id == "scapular_pull_up")
     }
 
     @Test("French aliases resolve, with or without accents")
