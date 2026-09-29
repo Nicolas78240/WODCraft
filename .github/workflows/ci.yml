@@ -47,6 +47,10 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # The runner's Homebrew Python refuses global installs (PEP 668): use a managed interpreter.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: Swift version
         run: swift --version
       - name: Build and test
