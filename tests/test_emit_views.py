@@ -320,3 +320,19 @@ def test_an_amrap_ladder_shows_its_reps_on_the_board():
 
     document = compile_wod("AMRAP 5:00\n  1-2-3 ...\n    Wall walk\n    Pull-up\n").document
     assert board.render(document).splitlines()[0] == "AMRAP 5:00 · 1-2-3 …"
+
+
+def test_the_29_september_session_reads_right_in_french():
+    from pathlib import Path
+
+    from wodcraft.api import compile_file
+    from wodcraft.emit import board
+
+    result = compile_file(Path(__file__).resolve().parent.parent / "examples" / "session-2026-09-29.wod")
+    assert result.ok and not result.diagnostics, result.report()
+    french = board.render(result.document, lang="fr")
+    assert "10 Tirage aux anneaux ou 10 Traction scapulaire" in french
+    assert "1 Montée au mur ................ (hold 10 s)" in french
+    assert "AMRAP 5:00 · 1-2-3 …" in french
+    assert "Teams of 2 · For time · cap 25:00 · aller-retour" in french
+    assert [s["workout"]["wodcraft"] for s in result.document["sections"]] == ["1.1", "1.1", "1.1", "1.0"]
