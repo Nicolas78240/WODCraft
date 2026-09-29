@@ -123,7 +123,16 @@ public struct Movement: Codable, Equatable, Sendable {
     public var bodyweight: Amount?
     public var sets: Sets?
     public var modifiers: [String]?
+    /// 1.1 — the other options of an alternative (`10 Ring row | 8 Scapular pull-up`).
+    public var or: [Movement]?
     public var source: SourceSpan?
+
+    /// Every option of the line, this movement first (a single element without an alternative).
+    public var options: [Movement] {
+        var first = self
+        first.or = nil
+        return [first] + (or ?? [])
+    }
 }
 
 public struct Rest: Codable, Equatable, Sendable {

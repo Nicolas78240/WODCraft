@@ -70,9 +70,9 @@ public enum Board {
         let localized = language == .en ? document : localize(document, language: language)
         switch localized {
         case let .session(session):
-            return renderSession(session, width: width, showProfile: showProfile)
+            return renderSession(session, width: width, showProfile: showProfile, language: language)
         case let .workout(workout):
-            return renderWorkout(workout, width: width, skipTitle: false, showProfile: showProfile)
+            return renderWorkout(workout, width: width, skipTitle: false, showProfile: showProfile, language: language)
         }
     }
 
@@ -115,10 +115,7 @@ public enum Board {
     private static func localize(item: Item, language: Language, catalog: Catalog) -> Item {
         switch item {
         case var .movement(movement):
-            if let entry = catalog.movement(id: movement.movement) {
-                movement.name = entry.displayName(language)
-            }
-            return .movement(movement)
+            return .movement(localize(movement: movement, language: language, catalog: catalog))
         case .rest:
             return item
         case let .block(nested):
@@ -126,9 +123,28 @@ public enum Board {
         }
     }
 
+    private static func localize(movement: Movement, language: Language, catalog: Catalog) -> Movement {
+        var out = movement
+        if let entry = catalog.movement(id: movement.movement) {
+            out.name = entry.displayName(language)
+        }
+        out.or = movement.or?.map { localize(movement: $0, language: language, catalog: catalog) }
+        return out
+    }
+
+    /// The connective words of the board in another language ("or", "there and back").
+    public static func word(_ text: String, _ language: Language) -> String {
+        guard language == .fr else { return text }
+        switch text {
+        case "or": return "ou"
+        case "there and back": return "aller-retour"
+        default: return text
+        }
+    }
+
     // MARK: Session
 
-    static func renderSession(_ session: Session, width: Int, showProfile: Bool) -> String {
+    static func renderSession(_ session: Session, width: Int, showProfile: Bool, language: Language = .en) -> String {
         var lines: [String] = [titleText(session.title ?? "Session")]
         var head: [String] = []
         if let date = session.date, !date.isEmpty { head.append(date) }
@@ -137,7 +153,9 @@ public enum Board {
         for section in session.sections {
             lines.append("")
             lines.append(section.title.uppercased())
-            lines.append(renderWorkout(section.workout, width: width, skipTitle: true, showProfile: showProfile))
+            lines.append(
+                renderWorkout(section.workout, width: width, skipTitle: true, showProfile: showProfile, language: language)
+            )
         }
         if let estimate = session.estimate {
             lines.append("")
@@ -152,14 +170,22 @@ public enum Board {
 
     // MARK: Workout
 
-    static func renderWorkout(_ workout: Workout, width: Int, skipTitle: Bool, showProfile: Bool) -> String {
+    static func renderWorkout(
+        _ workout: Workout,
+        width: Int,
+        skipTitle: Bool,
+        showProfile: Bool,
+        language: Language = .en
+    ) -> String {
         var lines: [String] = []
         if !skipTitle, let title = workout.title, !title.isEmpty {
             lines.append(titleText(title))
         }
         let meta = workout.meta
         var body: [String] = []
-        for block in workout.blocks { body.append(contentsOf: blockLines(block, depth: 0, width: width)) }
+        for block in workout.blocks {
+            body.append(contentsOf: blockLines(block, depth: 0, width: width, language: language))
+        }
         if let team = workout.team, !body.isEmpty {
             body[0] = "Teams of " + String(team.size) + " · " + body[0]
         }
@@ -195,32 +221,32 @@ public enum Board {
 
     // MARK: Blocks
 
-    static func blockLines(_ item: Item, depth: Int, width: Int) -> [String] {
+    static func blockLines(_ item: Item, depth: Int, width: Int, language: Language = .en) -> [String] {
         switch item {
         case let .movement(movement):
             let pad = padding(depth)
-            return [pad + movementText(movement, width: width - pad.count)]
+            return [pad + movementText(movement, width: width - pad.count, language: language)]
         case let .rest(rest):
             return [padding(depth) + "Rest " + formatClock(rest.seconds)]
         case let .block(block):
-            return blockLines(block, depth: depth, width: width)
+            return blockLines(block, depth: depth, width: width, language: language)
         }
     }
 
-    static func blockLines(_ block: Block, depth: Int, width: Int) -> [String] {
+    static func blockLines(_ block: Block, depth: Int, width: Int, language: Language = .en) -> [String] {
         let pad = padding(depth)
-        let head = headText(block)
+        let head = headText(block, language: language)
         let items = block.items
         let inlineKinds: [Block.Kind] = [.slot, .buyIn, .cashOut]
         if !head.isEmpty, inlineKinds.contains(block.type), items.count == 1,
            case let .movement(movement) = items[0] {
-            let inner = movementText(movement, width: width - pad.count - head.count - 1)
+            let inner = movementText(movement, width: width - pad.count - head.count - 1, language: language)
             return [pad + head + " " + inner]
         }
         var lines: [String] = head.isEmpty ? [] : [pad + head]
         let childDepth = depth + (head.isEmpty ? 0 : 1)
         for item in items {
-            lines.append(contentsOf: blockLines(item, depth: childDepth, width: width))
+            lines.append(contentsOf: blockLines(item, depth: childDepth, width: width, language: language))
         }
         return lines
     }
@@ -233,7 +259,7 @@ public enum Board {
     }
 
     /// The header line of a block: `AMRAP 20:00`, `21-15-9 for time`, `Odd:`…
-    static func headText(_ block: Block) -> String {
+    static func headText(_ block: Block, language: Language = .en) -> String {
         var parts: [String] = []
         var ladderPieces: [String] = []
         for rep in block.reps ?? [] { ladderPieces.append(String(rep)) }
@@ -310,7 +336,11 @@ public enum Board {
 
     // MARK: Movements
 
-    static func movementText(_ item: Movement, width: Int, dots: Bool = true) -> String {
+    static func movementText(_ item: Movement, width: Int, dots: Bool = true, language: Language = .en) -> String {
+        if let options = item.or, !options.isEmpty {  // an alternative: every option in full, joined by "or"
+            let texts: [String] = item.options.map { movementText($0, width: 0, dots: false) }
+            return texts.joined(separator: " " + word("or", language) + " ")
+        }
         var leftParts: [String] = []
         let quantity = quantityText(item.quantity)
         if !quantity.isEmpty { leftParts.append(quantity) }

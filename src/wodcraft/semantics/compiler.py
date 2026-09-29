@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from wodcraft import SPEC_VERSION
 from wodcraft.catalog import Catalog, Equivalences, load_catalog, load_equivalences
@@ -24,6 +24,8 @@ from wodcraft.syntax.ast import (
 )
 from wodcraft.syntax.units import format_clock
 
+BASE_VERSION = "1.0"  # the compiled format of a document that uses nothing newer
+LATEST_VERSION = SPEC_VERSION  # the language this compiler implements
 TIMED = {"for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"}
 INTERVALS = {"emom", "every"}
 UNTIMED = {"rounds", "ladder"}
@@ -91,11 +93,13 @@ class Compiler:
             workout = self._workout(section.body, section.title)
             sections.append({"title": section.title, "workout": workout, "source": section.span.to_dict()})
         out: dict = {
-            "wodcraft": SPEC_VERSION,
+            "wodcraft": BASE_VERSION,
             "kind": "session",
             "title": doc.title,
             "sections": sections,
         }
+        if any(section["workout"]["wodcraft"] != BASE_VERSION for section in sections):
+            out["wodcraft"] = LATEST_VERSION
         estimates = [section["workout"].get("estimate") for section in sections if section["workout"].get("estimate")]
         if estimates:
             out["estimate"] = {
@@ -129,7 +133,7 @@ class Compiler:
         if cap is not None and blocks:
             blocks[0].setdefault("cap_s", cap)
         out: dict = {
-            "wodcraft": SPEC_VERSION,
+            "wodcraft": BASE_VERSION,
             "kind": "workout",
             "title": title,
             "blocks": blocks,
@@ -143,6 +147,7 @@ class Compiler:
         rest = {k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}
         if rest:
             out["meta"] = rest
+        out["wodcraft"] = compiled_version(out)
         if self.opt.estimate:
             estimate = estimate_workout(out, self.opt.catalog, self.diags, self.file)
             if estimate:
@@ -161,7 +166,7 @@ class Compiler:
     def _adopt(self, used: dict, title: str | None, meta: dict) -> dict:
         source = used["source"] or {}
         out: dict = {
-            "wodcraft": SPEC_VERSION,
+            "wodcraft": BASE_VERSION,
             "kind": "workout",
             "title": title or source.get("title"),
             "blocks": used["blocks"],
@@ -170,6 +175,7 @@ class Compiler:
         for key in ("team", "levels", "estimate"):
             if source.get(key):
                 out[key] = source[key]
+        out["wodcraft"] = compiled_version(out)
         merged = {**(source.get("meta") or {}), **{k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}}
         if merged:
             out["meta"] = merged
@@ -318,6 +324,22 @@ class Compiler:
     # ------------------------------------------------------------------ movements
 
     def _movement(self, mv: MovementLine, parent: str) -> dict | None:
+        out = self._one_movement(mv, parent)
+        if out is None or not mv.alternatives:
+            return out
+        options = []
+        for alternative in mv.alternatives:
+            if alternative.quantity is None and alternative.sets is None:
+                # "10 Ring row | Scapular pull-up": an option without a quantity takes the first one's
+                alternative = replace(alternative, quantity=mv.quantity)
+            option = self._one_movement(alternative, parent)
+            if option is not None:
+                options.append(option)
+        if options:
+            out["or"] = options
+        return out
+
+    def _one_movement(self, mv: MovementLine, parent: str) -> dict | None:
         entry = self.opt.catalog.get(mv.name)
         if entry is None:
             hints = self.opt.catalog.suggest(mv.name)
@@ -604,6 +626,26 @@ class Compiler:
 
     def _err(self, code: str, message: str, span: Span, suggestion: str | None = None) -> None:
         self.diags.add(code, message, Span(span.line, span.col, span.end_col, self.file), suggestion)
+
+
+def compiled_version(workout: dict) -> str:
+    """The format version a compiled workout needs: "1.0" unless it uses a 1.1 construct (SPEC §13).
+
+    A document written in 1.0 therefore compiles to exactly the same JSON as before."""
+
+    def uses_1_1(node) -> bool:
+        if isinstance(node, dict):
+            if node.get("or") or node.get("there_and_back"):
+                return True
+            return any(uses_1_1(value) for value in node.values())
+        if isinstance(node, list):
+            return any(uses_1_1(value) for value in node)
+        return False
+
+    operations = [op for ops in (workout.get("levels") or {}).values() for op in ops]
+    if workout.get("adapted") is not None or any("factor" in op or "quantity" in op for op in operations):
+        return LATEST_VERSION
+    return LATEST_VERSION if uses_1_1(workout.get("blocks")) else BASE_VERSION
 
 
 def _has_max(block: dict) -> bool:

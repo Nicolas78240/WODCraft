@@ -229,7 +229,38 @@ private func modifierText(_ toks: [Token]) throws -> String {
     )
 }
 
+/// A movement line, or several separated by `|`: the athlete does one of them (SPEC §7.6).
 func parseMovement(_ line: SourceLine, _ tokens: [Token], _ file: String?, _ allowReplace: Bool = false) throws -> MovementLine {
+    var parts: [[Token]] = [[]]
+    for tok in tokens {
+        if tok.isSymbol("|") {
+            if allowReplace {
+                throw LineError("E014", "An alternative ('|') is not allowed in a level block.", tok.col, tok.endCol)
+            }
+            if parts[parts.count - 1].isEmpty {
+                throw LineError("E001", "Expected a movement before '|'.", tok.col, tok.endCol)
+            }
+            parts.append([])
+        } else {
+            parts[parts.count - 1].append(tok)
+        }
+    }
+    if parts[parts.count - 1].isEmpty, let last = tokens.last {
+        throw LineError("E001", "Expected a movement after '|'.", last.col, last.endCol)
+    }
+    let mv = try parseOneMovement(line, parts[0], file, allowReplace)
+    for part in parts.dropFirst() {
+        mv.alternatives.append(try parseOneMovement(line, part, file))
+    }
+    return mv
+}
+
+private func parseOneMovement(
+    _ line: SourceLine,
+    _ tokens: [Token],
+    _ file: String?,
+    _ allowReplace: Bool = false
+) throws -> MovementLine {
     let cur = Cursor(tokens, line)
     let quantity = try parseQuantity(cur, file)
     let named = try parseName(cur)

@@ -86,6 +86,12 @@ final class MovementLine: Statement {
     var replaceSpan: Span?
     /// level blocks: params written before "->"
     var selectorParams: [ParamNode] = []
+    /// "10 Ring row | Scapular pull-up": the other options
+    var alternatives: [MovementLine] = []
+    /// level blocks: "A -> 2x B" multiplies the quantities
+    var factor: Double?
+    /// level blocks: "A -> 10 B" sets the quantity
+    var replaceQuantity: QuantityNode?
 
     init(_ name: String, _ nameSpan: Span, _ span: Span, _ quantity: QuantityNode? = nil) {
         self.name = name

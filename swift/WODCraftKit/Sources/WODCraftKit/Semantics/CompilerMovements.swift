@@ -5,6 +5,25 @@ extension Compiler {
     // MARK: - movements
 
     func movement(_ mv: MovementLine, _ parent: String) -> JSONObject? {
+        guard var out = oneMovement(mv, parent) else { return nil }
+        if mv.alternatives.isEmpty { return out }
+        var options: [JSONValue] = []
+        for alternative in mv.alternatives {
+            if alternative.quantity == nil, alternative.sets == nil {
+                // "10 Ring row | Scapular pull-up": an option without a quantity takes the first one's
+                alternative.quantity = mv.quantity
+            }
+            if let option = oneMovement(alternative, parent) {
+                options.append(.object(option))
+            }
+        }
+        if !options.isEmpty {
+            out["or"] = .array(options)
+        }
+        return out
+    }
+
+    func oneMovement(_ mv: MovementLine, _ parent: String) -> JSONObject? {
         guard let entry = opt.catalog.get(mv.name) else {
             let hints: [String] = opt.catalog.suggest(mv.name)
             let suggestion: String

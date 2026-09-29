@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://wodcraft.dev/schema/1.0/workout.schema.json",
+  "$id": "https://wodcraft.dev/schema/1.1/workout.schema.json",
   "title": "WODCraft compiled document",
-  "description": "The interchange format produced by compiling a .wod document (WODCraft 1.0, SPEC §13).",
+  "description": "The interchange format produced by compiling a .wod document (WODCraft 1.1, SPEC §13). A document that uses no 1.1 construct is still stamped \"1.0\" and validates as before.",
   "oneOf": [{ "$ref": "#/$defs/workout" }, { "$ref": "#/$defs/session" }],
   "$defs": {
     "amount": {
@@ -85,6 +85,12 @@
           "required": ["reps"]
         },
         "modifiers": { "type": "array", "items": { "type": "string" } },
+        "or": {
+          "type": "array",
+          "description": "1.1 — the other options of an alternative (10 Ring row | 8 Scapular pull-up): the athlete does this movement or one of these",
+          "items": { "$ref": "#/$defs/movement" },
+          "minItems": 1
+        },
         "source": { "$ref": "#/$defs/source" }
       },
       "required": ["type", "movement", "name"]
@@ -195,7 +201,7 @@
     "workout": {
       "type": "object",
       "properties": {
-        "wodcraft": { "const": "1.0" },
+        "wodcraft": { "enum": ["1.0", "1.1"] },
         "kind": { "const": "workout" },
         "title": { "type": ["string", "null"] },
         "blocks": {
@@ -240,7 +246,7 @@
     "session": {
       "type": "object",
       "properties": {
-        "wodcraft": { "const": "1.0" },
+        "wodcraft": { "enum": ["1.0", "1.1"] },
         "kind": { "const": "session" },
         "title": { "type": ["string", "null"] },
         "date": { "type": "string" },

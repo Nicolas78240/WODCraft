@@ -59,7 +59,7 @@ struct SourceLine: Sendable {
 }
 
 enum Lexer {
-    private static let symbols: Set<Character> = ["/", "@", "(", ")", ",", ":", "%", "-", "#"]
+    private static let symbols: Set<Character> = ["/", "@", "(", ")", ",", ":", "%", "-", "#", "|"]
     private static let wordTail: Set<Character> = ["'", "\u{2019}", "+", "-", "_"]
 
     /// Split a line into code and its `//` comment. `//` only starts a comment at line start or

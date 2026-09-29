@@ -466,6 +466,25 @@ def _modifier_text(toks: list[Token]) -> str:
 
 
 def parse_movement(line: Line, tokens: list[Token], file: str | None, allow_replace: bool = False) -> MovementLine:
+    """A movement line, or several separated by '|': the athlete does one of them (SPEC §7.6)."""
+    parts: list[list[Token]] = [[]]
+    for tok in tokens:
+        if tok.is_sym("|"):
+            if allow_replace:
+                raise LineError("E014", "An alternative ('|') is not allowed in a level block.", tok.col, tok.end_col)
+            if not parts[-1]:
+                raise LineError("E001", "Expected a movement before '|'.", tok.col, tok.end_col)
+            parts.append([])
+        else:
+            parts[-1].append(tok)
+    if not parts[-1]:
+        raise LineError("E001", "Expected a movement after '|'.", tokens[-1].col, tokens[-1].end_col)
+    mv = _parse_one_movement(line, parts[0], file, allow_replace)
+    mv.alternatives = [_parse_one_movement(line, part, file) for part in parts[1:]]
+    return mv
+
+
+def _parse_one_movement(line: Line, tokens: list[Token], file: str | None, allow_replace: bool = False) -> MovementLine:
     cur = Cursor(tokens, line)
     quantity = _parse_quantity(cur, file)
     name, c0, c1 = _parse_name(cur)

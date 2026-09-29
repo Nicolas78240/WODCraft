@@ -282,3 +282,10 @@ def test_resolution_does_not_mutate_the_compiled_document():
     resolve(document, Profile("women", "scaled", "lb"))
     assert document["blocks"][0]["items"][0]["load"]["kg"] == {"men": 43, "women": 30}
     assert "resolved" not in document
+
+
+def test_a_level_applies_to_every_option_of_an_alternative():
+    source = "For time\n  10 Ring row | 8 Pull-up\n\nScaled:\n  Pull-up -> Jumping pull-up\n"
+    item = resolved_items(Profile(level="scaled"), source)[0]
+    assert item["movement"] == "ring_row"
+    assert [(o["movement"], o["quantity"]["reps"]) for o in item["or"]] == [("jumping_pull_up", 8)]

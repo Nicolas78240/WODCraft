@@ -84,6 +84,8 @@ def _movement(item: dict, operations: list[dict], profile: Profile, eq: Equivale
     if "bodyweight" in item and profile.bodyweight_kg:
         factor = _pick(item["bodyweight"], profile)
         item["load"] = _round_load({"kg": profile.bodyweight_kg * factor}, profile, eq)
+    if "or" in item:  # every option of an alternative is resolved the same way
+        item["or"] = [_movement(option, operations, profile, eq) for option in item["or"]]
     return item
 
 

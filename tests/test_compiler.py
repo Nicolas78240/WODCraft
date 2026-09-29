@@ -24,10 +24,36 @@ def score_of(source: str, **kwargs) -> dict:
 def test_a_compiled_workout_carries_the_spec_version_and_kind():
     result = compile_wod("# Fran\nFor time\n  10 Burpee\n")
     document = result.document
-    assert document["wodcraft"] == SPEC_VERSION == "1.0"
+    assert document["wodcraft"] == "1.0"  # the format of a document that uses nothing newer
+    assert SPEC_VERSION == "1.1"
     assert document["kind"] == "workout"
     assert document["title"] == "Fran"
     assert set(document) == {"wodcraft", "kind", "title", "blocks", "score"}
+
+
+def test_a_workout_using_a_1_1_construct_is_stamped_1_1():
+    assert compile_wod("For time\n  10 Ring row | Scap pull\n").document["wodcraft"] == "1.1"
+    session = compile_wod("# S\n## A\nFor time\n  10 Burpee\n## B\nFor time\n  10 Ring row | Scap pull\n").document
+    assert session["wodcraft"] == "1.1"
+    assert [s["workout"]["wodcraft"] for s in session["sections"]] == ["1.0", "1.1"]
+
+
+def test_an_alternative_option_takes_the_first_quantity_when_it_has_none():
+    item = compile_wod("For time\n  10 Ring row | Scap pull | 8 Pull-up\n").document["blocks"][0]["items"][0]
+    assert item["movement"] == "ring_row"
+    assert [(o["movement"], o["quantity"]["reps"]) for o in item["or"]] == [("scapular_pull_up", 10), ("pull_up", 8)]
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("For time\n  10 Ring row |\n", [("E016", 1), ("E001", 2)]),
+        ("For time\n  10 Ring row | Pull-up\n\nScaled:\n  Ring row -> Jumping pull-up | Burpee\n", [("E014", 5)]),
+        ("For time\n  10 cal Row | Burpee\n", [("E033", 2)]),
+    ],
+)
+def test_alternative_errors(source, expected):
+    assert [(d.code, d.span.line) for d in compile_wod(source).diagnostics] == expected
 
 
 def test_an_untitled_workout_has_a_null_title():

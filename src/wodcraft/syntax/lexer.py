@@ -17,7 +17,7 @@ _TOKEN_RE = re.compile(
   | (?P<ELLIPSIS>\.\.\.|…)
   | (?P<ARROW>->|→)
   | (?P<WORD>[^\W\d_][\w'’+\-]*)
-  | (?P<SYM>[/@(),:%\-#])
+  | (?P<SYM>[/@(),:%\-#|])
     """,
     re.VERBOSE,
 )

@@ -161,6 +161,8 @@ def movement(mv: MovementLine) -> str:
     text = " ".join(parts)
     if mv.modifiers:
         text += " (" + ", ".join(_modifier(m) for m in mv.modifiers) + ")"
+    for alternative in mv.alternatives:
+        text += " | " + movement(alternative)
     return text
 
 

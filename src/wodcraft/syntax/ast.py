@@ -57,6 +57,9 @@ class MovementLine:
     replace_with: str | None = None  # level blocks: "A -> B"
     replace_span: Span | None = None
     selector_params: list[Param] = field(default_factory=list)  # level blocks: params written before "->"
+    alternatives: list[MovementLine] = field(default_factory=list)  # "10 Ring row | Scapular pull-up"
+    factor: float | None = None  # level blocks: "A -> 2x B" multiplies the quantities
+    replace_quantity: Quantity | None = None  # level blocks: "A -> 10 B" sets the quantity
 
 
 @dataclass

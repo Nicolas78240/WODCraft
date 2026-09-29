@@ -856,6 +856,22 @@ enum ViewsFixtures {
     static let conformanceJSON: String = #"""
 [
  {
+  "path": "alternatives",
+  "board": "For time\n  10 Ring row or 10 Scapular pull-up\n  12/10 cal Row or 15/12 cal Bike erg or 200 m Run\n  21-15-9\n    Pull-up or Ring row (strict)\nScore: time\nLevels: scaled",
+  "boardFr": "For time\n  10 Tirage aux anneaux ou 10 Traction scapulaire\n  12/10 cal Rameur ou 15/12 cal Vélo erg ou 200 m Course\n  21-15-9\n    Traction ou Tirage aux anneaux (strict)\nScore: time\nLevels: scaled",
+  "markdown": "# Workout\n\n```\nFor time\n  10 Ring row or 10 Scapular pull-up\n  12/10 cal Row or 15/12 cal Bike erg or 200 m Run\n  21-15-9\n    Pull-up or Ring row (strict)\n```\n\n**Score** — time\n",
+  "timer": "    0:00       —~ For time: 10 Ring row or 10 Scapular pull-up + 12/10 cal Row or 15/12 cal Bike erg or 200 m Run + 21-15-9 Pull-up or Ring row (strict)\n            0:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 0,
+    "label": "For time: 10 Ring row or 10 Scapular pull-up + 12/10 cal Row or 15/12 cal Bike erg or 200 m Run + 21-15-9 Pull-up or Ring row (strict)",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "amrap_max_reps",
   "board": "NICOLE\nAMRAP 20:00\n  400 m Run\n  max Pull-up\nScore: reps",
   "boardFr": "NICOLE\nAMRAP 20:00\n  400 m Course\n  max Traction\nScore: reps",

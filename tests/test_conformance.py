@@ -159,3 +159,18 @@ def test_the_expectations_never_contain_an_estimate():
         expected_json = case.with_suffix(".json")
         if expected_json.exists():
             assert '"estimate"' not in expected_json.read_text(encoding="utf-8"), case.name
+
+
+def test_every_expected_document_validates_against_the_schema():
+    jsonschema = pytest.importorskip("jsonschema")
+    from wodcraft.resources import schema
+
+    validator = jsonschema.Draft202012Validator(schema())
+    for case in CASES:
+        expected = case.with_suffix(".json")
+        if not expected.exists():
+            continue
+        payload = json.loads(expected.read_text(encoding="utf-8"))
+        for document in payload if isinstance(payload, list) else [payload]:
+            errors = [f"{'/'.join(map(str, e.path))}: {e.message}" for e in validator.iter_errors(document)]
+            assert not errors, f"{case.stem}: {errors}"

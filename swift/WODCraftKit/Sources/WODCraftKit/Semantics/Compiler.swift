@@ -1,7 +1,10 @@
 /// Semantic analysis: resolve, check and compile a parsed document into the JSON model.
 import Foundation
 
-let specVersion: String = "1.0"
+/// The language this compiler implements.
+let specVersion: String = "1.1"
+/// The compiled format of a document that uses nothing newer (SPEC §13).
+let baseVersion: String = "1.0"
 
 let timedKinds: Set<String> = ["for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"]
 let intervalKinds: Set<String> = ["emom", "every"]
@@ -90,10 +93,14 @@ final class Compiler {
             }
         }
         var out = JSONObject()
-        out["wodcraft"] = .string(specVersion)
+        out["wodcraft"] = .string(baseVersion)
         out["kind"] = .string("session")
         out["title"] = doc.title.map { JSONValue.string($0) } ?? .null
         out["sections"] = .array(sections)
+        let newer: Bool = sections.contains { $0.objectValue?["workout"]?.objectValue?["wodcraft"]?.stringValue != baseVersion }
+        if newer {
+            out["wodcraft"] = .string(specVersion)
+        }
         if !estimates.isEmpty {
             let minTotal: Double = estimates.reduce(0.0) { $0 + ($1["min_s"]?.doubleValue ?? 0) }
             let maxTotal: Double = estimates.reduce(0.0) { $0 + ($1["max_s"]?.doubleValue ?? 0) }
@@ -141,7 +148,7 @@ final class Compiler {
             blocks[0].setDefault("cap_s", cap)
         }
         var out = JSONObject()
-        out["wodcraft"] = .string(specVersion)
+        out["wodcraft"] = .string(baseVersion)
         out["kind"] = .string("workout")
         out["title"] = title.map { JSONValue.string($0) } ?? .null
         out["blocks"] = .array(blocks.map { JSONValue.object($0) })
@@ -160,6 +167,7 @@ final class Compiler {
         if !rest.isEmpty {
             out["meta"] = .object(rest)
         }
+        out["wodcraft"] = .string(compiledVersion(out))
         if opt.estimate, let estimate = Estimator.estimateWorkout(out, opt.catalog, diags, file) {
             out["estimate"] = .object(estimate)
         }
@@ -179,7 +187,7 @@ final class Compiler {
     func adopt(_ used: (blocks: [JSONObject], source: JSONObject?), _ title: String?, _ meta: JSONObject) -> JSONObject {
         let source: JSONObject = used.source ?? JSONObject()
         var out = JSONObject()
-        out["wodcraft"] = .string(specVersion)
+        out["wodcraft"] = .string(baseVersion)
         out["kind"] = .string("workout")
         let sourceTitle: JSONValue = source["title"] ?? .null
         out["title"] = title.map { JSONValue.string($0) } ?? sourceTitle
@@ -194,6 +202,7 @@ final class Compiler {
                 out[key] = value
             }
         }
+        out["wodcraft"] = .string(compiledVersion(out))
         var merged: JSONObject = source["meta"]?.objectValue ?? JSONObject()
         for key in meta.keys where !["units", "cap_s", "score"].contains(key) {
             merged[key] = meta[key]
@@ -205,6 +214,30 @@ final class Compiler {
     }
 
     // MARK: - helpers
+
+    /// The format version a compiled workout needs: "1.0" unless it uses a 1.1 construct (SPEC §13).
+    func compiledVersion(_ workout: JSONObject) -> String {
+        func uses(_ value: JSONValue?) -> Bool {
+            switch value {
+            case let .object(object)?:
+                if let options = object["or"]?.arrayValue, !options.isEmpty { return true }
+                if case .bool(true)? = object["there_and_back"] { return true }
+                return object.keys.contains { uses(object[$0]) }
+            case let .array(array)?:
+                return array.contains { uses($0) }
+            default:
+                return false
+            }
+        }
+        if workout.has("adapted") { return specVersion }
+        let levels: JSONObject = workout["levels"]?.objectValue ?? JSONObject()
+        for key in levels.keys {
+            for operation in levels[key]?.arrayValue ?? [] {
+                if let op = operation.objectValue, op.has("factor") || op.has("quantity") { return specVersion }
+            }
+        }
+        return uses(workout["blocks"]) ? specVersion : baseVersion
+    }
 
     func err(_ code: String, _ message: String, _ span: Span, _ suggestion: String? = nil) {
         diags.add(code, message, Span(span.line, span.col, span.endCol, file), suggestion)

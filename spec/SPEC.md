@@ -1,4 +1,4 @@
-# WODCraft Language Specification — 1.0 (draft)
+# WODCraft Language Specification — 1.1 (draft)
 
 Status: draft · Editor: WODCraft project · License: CC BY-SA 4.0 (see `LICENSE-docs`)
 
@@ -13,7 +13,8 @@ and whole training sessions. A WODCraft file:
 2. is **strict**: anything ambiguous is rejected with a located, coded diagnostic;
 3. compiles to a JSON document (see `workout.schema.json`) that applications exchange.
 
-Out of scope for 1.0: multi-week programming, logged results.
+Out of scope for 1.1: multi-week programming, logged results (the athlete's adaptation, §9.1, is
+the only record of what was actually done).
 
 ## 2. Lexical structure
 
@@ -244,6 +245,22 @@ the duration is added to every rep in estimates, and anything but a duration aft
 error, `E001`), or free text in quotes — `("lateral over the dumbbell")`. A quoted
 modifier may contain commas; commas outside quotes separate modifiers.
 
+### 7.6 Alternatives (1.1)
+
+`|` separates the **options** of a movement line: the athlete does one of them.
+
+```wod
+For time
+  10 Ring row | 8 Scapular pull-up
+  12/10 cal Row | 15/12 cal Bike erg
+```
+
+Each option is a complete movement line (quantity, parameters, modifiers). An option written
+without a quantity takes the quantity of the first one: `10 Ring row | Scap pull` is ten of either.
+The compiled item is the first option, with the others in `or` (§13), so a reader that ignores `or`
+still sees a valid workout. Level and adaptation blocks (§9) apply to every option. A `|` inside a
+level block is an error (`E014`). The whiteboard joins the options with "or" ("ou" in French).
+
 ## 8. Rest
 
 `Rest DURATION` is a timed pause item. As the **last item of a repeated block** it is performed
@@ -320,7 +337,11 @@ single) scores `multi`, with one entry per part — that is also how a workout c
 
 Compiling a document produces a JSON object described by `spec/workout.schema.json`. In summary:
 
-- `wodcraft`: spec version (`"1.0"`); `kind`: `"workout"` or `"session"`; `title`.
+- `wodcraft`: the version of the compiled format. It is `"1.0"` for a document that uses nothing newer,
+  so that a 1.0 document compiles to exactly the same JSON under 1.1, and `"1.1"` when it uses a
+  construct added in 1.1: an alternative (`or`), a level quantity (`factor`, `quantity`), a block
+  done there and back (`there_and_back`) or an `Adapted:` block (`adapted`). A session is `"1.1"` when
+  one of its sections is. `kind`: `"workout"` or `"session"`; `title`.
 - Workout: `blocks` (the body: blocks, and the movement or rest lines written at the top level, such
   as a bare strength line), `score`, `levels`, `meta`, `team`.
 - Session: `sections`, each `{ "title", "workout" }`, plus `date`, `time`, `meta`.
@@ -423,5 +444,5 @@ A `.diag` file holds one `CODE LINE` per line, in source order, and lists **ever
 case produces — warnings included, and the cascading ones too (a rejected line that leaves its block
 empty also reports `E016`).
 
-An implementation conforms to WODCraft 1.0 when, for every case, it produces the same JSON (key
+An implementation conforms to WODCraft 1.1 when, for every case, it produces the same JSON (key
 order and the `estimate` object excluded) or exactly that list of diagnostics.

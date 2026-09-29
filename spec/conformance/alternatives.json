@@ -1,0 +1,146 @@
+{
+  "wodcraft": "1.1",
+  "kind": "workout",
+  "title": null,
+  "blocks": [
+    {
+      "type": "for_time",
+      "source": {
+        "line": 2,
+        "col": 1
+      },
+      "items": [
+        {
+          "type": "movement",
+          "movement": "ring_row",
+          "name": "Ring row",
+          "quantity": {
+            "kind": "reps",
+            "reps": 10
+          },
+          "source": {
+            "line": 3,
+            "col": 6
+          },
+          "or": [
+            {
+              "type": "movement",
+              "movement": "scapular_pull_up",
+              "name": "Scapular pull-up",
+              "quantity": {
+                "kind": "reps",
+                "reps": 10
+              },
+              "source": {
+                "line": 3,
+                "col": 17
+              }
+            }
+          ]
+        },
+        {
+          "type": "movement",
+          "movement": "row",
+          "name": "Row",
+          "quantity": {
+            "kind": "calories",
+            "cal": {
+              "men": 12,
+              "women": 10
+            }
+          },
+          "source": {
+            "line": 4,
+            "col": 13
+          },
+          "or": [
+            {
+              "type": "movement",
+              "movement": "bike_erg",
+              "name": "Bike erg",
+              "quantity": {
+                "kind": "calories",
+                "cal": {
+                  "men": 15,
+                  "women": 12
+                }
+              },
+              "source": {
+                "line": 4,
+                "col": 29
+              }
+            },
+            {
+              "type": "movement",
+              "movement": "run",
+              "name": "Run",
+              "quantity": {
+                "m": 200,
+                "unit": "m",
+                "written": 200,
+                "kind": "distance"
+              },
+              "source": {
+                "line": 4,
+                "col": 46
+              }
+            }
+          ]
+        },
+        {
+          "type": "ladder",
+          "source": {
+            "line": 5,
+            "col": 3
+          },
+          "reps": [
+            21,
+            15,
+            9
+          ],
+          "items": [
+            {
+              "type": "movement",
+              "movement": "pull_up",
+              "name": "Pull-up",
+              "source": {
+                "line": 6,
+                "col": 5
+              },
+              "or": [
+                {
+                  "type": "movement",
+                  "movement": "ring_row",
+                  "name": "Ring row",
+                  "modifiers": [
+                    "strict"
+                  ],
+                  "source": {
+                    "line": 6,
+                    "col": 15
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "time"
+  },
+  "levels": {
+    "scaled": [
+      {
+        "movement": "pull_up",
+        "replace_with": "jumping_pull_up",
+        "name": "Jumping pull-up",
+        "source": {
+          "line": 9,
+          "col": 3
+        }
+      }
+    ]
+  }
+}

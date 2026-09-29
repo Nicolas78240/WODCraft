@@ -17,12 +17,20 @@ SCORE_LABEL = {
 }
 
 
+WORDS = {"fr": {"or": "ou", "there and back": "aller-retour"}}
+
+
+def word(text: str, lang: str = "en") -> str:
+    """The connective words of the board in another language ('or', 'there and back')."""
+    return WORDS.get(lang, {}).get(text, text)
+
+
 def render(document: dict, width: int = 46, lang: str = "en", show_profile: bool = True) -> str:
     if lang != "en":
         document = localize(document, lang)
     if document.get("kind") == "session":
-        return _session(document, width, show_profile)
-    return _workout(document, width, show_profile=show_profile)
+        return _session(document, width, show_profile, lang)
+    return _workout(document, width, show_profile=show_profile, lang=lang)
 
 
 def localize(document: dict, lang: str) -> dict:
@@ -39,7 +47,7 @@ def localize(document: dict, lang: str) -> dict:
             entry = catalog.movements.get(node.get("movement", ""))
             if entry:
                 node["name"] = entry.display_name(lang)
-        for child in node.get("items", []):
+        for child in node.get("items", []) + node.get("or", []):
             walk(child)
 
     for section in out.get("sections", []):
@@ -50,7 +58,7 @@ def localize(document: dict, lang: str) -> dict:
     return out
 
 
-def _session(session: dict, width: int, show_profile: bool = True) -> str:
+def _session(session: dict, width: int, show_profile: bool = True, lang: str = "en") -> str:
     lines = [_title(session.get("title") or "Session")]
     head = " · ".join(x for x in (session.get("date"), session.get("time")) if x)
     if head:
@@ -58,21 +66,21 @@ def _session(session: dict, width: int, show_profile: bool = True) -> str:
     for section in session.get("sections", []):
         lines.append("")
         lines.append(section["title"].upper())
-        lines.append(_workout(section["workout"], width, skip_title=True, show_profile=show_profile))
+        lines.append(_workout(section["workout"], width, skip_title=True, show_profile=show_profile, lang=lang))
     if session.get("estimate"):
         lines.append("")
         lines.append(f"Session estimate: {_range(session['estimate'])}")
     return "\n".join(lines).rstrip() + "\n"
 
 
-def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: bool = True) -> str:
+def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: bool = True, lang: str = "en") -> str:
     lines: list[str] = []
     if not skip_title and workout.get("title"):
         lines.append(_title(workout["title"]))
     meta = workout.get("meta") or {}
     body: list[str] = []
     for block in workout.get("blocks", []):
-        body += _block(block, 0, width)
+        body += _block(block, 0, width, lang)
     if workout.get("team") and body:
         body[0] = f"Teams of {workout['team']['size']} · {body[0]}"
     lines += body
@@ -104,24 +112,24 @@ def _title(title: str) -> str:
     return title.upper()
 
 
-def _block(block: dict, depth: int, width: int) -> list[str]:
+def _block(block: dict, depth: int, width: int, lang: str = "en") -> list[str]:
     kind = block.get("type")
     pad = "  " * depth
     if kind == "movement":
-        return [pad + _movement(block, width - len(pad))]
+        return [pad + _movement(block, width - len(pad), lang=lang)]
     if kind == "rest":
         return [f"{pad}Rest {format_clock(block['seconds'])}"]
-    head = _head(block)
+    head = _head(block, lang)
     items = block.get("items", [])
     if head and block.get("type") in ("slot", "buy_in", "cash_out") and len(items) == 1 and items[0].get("type") == "movement":
-        return [f"{pad}{head} {_movement(items[0], width - len(pad) - len(head) - 1)}"]
+        return [f"{pad}{head} {_movement(items[0], width - len(pad) - len(head) - 1, lang=lang)}"]
     lines = [pad + head] if head else []
     for item in items:
-        lines += _block(item, depth + (1 if head else 0), width)
+        lines += _block(item, depth + (1 if head else 0), width, lang)
     return lines
 
 
-def _head(block: dict) -> str:
+def _head(block: dict, lang: str = "en") -> str:
     kind = block.get("type")
     parts: list[str] = []
     ladder = "-".join(str(r) for r in block.get("reps", []) or [])
@@ -163,7 +171,11 @@ def _head(block: dict) -> str:
     return " · ".join(parts)
 
 
-def _movement(item: dict, width: int, dots: bool = True) -> str:
+def _movement(item: dict, width: int, dots: bool = True, lang: str = "en") -> str:
+    if item.get("or"):  # an alternative: every option in full, joined by "or"
+        options = [_movement({k: v for k, v in item.items() if k != "or"}, 0, dots=False)]
+        options += [_movement(option, 0, dots=False) for option in item["or"]]
+        return f" {word('or', lang)} ".join(options)
     left = " ".join(x for x in (_quantity(item.get("quantity")), item.get("name", item.get("movement", "?"))) if x)
     right_parts = []
     if item.get("sets"):

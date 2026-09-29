@@ -191,6 +191,9 @@ struct Resolver {
             let factor = pick(bodyweight)
             item.load = roundToPlate(kilograms: weight * factor)
         }
+        if let options = item.or {  // every option of an alternative is resolved the same way
+            item.or = options.map { movement($0, operations: operations) }
+        }
         return item
     }
 
