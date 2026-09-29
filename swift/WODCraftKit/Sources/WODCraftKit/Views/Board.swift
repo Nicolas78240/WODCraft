@@ -114,7 +114,7 @@ public enum Board {
     /// A body holds items, not only blocks: a strength line stands on its own.
     private static func localize(item: Item, language: Language, catalog: Catalog) -> Item {
         switch item {
-        case var .movement(movement):
+        case let .movement(movement):
             return .movement(localize(movement: movement, language: language, catalog: catalog))
         case .rest:
             return item

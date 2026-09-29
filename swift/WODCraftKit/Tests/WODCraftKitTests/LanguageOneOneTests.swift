@@ -122,4 +122,19 @@ struct LanguageOneOneTests {
             + "Adapted:\n  Burpee -> Air squat\n"
         #expect(Self.codes(errors) == ["E040 6", "E014 7", "E041 9"])
     }
+
+    @Test("the typed model writes the 1.1 fields back as the compiler emits them")
+    func roundTrip() throws {
+        let workout = try Self.workout("For time, there and back\n  10 Ring row | Scap pull\n  5 Burpee\n")
+        let data = try JSONEncoder.wodcraft.encode(Document.workout(workout))
+        let text = try #require(String(data: data, encoding: .utf8))
+        #expect(text.contains("\"there_and_back\":true"))
+        let object = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let blocks = try #require(object["blocks"] as? [[String: Any]])
+        let items = try #require(blocks.first?["items"] as? [[String: Any]])
+        let options = try #require(items.first?["or"] as? [[String: Any]])
+        #expect(options.first?["type"] as? String == "movement")
+        let decoded = try JSONDecoder.wodcraft.decode(Document.self, from: data)
+        #expect(decoded == .workout(workout))
+    }
 }

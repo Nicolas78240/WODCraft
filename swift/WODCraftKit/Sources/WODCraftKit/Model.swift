@@ -135,6 +135,32 @@ public struct Movement: Codable, Equatable, Sendable {
         first.or = nil
         return [first] + (or ?? [])
     }
+
+    enum CodingKeys: String, CodingKey {
+        case movement, name, quantity, load, height, distance, calories, percent, rpe, bodyweight, sets
+        case modifiers, factor, or, source
+    }
+
+    /// Synthesized, except that the options of an alternative are written as items, with their
+    /// `"type": "movement"`, exactly as the compiler emits them.
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(movement, forKey: .movement)
+        try container.encode(name, forKey: .name)
+        try container.encodeIfPresent(quantity, forKey: .quantity)
+        try container.encodeIfPresent(load, forKey: .load)
+        try container.encodeIfPresent(height, forKey: .height)
+        try container.encodeIfPresent(distance, forKey: .distance)
+        try container.encodeIfPresent(calories, forKey: .calories)
+        try container.encodeIfPresent(percent, forKey: .percent)
+        try container.encodeIfPresent(rpe, forKey: .rpe)
+        try container.encodeIfPresent(bodyweight, forKey: .bodyweight)
+        try container.encodeIfPresent(sets, forKey: .sets)
+        try container.encodeIfPresent(modifiers, forKey: .modifiers)
+        try container.encodeIfPresent(factor, forKey: .factor)
+        try container.encodeIfPresent(or?.map { Item.movement($0) }, forKey: .or)
+        try container.encodeIfPresent(source, forKey: .source)
+    }
 }
 
 public struct Rest: Codable, Equatable, Sendable {
