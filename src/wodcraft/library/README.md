@@ -3,8 +3,8 @@
 Reference workouts written in WODCraft 1.0 (see `spec/SPEC.md`). One workout per file.
 
 ```
-girls/     the 21 classic CrossFit "Girls" benchmarks
-heroes/    10 Hero WODs
+girls/     the 22 classic CrossFit "Girls" benchmarks
+heroes/    51 Hero WODs
 open/      selected CrossFit Games Open workouts (file name = <yy>_<n>)
 ```
 

@@ -7,10 +7,10 @@ import Testing
 struct LibraryTests {
     let library = Library.shared
 
-    @Test("the embedded library holds the 40 standard workouts")
+    @Test("the embedded library holds the 82 standard workouts")
     func loadsEveryEntry() {
-        #expect(library.count == 40)
-        #expect(library.entries.count == 40)
+        #expect(library.count == 82)
+        #expect(library.entries.count == 82)
     }
 
     @Test("every entry carries its source and a compiled document")
@@ -36,17 +36,17 @@ struct LibraryTests {
 
     @Test("search matches paths and titles, case-insensitively")
     func searches() {
-        #expect(library.search("fran").map(\.path) == ["girls/fran"])
-        #expect(library.search("FRAN").map(\.path) == ["girls/fran"])
-        #expect(library.search("heroes").count == 10)
-        #expect(library.search("").count == 40)
+        #expect(library.search("fran").map(\.path) == ["girls/fran", "heroes/war_frank"])
+        #expect(library.search("GIRLS/FRAN").map(\.path) == ["girls/fran"])
+        #expect(library.search("heroes").count == 51)
+        #expect(library.search("").count == 82)
         #expect(library.search("no such workout").isEmpty)
     }
 
     @Test("the three standard collections are present")
     func collections() {
-        #expect(library.collection("girls").count == 21)
-        #expect(library.collection("heroes").count == 10)
+        #expect(library.collection("girls").count == 22)
+        #expect(library.collection("heroes").count == 51)
         #expect(library.collection("open").count == 9)
     }
 

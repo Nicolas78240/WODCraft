@@ -23,7 +23,7 @@ def test_an_entry_carries_its_path_title_and_file():
 
 
 def test_entries_filters_by_path():
-    assert [entry.path for entry in library.entries("fran")] == ["girls/fran"]
+    assert [entry.path for entry in library.entries("girls/fran")] == ["girls/fran"]
 
 
 def test_entries_filters_by_title():
@@ -31,7 +31,7 @@ def test_entries_filters_by_title():
 
 
 def test_the_filter_is_case_insensitive():
-    assert [entry.path for entry in library.entries("FRAN")] == ["girls/fran"]
+    assert [entry.path for entry in library.entries("GIRLS/FRAN")] == ["girls/fran"]
 
 
 def test_an_unmatched_filter_returns_nothing():
@@ -105,3 +105,14 @@ def test_a_missing_specification_raises(monkeypatch, tmp_path):
         resources.spec_dir()
 
     assert "WODCRAFT_SPEC_DIR" in str(excinfo.value)
+
+
+def test_the_filter_matches_a_substring_of_any_path_or_title():
+    # "fran" is in Fran and in War Frank
+    assert [entry.path for entry in library.entries("fran")] == ["girls/fran", "heroes/war_frank"]
+
+
+def test_the_library_ships_the_girls_and_the_heroes():
+    collections = [entry.path.split("/")[0] for entry in library.entries()]
+    assert collections.count("girls") == 22
+    assert collections.count("heroes") == 51

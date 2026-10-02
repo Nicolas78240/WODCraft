@@ -1,0 +1,12 @@
+# Capoot
+tags: heroes, benchmark
+stimulus: Push-up sets that shrink while the runs get longer.
+For time
+  100 Push-up
+  800 m Run
+  75 Push-up
+  1200 m Run
+  50 Push-up
+  1600 m Run
+  25 Push-up
+  2000 m Run

@@ -1,0 +1,8 @@
+# Griff
+tags: heroes, benchmark
+stimulus: Running only, alternating forward and backward legs.
+For time
+  800 m Run
+  400 m Run ("backwards")
+  800 m Run
+  400 m Run ("backwards")

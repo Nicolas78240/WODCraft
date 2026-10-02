@@ -24,7 +24,7 @@ struct ViewExpectation: Decodable, Sendable, CustomTestStringConvertible {
 }
 
 enum ViewExpectations {
-    /// The 40 workouts of the standard library.
+    /// The 82 workouts of the standard library.
     static let all: [ViewExpectation] = decode(ViewsFixtures.libraryJSON)
 
     /// Every compiled document of the conformance corpus: sessions, slots, ladders, teams…
@@ -89,7 +89,7 @@ struct ViewsTests {
 
     @Test("the fixtures cover the whole library")
     func fixturesAreComplete() {
-        #expect(ViewExpectations.all.count == 40)
+        #expect(ViewExpectations.all.count == 82)
         var paths: [String] = []
         for entry in library.entries { paths.append(entry.path) }
         var expected: [String] = []

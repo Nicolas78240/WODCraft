@@ -24,6 +24,18 @@ a document that uses a 1.1 construct is stamped `"1.1"`, and the schema accepts 
   (`5 Wall walk`). Compiled in `adapted`; resolution applies it after the chosen level and sets
   `resolved.adapted`.
 
+### The library
+- **Christine** joins the Girls (22), and the Heroes grow from 10 to 51: Adam Brown, Arnie, Blake,
+  Brenton, Bull, Bulger, Capoot, Coe, Daniel, Danny, Erin, Forrest, Garrett, Griff, Hall, Hansen,
+  Helton, Jack, Jason, Johnson, Joshie, Luce, Lumberjack 20, Marco, McGhee, Mr. Joshua, Nutts, PK,
+  Paul, RJ, Roy, Ryan, Servais, Severin, Stephen, The Seven, Thompson, Tommy V, Tyler, War Frank,
+  Whitten. Prescriptions follow the CrossFit definitions; where the original gives men's loads only,
+  the women's load is the commonly used one and a `note:` says so.
+- New catalog movements: `l_pull_up`, `ring_push_up`, `ring_handstand_push_up`,
+  `dumbbell_squat_clean`, `dumbbell_split_clean`, `kettlebell_overhead_squat`,
+  `plate_overhead_lunge`, `plate_carry`, `stiff_legged_deadlift` (the `stiff leg deadlift` alias moves
+  from `romanian_deadlift` to it).
+
 ### Fixes
 - `wodc fmt` no longer turns `AMRAP 5:00` + `1-2-3 ...` into a bare ladder (it dropped the clock).
 - The board shows the ladder of an AMRAP: `AMRAP 5:00 · 1-2-3 …`.
