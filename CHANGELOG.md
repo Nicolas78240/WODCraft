@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 — unreleased
+## 1.1.0 — 2026-10-04
 
 Additions for real training sessions (the whiteboard of 29 September: warm-up, skill, team chipper,
 core work). Every 1.0 document still compiles to exactly the same JSON, stamped `"wodcraft": "1.0"`;
@@ -49,7 +49,7 @@ a document that uses a 1.1 construct is stamped `"1.1"`, and the schema accepts 
   `Workout.adapted`, `Resolved.adapted`), with the same conformance suite.
 - New example: `examples/session-2026-09-29.wod`.
 
-## 1.0.0 — unreleased
+## 1.0.0 — not released on its own (first published as 1.1.0)
 
 Complete rewrite. WODCraft is now a specified language with a reference compiler, and the old
 `module … { wod ForTime { … } }` syntax is gone (the previous implementation is archived under the

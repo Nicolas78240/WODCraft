@@ -177,7 +177,7 @@ wodc bundle            # catalog.json, library.json and the schema: 115 kB an ap
 ```
 
 - **Apple platforms** — [`swift/WODCraftKit`](swift/WODCraftKit) is a SwiftPM package with no third
-  party dependency: the compiled model, the compiler, the catalog, the 40 benchmarks, the whiteboard
+  party dependency: the compiled model, the compiler, the catalog, the 82 benchmarks, the whiteboard
   and a timeline that drives a timer. It compiles **offline** and is validated by the same conformance
   suite as the reference implementation.
 - **Anything else** — `pip install "wodcraft[service]"` runs a small HTTP service
