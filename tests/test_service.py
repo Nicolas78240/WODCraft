@@ -79,7 +79,7 @@ def test_the_library_is_served(client):
 
 
 def test_the_library_can_be_filtered(client):
-    assert client.get("/library", params={"query": "fran"}).json()["workouts"] == [{"path": "girls/fran", "title": "Fran"}]
+    assert client.get("/library", params={"query": "girls/fran"}).json()["workouts"] == [{"path": "girls/fran", "title": "Fran"}]
 
 
 def test_one_library_workout_carries_source_and_compiled(client):

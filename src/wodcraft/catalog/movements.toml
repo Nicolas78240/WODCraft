@@ -342,8 +342,19 @@ pace = { rep = 2.5 }
 
 [movements.romanian_deadlift]
 name = "Romanian deadlift"
-aliases = ["rdl", "stiff leg deadlift"]
+aliases = ["rdl"]
 fr = ["soulevé de terre roumain", "sdt roumain"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "barbell"
+pace = { rep = 2.5 }
+
+[movements.stiff_legged_deadlift]
+name = "Stiff-legged deadlift"
+aliases = ["stiff legged deadlift", "stiff leg deadlift", "stiff-leg deadlift", "sldl"]
+fr = ["soulevé de terre jambes tendues"]
+fr_name = "Soulevé de terre jambes tendues"
 family = "W"
 quantities = ["reps"]
 param = "load"
@@ -404,6 +415,17 @@ param = "load"
 equipment = "barbell"
 rx = { men = 20, women = 15, unit = "kg" }
 pace = { rep = 2.5 }
+
+[movements.plate_overhead_lunge]
+name = "Plate overhead lunge"
+aliases = ["overhead plate lunge", "plate overhead walking lunge"]
+fr = ["fente disque au-dessus de la tête"]
+fr_name = "Fente disque au-dessus de la tête"
+family = "W"
+quantities = ["reps", "distance"]
+param = "load"
+equipment = "other"
+pace = { rep = 2.5, m = 1.5 }
 
 [movements.good_morning]
 name = "Good morning"
@@ -488,6 +510,29 @@ param = "load"
 equipment = "dumbbell"
 rx = { men = 22.5, women = 15, unit = "kg" }
 pace = { rep = 2.5 }
+
+[movements.dumbbell_squat_clean]
+name = "Dumbbell squat clean"
+aliases = ["db squat clean", "dumbbell full clean"]
+fr = ["épaulé squat haltère"]
+fr_name = "Épaulé squat haltère"
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+rx = { men = 22.5, women = 15, unit = "kg" }
+pace = { rep = 3 }
+
+[movements.dumbbell_split_clean]
+name = "Dumbbell split clean"
+aliases = ["db split clean"]
+fr = ["épaulé fente haltère"]
+fr_name = "Épaulé fente haltère"
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "dumbbell"
+pace = { rep = 3 }
 
 [movements.dumbbell_hang_clean]
 name = "Dumbbell hang clean"
@@ -805,6 +850,17 @@ equipment = "kettlebell"
 rx = { men = 24, women = 16, unit = "kg" }
 pace = { rep = 2.5 }
 
+[movements.kettlebell_overhead_squat]
+name = "Kettlebell overhead squat"
+aliases = ["kb overhead squat", "kb ohs", "single arm kettlebell overhead squat"]
+fr = ["squat overhead kettlebell"]
+fr_name = "Squat overhead kettlebell"
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+pace = { rep = 3 }
+
 [movements.turkish_get_up]
 name = "Turkish get-up"
 aliases = ["tgu", "turkish get up", "get-up", "get up"]
@@ -962,6 +1018,17 @@ param = "load"
 equipment = "other"
 pace = { m = 0.9 }
 
+[movements.plate_carry]
+name = "Plate carry"
+aliases = ["plate run", "run with plate", "plate walk"]
+fr = ["course avec disque", "portage de disque"]
+fr_name = "Course avec disque"
+family = "W"
+quantities = ["distance", "time"]
+param = "load"
+equipment = "other"
+pace = { m = 0.45 }
+
 [movements.yoke_carry]
 name = "Yoke carry"
 aliases = ["yoke", "yoke walk"]
@@ -1024,6 +1091,17 @@ quantities = ["reps"]
 param = "none"
 equipment = "bar"
 pace = { rep = 2.5 }
+
+[movements.l_pull_up]
+name = "L-pull-up"
+aliases = ["l pull-up", "l pull up", "l-pullup", "l-sit pull-up", "l sit pull-up"]
+fr = ["traction en l"]
+fr_name = "Traction en L"
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+pace = { rep = 3 }
 
 [movements.butterfly_pull_up]
 name = "Butterfly pull-up"
@@ -1142,6 +1220,17 @@ param = "none"
 equipment = "bodyweight"
 pace = { rep = 1.5 }
 
+[movements.ring_push_up]
+name = "Ring push-up"
+aliases = ["ring pushup", "ring push up"]
+fr = ["pompe aux anneaux"]
+fr_name = "Pompe aux anneaux"
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 2 }
+
 [movements.yoga_push_up]
 name = "Yoga push-up"
 aliases = ["yoga pushup", "yoga push up", "push-up to down dog", "downward dog push-up"]
@@ -1173,6 +1262,17 @@ quantities = ["reps"]
 param = "none"
 equipment = "bodyweight"
 pace = { rep = 3 }
+
+[movements.ring_handstand_push_up]
+name = "Ring handstand push-up"
+aliases = ["ring hspu", "ring handstand pushup", "ring handstand push up"]
+fr = ["pompe en équilibre aux anneaux"]
+fr_name = "Pompe en équilibre aux anneaux"
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "rings"
+pace = { rep = 5 }
 
 [movements.strict_handstand_push_up]
 name = "Strict handstand push-up"

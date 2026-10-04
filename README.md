@@ -177,7 +177,7 @@ wodc bundle            # catalog.json, library.json and the schema: 115 kB an ap
 ```
 
 - **Apple platforms** — [`swift/WODCraftKit`](swift/WODCraftKit) is a SwiftPM package with no third
-  party dependency: the compiled model, the compiler, the catalog, the 40 benchmarks, the whiteboard
+  party dependency: the compiled model, the compiler, the catalog, the 82 benchmarks, the whiteboard
   and a timeline that drives a timer. It compiles **offline** and is validated by the same conformance
   suite as the reference implementation.
 - **Anything else** — `pip install "wodcraft[service]"` runs a small HTTP service
@@ -208,6 +208,16 @@ WODCraft is meant to be implementable by anyone:
 
 Adding a movement, a benchmark workout or a French alias is the easiest way in: edit the catalog or
 drop a `.wod` in the library, then run `pytest`. Language changes go through the specification first.
+
+## Who made it
+
+WODCraft is a collaboration. Nicolas Caussin set the course and had the idea; he orchestrated the
+work, corrected it and approved it, and the two of them iterated until the current version. Most of the
+writing — the specification, the Python compiler, the Swift port, the test and conformance suites, the
+documentation and the [website](https://wodcraft.dev) — was done by **Claude** (Anthropic's AI) through
+[Claude Code](https://claude.com/claude-code). The guardrails are the ones any contributor gets: every
+documented snippet is compiled, the conformance suite pins the language, and the Python and Swift
+implementations are checked against each other.
 
 ## License
 

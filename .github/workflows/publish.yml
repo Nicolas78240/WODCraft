@@ -1,0 +1,46 @@
+name: Publish to PyPI
+
+# A published GitHub release builds the package and uploads it to PyPI with trusted publishing:
+# no token is stored. One-time setup on pypi.org (project wodcraft > Publishing > Add a trusted
+# publisher): owner Nicolas78240, repository WODCraft, workflow publish.yml, environment pypi.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: The tag is the package version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::invalid tag"; exit 1; }
+          version="$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          [ "v$version" = "$TAG_NAME" ] || { echo "::error::tag $TAG_NAME != v$version"; exit 1; }
+      - run: pip install build && python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33  # release/v1

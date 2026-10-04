@@ -291,6 +291,22 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "girls/christine",
+  "board": "CHRISTINE\n3 rounds for time\n  500 m Row\n  12 Deadlift\n  21 Box jump ....................... 24/20 in\nScore: time\nEstimate: 11:56–22:09\nStimulus: Three rounds of rowing, bodyweight deadlifts and box jumps.",
+  "boardFr": "CHRISTINE\n3 rounds for time\n  500 m Rameur\n  12 Soulevé de terre\n  21 Saut sur box ................... 24/20 in\nScore: time\nEstimate: 11:56–22:09\nStimulus: Three rounds of rowing, bodyweight deadlifts and box jumps.",
+  "markdown": "# Christine\n\n```\n3 rounds for time\n  500 m Row\n  12 Deadlift\n  21 Box jump ................. 24/20 in\n```\n\n**Score** — time\n**Estimate** — 11:56–22:09\n\n> Three rounds of rowing, bodyweight deadlifts and box jumps.\n",
+  "timer": "    0:00   22:09~ 3 rounds for time: 500 m Row + 12 Deadlift + 21 Box jump 24/20 in\n           22:09  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1329,
+    "label": "3 rounds for time: 500 m Row + 12 Deadlift + 21 Box jump 24/20 in",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "girls/cindy",
   "board": "CINDY\nAMRAP 20:00\n  5 Pull-up\n  10 Push-up\n  15 Air squat\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Bodyweight engine test; steady, repeatable rounds for 20 minutes.\nLevels: scaled",
   "boardFr": "CINDY\nAMRAP 20:00\n  5 Traction\n  10 Pompe\n  15 Squat à vide\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Bodyweight engine test; steady, repeatable rounds for 20 minutes.\nLevels: scaled",
@@ -547,6 +563,38 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/adam_brown",
+  "board": "ADAM BROWN\n2 rounds for time\n  24 Deadlift ..................... 295/205 lb\n  24 Box jump ....................... 24/20 in\n  24 Wall ball ...................... 20/14 lb\n  24 Bench press .................. 195/135 lb\n  24 Box jump ....................... 24/20 in\n  24 Wall ball ...................... 20/14 lb\n  24 Clean ........................ 145/100 lb\nScore: time\nEstimate: 27:50–51:41\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Two long rounds of seven movements, 24 reps each; heavy deadlifts and bench press.",
+  "boardFr": "ADAM BROWN\n2 rounds for time\n  24 Soulevé de terre ............. 295/205 lb\n  24 Saut sur box ................... 24/20 in\n  24 Wall ball ...................... 20/14 lb\n  24 Développé couché ............. 195/135 lb\n  24 Saut sur box ................... 24/20 in\n  24 Wall ball ...................... 20/14 lb\n  24 Épaulé ....................... 145/100 lb\nScore: time\nEstimate: 27:50–51:41\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Two long rounds of seven movements, 24 reps each; heavy deadlifts and bench press.",
+  "markdown": "# Adam Brown\n\n```\n2 rounds for time\n  24 Deadlift ............... 295/205 lb\n  24 Box jump ................. 24/20 in\n  24 Wall ball ................ 20/14 lb\n  24 Bench press ............ 195/135 lb\n  24 Box jump ................. 24/20 in\n  24 Wall ball ................ 20/14 lb\n  24 Clean .................. 145/100 lb\n```\n\n**Score** — time\n**Estimate** — 27:50–51:41\n\n> Two long rounds of seven movements, 24 reps each; heavy deadlifts and bench press.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   51:41~ 2 rounds for time: 24 Deadlift 295/205 lb + 24 Box jump 24/20 in + 24 Wall ball 20/14 lb + 24 Bench press 195/135 lb + 24 Box jump 24/20 in + 24 Wall ball 20/14 lb + 24 Clean 145/100 lb\n           51:41  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3101,
+    "label": "2 rounds for time: 24 Deadlift 295/205 lb + 24 Box jump 24/20 in + 24 Wall ball 20/14 lb + 24 Bench press 195/135 lb + 24 Box jump 24/20 in + 24 Wall ball 20/14 lb + 24 Clean 145/100 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/arnie",
+  "board": "ARNIE\nFor time\n  21 Turkish get-up ... 2/1.5 pood (right arm)\n  50 Kettlebell swing ............. 2/1.5 pood\n  21 Kettlebell overhead squat . 2/1.5 pood (left arm)\n  50 Kettlebell swing ............. 2/1.5 pood\n  21 Kettlebell overhead squat . 2/1.5 pood (right arm)\n  50 Kettlebell swing ............. 2/1.5 pood\n  21 Turkish get-up .... 2/1.5 pood (left arm)\nScore: time\nEstimate: 37:49–1:10:13\nNote: All the work is done with a single kettlebell. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: One kettlebell, single-arm work alternating with swings.",
+  "boardFr": "ARNIE\nFor time\n  21 Relevé turc ...... 2/1.5 pood (right arm)\n  50 Swing kettlebell ............. 2/1.5 pood\n  21 Squat overhead kettlebell . 2/1.5 pood (left arm)\n  50 Swing kettlebell ............. 2/1.5 pood\n  21 Squat overhead kettlebell . 2/1.5 pood (right arm)\n  50 Swing kettlebell ............. 2/1.5 pood\n  21 Relevé turc ....... 2/1.5 pood (left arm)\nScore: time\nEstimate: 37:49–1:10:13\nNote: All the work is done with a single kettlebell. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: One kettlebell, single-arm work alternating with swings.",
+  "markdown": "# Arnie\n\n```\nFor time\n  21 Turkish get-up . 2/1.5 pood (right arm)\n  50 Kettlebell swing ....... 2/1.5 pood\n  21 Kettlebell overhead squat . 2/1.5 pood (left arm)\n  50 Kettlebell swing ....... 2/1.5 pood\n  21 Kettlebell overhead squat . 2/1.5 pood (right arm)\n  50 Kettlebell swing ....... 2/1.5 pood\n  21 Turkish get-up . 2/1.5 pood (left arm)\n```\n\n**Score** — time\n**Estimate** — 37:49–1:10:13\n\n> One kettlebell, single-arm work alternating with swings.\n\n*All the work is done with a single kettlebell. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00  1:10:13~ For time: 21 Turkish get-up 2/1.5 pood (right arm) + 50 Kettlebell swing 2/1.5 pood + 21 Kettlebell overhead squat 2/1.5 pood (left arm) + 50 Kettlebell swing 2/1.5 pood + 21 Kettlebell overhead squat 2/1.5 pood (right arm) + 50 Kettlebell swing 2/1.5 pood + 21 Turkish get-up 2/1.5 pood (left arm)\n          1:10:13  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 4213,
+    "label": "For time: 21 Turkish get-up 2/1.5 pood (right arm) + 50 Kettlebell swing 2/1.5 pood + 21 Kettlebell overhead squat 2/1.5 pood (left arm) + 50 Kettlebell swing 2/1.5 pood + 21 Kettlebell overhead squat 2/1.5 pood (right arm) + 50 Kettlebell swing 2/1.5 pood + 21 Turkish get-up 2/1.5 pood (left arm)",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "heroes/badger",
   "board": "BADGER\n3 rounds for time\n  30 Squat clean .................... 95/65 lb\n  30 Pull-up\n  800 m Run\nScore: time\nEstimate: 21:30–39:55\nStimulus: Ninety squat cleans, ninety pull-ups and 2.4 km of running; break the cleans early.",
   "boardFr": "BADGER\n3 rounds for time\n  30 Épaulé squat ................... 95/65 lb\n  30 Traction\n  800 m Course\nScore: time\nEstimate: 21:30–39:55\nStimulus: Ninety squat cleans, ninety pull-ups and 2.4 km of running; break the cleans early.",
@@ -563,6 +611,134 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/blake",
+  "board": "BLAKE\n4 rounds for time\n  100 ft Plate overhead lunge ....... 45/35 lb\n  30 Box jump ....................... 24/20 in\n  20 Wall ball ...................... 20/14 lb\n  10 Handstand push-up\nScore: time\nEstimate: 16:06–29:55\nNote: The plate is held overhead for the whole lunge distance. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Four rounds of overhead plate lunges, box jumps, wall balls and handstand push-ups.",
+  "boardFr": "BLAKE\n4 rounds for time\n  100 ft Fente disque au-dessus de la tête . 45/35 lb\n  30 Saut sur box ................... 24/20 in\n  20 Wall ball ...................... 20/14 lb\n  10 Pompe en équilibre\nScore: time\nEstimate: 16:06–29:55\nNote: The plate is held overhead for the whole lunge distance. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Four rounds of overhead plate lunges, box jumps, wall balls and handstand push-ups.",
+  "markdown": "# Blake\n\n```\n4 rounds for time\n  100 ft Plate overhead lunge . 45/35 lb\n  30 Box jump ................. 24/20 in\n  20 Wall ball ................ 20/14 lb\n  10 Handstand push-up\n```\n\n**Score** — time\n**Estimate** — 16:06–29:55\n\n> Four rounds of overhead plate lunges, box jumps, wall balls and handstand push-ups.\n\n*The plate is held overhead for the whole lunge distance. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   29:55~ 4 rounds for time: 100 ft Plate overhead lunge 45/35 lb + 30 Box jump 24/20 in + 20 Wall ball 20/14 lb + 10 Handstand push-up\n           29:55  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1795,
+    "label": "4 rounds for time: 100 ft Plate overhead lunge 45/35 lb + 30 Box jump 24/20 in + 20 Wall ball 20/14 lb + 10 Handstand push-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/brenton",
+  "board": "BRENTON\n5 rounds for time\n  100 ft Bear crawl\n  100 ft Broad jump\nScore: time\nEstimate: 8:32–15:51\nNote: Do three burpees after every five broad jumps. Wear a 20 lb vest or body armor if you have one.\nStimulus: Five rounds of bear crawls and broad jumps, with burpees in between.",
+  "boardFr": "BRENTON\n5 rounds for time\n  100 ft Marche de l'ours\n  100 ft Saut en longueur\nScore: time\nEstimate: 8:32–15:51\nNote: Do three burpees after every five broad jumps. Wear a 20 lb vest or body armor if you have one.\nStimulus: Five rounds of bear crawls and broad jumps, with burpees in between.",
+  "markdown": "# Brenton\n\n```\n5 rounds for time\n  100 ft Bear crawl\n  100 ft Broad jump\n```\n\n**Score** — time\n**Estimate** — 8:32–15:51\n\n> Five rounds of bear crawls and broad jumps, with burpees in between.\n\n*Do three burpees after every five broad jumps. Wear a 20 lb vest or body armor if you have one.*\n",
+  "timer": "    0:00   15:51~ 5 rounds for time: 100 ft Bear crawl + 100 ft Broad jump\n           15:51  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 951,
+    "label": "5 rounds for time: 100 ft Bear crawl + 100 ft Broad jump",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/bulger",
+  "board": "BULGER\n10 rounds for time\n  150 m Run\n  7 Chest-to-bar pull-up\n  7 Front squat .................... 135/95 lb\n  7 Handstand push-up\nScore: time\nEstimate: 20:24–37:54\nStimulus: Ten short rounds of a 150 m run and three seven-rep movements.",
+  "boardFr": "BULGER\n10 rounds for time\n  150 m Course\n  7 Traction poitrine-barre\n  7 Squat avant .................... 135/95 lb\n  7 Pompe en équilibre\nScore: time\nEstimate: 20:24–37:54\nStimulus: Ten short rounds of a 150 m run and three seven-rep movements.",
+  "markdown": "# Bulger\n\n```\n10 rounds for time\n  150 m Run\n  7 Chest-to-bar pull-up\n  7 Front squat .............. 135/95 lb\n  7 Handstand push-up\n```\n\n**Score** — time\n**Estimate** — 20:24–37:54\n\n> Ten short rounds of a 150 m run and three seven-rep movements.\n",
+  "timer": "    0:00   37:54~ 10 rounds for time: 150 m Run + 7 Chest-to-bar pull-up + 7 Front squat 135/95 lb + 7 Handstand push-up\n           37:54  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2274,
+    "label": "10 rounds for time: 150 m Run + 7 Chest-to-bar pull-up + 7 Front squat 135/95 lb + 7 Handstand push-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/bull",
+  "board": "BULL\n2 rounds for time\n  200 Double-under\n  50 Overhead squat ................ 135/95 lb\n  50 Pull-up\n  1 mi Run\nScore: time\nEstimate: 35:07–1:05:14\nStimulus: Two long rounds of double-unders, overhead squats, pull-ups and a mile run.",
+  "boardFr": "BULL\n2 rounds for time\n  200 Double under\n  50 Squat overhead ................ 135/95 lb\n  50 Traction\n  1 mi Course\nScore: time\nEstimate: 35:07–1:05:14\nStimulus: Two long rounds of double-unders, overhead squats, pull-ups and a mile run.",
+  "markdown": "# Bull\n\n```\n2 rounds for time\n  200 Double-under\n  50 Overhead squat .......... 135/95 lb\n  50 Pull-up\n  1 mi Run\n```\n\n**Score** — time\n**Estimate** — 35:07–1:05:14\n\n> Two long rounds of double-unders, overhead squats, pull-ups and a mile run.\n",
+  "timer": "    0:00  1:05:14~ 2 rounds for time: 200 Double-under + 50 Overhead squat 135/95 lb + 50 Pull-up + 1 mi Run\n          1:05:14  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3914,
+    "label": "2 rounds for time: 200 Double-under + 50 Overhead squat 135/95 lb + 50 Pull-up + 1 mi Run",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/capoot",
+  "board": "CAPOOT\nFor time\n  100 Push-up\n  800 m Run\n  75 Push-up\n  1200 m Run\n  50 Push-up\n  1600 m Run\n  25 Push-up\n  2000 m Run\nScore: time\nEstimate: 38:22–1:11:14\nStimulus: Push-up sets that shrink while the runs get longer.",
+  "boardFr": "CAPOOT\nFor time\n  100 Pompe\n  800 m Course\n  75 Pompe\n  1200 m Course\n  50 Pompe\n  1600 m Course\n  25 Pompe\n  2000 m Course\nScore: time\nEstimate: 38:22–1:11:14\nStimulus: Push-up sets that shrink while the runs get longer.",
+  "markdown": "# Capoot\n\n```\nFor time\n  100 Push-up\n  800 m Run\n  75 Push-up\n  1200 m Run\n  50 Push-up\n  1600 m Run\n  25 Push-up\n  2000 m Run\n```\n\n**Score** — time\n**Estimate** — 38:22–1:11:14\n\n> Push-up sets that shrink while the runs get longer.\n",
+  "timer": "    0:00  1:11:14~ For time: 100 Push-up + 800 m Run + 75 Push-up + 1200 m Run + 50 Push-up + 1600 m Run + 25 Push-up + 2000 m Run\n          1:11:14  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 4274,
+    "label": "For time: 100 Push-up + 800 m Run + 75 Push-up + 1200 m Run + 50 Push-up + 1600 m Run + 25 Push-up + 2000 m Run",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/coe",
+  "board": "COE\n10 rounds for time\n  10 Thruster ....................... 95/65 lb\n  10 Ring push-up\nScore: time\nEstimate: 8:24–15:36\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Ten rounds of a light thruster and ring push-ups.",
+  "boardFr": "COE\n10 rounds for time\n  10 Thruster ....................... 95/65 lb\n  10 Pompe aux anneaux\nScore: time\nEstimate: 8:24–15:36\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Ten rounds of a light thruster and ring push-ups.",
+  "markdown": "# Coe\n\n```\n10 rounds for time\n  10 Thruster ................. 95/65 lb\n  10 Ring push-up\n```\n\n**Score** — time\n**Estimate** — 8:24–15:36\n\n> Ten rounds of a light thruster and ring push-ups.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   15:36~ 10 rounds for time: 10 Thruster 95/65 lb + 10 Ring push-up\n           15:36  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 936,
+    "label": "10 rounds for time: 10 Thruster 95/65 lb + 10 Ring push-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/daniel",
+  "board": "DANIEL\nFor time\n  50 Pull-up\n  400 m Run\n  21 Thruster ....................... 95/65 lb\n  800 m Run\n  21 Thruster ....................... 95/65 lb\n  400 m Run\n  50 Pull-up\nScore: time\nEstimate: 13:43–25:29\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Symmetric chipper of pull-ups, runs and thrusters.",
+  "boardFr": "DANIEL\nFor time\n  50 Traction\n  400 m Course\n  21 Thruster ....................... 95/65 lb\n  800 m Course\n  21 Thruster ....................... 95/65 lb\n  400 m Course\n  50 Traction\nScore: time\nEstimate: 13:43–25:29\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Symmetric chipper of pull-ups, runs and thrusters.",
+  "markdown": "# Daniel\n\n```\nFor time\n  50 Pull-up\n  400 m Run\n  21 Thruster ................. 95/65 lb\n  800 m Run\n  21 Thruster ................. 95/65 lb\n  400 m Run\n  50 Pull-up\n```\n\n**Score** — time\n**Estimate** — 13:43–25:29\n\n> Symmetric chipper of pull-ups, runs and thrusters.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   25:29~ For time: 50 Pull-up + 400 m Run + 21 Thruster 95/65 lb + 800 m Run + 21 Thruster 95/65 lb + 400 m Run + 50 Pull-up\n           25:29  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1529,
+    "label": "For time: 50 Pull-up + 400 m Run + 21 Thruster 95/65 lb + 800 m Run + 21 Thruster 95/65 lb + 400 m Run + 50 Pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/danny",
+  "board": "DANNY\nAMRAP 20:00\n  30 Box jump ....................... 24/20 in\n  20 Push press .................... 115/75 lb\n  30 Pull-up\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of box jumps, push presses and pull-ups.",
+  "boardFr": "DANNY\nAMRAP 20:00\n  30 Saut sur box ................... 24/20 in\n  20 Développé jeté ................ 115/75 lb\n  30 Traction\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of box jumps, push presses and pull-ups.",
+  "markdown": "# Danny\n\n```\nAMRAP 20:00\n  30 Box jump ................. 24/20 in\n  20 Push press .............. 115/75 lb\n  30 Pull-up\n```\n\n**Score** — rounds + reps\n**Estimate** — 20:00\n\n> Twenty-minute AMRAP of box jumps, push presses and pull-ups.\n",
+  "timer": "    0:00   20:00  AMRAP 20:00: 30 Box jump 24/20 in + 20 Push press 115/75 lb + 30 Pull-up\n           20:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1200.0,
+    "label": "AMRAP 20:00: 30 Box jump 24/20 in + 20 Push press 115/75 lb + 30 Pull-up",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "heroes/dt",
   "board": "DT\n5 rounds for time\n  12 Deadlift ..................... 155/105 lb\n  9 Hang power clean .............. 155/105 lb\n  6 Push jerk ..................... 155/105 lb\nScore: time\nEstimate: 10:25–19:20\nStimulus: Five rounds on one barbell; grip and shoulders, never put the bar down at the wrong moment.\nLevels: scaled",
   "boardFr": "DT\n5 rounds for time\n  12 Soulevé de terre ............. 155/105 lb\n  9 Épaulé suspendu puissance ..... 155/105 lb\n  6 Jeté force .................... 155/105 lb\nScore: time\nEstimate: 10:25–19:20\nStimulus: Five rounds on one barbell; grip and shoulders, never put the bar down at the wrong moment.\nLevels: scaled",
@@ -573,6 +749,118 @@ enum ViewsFixtures {
     "at": 0.0,
     "duration": 1160,
     "label": "5 rounds for time: 12 Deadlift 155/105 lb + 9 Hang power clean 155/105 lb + 6 Push jerk 155/105 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/erin",
+  "board": "ERIN\n5 rounds for time\n  15 Dumbbell split clean ........... 40/25 lb\n  21 Pull-up\nScore: time\nEstimate: 6:57–12:55\nNote: Two dumbbells.\nStimulus: Five rounds of dumbbell split cleans and pull-ups.",
+  "boardFr": "ERIN\n5 rounds for time\n  15 Épaulé fente haltère ........... 40/25 lb\n  21 Traction\nScore: time\nEstimate: 6:57–12:55\nNote: Two dumbbells.\nStimulus: Five rounds of dumbbell split cleans and pull-ups.",
+  "markdown": "# Erin\n\n```\n5 rounds for time\n  15 Dumbbell split clean ..... 40/25 lb\n  21 Pull-up\n```\n\n**Score** — time\n**Estimate** — 6:57–12:55\n\n> Five rounds of dumbbell split cleans and pull-ups.\n\n*Two dumbbells.*\n",
+  "timer": "    0:00   12:55~ 5 rounds for time: 15 Dumbbell split clean 40/25 lb + 21 Pull-up\n           12:55  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 775,
+    "label": "5 rounds for time: 15 Dumbbell split clean 40/25 lb + 21 Pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/forrest",
+  "board": "FORREST\n3 rounds for time\n  20 L-pull-up\n  30 Toes-to-bar\n  40 Burpee\n  800 m Run\nScore: time\nEstimate: 28:00–52:00\nStimulus: Three rounds of L-pull-ups, toes-to-bar, burpees and an 800 m run.",
+  "boardFr": "FORREST\n3 rounds for time\n  20 Traction en L\n  30 Pointes de pieds à la barre\n  40 Burpee\n  800 m Course\nScore: time\nEstimate: 28:00–52:00\nStimulus: Three rounds of L-pull-ups, toes-to-bar, burpees and an 800 m run.",
+  "markdown": "# Forrest\n\n```\n3 rounds for time\n  20 L-pull-up\n  30 Toes-to-bar\n  40 Burpee\n  800 m Run\n```\n\n**Score** — time\n**Estimate** — 28:00–52:00\n\n> Three rounds of L-pull-ups, toes-to-bar, burpees and an 800 m run.\n",
+  "timer": "    0:00   52:00~ 3 rounds for time: 20 L-pull-up + 30 Toes-to-bar + 40 Burpee + 800 m Run\n           52:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3120,
+    "label": "3 rounds for time: 20 L-pull-up + 30 Toes-to-bar + 40 Burpee + 800 m Run",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/garrett",
+  "board": "GARRETT\n3 rounds for time\n  75 Air squat\n  25 Ring handstand push-up\n  25 L-pull-up\nScore: time\nEstimate: 17:30–32:30\nStimulus: Three rounds of squats, ring handstand push-ups and L-pull-ups.",
+  "boardFr": "GARRETT\n3 rounds for time\n  75 Squat à vide\n  25 Pompe en équilibre aux anneaux\n  25 Traction en L\nScore: time\nEstimate: 17:30–32:30\nStimulus: Three rounds of squats, ring handstand push-ups and L-pull-ups.",
+  "markdown": "# Garrett\n\n```\n3 rounds for time\n  75 Air squat\n  25 Ring handstand push-up\n  25 L-pull-up\n```\n\n**Score** — time\n**Estimate** — 17:30–32:30\n\n> Three rounds of squats, ring handstand push-ups and L-pull-ups.\n",
+  "timer": "    0:00   32:30~ 3 rounds for time: 75 Air squat + 25 Ring handstand push-up + 25 L-pull-up\n           32:30  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1950,
+    "label": "3 rounds for time: 75 Air squat + 25 Ring handstand push-up + 25 L-pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/griff",
+  "board": "GRIFF\nFor time\n  800 m Run\n  400 m Run ...................... (backwards)\n  800 m Run\n  400 m Run ...................... (backwards)\nScore: time\nEstimate: 13:26–24:58\nStimulus: Running only, alternating forward and backward legs.",
+  "boardFr": "GRIFF\nFor time\n  800 m Course\n  400 m Course ................... (backwards)\n  800 m Course\n  400 m Course ................... (backwards)\nScore: time\nEstimate: 13:26–24:58\nStimulus: Running only, alternating forward and backward legs.",
+  "markdown": "# Griff\n\n```\nFor time\n  800 m Run\n  400 m Run ................ (backwards)\n  800 m Run\n  400 m Run ................ (backwards)\n```\n\n**Score** — time\n**Estimate** — 13:26–24:58\n\n> Running only, alternating forward and backward legs.\n",
+  "timer": "    0:00   24:58~ For time: 800 m Run + 400 m Run (backwards) + 800 m Run + 400 m Run (backwards)\n           24:58  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1498,
+    "label": "For time: 800 m Run + 400 m Run (backwards) + 800 m Run + 400 m Run (backwards)",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/hall",
+  "board": "HALL\n5 rounds for time\n  3 Clean ......................... 225/155 lb\n  200 m Sprint\n  20 Kettlebell snatch . 1.5/1 pood (10 each arm)\n  Rest 2:00\nScore: time\nEstimate: 16:49–31:14\nNote: The kettlebell snatches are 10 per arm. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of heavy cleans, a sprint and kettlebell snatches, with rest built in.",
+  "boardFr": "HALL\n5 rounds for time\n  3 Épaulé ........................ 225/155 lb\n  200 m Sprint course\n  20 Arraché kettlebell . 1.5/1 pood (10 each arm)\n  Rest 2:00\nScore: time\nEstimate: 16:49–31:14\nNote: The kettlebell snatches are 10 per arm. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of heavy cleans, a sprint and kettlebell snatches, with rest built in.",
+  "markdown": "# Hall\n\n```\n5 rounds for time\n  3 Clean ................... 225/155 lb\n  200 m Sprint\n  20 Kettlebell snatch . 1.5/1 pood (10 each arm)\n  Rest 2:00\n```\n\n**Score** — time\n**Estimate** — 16:49–31:14\n\n> Five rounds of heavy cleans, a sprint and kettlebell snatches, with rest built in.\n\n*The kettlebell snatches are 10 per arm. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   31:14~ 5 rounds for time: 3 Clean 225/155 lb + 200 m Sprint + 20 Kettlebell snatch 1.5/1 pood (10 each arm) + Rest 2:00\n           31:14  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1874,
+    "label": "5 rounds for time: 3 Clean 225/155 lb + 200 m Sprint + 20 Kettlebell snatch 1.5/1 pood (10 each arm) + Rest 2:00",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/hansen",
+  "board": "HANSEN\n5 rounds for time\n  30 Kettlebell swing ............. 2/1.5 pood\n  30 Burpee\n  30 GHD sit-up\nScore: time\nEstimate: 25:46–47:50\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of heavy kettlebell swings, burpees and GHD sit-ups.",
+  "boardFr": "HANSEN\n5 rounds for time\n  30 Swing kettlebell ............. 2/1.5 pood\n  30 Burpee\n  30 Relevé de buste GHD\nScore: time\nEstimate: 25:46–47:50\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of heavy kettlebell swings, burpees and GHD sit-ups.",
+  "markdown": "# Hansen\n\n```\n5 rounds for time\n  30 Kettlebell swing ....... 2/1.5 pood\n  30 Burpee\n  30 GHD sit-up\n```\n\n**Score** — time\n**Estimate** — 25:46–47:50\n\n> Five rounds of heavy kettlebell swings, burpees and GHD sit-ups.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   47:50~ 5 rounds for time: 30 Kettlebell swing 2/1.5 pood + 30 Burpee + 30 GHD sit-up\n           47:50  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2870,
+    "label": "5 rounds for time: 30 Kettlebell swing 2/1.5 pood + 30 Burpee + 30 GHD sit-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/helton",
+  "board": "HELTON\n3 rounds for time\n  800 m Run\n  30 Dumbbell squat clean ........... 50/35 lb\n  30 Burpee\nScore: time\nEstimate: 24:22–45:14\nNote: Two dumbbells. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Three rounds of an 800 m run, dumbbell squat cleans and burpees.",
+  "boardFr": "HELTON\n3 rounds for time\n  800 m Course\n  30 Épaulé squat haltère ........... 50/35 lb\n  30 Burpee\nScore: time\nEstimate: 24:22–45:14\nNote: Two dumbbells. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Three rounds of an 800 m run, dumbbell squat cleans and burpees.",
+  "markdown": "# Helton\n\n```\n3 rounds for time\n  800 m Run\n  30 Dumbbell squat clean ..... 50/35 lb\n  30 Burpee\n```\n\n**Score** — time\n**Estimate** — 24:22–45:14\n\n> Three rounds of an 800 m run, dumbbell squat cleans and burpees.\n\n*Two dumbbells. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   45:14~ 3 rounds for time: 800 m Run + 30 Dumbbell squat clean 50/35 lb + 30 Burpee\n           45:14  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2714,
+    "label": "3 rounds for time: 800 m Run + 30 Dumbbell squat clean 50/35 lb + 30 Burpee",
     "kind": "work",
     "openEnded": true
    }
@@ -595,6 +883,38 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/jack",
+  "board": "JACK\nAMRAP 20:00\n  10 Push press .................... 115/75 lb\n  10 Kettlebell swing ............. 1.5/1 pood\n  10 Box jump ....................... 24/20 in\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of push presses, kettlebell swings and box jumps.",
+  "boardFr": "JACK\nAMRAP 20:00\n  10 Développé jeté ................ 115/75 lb\n  10 Swing kettlebell ............. 1.5/1 pood\n  10 Saut sur box ................... 24/20 in\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of push presses, kettlebell swings and box jumps.",
+  "markdown": "# Jack\n\n```\nAMRAP 20:00\n  10 Push press .............. 115/75 lb\n  10 Kettlebell swing ....... 1.5/1 pood\n  10 Box jump ................. 24/20 in\n```\n\n**Score** — rounds + reps\n**Estimate** — 20:00\n\n> Twenty-minute AMRAP of push presses, kettlebell swings and box jumps.\n",
+  "timer": "    0:00   20:00  AMRAP 20:00: 10 Push press 115/75 lb + 10 Kettlebell swing 1.5/1 pood + 10 Box jump 24/20 in\n           20:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1200.0,
+    "label": "AMRAP 20:00: 10 Push press 115/75 lb + 10 Kettlebell swing 1.5/1 pood + 10 Box jump 24/20 in",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
+  "path": "heroes/jason",
+  "board": "JASON\nFor time\n  100 Air squat\n  5 Ring muscle-up\n  75 Air squat\n  10 Ring muscle-up\n  50 Air squat\n  15 Ring muscle-up\n  25 Air squat\n  20 Ring muscle-up\nScore: time\nEstimate: 11:40–21:40\nStimulus: Descending air squats against ascending muscle-ups.",
+  "boardFr": "JASON\nFor time\n  100 Squat à vide\n  5 Muscle-up aux anneaux\n  75 Squat à vide\n  10 Muscle-up aux anneaux\n  50 Squat à vide\n  15 Muscle-up aux anneaux\n  25 Squat à vide\n  20 Muscle-up aux anneaux\nScore: time\nEstimate: 11:40–21:40\nStimulus: Descending air squats against ascending muscle-ups.",
+  "markdown": "# Jason\n\n```\nFor time\n  100 Air squat\n  5 Ring muscle-up\n  75 Air squat\n  10 Ring muscle-up\n  50 Air squat\n  15 Ring muscle-up\n  25 Air squat\n  20 Ring muscle-up\n```\n\n**Score** — time\n**Estimate** — 11:40–21:40\n\n> Descending air squats against ascending muscle-ups.\n",
+  "timer": "    0:00   21:40~ For time: 100 Air squat + 5 Ring muscle-up + 75 Air squat + 10 Ring muscle-up + 50 Air squat + 15 Ring muscle-up + 25 Air squat + 20 Ring muscle-up\n           21:40  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1300,
+    "label": "For time: 100 Air squat + 5 Ring muscle-up + 75 Air squat + 10 Ring muscle-up + 50 Air squat + 15 Ring muscle-up + 25 Air squat + 20 Ring muscle-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "heroes/jerry",
   "board": "JERRY\nFor time\n  1 mi Run\n  2 km Row\n  1 mi Run\nScore: time\nEstimate: 26:59–50:07\nStimulus: Pure engine; a mile, a 2 K row, a mile, all at threshold.",
   "boardFr": "JERRY\nFor time\n  1 mi Course\n  2 km Rameur\n  1 mi Course\nScore: time\nEstimate: 26:59–50:07\nStimulus: Pure engine; a mile, a 2 K row, a mile, all at threshold.",
@@ -611,6 +931,22 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/johnson",
+  "board": "JOHNSON\nAMRAP 20:00\n  9 Deadlift ...................... 245/165 lb\n  8 Ring muscle-up\n  9 Squat clean ................... 155/105 lb\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of deadlifts, muscle-ups and squat cleans.",
+  "boardFr": "JOHNSON\nAMRAP 20:00\n  9 Soulevé de terre .............. 245/165 lb\n  8 Muscle-up aux anneaux\n  9 Épaulé squat .................. 155/105 lb\nScore: rounds + reps\nEstimate: 20:00\nStimulus: Twenty-minute AMRAP of deadlifts, muscle-ups and squat cleans.",
+  "markdown": "# Johnson\n\n```\nAMRAP 20:00\n  9 Deadlift ................ 245/165 lb\n  8 Ring muscle-up\n  9 Squat clean ............. 155/105 lb\n```\n\n**Score** — rounds + reps\n**Estimate** — 20:00\n\n> Twenty-minute AMRAP of deadlifts, muscle-ups and squat cleans.\n",
+  "timer": "    0:00   20:00  AMRAP 20:00: 9 Deadlift 245/165 lb + 8 Ring muscle-up + 9 Squat clean 155/105 lb\n           20:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1200.0,
+    "label": "AMRAP 20:00: 9 Deadlift 245/165 lb + 8 Ring muscle-up + 9 Squat clean 155/105 lb",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "heroes/josh",
   "board": "JOSH\nFor time\n  21 Overhead squat ................. 95/65 lb\n  42 Pull-up\n  15 Overhead squat ................. 95/65 lb\n  30 Pull-up\n  9 Overhead squat .................. 95/65 lb\n  18 Pull-up\nScore: time\nEstimate: 5:02–9:22\nNote: The original posting prescribes 95 lb; 65 lb is the commonly used women's load.\nStimulus: Overhead squats sandwiched between big sets of pull-ups.",
   "boardFr": "JOSH\nFor time\n  21 Squat overhead ................. 95/65 lb\n  42 Traction\n  15 Squat overhead ................. 95/65 lb\n  30 Traction\n  9 Squat overhead .................. 95/65 lb\n  18 Traction\nScore: time\nEstimate: 5:02–9:22\nNote: The original posting prescribes 95 lb; 65 lb is the commonly used women's load.\nStimulus: Overhead squats sandwiched between big sets of pull-ups.",
@@ -621,6 +957,22 @@ enum ViewsFixtures {
     "at": 0.0,
     "duration": 562,
     "label": "For time: 21 Overhead squat 95/65 lb + 42 Pull-up + 15 Overhead squat 95/65 lb + 30 Pull-up + 9 Overhead squat 95/65 lb + 18 Pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/joshie",
+  "board": "JOSHIE\n3 rounds for time\n  21 Dumbbell snatch .... 40/25 lb (right arm)\n  21 L-pull-up\n  21 Dumbbell snatch ..... 40/25 lb (left arm)\n  21 L-pull-up\nScore: time\nEstimate: 12:40–23:32\nNote: The dumbbell snatches are full squat snatches, one arm at a time. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Three rounds of single-arm dumbbell snatches and L-pull-ups.",
+  "boardFr": "JOSHIE\n3 rounds for time\n  21 Arraché haltère .... 40/25 lb (right arm)\n  21 Traction en L\n  21 Arraché haltère ..... 40/25 lb (left arm)\n  21 Traction en L\nScore: time\nEstimate: 12:40–23:32\nNote: The dumbbell snatches are full squat snatches, one arm at a time. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Three rounds of single-arm dumbbell snatches and L-pull-ups.",
+  "markdown": "# Joshie\n\n```\n3 rounds for time\n  21 Dumbbell snatch . 40/25 lb (right arm)\n  21 L-pull-up\n  21 Dumbbell snatch . 40/25 lb (left arm)\n  21 L-pull-up\n```\n\n**Score** — time\n**Estimate** — 12:40–23:32\n\n> Three rounds of single-arm dumbbell snatches and L-pull-ups.\n\n*The dumbbell snatches are full squat snatches, one arm at a time. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   23:32~ 3 rounds for time: 21 Dumbbell snatch 40/25 lb (right arm) + 21 L-pull-up + 21 Dumbbell snatch 40/25 lb (left arm) + 21 L-pull-up\n           23:32  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1412,
+    "label": "3 rounds for time: 21 Dumbbell snatch 40/25 lb (right arm) + 21 L-pull-up + 21 Dumbbell snatch 40/25 lb (left arm) + 21 L-pull-up",
     "kind": "work",
     "openEnded": true
    }
@@ -643,6 +995,70 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/luce",
+  "board": "LUCE\n3 rounds for time\n  1 km Run\n  10 Ring muscle-up\n  100 Air squat\nVest: 20/14 lb\nScore: time\nEstimate: 28:00–52:00\nNote: The original posting prescribes a 20 lb vest; 14 lb is the commonly used women's vest.\nStimulus: Three rounds under a vest of a 1 km run, muscle-ups and air squats.",
+  "boardFr": "LUCE\n3 rounds for time\n  1 km Course\n  10 Muscle-up aux anneaux\n  100 Squat à vide\nVest: 20/14 lb\nScore: time\nEstimate: 28:00–52:00\nNote: The original posting prescribes a 20 lb vest; 14 lb is the commonly used women's vest.\nStimulus: Three rounds under a vest of a 1 km run, muscle-ups and air squats.",
+  "markdown": "# Luce\n\n```\n3 rounds for time\n  1 km Run\n  10 Ring muscle-up\n  100 Air squat\n```\n\n**Score** — time\n**Estimate** — 28:00–52:00\n\n> Three rounds under a vest of a 1 km run, muscle-ups and air squats.\n\n*The original posting prescribes a 20 lb vest; 14 lb is the commonly used women's vest.*\n",
+  "timer": "    0:00   52:00~ 3 rounds for time: 1 km Run + 10 Ring muscle-up + 100 Air squat\n           52:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3120,
+    "label": "3 rounds for time: 1 km Run + 10 Ring muscle-up + 100 Air squat",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/lumberjack_20",
+  "board": "LUMBERJACK 20\nFor time\n  20 Deadlift ..................... 275/185 lb\n  400 m Run\n  20 Kettlebell swing ............. 2/1.5 pood\n  400 m Run\n  20 Overhead squat ................ 115/75 lb\n  400 m Run\n  20 Burpee\n  400 m Run\n  20 Chest-to-bar pull-up\n  400 m Run\n  20 Box jump ....................... 24/20 in\n  400 m Run\n  20 Dumbbell squat clean ........... 45/35 lb\n  400 m Run\nScore: time\nEstimate: 25:57–48:12\nNote: The dumbbell squat cleans are done with two dumbbells. The original posting gives men's loads only, except for the overhead squat and the box; the other women's loads are the commonly used ones.\nStimulus: Seven twenty-rep movements, each followed by a 400 m run.",
+  "boardFr": "LUMBERJACK 20\nFor time\n  20 Soulevé de terre ............. 275/185 lb\n  400 m Course\n  20 Swing kettlebell ............. 2/1.5 pood\n  400 m Course\n  20 Squat overhead ................ 115/75 lb\n  400 m Course\n  20 Burpee\n  400 m Course\n  20 Traction poitrine-barre\n  400 m Course\n  20 Saut sur box ................... 24/20 in\n  400 m Course\n  20 Épaulé squat haltère ........... 45/35 lb\n  400 m Course\nScore: time\nEstimate: 25:57–48:12\nNote: The dumbbell squat cleans are done with two dumbbells. The original posting gives men's loads only, except for the overhead squat and the box; the other women's loads are the commonly used ones.\nStimulus: Seven twenty-rep movements, each followed by a 400 m run.",
+  "markdown": "# Lumberjack 20\n\n```\nFor time\n  20 Deadlift ............... 275/185 lb\n  400 m Run\n  20 Kettlebell swing ....... 2/1.5 pood\n  400 m Run\n  20 Overhead squat .......... 115/75 lb\n  400 m Run\n  20 Burpee\n  400 m Run\n  20 Chest-to-bar pull-up\n  400 m Run\n  20 Box jump ................. 24/20 in\n  400 m Run\n  20 Dumbbell squat clean ..... 45/35 lb\n  400 m Run\n```\n\n**Score** — time\n**Estimate** — 25:57–48:12\n\n> Seven twenty-rep movements, each followed by a 400 m run.\n\n*The dumbbell squat cleans are done with two dumbbells. The original posting gives men's loads only, except for the overhead squat and the box; the other women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   48:12~ For time: 20 Deadlift 275/185 lb + 400 m Run + 20 Kettlebell swing 2/1.5 pood + 400 m Run + 20 Overhead squat 115/75 lb + 400 m Run + 20 Burpee + 400 m Run + 20 Chest-to-bar pull-up + 400 m Run + 20 Box jump 24/20 in + 400 m Run + 20 Dumbbell squat clean 45/35 lb + 400 m Run\n           48:12  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2892,
+    "label": "For time: 20 Deadlift 275/185 lb + 400 m Run + 20 Kettlebell swing 2/1.5 pood + 400 m Run + 20 Overhead squat 115/75 lb + 400 m Run + 20 Burpee + 400 m Run + 20 Chest-to-bar pull-up + 400 m Run + 20 Box jump 24/20 in + 400 m Run + 20 Dumbbell squat clean 45/35 lb + 400 m Run",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/marco",
+  "board": "MARCO\n3 rounds for time\n  21 Pull-up\n  15 Handstand push-up\n  9 Thruster ....................... 135/95 lb\nScore: time\nEstimate: 6:30–12:04\nStimulus: Three rounds of pull-ups, handstand push-ups and thrusters.",
+  "boardFr": "MARCO\n3 rounds for time\n  21 Traction\n  15 Pompe en équilibre\n  9 Thruster ....................... 135/95 lb\nScore: time\nEstimate: 6:30–12:04\nStimulus: Three rounds of pull-ups, handstand push-ups and thrusters.",
+  "markdown": "# Marco\n\n```\n3 rounds for time\n  21 Pull-up\n  15 Handstand push-up\n  9 Thruster ................. 135/95 lb\n```\n\n**Score** — time\n**Estimate** — 6:30–12:04\n\n> Three rounds of pull-ups, handstand push-ups and thrusters.\n",
+  "timer": "    0:00   12:04~ 3 rounds for time: 21 Pull-up + 15 Handstand push-up + 9 Thruster 135/95 lb\n           12:04  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 724,
+    "label": "3 rounds for time: 21 Pull-up + 15 Handstand push-up + 9 Thruster 135/95 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/mcghee",
+  "board": "MCGHEE\nAMRAP 30:00\n  5 Deadlift ...................... 275/185 lb\n  13 Push-up\n  9 Box jump ........................ 24/20 in\nScore: rounds + reps\nEstimate: 30:00\nStimulus: Thirty-minute AMRAP of heavy deadlifts, push-ups and box jumps.",
+  "boardFr": "MCGHEE\nAMRAP 30:00\n  5 Soulevé de terre .............. 275/185 lb\n  13 Pompe\n  9 Saut sur box .................... 24/20 in\nScore: rounds + reps\nEstimate: 30:00\nStimulus: Thirty-minute AMRAP of heavy deadlifts, push-ups and box jumps.",
+  "markdown": "# McGhee\n\n```\nAMRAP 30:00\n  5 Deadlift ................ 275/185 lb\n  13 Push-up\n  9 Box jump .................. 24/20 in\n```\n\n**Score** — rounds + reps\n**Estimate** — 30:00\n\n> Thirty-minute AMRAP of heavy deadlifts, push-ups and box jumps.\n",
+  "timer": "    0:00   30:00  AMRAP 30:00: 5 Deadlift 275/185 lb + 13 Push-up + 9 Box jump 24/20 in\n           30:00  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1800.0,
+    "label": "AMRAP 30:00: 5 Deadlift 275/185 lb + 13 Push-up + 9 Box jump 24/20 in",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "heroes/michael",
   "board": "MICHAEL\n3 rounds for time\n  800 m Run\n  50 Hip extension\n  50 Sit-up\nScore: time\nEstimate: 24:05–44:43\nStimulus: Running and posterior-chain endurance; keep the back extensions smooth.",
   "boardFr": "MICHAEL\n3 rounds for time\n  800 m Course\n  50 Extension lombaire\n  50 Relevé de buste\nScore: time\nEstimate: 24:05–44:43\nStimulus: Running and posterior-chain endurance; keep the back extensions smooth.",
@@ -653,6 +1069,22 @@ enum ViewsFixtures {
     "at": 0.0,
     "duration": 2683,
     "label": "3 rounds for time: 800 m Run + 50 Hip extension + 50 Sit-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/mr_joshua",
+  "board": "MR. JOSHUA\n5 rounds for time\n  400 m Run\n  30 GHD sit-up\n  15 Deadlift ..................... 250/175 lb\nScore: time\nEstimate: 29:38–55:03\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of a 400 m run, GHD sit-ups and heavy deadlifts.",
+  "boardFr": "MR. JOSHUA\n5 rounds for time\n  400 m Course\n  30 Relevé de buste GHD\n  15 Soulevé de terre ............. 250/175 lb\nScore: time\nEstimate: 29:38–55:03\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of a 400 m run, GHD sit-ups and heavy deadlifts.",
+  "markdown": "# Mr. Joshua\n\n```\n5 rounds for time\n  400 m Run\n  30 GHD sit-up\n  15 Deadlift ............... 250/175 lb\n```\n\n**Score** — time\n**Estimate** — 29:38–55:03\n\n> Five rounds of a 400 m run, GHD sit-ups and heavy deadlifts.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   55:03~ 5 rounds for time: 400 m Run + 30 GHD sit-up + 15 Deadlift 250/175 lb\n           55:03  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3303,
+    "label": "5 rounds for time: 400 m Run + 30 GHD sit-up + 15 Deadlift 250/175 lb",
     "kind": "work",
     "openEnded": true
    }
@@ -691,6 +1123,54 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "heroes/nutts",
+  "board": "NUTTS\nFor time\n  10 Handstand push-up\n  15 Deadlift ..................... 250/175 lb\n  25 Box jump ....................... 30/24 in\n  50 Pull-up\n  100 Wall ball ..................... 20/14 lb\n  200 Double-under\n  400 m Plate carry ................. 45/35 lb\nScore: time\nEstimate: 15:55–29:33\nNote: Wall ball target 10 ft (men) / 9 ft (women). The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Seven-movement chipper finishing with a run holding a plate.",
+  "boardFr": "NUTTS\nFor time\n  10 Pompe en équilibre\n  15 Soulevé de terre ............. 250/175 lb\n  25 Saut sur box ................... 30/24 in\n  50 Traction\n  100 Wall ball ..................... 20/14 lb\n  200 Double under\n  400 m Course avec disque .......... 45/35 lb\nScore: time\nEstimate: 15:55–29:33\nNote: Wall ball target 10 ft (men) / 9 ft (women). The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Seven-movement chipper finishing with a run holding a plate.",
+  "markdown": "# Nutts\n\n```\nFor time\n  10 Handstand push-up\n  15 Deadlift ............... 250/175 lb\n  25 Box jump ................. 30/24 in\n  50 Pull-up\n  100 Wall ball ............... 20/14 lb\n  200 Double-under\n  400 m Plate carry ........... 45/35 lb\n```\n\n**Score** — time\n**Estimate** — 15:55–29:33\n\n> Seven-movement chipper finishing with a run holding a plate.\n\n*Wall ball target 10 ft (men) / 9 ft (women). The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   29:33~ For time: 10 Handstand push-up + 15 Deadlift 250/175 lb + 25 Box jump 30/24 in + 50 Pull-up + 100 Wall ball 20/14 lb + 200 Double-under + 400 m Plate carry 45/35 lb\n           29:33  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1773,
+    "label": "For time: 10 Handstand push-up + 15 Deadlift 250/175 lb + 25 Box jump 30/24 in + 50 Pull-up + 100 Wall ball 20/14 lb + 200 Double-under + 400 m Plate carry 45/35 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/paul",
+  "board": "PAUL\n5 rounds for time\n  50 Double-under\n  35 Knees-to-elbow\n  60 ft Overhead carry ............ 185/125 lb\nScore: time\nEstimate: 10:13–18:58\nNote: The overhead walk is 20 yards with a barbell. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of double-unders, knees-to-elbows and a heavy overhead walk.",
+  "boardFr": "PAUL\n5 rounds for time\n  50 Double under\n  35 Genoux aux coudes\n  60 ft Portage au-dessus de la tête . 185/125 lb\nScore: time\nEstimate: 10:13–18:58\nNote: The overhead walk is 20 yards with a barbell. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of double-unders, knees-to-elbows and a heavy overhead walk.",
+  "markdown": "# Paul\n\n```\n5 rounds for time\n  50 Double-under\n  35 Knees-to-elbow\n  60 ft Overhead carry ...... 185/125 lb\n```\n\n**Score** — time\n**Estimate** — 10:13–18:58\n\n> Five rounds of double-unders, knees-to-elbows and a heavy overhead walk.\n\n*The overhead walk is 20 yards with a barbell. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   18:58~ 5 rounds for time: 50 Double-under + 35 Knees-to-elbow + 60 ft Overhead carry 185/125 lb\n           18:58  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1138,
+    "label": "5 rounds for time: 50 Double-under + 35 Knees-to-elbow + 60 ft Overhead carry 185/125 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/pk",
+  "board": "PK\n5 rounds for time\n  10 Back squat\n  10 Deadlift\n  400 m Sprint\n  Rest 2:00\nScore: time\nEstimate: 18:12–33:48\nNote: Loads are multiples of bodyweight.\nStimulus: Five rounds of bodyweight-relative squats and deadlifts, a sprint, and rest.",
+  "boardFr": "PK\n5 rounds for time\n  10 Squat arrière\n  10 Soulevé de terre\n  400 m Sprint course\n  Rest 2:00\nScore: time\nEstimate: 18:12–33:48\nNote: Loads are multiples of bodyweight.\nStimulus: Five rounds of bodyweight-relative squats and deadlifts, a sprint, and rest.",
+  "markdown": "# PK\n\n```\n5 rounds for time\n  10 Back squat\n  10 Deadlift\n  400 m Sprint\n  Rest 2:00\n```\n\n**Score** — time\n**Estimate** — 18:12–33:48\n\n> Five rounds of bodyweight-relative squats and deadlifts, a sprint, and rest.\n\n*Loads are multiples of bodyweight.*\n",
+  "timer": "    0:00   33:48~ 5 rounds for time: 10 Back squat + 10 Deadlift + 400 m Sprint + Rest 2:00\n           33:48  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2028,
+    "label": "5 rounds for time: 10 Back squat + 10 Deadlift + 400 m Sprint + Rest 2:00",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "heroes/randy",
   "board": "RANDY\nFor time\n  75 Power snatch ................... 75/55 lb\nScore: time\nEstimate: 4:42–8:43\nStimulus: Seventy-five light power snatches, one barbell, no rest built in.\nLevels: scaled",
   "boardFr": "RANDY\nFor time\n  75 Arraché puissance .............. 75/55 lb\nScore: time\nEstimate: 4:42–8:43\nStimulus: Seventy-five light power snatches, one barbell, no rest built in.\nLevels: scaled",
@@ -701,6 +1181,198 @@ enum ViewsFixtures {
     "at": 0.0,
     "duration": 523,
     "label": "For time: 75 Power snatch 75/55 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/rj",
+  "board": "RJ\n5 rounds for time\n  800 m Run\n  5 Rope climb\n  50 Push-up\nScore: time\nEstimate: 36:24–1:07:36\nNote: Rope climbs to 15 ft.\nStimulus: Five rounds of an 800 m run, rope climbs and push-ups.",
+  "boardFr": "RJ\n5 rounds for time\n  800 m Course\n  5 Montée de corde\n  50 Pompe\nScore: time\nEstimate: 36:24–1:07:36\nNote: Rope climbs to 15 ft.\nStimulus: Five rounds of an 800 m run, rope climbs and push-ups.",
+  "markdown": "# RJ\n\n```\n5 rounds for time\n  800 m Run\n  5 Rope climb\n  50 Push-up\n```\n\n**Score** — time\n**Estimate** — 36:24–1:07:36\n\n> Five rounds of an 800 m run, rope climbs and push-ups.\n\n*Rope climbs to 15 ft.*\n",
+  "timer": "    0:00  1:07:36~ 5 rounds for time: 800 m Run + 5 Rope climb + 50 Push-up\n          1:07:36  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 4056,
+    "label": "5 rounds for time: 800 m Run + 5 Rope climb + 50 Push-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/roy",
+  "board": "ROY\n5 rounds for time\n  15 Deadlift ..................... 225/155 lb\n  20 Box jump ....................... 24/20 in\n  25 Pull-up\nScore: time\nEstimate: 19:09–35:34\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of deadlifts, box jumps and pull-ups.",
+  "boardFr": "ROY\n5 rounds for time\n  15 Soulevé de terre ............. 225/155 lb\n  20 Saut sur box ................... 24/20 in\n  25 Traction\nScore: time\nEstimate: 19:09–35:34\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of deadlifts, box jumps and pull-ups.",
+  "markdown": "# Roy\n\n```\n5 rounds for time\n  15 Deadlift ............... 225/155 lb\n  20 Box jump ................. 24/20 in\n  25 Pull-up\n```\n\n**Score** — time\n**Estimate** — 19:09–35:34\n\n> Five rounds of deadlifts, box jumps and pull-ups.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   35:34~ 5 rounds for time: 15 Deadlift 225/155 lb + 20 Box jump 24/20 in + 25 Pull-up\n           35:34  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2134,
+    "label": "5 rounds for time: 15 Deadlift 225/155 lb + 20 Box jump 24/20 in + 25 Pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/ryan",
+  "board": "RYAN\n5 rounds for time\n  7 Ring muscle-up\n  21 Burpee\nScore: time\nEstimate: 10:08–18:48\nNote: Each burpee ends with a jump to a target 1 ft above maximum standing reach.\nStimulus: Five rounds of muscle-ups and burpees.",
+  "boardFr": "RYAN\n5 rounds for time\n  7 Muscle-up aux anneaux\n  21 Burpee\nScore: time\nEstimate: 10:08–18:48\nNote: Each burpee ends with a jump to a target 1 ft above maximum standing reach.\nStimulus: Five rounds of muscle-ups and burpees.",
+  "markdown": "# Ryan\n\n```\n5 rounds for time\n  7 Ring muscle-up\n  21 Burpee\n```\n\n**Score** — time\n**Estimate** — 10:08–18:48\n\n> Five rounds of muscle-ups and burpees.\n\n*Each burpee ends with a jump to a target 1 ft above maximum standing reach.*\n",
+  "timer": "    0:00   18:48~ 5 rounds for time: 7 Ring muscle-up + 21 Burpee\n           18:48  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1128,
+    "label": "5 rounds for time: 7 Ring muscle-up + 21 Burpee",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/servais",
+  "board": "SERVAIS\nFor time\n  1.5 mi Run\n  8 rounds\n    19 Pull-up\n    19 Push-up\n    19 Burpee\n  400 m Sandbag carry\n  1 mi Farmer carry ................. 45/35 lb\nScore: time\nEstimate: 1:03:28–1:57:51\nNote: The sandbag is heavy, with no fixed load. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: A long run, eight rounds of bodyweight work, then two heavy carries.",
+  "boardFr": "SERVAIS\nFor time\n  1.5 mi Course\n  8 rounds\n    19 Traction\n    19 Pompe\n    19 Burpee\n  400 m Portage sac de sable\n  1 mi Portage du fermier ........... 45/35 lb\nScore: time\nEstimate: 1:03:28–1:57:51\nNote: The sandbag is heavy, with no fixed load. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: A long run, eight rounds of bodyweight work, then two heavy carries.",
+  "markdown": "# Servais\n\n```\nFor time\n  1.5 mi Run\n  8 rounds\n    19 Pull-up\n    19 Push-up\n    19 Burpee\n  400 m Sandbag carry\n  1 mi Farmer carry ........... 45/35 lb\n```\n\n**Score** — time\n**Estimate** — 1:03:28–1:57:51\n\n> A long run, eight rounds of bodyweight work, then two heavy carries.\n\n*The sandbag is heavy, with no fixed load. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00  1:57:51~ For time: 1.5 mi Run + 8 rounds 19 Pull-up + 19 Push-up + 19 Burpee + 400 m Sandbag carry + 1 mi Farmer carry 45/35 lb\n          1:57:51  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 7071,
+    "label": "For time: 1.5 mi Run + 8 rounds 19 Pull-up + 19 Push-up + 19 Burpee + 400 m Sandbag carry + 1 mi Farmer carry 45/35 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/severin",
+  "board": "SEVERIN\nFor time\n  50 Strict pull-up\n  100 Hand-release push-up\n  5 km Run\nScore: time\nEstimate: 34:04–1:03:16\nNote: Wear a 20 lb vest or body armor if you have one.\nStimulus: Strict pull-ups, hand-release push-ups, then a 5 km run.",
+  "boardFr": "SEVERIN\nFor time\n  50 Traction stricte\n  100 Pompe mains levées\n  5 km Course\nScore: time\nEstimate: 34:04–1:03:16\nNote: Wear a 20 lb vest or body armor if you have one.\nStimulus: Strict pull-ups, hand-release push-ups, then a 5 km run.",
+  "markdown": "# Severin\n\n```\nFor time\n  50 Strict pull-up\n  100 Hand-release push-up\n  5 km Run\n```\n\n**Score** — time\n**Estimate** — 34:04–1:03:16\n\n> Strict pull-ups, hand-release push-ups, then a 5 km run.\n\n*Wear a 20 lb vest or body armor if you have one.*\n",
+  "timer": "    0:00  1:03:16~ For time: 50 Strict pull-up + 100 Hand-release push-up + 5 km Run\n          1:03:16  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 3796,
+    "label": "For time: 50 Strict pull-up + 100 Hand-release push-up + 5 km Run",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/stephen",
+  "board": "STEPHEN\n30-25-20-15-10-5 for time\n  GHD sit-up\n  Hip extension\n  Knees-to-elbow\n  Stiff-legged deadlift ............. 95/65 lb\nScore: time\nEstimate: 17:07–31:47\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Descending ladder of midline and posterior-chain movements.",
+  "boardFr": "STEPHEN\n30-25-20-15-10-5 for time\n  Relevé de buste GHD\n  Extension lombaire\n  Genoux aux coudes\n  Soulevé de terre jambes tendues ... 95/65 lb\nScore: time\nEstimate: 17:07–31:47\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Descending ladder of midline and posterior-chain movements.",
+  "markdown": "# Stephen\n\n```\n30-25-20-15-10-5 for time\n  GHD sit-up\n  Hip extension\n  Knees-to-elbow\n  Stiff-legged deadlift ....... 95/65 lb\n```\n\n**Score** — time\n**Estimate** — 17:07–31:47\n\n> Descending ladder of midline and posterior-chain movements.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   31:47~ 30-25-20-15-10-5 for time: GHD sit-up + Hip extension + Knees-to-elbow + Stiff-legged deadlift 95/65 lb\n           31:47  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1907,
+    "label": "30-25-20-15-10-5 for time: GHD sit-up + Hip extension + Knees-to-elbow + Stiff-legged deadlift 95/65 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/the_seven",
+  "board": "THE SEVEN\n7 rounds for time\n  7 Handstand push-up\n  7 Thruster ....................... 135/95 lb\n  7 Knees-to-elbow\n  7 Deadlift ...................... 245/165 lb\n  7 Burpee\n  7 Kettlebell swing .............. 2/1.5 pood\n  7 Pull-up\nScore: time\nEstimate: 23:13–43:06\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Seven rounds of seven movements, seven reps each.",
+  "boardFr": "THE SEVEN\n7 rounds for time\n  7 Pompe en équilibre\n  7 Thruster ....................... 135/95 lb\n  7 Genoux aux coudes\n  7 Soulevé de terre .............. 245/165 lb\n  7 Burpee\n  7 Swing kettlebell .............. 2/1.5 pood\n  7 Traction\nScore: time\nEstimate: 23:13–43:06\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Seven rounds of seven movements, seven reps each.",
+  "markdown": "# The Seven\n\n```\n7 rounds for time\n  7 Handstand push-up\n  7 Thruster ................. 135/95 lb\n  7 Knees-to-elbow\n  7 Deadlift ................ 245/165 lb\n  7 Burpee\n  7 Kettlebell swing ........ 2/1.5 pood\n  7 Pull-up\n```\n\n**Score** — time\n**Estimate** — 23:13–43:06\n\n> Seven rounds of seven movements, seven reps each.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   43:06~ 7 rounds for time: 7 Handstand push-up + 7 Thruster 135/95 lb + 7 Knees-to-elbow + 7 Deadlift 245/165 lb + 7 Burpee + 7 Kettlebell swing 2/1.5 pood + 7 Pull-up\n           43:06  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2586,
+    "label": "7 rounds for time: 7 Handstand push-up + 7 Thruster 135/95 lb + 7 Knees-to-elbow + 7 Deadlift 245/165 lb + 7 Burpee + 7 Kettlebell swing 2/1.5 pood + 7 Pull-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/thompson",
+  "board": "THOMPSON\n10 rounds for time\n  1 Rope climb ................. (from seated)\n  29 Back squat ..................... 95/65 lb\n  10 m Farmer carry ................ 135/95 lb\nScore: time\nEstimate: 20:05–37:17\nNote: Rope climb to 15 ft, starting seated on the floor. The farmer carry uses two barbells. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Ten rounds of a rope climb from seated, back squats and a short farmer carry.",
+  "boardFr": "THOMPSON\n10 rounds for time\n  1 Montée de corde ............ (from seated)\n  29 Squat arrière .................. 95/65 lb\n  10 m Portage du fermier .......... 135/95 lb\nScore: time\nEstimate: 20:05–37:17\nNote: Rope climb to 15 ft, starting seated on the floor. The farmer carry uses two barbells. The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Ten rounds of a rope climb from seated, back squats and a short farmer carry.",
+  "markdown": "# Thompson\n\n```\n10 rounds for time\n  1 Rope climb ........... (from seated)\n  29 Back squat ............... 95/65 lb\n  10 m Farmer carry .......... 135/95 lb\n```\n\n**Score** — time\n**Estimate** — 20:05–37:17\n\n> Ten rounds of a rope climb from seated, back squats and a short farmer carry.\n\n*Rope climb to 15 ft, starting seated on the floor. The farmer carry uses two barbells. The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   37:17~ 10 rounds for time: 1 Rope climb (from seated) + 29 Back squat 95/65 lb + 10 m Farmer carry 135/95 lb\n           37:17  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2237,
+    "label": "10 rounds for time: 1 Rope climb (from seated) + 29 Back squat 95/65 lb + 10 m Farmer carry 135/95 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/tommy_v",
+  "board": "TOMMY V\nFor time\n  21 Thruster ...................... 115/75 lb\n  12 Rope climb\n  15 Thruster ...................... 115/75 lb\n  9 Rope climb\n  9 Thruster ....................... 115/75 lb\n  6 Rope climb\nScore: time\nEstimate: 10:27–19:25\nNote: Rope climbs to 15 ft.\nStimulus: Descending thrusters alternating with rope climbs.",
+  "boardFr": "TOMMY V\nFor time\n  21 Thruster ...................... 115/75 lb\n  12 Montée de corde\n  15 Thruster ...................... 115/75 lb\n  9 Montée de corde\n  9 Thruster ....................... 115/75 lb\n  6 Montée de corde\nScore: time\nEstimate: 10:27–19:25\nNote: Rope climbs to 15 ft.\nStimulus: Descending thrusters alternating with rope climbs.",
+  "markdown": "# Tommy V\n\n```\nFor time\n  21 Thruster ................ 115/75 lb\n  12 Rope climb\n  15 Thruster ................ 115/75 lb\n  9 Rope climb\n  9 Thruster ................. 115/75 lb\n  6 Rope climb\n```\n\n**Score** — time\n**Estimate** — 10:27–19:25\n\n> Descending thrusters alternating with rope climbs.\n\n*Rope climbs to 15 ft.*\n",
+  "timer": "    0:00   19:25~ For time: 21 Thruster 115/75 lb + 12 Rope climb + 15 Thruster 115/75 lb + 9 Rope climb + 9 Thruster 115/75 lb + 6 Rope climb\n           19:25  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 1165,
+    "label": "For time: 21 Thruster 115/75 lb + 12 Rope climb + 15 Thruster 115/75 lb + 9 Rope climb + 9 Thruster 115/75 lb + 6 Rope climb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/tyler",
+  "board": "TYLER\n5 rounds for time\n  7 Ring muscle-up\n  21 Sumo deadlift high pull ........ 95/65 lb\nScore: time\nEstimate: 8:10–15:10\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of muscle-ups and sumo deadlift high pulls.",
+  "boardFr": "TYLER\n5 rounds for time\n  7 Muscle-up aux anneaux\n  21 Soulevé de terre sumo tirage menton . 95/65 lb\nScore: time\nEstimate: 8:10–15:10\nNote: The original posting gives men's loads only; the women's loads are the commonly used ones.\nStimulus: Five rounds of muscle-ups and sumo deadlift high pulls.",
+  "markdown": "# Tyler\n\n```\n5 rounds for time\n  7 Ring muscle-up\n  21 Sumo deadlift high pull .. 95/65 lb\n```\n\n**Score** — time\n**Estimate** — 8:10–15:10\n\n> Five rounds of muscle-ups and sumo deadlift high pulls.\n\n*The original posting gives men's loads only; the women's loads are the commonly used ones.*\n",
+  "timer": "    0:00   15:10~ 5 rounds for time: 7 Ring muscle-up + 21 Sumo deadlift high pull 95/65 lb\n           15:10  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 910,
+    "label": "5 rounds for time: 7 Ring muscle-up + 21 Sumo deadlift high pull 95/65 lb",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/war_frank",
+  "board": "WAR FRANK\n3 rounds for time\n  25 Ring muscle-up\n  100 Air squat\n  35 GHD sit-up\nScore: time\nEstimate: 20:18–37:42\nStimulus: Three rounds of high-volume muscle-ups, air squats and GHD sit-ups.",
+  "boardFr": "WAR FRANK\n3 rounds for time\n  25 Muscle-up aux anneaux\n  100 Squat à vide\n  35 Relevé de buste GHD\nScore: time\nEstimate: 20:18–37:42\nStimulus: Three rounds of high-volume muscle-ups, air squats and GHD sit-ups.",
+  "markdown": "# War Frank\n\n```\n3 rounds for time\n  25 Ring muscle-up\n  100 Air squat\n  35 GHD sit-up\n```\n\n**Score** — time\n**Estimate** — 20:18–37:42\n\n> Three rounds of high-volume muscle-ups, air squats and GHD sit-ups.\n",
+  "timer": "    0:00   37:42~ 3 rounds for time: 25 Ring muscle-up + 100 Air squat + 35 GHD sit-up\n           37:42  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 2262,
+    "label": "3 rounds for time: 25 Ring muscle-up + 100 Air squat + 35 GHD sit-up",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
+  "path": "heroes/whitten",
+  "board": "WHITTEN\n5 rounds for time\n  22 Kettlebell swing ............. 2/1.5 pood\n  22 Box jump ....................... 24/20 in\n  400 m Run\n  22 Burpee\n  22 Wall ball ...................... 20/14 lb\nScore: time\nEstimate: 36:15–1:07:19\nStimulus: Five rounds of five movements, including a 400 m run.",
+  "boardFr": "WHITTEN\n5 rounds for time\n  22 Swing kettlebell ............. 2/1.5 pood\n  22 Saut sur box ................... 24/20 in\n  400 m Course\n  22 Burpee\n  22 Wall ball ...................... 20/14 lb\nScore: time\nEstimate: 36:15–1:07:19\nStimulus: Five rounds of five movements, including a 400 m run.",
+  "markdown": "# Whitten\n\n```\n5 rounds for time\n  22 Kettlebell swing ....... 2/1.5 pood\n  22 Box jump ................. 24/20 in\n  400 m Run\n  22 Burpee\n  22 Wall ball ................ 20/14 lb\n```\n\n**Score** — time\n**Estimate** — 36:15–1:07:19\n\n> Five rounds of five movements, including a 400 m run.\n",
+  "timer": "    0:00  1:07:19~ 5 rounds for time: 22 Kettlebell swing 2/1.5 pood + 22 Box jump 24/20 in + 400 m Run + 22 Burpee + 22 Wall ball 20/14 lb\n          1:07:19  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 4039,
+    "label": "5 rounds for time: 22 Kettlebell swing 2/1.5 pood + 22 Box jump 24/20 in + 400 m Run + 22 Burpee + 22 Wall ball 20/14 lb",
     "kind": "work",
     "openEnded": true
    }

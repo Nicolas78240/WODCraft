@@ -323,7 +323,7 @@ def test_lib_lists_the_standard_library(capsys):
 
 
 def test_lib_filters_by_name(capsys):
-    _, out, _ = run(["lib", "fran"], capsys)
+    _, out, _ = run(["lib", "girls/fran"], capsys)
     assert out.strip() == "girls/fran               Fran"
 
 

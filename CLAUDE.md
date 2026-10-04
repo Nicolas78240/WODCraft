@@ -24,6 +24,7 @@ src/wodcraft/
   service.py     HTTP compile service (optional extra), bundle.py  the JSON an app embeds
 swift/WODCraftKit  the same language in Swift, for iOS and macOS applications
 deploy/          Dockerfile for the service
+site/            wodcraft.dev: the bilingual page (build_data.py + build_site.py, Firebase Hosting)
 tests/           pytest suite, including test_docs.py: every documented snippet and console
                  transcript is run and compared
 examples/        a workout and an athlete profile used by the README

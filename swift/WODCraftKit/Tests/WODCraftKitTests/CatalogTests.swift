@@ -7,11 +7,11 @@ import Testing
 struct CatalogTests {
     let catalog = Catalog.shared
 
-    @Test("the embedded catalog holds the 214 movements of WODCraft 1.1")
+    @Test("the embedded catalog holds the 223 movements of WODCraft 1.1")
     func loadsEveryMovement() {
-        #expect(catalog.count == 214)
-        #expect(catalog.identifiers.count == 214)
-        #expect(catalog.all.count == 214)
+        #expect(catalog.count == 223)
+        #expect(catalog.identifiers.count == 223)
+        #expect(catalog.all.count == 223)
     }
 
     @Test("a movement is found by identifier")

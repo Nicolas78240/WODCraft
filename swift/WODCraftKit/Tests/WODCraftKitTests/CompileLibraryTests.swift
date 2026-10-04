@@ -1,4 +1,4 @@
-/// The 40 workouts of the standard library compile, without errors, to the document they ship with.
+/// The 82 workouts of the standard library compile, without errors, to the document they ship with.
 import Foundation
 import Testing
 @testable import WODCraftKit
@@ -7,9 +7,9 @@ import Testing
 struct CompileLibraryTests {
     static let entries: [LibraryWorkout] = EmbeddedLibrary.shared.order.compactMap { EmbeddedLibrary.shared.get($0) }
 
-    @Test("the library ships 40 workouts")
+    @Test("the library ships 82 workouts")
     func libraryIsComplete() {
-        #expect(CompileLibraryTests.entries.count == 40)
+        #expect(CompileLibraryTests.entries.count == 82)
         #expect(EmbeddedLibrary.shared.get("girls/fran") != nil)
     }
 
