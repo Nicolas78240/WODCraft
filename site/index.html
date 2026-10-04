@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--HEAD-->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="WODCraft, haut de page">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#plate"/></svg>
+    <span>WODCRAFT</span>
+  </a>
+  <nav>
+    <a href="#how">Comment ça marche</a>
+    <a href="#formats">Formats</a>
+    <a href="#try">Essayer</a>
+    <a class="gh" href="https://github.com/Nicolas78240/WODCraft" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#github"/></svg>GitHub
+    </a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-copy">
+    <p class="kicker"><span class="dot red"></span>Un langage ouvert · version 1.1</p>
+    <h1>Le WOD s'écrit<br>comme au tableau.<br><em>Le compilateur<br>le relit.</em></h1>
+    <p class="lede">WODCraft est un petit langage pour prescrire des séances de fitness fonctionnel — et le compilateur qui les vérifie. Strict là où ça compte (unités, mouvements, cohérence du score, plausibilité), souple là où les coachs en ont besoin.</p>
+    <div class="cta">
+      <a class="btn primary" href="#try">Essayer dans le navigateur</a>
+      <a class="btn" href="https://github.com/Nicolas78240/WODCraft" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#github"/></svg>Voir sur GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-stage">
+    <div class="clock" aria-label="Chrono de la box">
+      <span class="clock-label">CAP 10:00</span>
+      <span class="clock-digits" id="heroClock">00:00</span>
+    </div>
+    <div class="editor">
+      <div class="editor-bar"><i></i><i></i><i></i><span>fran.wod</span></div>
+      <pre class="code" id="heroCode" aria-label="Source du WOD Fran"></pre>
+      <div class="editor-status" id="heroStatus">&nbsp;</div>
+    </div>
+    <div class="out" id="heroOut">
+      <div class="out-tabs" role="tablist">
+        <button role="tab" data-v="board" aria-selected="true">Tableau</button>
+        <button role="tab" data-v="json">JSON</button>
+        <button role="tab" data-v="timer">Chrono</button>
+      </div>
+      <pre class="board" id="heroBoard"></pre>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<!-- ============ WHY ============ -->
+<section class="why">
+  <div class="why-grid">
+    <article>
+      <span class="num red">01</span>
+      <h3>Lisible par les athlètes</h3>
+      <p>Tout fichier valide peut être affiché tel quel au mur de la box. Pas d'accolades, pas de YAML : la syntaxe du tableau blanc.</p>
+    </article>
+    <article>
+      <span class="num blue">02</span>
+      <h3>Vérifié par un compilateur</h3>
+      <p>Un box jump attend une hauteur, pas une charge. <code>1 m Run</code> demande si vous vouliez <code>1 mi</code>. Un EMOM intenable est signalé.</p>
+    </article>
+    <article>
+      <span class="num yellow">03</span>
+      <h3>Un seul format d'échange</h3>
+      <p>Le JSON compilé suit un schéma versionné : c'est lui que s'échangent les timers, les applications et les agents IA.</p>
+    </article>
+    <article>
+      <span class="num green">04</span>
+      <h3>Converti pour vous</h3>
+      <p>Les charges portent kilos et livres, avec les équivalences réellement utilisées en box : 95 lb ↔ 43 kg, 24 in ↔ 60 cm.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ HOW ============ -->
+<section class="how" id="how">
+  <header class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>Comment ça marche</h2>
+    <p>Un texte entre, un document structuré sort. Cliquez sur une étape pour voir ce qu'elle produit réellement pour <b>Fran</b>.</p>
+  </header>
+  <ol class="pipe" id="pipe">
+    <li data-step="0"><span class="pipe-n">.wod</span><b>Source</b><small>Le texte du coach</small></li>
+    <li data-step="1"><span class="pipe-n">lex · parse</span><b>Lecture</b><small>Une ligne, une instruction</small></li>
+    <li data-step="2"><span class="pipe-n">223 mvts</span><b>Vérification</b><small>Catalogue, unités, plausibilité</small></li>
+    <li data-step="3"><span class="pipe-n">schema 1.1</span><b>JSON</b><small>Le document compilé</small></li>
+    <li data-step="4"><span class="pipe-n">→ partout</span><b>Sorties</b><small>Tableau, chrono, agenda, apps</small></li>
+  </ol>
+  <div class="pipe-detail" id="pipeDetail" aria-live="polite"></div>
+</section>
+
+<!-- ============ DIAGNOSTICS ============ -->
+<section class="diag" id="diag">
+  <header class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>Le compilateur vous relit</h2>
+    <p>Chaque diagnostic porte un code de la spécification, une ligne, une colonne exactes — et une suggestion quand c'est possible. Sortie réelle de <code>wodc check</code>.</p>
+  </header>
+  <div class="diag-grid">
+    <div class="editor light-dim">
+      <div class="editor-bar"><i></i><i></i><i></i><span>mardi.wod</span></div>
+      <pre class="code numbered" id="diagCode"></pre>
+    </div>
+    <div class="diag-list" id="diagList"></div>
+  </div>
+</section>
+
+<!-- ============ FORMATS ============ -->
+<section class="formats" id="formats">
+  <header class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>Tous les formats de la box</h2>
+    <p>For time, AMRAP, EMOM, intervalles, Tabata, Death by, séries de force, équipes, aller-retour… À gauche ce qu'écrit le coach, à droite ce qu'affiche le tableau.</p>
+  </header>
+  <div class="tabs" id="fmtTabs" role="tablist"></div>
+  <div class="split">
+    <div class="editor">
+      <div class="editor-bar"><i></i><i></i><i></i><span id="fmtName">fran.wod</span></div>
+      <pre class="code" id="fmtCode"></pre>
+    </div>
+    <div class="whiteboard">
+      <pre class="board" id="fmtBoard"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFILE ============ -->
+<section class="profile" id="profile">
+  <header class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>Une prescription, chaque athlète</h2>
+    <p>Le coach écrit <code>Thruster 95/65 lb</code> une seule fois. Le compilateur résout pour chacun : catégorie, niveau, unités, langue.</p>
+  </header>
+  <div class="profile-grid">
+    <div class="controls" id="profileCtl">
+      <fieldset><legend>Catégorie</legend>
+        <button data-k="cat" data-v="men" aria-pressed="true">Homme</button><button data-k="cat" data-v="women">Femme</button></fieldset>
+      <fieldset><legend>Niveau</legend>
+        <button data-k="lvl" data-v="rx" aria-pressed="true">RX</button><button data-k="lvl" data-v="scaled">Scaled</button></fieldset>
+      <fieldset><legend>Unités</legend>
+        <button data-k="units" data-v="kg" aria-pressed="true">kg</button><button data-k="units" data-v="lb">lb</button></fieldset>
+      <fieldset><legend>Langue</legend>
+        <button data-k="lang" data-v="en" aria-pressed="true">EN</button><button data-k="lang" data-v="fr">FR</button></fieldset>
+      <p class="hint">Sortie de <code id="profileCmd">wodc show fran.wod</code></p>
+    </div>
+    <div class="whiteboard big">
+      <pre class="board" id="profileBoard"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SESSION ============ -->
+<section class="session" id="session">
+  <header class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>Une séance, minute par minute</h2>
+    <p>La vraie séance du 29 septembre : échauffement, AMRAP, chipper en équipe, renfo. <code>wodc timer</code> en tire le déroulé du chrono.</p>
+  </header>
+  <div class="tl">
+    <div class="tl-head">
+      <span class="tl-clock" id="tlClock">00:00</span>
+      <button class="btn small" id="tlPlay">Rejouer</button>
+    </div>
+    <div class="tl-bar" id="tlBar"><div class="tl-head-line" id="tlHead"></div></div>
+    <div class="tl-ticks" id="tlTicks"></div>
+  </div>
+  <div class="whiteboard"><pre class="board" id="tlBoard"></pre></div>
+</section>
+
+<!-- ============ TRY ============ -->
+<section class="try" id="try">
+  <header class="sec-head">
+    <span class="sec-num">06</span>
+    <h2>Essayez — le vrai compilateur, dans votre navigateur</h2>
+    <p>Aucun serveur : le paquet Python de WODCraft tourne ici même grâce à Pyodide. Modifiez le WOD, cassez-le, compilez.</p>
+  </header>
+  <div class="play">
+    <div class="play-bar">
+      <label>Exemple
+        <select id="playEx">
+          <option value="fran">Fran</option>
+          <option value="cindy">Cindy</option>
+          <option value="murph">Murph</option>
+          <option value="teams">Chipper en équipe (1.1)</option>
+          <option value="session">Séance du 29 septembre</option>
+          <option value="bad">Un WOD plein d'erreurs</option>
+        </select>
+      </label>
+      <label class="chk"><input type="checkbox" id="playFr"> Noms en français</label>
+      <button class="btn primary" id="playRun">Compiler</button>
+    </div>
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><i></i><i></i><i></i><span>mon.wod</span></div>
+        <div class="live">
+          <pre class="code" id="playHl" aria-hidden="true"></pre>
+          <textarea id="playSrc" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Source WODCraft"></textarea>
+        </div>
+      </div>
+      <div class="term">
+        <div class="editor-bar"><i></i><i></i><i></i><span>terminal</span></div>
+        <pre id="playOut"><span class="muted">Appuyez sur « Compiler » : le compilateur (≈ 10 Mo avec Python) se charge la première fois.</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVERYWHERE ============ -->
+<section class="everywhere">
+  <header class="sec-head">
+    <span class="sec-num">07</span>
+    <h2>Partout où vit un WOD</h2>
+    <p>Une spécification, un schéma, une suite de conformité — et deux implémentations qui se vérifient l'une l'autre.</p>
+  </header>
+  <div class="cards">
+    <article><h3>Terminal</h3><p>Vérifier, afficher, formater comme <code>gofmt</code>, exporter vers l'agenda.</p>
+      <pre class="mini">$ wodc check mardi.wod
+$ wodc show girls/fran --me
+$ wodc fmt --write mardi.wod
+$ wodc export ics semaine.wod</pre></article>
+    <article><h3>Éditeur</h3><p>Serveur de langage et extension VS Code : diagnostics en direct, complétion des mouvements, survol, corrections rapides.</p>
+      <pre class="mini">python -m wodcraft.lsp</pre></article>
+    <article><h3>Agents IA</h3><p>Un serveur MCP expose le compilateur lui-même. L'agent rédige un WOD, le compilateur répond, l'agent corrige.</p>
+      <pre class="mini">check_wod · compile_wod · show_wod
+format_wod · timeline_wod
+search_movements · library_get</pre></article>
+    <article><h3>iOS · macOS</h3><p><code>WODCraftKit</code> : le langage porté en Swift, hors ligne, validé par la même suite de conformité.</p>
+      <pre class="mini">import WODCraftKit</pre></article>
+    <article><h3>Service HTTP</h3><p>Pour les clients qui ne peuvent pas embarquer le compilateur. Image Docker prête pour Cloud Run.</p>
+      <pre class="mini">POST /compile  /check  /format  /show
+GET  /catalog  /library</pre></article>
+    <article><h3>Le standard</h3><p>Spécification (CC BY-SA), JSON Schema versionné et cas de conformité : WODCraft est fait pour être réimplémenté.</p>
+      <pre class="mini">spec/SPEC.md
+spec/workout.schema.json
+spec/conformance/</pre></article>
+  </div>
+  <dl class="stats" id="stats">
+    <div><dt data-n="223">0</dt><dd>mouvements au catalogue, en français et en anglais</dd></div>
+    <div><dt data-n="82">0</dt><dd>WODs de référence : Girls, Heroes, Open</dd></div>
+    <div><dt data-n="79">0</dt><dd>cas de conformité</dd></div>
+    <div><dt data-n="2">0</dt><dd>implémentations, Python et Swift</dd></div>
+    <div><dt data-n="0">0</dt><dd>dépendance à l'exécution</dd></div>
+  </dl>
+</section>
+
+<!-- ============ END ============ -->
+<section class="end">
+  <h2>3, 2, 1… <em>go.</em></h2>
+  <pre class="install"><span class="muted">$</span> pip install git+https://github.com/Nicolas78240/WODCraft
+<span class="muted">$</span> wodc show girls/fran --lang fr</pre>
+  <div class="cta center">
+    <a class="btn primary big" href="https://github.com/Nicolas78240/WODCraft" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#github"/></svg>Nicolas78240/WODCraft
+    </a>
+    <a class="btn big" href="https://github.com/Nicolas78240/WODCraft/blob/main/spec/SPEC.md" target="_blank" rel="noopener">Lire la spécification</a>
+  </div>
+  <p class="credit">Une collaboration : <b>Nicolas Caussin</b> a donné le cap et l'idée, orchestré, corrigé et validé, et nous avons itéré jusqu'à cette version. L'essentiel de l'écriture — spécification, compilateur, portage Swift, tests, documentation et ce site — a été réalisé par <b>Claude</b> (Anthropic) avec <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>.</p>
+</section>
+</main>
+
+<footer class="foot">
+  <span>WODCraft · Nicolas Caussin &amp; Claude (Anthropic) · code Apache 2.0 · spécification CC BY-SA 4.0</span>
+  <span>Chaque exemple de cette page a été compilé par <code>wodc</code>.</span>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="plate" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#e5383b"/><circle cx="16" cy="16" r="10.5" fill="none" stroke="#0e0e0c" stroke-width="1.5" opacity=".5"/><circle cx="16" cy="16" r="4" fill="#f2efe6"/><circle cx="16" cy="16" r="2" fill="#0e0e0c"/></symbol>
+  <symbol id="github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+</svg>
+
+<script src="/data.js" defer></script>
+<script src="/i18n.js" defer></script>
+<script src="/main.js" defer></script>
+</body>
+</html>
