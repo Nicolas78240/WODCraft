@@ -2,6 +2,14 @@
 
 Note de conception pour le PO. Rien n'est appliqué au dépôt oKo : ce document propose, il ne décide pas.
 
+> **État au 8 octobre 2026.** Cette note date de la 1.0 (fin septembre) ; ses chiffres et son plan sont
+> ceux d'alors. Depuis : WODCraft 1.2.0, **228 mouvements**, **83 WODs de référence**, **86 cas de
+> conformité** ; l'app ne dépose pas `WODCraftKit` dans `packages/` mais dépend du dépôt GitHub à une
+> version exacte (`Package.swift` racine, `exactVersion` dans `app/project.yml`, fichier
+> `WODCRAFT_VERSION` côté oKo), et `wodcraft_version` vaut `"1.0"`, `"1.1"` ou `"1.2"` selon le
+> document. La façon dont un manque constaté dans oKo devient une version de WODCraft, puis revient dans
+> l'app, est décrite dans **[amelioration-continue.fr.md](amelioration-continue.fr.md)**.
+
 Contexte oKo (fourni par l'équipe) : app iOS SwiftUI, iOS 17, Swift 6 en concurrence stricte, **hors
 ligne obligatoire**, SwiftData en local et Supabase comme source de vérité, packages SwiftPM locaux
 `OkoCore` et `OkoData`, tests en Swift Testing, UI en français, identifiants en anglais.

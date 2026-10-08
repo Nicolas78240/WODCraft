@@ -1,6 +1,6 @@
 # The WODCraft MCP server
 
-The WODCraft 1.0 compiler, exposed over the [Model Context Protocol](https://modelcontextprotocol.io).
+The WODCraft compiler (language 1.2), exposed over the [Model Context Protocol](https://modelcontextprotocol.io).
 An assistant drafts a workout, `check_wod` tells it exactly what is wrong (code, line, column,
 suggestion), it fixes the draft, and only hands back source that compiles.
 
@@ -68,7 +68,7 @@ directory if you want to serve a working copy instead.
 | `compile_wod` | `source` | `document` and `documents[]`: the compiled JSON (SPEC §13) |
 | `show_wod` | `source`, `category?`, `level?`, `units?` | `board`: the whiteboard view, resolved for that athlete |
 | `format_wod` | `source` | `formatted`: the canonical form, and `changed` |
-| `timeline_wod` | `source` | `segments[]` (`at_s`, `duration_s`, `label`, `kind`, `open_ended`), `total_s`, `rendered` |
+| `timeline_wod` | `source` | `segments[]` (`at_s`, `duration_s`, `label`, `kind`, `open_ended`), `total_s`, `cap_s` (the cap of the whole workout, 1.2), `rendered` |
 | `search_movements` | `query?`, `family?`, `limit?` | `movements[]`: id, name, French and English aliases, family, quantities, parameter, Rx |
 | `library_list` | `query?` | `workouts[]`: `use` path, title, tags |
 | `library_get` | `path` | `source`, `title`, `tags`, `use_line` |
@@ -92,7 +92,7 @@ example that does not compile fails the build.
 ## Prompt
 
 `design_wod(goal, duration?, equipment?, level?)` — asks for a workout built for a goal, a duration,
-the available equipment and a level, and imposes the 1.0 syntax plus the draft → `check_wod` → fix loop.
+the available equipment and a level, and imposes the current syntax plus the draft → `check_wod` → fix loop.
 
 ## Example
 
