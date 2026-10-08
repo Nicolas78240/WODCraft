@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from wodcraft.catalog import load_catalog
 from wodcraft.emit.board import _head, _movement
-from wodcraft.semantics.estimate import item_seconds
+from wodcraft.semantics.estimate import builds_up, effort_seconds, item_seconds
 from wodcraft.syntax.units import format_clock
 
 
@@ -56,11 +56,19 @@ def _block(block: dict, document: dict) -> list[dict]:
         return out
     if kind == "amrap" and block.get("duration_s"):
         return [{"duration_s": block["duration_s"], "label": f"{label}: {_items_label(block.get('items', []))}", "kind": "work"}]
-    duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
+    items = block.get("items", [])
+    content = _items_label(items)
+    if kind == "max_load" and block.get("attempts") and items and items[-1].get("type") == "rest":
+        content += " between attempts"  # the rest comes between the attempts (SPEC §8)
+    if kind == "max_load" and builds_up(block):
+        # a lift has its own length: the whole workout's estimate would count every lift once per lift
+        duration = block.get("cap_s") or round(effort_seconds(block, load_catalog()))
+    else:
+        duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
     return [
         {
             "duration_s": duration,
-            "label": f"{label}: {_items_label(block.get('items', []))}",
+            "label": f"{label}: {content}",
             "kind": "work",
             "open_ended": not block.get("cap_s"),
         }

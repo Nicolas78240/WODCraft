@@ -22,6 +22,7 @@ LABELS = {
     "foundations": "foundations",
     "adapted": "adapted",
 }
+ATTEMPT_WORDS = ("attempts", "attempt", "essais", "essai")  # "Max load, 3 attempts" (1.2)
 MODIFIERS = {"sync", "split", "each", "alternating", "unbroken", "strict"}
 _ENMOM = re.compile(r"^e(\d+)mom$", re.IGNORECASE)
 _XN = re.compile(r"^x(\d+)$", re.IGNORECASE)
@@ -213,13 +214,20 @@ def parse_format(line: Line, tokens: list[Token], file: str | None) -> Block:
             block.there_and_back = True
         elif cur.accept_word("aller-retour"):
             block.there_and_back = True
+        elif seg[0].kind == "NUM" and len(seg) > 1 and seg[1].is_word(*ATTEMPT_WORDS):
+            # "Max load, 3 attempts" (French "3 essais"): the best of N attempts counts (1.2)
+            count = _number(cur.next())
+            cur.next()
+            if count != int(count):
+                raise LineError("E035", "A number of attempts must be a whole number.", seg[0].col, seg[1].end_col)
+            block.attempts = int(count)
         else:
             raise LineError(
                 "E001",
                 f"Unknown option {seg[0].text!r}.",
                 seg[0].col,
                 seg[-1].end_col,
-                "options are: cap, teams of N, for time, there and back",
+                "options are: cap, teams of N, for time, there and back, N attempts",
             )
         cur.expect_end()
     return block

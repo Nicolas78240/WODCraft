@@ -21,18 +21,7 @@ IDS = [case.stem for case in CASES]
 
 # Cases whose expectation states the specification while the implementation still
 # deviates. Each entry must be removed as soon as the implementation catches up.
-KNOWN_DEVIATIONS: dict[str, str] = {
-    name: "WODCraft 1.2 is specified, not implemented yet"
-    for name in (
-        "crossfit_total",
-        "total_block_caps",
-        "total_reps",
-        "workout_cap",
-        "err_attempts",
-        "err_caps_combined",
-        "err_score_total",
-    )
-}
+KNOWN_DEVIATIONS: dict[str, str] = {}
 
 
 def strip_estimate(obj):

@@ -42,10 +42,30 @@ with a coded diagnostic, so check your draft with the `check_wod` tool before re
 | Every | `Every 4:00 x 4` | idem |
 | Tabata | `Tabata` / `Tabata 8` | reps |
 | Death by | `Death by` | rounds+reps |
-| Max load | `Max load` / `Max load, cap 15:00` | load |
+| Max load | `Max load` / `Max load, 3 attempts` / `Max load, cap 15:00` | load |
 
 Options after a comma: `cap DURATION`, `teams of N`, `for time`, `there and back` (For time,
-AMRAP, rounds, ladders: the list in order, then back to the first line without repeating the last).
+AMRAP, rounds, ladders: the list in order, then back to the first line without repeating the last),
+`N attempts` (Max load only: the best attempt counts; a `Rest` written last in the block comes
+between the attempts).
+
+A time cap is either `cap:` for the whole workout or `cap` on each block — never both (`E037`).
+Several lifts that add up to one score: `score: load, total` (`score: reps, total` for reps).
+
+```wod
+# CrossFit Total
+score: load, total
+cap: 30:00
+Max load, 3 attempts
+  1 Back squat
+  Rest 2:00
+Max load, 3 attempts
+  1 Shoulder press
+  Rest 2:00
+Max load, 3 attempts
+  1 Deadlift
+  Rest 2:00
+```
 
 A bare number is minutes **only** in a format line (`AMRAP 20` = 20 minutes). Everywhere else
 write `2 min`, `30 s` or `1:30`.

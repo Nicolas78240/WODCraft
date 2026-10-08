@@ -29,6 +29,7 @@ FORMATS: tuple[tuple[str, str, str], ...] = (
     ("Tabata", "format", "8 rounds (unless a count follows) of 20 s work / 10 s rest."),
     ("Death by", "format", "Minute *k*: perform *k* reps of the single child movement, until failure."),
     ("Max load", "format", "Build to the heaviest load for the prescribed reps."),
+    ("attempts", "option · N attempts", "Max load only: the best of N attempts counts (`Max load, 3 attempts`)."),
     ("rounds", "format · N rounds", "Repeat the block N times: `3 rounds`, `5 rounds for time`."),
     ("rounds for time", "format · N rounds for time", "Repeat the block N times, on the clock."),
     ("21-15-9", "rep ladder", "One round per value; children without a quantity take it."),
@@ -55,8 +56,11 @@ LABEL_ITEMS: tuple[tuple[str, str, str], ...] = (
 
 #: ``key -> (detail, documentation)`` — SPEC §6.
 META_ITEMS: dict[str, tuple[str, str]] = {
-    "cap": ("duration", "Time cap of the workout: `cap: 10:00`."),
-    "score": ("time | rounds+reps | reps | load | distance | calories | none", "How the workout is scored."),
+    "cap": ("duration", "Time cap of the whole workout: `cap: 10:00` — or a cap on each block, never both."),
+    "score": (
+        "time | rounds+reps | reps | load | distance | calories | none [, total]",
+        "How the workout is scored; `, total` adds the parts up: `score: load, total`.",
+    ),
     "tiebreak": ("free text", "Tie-break rule."),
     "units": ("kg | lb", "Default unit for loads written without one."),
     "vest": ("load", "Weight vest: `vest: 20/14 lb`."),

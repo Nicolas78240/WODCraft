@@ -105,6 +105,7 @@ class Block:
     for_time: bool = False
     slot: str | int | None = None  # odd | even | N for "Min N:"
     there_and_back: bool = False  # "there and back": the list in order, then back without the last line
+    attempts: int | None = None  # "Max load, 3 attempts": the best of N attempts counts (1.2)
     is_label: bool = False
 
 

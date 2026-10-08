@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 
-from wodcraft import SPEC_VERSION
 from wodcraft.catalog import Catalog, Equivalences, load_catalog, load_equivalences
 from wodcraft.diagnostics import DiagnosticBag, Span
 from wodcraft.semantics import measures
@@ -25,7 +24,7 @@ from wodcraft.syntax.ast import (
 from wodcraft.syntax.units import format_clock
 
 BASE_VERSION = "1.0"  # the compiled format of a document that uses nothing newer
-LATEST_VERSION = SPEC_VERSION  # the language this compiler implements
+VERSIONS = ("1.0", "1.1", "1.2")  # a document is stamped with the oldest version that holds it (SPEC §13)
 TIMED = {"for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"}
 INTERVALS = {"emom", "every"}
 UNTIMED = {"rounds", "ladder"}
@@ -46,6 +45,9 @@ ALLOWED_CHILDREN = {
     "root": TIMED | UNTIMED | {"buy_in", "cash_out"},
 }
 SCORE_TYPES = {"time", "rounds+reps", "rounds", "reps", "load", "distance", "calories", "none"}
+SCORE_ALIASES = {"charge": "load"}  # French, written back in English by the formatter (1.2)
+SCORE_MODIFIERS = {"total"}  # "score: load, total": the parts add up (1.2)
+PRIVATE_META = ("units", "cap_s", "score", "score_total")  # compiled elsewhere, not into "meta"
 SCORE_BY_FORMAT = {
     "for_time": "time",
     "amrap": "rounds+reps",
@@ -99,8 +101,8 @@ class Compiler:
             "title": doc.title,
             "sections": sections,
         }
-        if any(section["workout"]["wodcraft"] != BASE_VERSION for section in sections):
-            out["wodcraft"] = LATEST_VERSION
+        # a session is stamped with the newest version one of its sections needs
+        out["wodcraft"] = max((section["workout"]["wodcraft"] for section in sections), key=VERSIONS.index, default=BASE_VERSION)
         estimates = [section["workout"].get("estimate") for section in sections if section["workout"].get("estimate")]
         if estimates:
             out["estimate"] = {
@@ -118,7 +120,9 @@ class Compiler:
         saved_units = self.units
         self._movement_ids = []
         saved_declared = self._units_declared
-        meta = self._meta({}, [s for s in _walk(body.statements) if isinstance(s, MetaLine)])
+        metas = [s for s in _walk(body.statements) if isinstance(s, MetaLine)]
+        meta = self._meta({}, metas)
+        cap_span = next((m.value_span for m in reversed(metas) if m.key == "cap"), None)
         if "units" in meta:
             self.units, self._units_declared = meta["units"], True
         used = self._sole_use(body.statements)
@@ -131,15 +135,31 @@ class Compiler:
             if block.get("teams"):
                 team = {"size": block.pop("teams")}
         cap = meta.get("cap_s")
+        workout_cap = None
         if cap is not None and blocks:
-            blocks[0].setdefault("cap_s", cap)
+            capped = [b for b in _walk_compiled(blocks) if b.get("cap_s")]
+            if capped:
+                # one or the other: a cap on the whole workout, or a cap on each block (SPEC §6)
+                lines = ", ".join(str(b["source"]["line"]) for b in capped)
+                self._err(
+                    "E037",
+                    f"A workout cap cannot be combined with block caps (line{'s' if len(capped) > 1 else ''} {lines}).",
+                    cap_span or Span(1, 1),
+                    "keep either 'cap:' for the whole workout, or a cap on each block",
+                )
+            elif len(blocks) == 1:
+                blocks[0]["cap_s"] = cap  # the block is the whole workout
+            else:
+                workout_cap = cap  # it covers every block, not the first one (1.2)
         out: dict = {
             "wodcraft": BASE_VERSION,
             "kind": "workout",
             "title": title,
             "blocks": blocks,
-            "score": self._score(blocks, meta),
         }
+        if workout_cap is not None:
+            out["cap_s"] = workout_cap
+        out["score"] = self._score(blocks, meta)
         if team:
             out["team"] = team
         levels, adapted = self._levels(body.levels)
@@ -147,7 +167,7 @@ class Compiler:
             out["levels"] = levels
         if adapted is not None:
             out["adapted"] = adapted
-        rest = {k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}
+        rest = {k: v for k, v in meta.items() if k not in PRIVATE_META}
         if rest:
             out["meta"] = rest
         out["wodcraft"] = compiled_version(out)
@@ -179,7 +199,7 @@ class Compiler:
             if source.get(key):
                 out[key] = source[key]
         out["wodcraft"] = compiled_version(out)
-        merged = {**(source.get("meta") or {}), **{k: v for k, v in meta.items() if k not in ("units", "cap_s", "score")}}
+        merged = {**(source.get("meta") or {}), **{k: v for k, v in meta.items() if k not in PRIVATE_META}}
         if merged:
             out["meta"] = merged
         return out
@@ -202,10 +222,7 @@ class Compiler:
                 else:
                     out["cap_s"] = seconds
             elif key == "score":
-                if value.lower() not in SCORE_TYPES:
-                    self._err("E013", f"Unknown score {value!r}.", meta.value_span, "one of: " + ", ".join(sorted(SCORE_TYPES)))
-                else:
-                    out["score"] = value.lower()
+                self._score_meta(out, value, meta)
             elif key == "vest":
                 dual = _dual_from_text(value)
                 if dual is None:
@@ -220,6 +237,26 @@ class Compiler:
             elif key in ("date", "time", "tiebreak"):
                 out[key] = value
         return out
+
+    def _score_meta(self, out: dict, value: str, meta: MetaLine) -> None:
+        """'score: VALUE[, total]' — the value, then its modifiers after a comma (SPEC §6, 1.2)."""
+        head, *modifiers = [part.strip().lower() for part in value.split(",")]
+        head = SCORE_ALIASES.get(head, head)
+        if head not in SCORE_TYPES:
+            self._err(
+                "E013", f"Unknown score {value.split(',')[0].strip()!r}.", meta.value_span, "one of: " + ", ".join(sorted(SCORE_TYPES))
+            )
+            return
+        for modifier in modifiers:
+            if modifier not in SCORE_MODIFIERS:
+                self._err("E013", f"Unknown score modifier {modifier!r}.", meta.value_span, "e.g. 'score: load, total'")
+                return
+        if modifiers and head == "none":
+            self._err("E013", "A workout scored 'none' has nothing to add up.", meta.value_span, "e.g. 'score: load, total'")
+            return
+        out["score"] = head
+        if modifiers:
+            out["score_total"] = True
 
     # ------------------------------------------------------------------ statements
 
@@ -298,6 +335,13 @@ class Compiler:
                 )
             else:
                 out["there_and_back"] = True
+        if block.attempts is not None:
+            if kind != "max_load":
+                self._err("E014", f"Attempts only apply to Max load, not to {_human(kind)}.", block.span, "e.g. 'Max load, 3 attempts'")
+            elif block.attempts < 1:
+                self._err("E035", "A Max load needs at least one attempt.", block.span)
+            else:
+                out["attempts"] = block.attempts
         if block.teams is not None:
             if parent != "root":
                 self._err("E014", "'Teams of N' is only allowed on the main format line.", block.span)
@@ -632,6 +676,8 @@ class Compiler:
 
     def _score(self, blocks: list[dict], meta: dict) -> dict:
         parts = [b for b in blocks if b.get("type") in TIMED]
+        if len(parts) > 1 and meta.get("score_total"):
+            return self._total_score(blocks, parts, meta)
         if len(parts) > 1 and "score" not in meta:
             return {
                 "type": "multi",
@@ -659,6 +705,8 @@ class Compiler:
             score = {"type": inferred}
         else:
             score = {"type": declared}
+        if meta.get("score_total") and declared is not None:
+            score["aggregate"] = "sum"  # "score: reps, total": every effort adds up (1.2)
         cap = meta.get("cap_s") or (main or {}).get("cap_s")
         if score["type"] == "time" and cap:
             score["capped"] = "reps"
@@ -667,6 +715,30 @@ class Compiler:
         if main and main.get("there_and_back") and score["type"] != "none":
             # a round is the whole path, and a capped athlete counts the reps done along it
             score["there_and_back"] = True
+        return score
+
+    def _total_score(self, blocks: list[dict], parts: list[dict], meta: dict) -> dict:
+        """'score: load, total' over several timed blocks: one score per part, and they add up (1.2)."""
+        declared = meta["score"]
+        out_parts = []
+        for index, block in enumerate(blocks):
+            if not any(block is part for part in parts):
+                continue
+            kind = block["type"]
+            if declared != SCORE_BY_FORMAT.get(kind) and not _score_compatible(declared, kind, block):
+                self._err(
+                    "E036",
+                    f"This {_human(kind)} part cannot be scored by {declared!r}, so it cannot count in the total.",
+                    Span(block["source"]["line"], block["source"]["col"]),
+                    f"this part scores {SCORE_BY_FORMAT.get(kind, 'none')!r}",
+                )
+            part: dict = {"type": declared, "block": index}
+            if block.get("there_and_back"):
+                part["there_and_back"] = True
+            out_parts.append(part)
+        score: dict = {"type": "multi", "aggregate": "sum", "unit": declared, "parts": out_parts}
+        if meta.get("tiebreak"):
+            score["tiebreak"] = meta["tiebreak"]
         return score
 
     # ------------------------------------------------------------------ helpers
@@ -683,9 +755,18 @@ def _part(block: dict, index: int) -> dict:
 
 
 def compiled_version(workout: dict) -> str:
-    """The format version a compiled workout needs: "1.0" unless it uses a 1.1 construct (SPEC §13).
+    """The format version a compiled workout needs: "1.0" unless it uses a 1.1 or a 1.2 construct
+    (SPEC §13). A document written in an older version therefore compiles to exactly the same JSON."""
 
-    A document written in 1.0 therefore compiles to exactly the same JSON as before."""
+    def uses_1_2(node) -> bool:
+        if isinstance(node, dict):
+            return "attempts" in node or any(uses_1_2(value) for value in node.values())
+        if isinstance(node, list):
+            return any(uses_1_2(value) for value in node)
+        return False
+
+    if "cap_s" in workout or (workout.get("score") or {}).get("aggregate") or uses_1_2(workout.get("blocks")):
+        return "1.2"
 
     def uses_1_1(node) -> bool:
         if isinstance(node, dict):
@@ -698,8 +779,8 @@ def compiled_version(workout: dict) -> str:
 
     operations = [op for ops in (workout.get("levels") or {}).values() for op in ops]
     if workout.get("adapted") is not None or any("factor" in op or "quantity" in op for op in operations):
-        return LATEST_VERSION
-    return LATEST_VERSION if uses_1_1(workout.get("blocks")) else BASE_VERSION
+        return "1.1"
+    return "1.1" if uses_1_1(workout.get("blocks")) else BASE_VERSION
 
 
 def _has_max(block: dict) -> bool:
@@ -750,6 +831,12 @@ def _human(kind: str) -> str:
         "cash_out": "Cash-out",
         "root": "the workout body",
     }.get(kind, kind)
+
+
+def _walk_compiled(items: list[dict]):
+    for item in items:
+        yield item
+        yield from _walk_compiled(item.get("items", []))
 
 
 def _walk(statements: list[Statement]):
