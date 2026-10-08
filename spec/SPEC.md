@@ -1,4 +1,4 @@
-# WODCraft Language Specification — 1.1 (draft)
+# WODCraft Language Specification — 1.2 (draft)
 
 Status: draft · Editor: WODCraft project · License: CC BY-SA 4.0 (see `LICENSE-docs`)
 
@@ -13,7 +13,7 @@ and whole training sessions. A WODCraft file:
 2. is **strict**: anything ambiguous is rejected with a located, coded diagnostic;
 3. compiles to a JSON document (see `workout.schema.json`) that applications exchange.
 
-Out of scope for 1.1: multi-week programming, logged results (the athlete's adaptation, §9.1, is
+Out of scope for 1.2: multi-week programming, logged results (the athlete's adaptation, §9.1, is
 the only record of what was actually done).
 
 ## 2. Lexical structure
@@ -136,7 +136,8 @@ Any other combination is an error (`E015`).
 
 ## 5. Format lines
 
-`FORMAT [, OPTION]*`. Options: `cap DURATION`, `teams of N`, `for time`, `there and back`.
+`FORMAT [, OPTION]*`. Options: `cap DURATION`, `teams of N`, `for time`, `there and back`,
+`N attempts`.
 
 | Format | Syntax | Semantics |
 |---|---|---|
@@ -150,7 +151,7 @@ Any other combination is an error (`E015`).
 | Every | `Every DURATION x N` | N intervals of DURATION |
 | Tabata | `Tabata` · `Tabata N` | N intervals (default 8) of 20 s work / 10 s rest, **per movement**, movements in order |
 | Death by | `Death by` | minute *k*: perform *k* reps of the (single) child movement, until failure |
-| Max load | `Max load` · `Max load, cap DURATION` | build to the heaviest load for the prescribed reps |
+| Max load | `Max load` · `Max load, N attempts` · `Max load, cap DURATION` | build to the heaviest load for the prescribed reps; with attempts, the best of N attempts counts |
 | Sets | movement line with `NxM` / `N-N-N` (§7.3) | strength sets |
 
 A rep ladder MAY use any number of values (`10-9-8-7-6-5-4-3-2-1`). An **open ladder** ends with `...`
@@ -174,6 +175,29 @@ The score (§12) carries `there_and_back: true`: a round is the whole path, and 
 by the cap counts the reps done along it (50 + 40 + 10 + 40 + 50 reps and calories for the path
 above). Duration estimates count the whole path.
 
+**Attempts** (1.2; French `essais` is accepted and written back as `attempts`) apply to `Max load`
+only — on any other format they are an error (`E014`), and N MUST be at least 1 (`E035`).
+`Max load, 3 attempts` gives the athlete three attempts at the heaviest load; the best one counts.
+A `Rest` written as the last line of the block is the rest **between** the attempts: three attempts
+take two rests (§8). A `Rest` between two blocks keeps its usual meaning.
+
+```wod
+# CrossFit Total
+score: load, total
+cap: 30:00
+Max load, 3 attempts
+  1 Back squat
+  Rest 2:00
+Rest 3:00
+Max load, 3 attempts
+  1 Shoulder press
+  Rest 2:00
+Rest 3:00
+Max load, 3 attempts
+  1 Deadlift
+  Rest 2:00
+```
+
 ## 6. Label and meta lines
 
 **Labels** open a block; text after the colon, if any, is a single child movement line.
@@ -190,8 +214,8 @@ above). Duration estimates count the whole path.
 
 | Key | Value | Where |
 |---|---|---|
-| `cap` | duration | workout |
-| `score` | `time`, `rounds+reps`, `rounds`, `reps`, `load`, `distance`, `calories`, `none` | workout |
+| `cap` | duration — the cap of the **whole** workout (§6.1) | workout |
+| `score` | `time`, `rounds+reps`, `rounds`, `reps`, `load`, `distance`, `calories`, `none`, then optionally `, total` (§12) | workout |
 | `tiebreak` | free text | workout |
 | `units` | `kg` or `lb` | workout, session — default unit for loads written without one |
 | `vest` | load | workout |
@@ -201,6 +225,27 @@ above). Duration estimates count the whole path.
 | `time` | `HH:MM` (local) | session |
 
 An unknown key is an error (`E012`).
+
+The value of `score:` is one of the words above, optionally followed by modifiers after a comma —
+the grammar of a format line. The only modifier is `total` (1.2): `score: load, total`. An unknown
+modifier is an error (`E013`), and so is `none, total`, which has nothing to add up. The French
+`charge` is accepted for `load` and written back as `load` by the formatter.
+
+### 6.1 Time caps (1.2)
+
+A workout has **either** one cap for the whole of it, **or** a cap on each block that needs one —
+never both:
+
+- `cap:` caps the whole workout. When the body is a single block, the cap is that block's
+  (`cap: 12:00` above `For time` is `For time, cap 12:00`); when the body holds several blocks, it
+  belongs to the workout and is compiled as the workout's `cap_s`: it does not attach to the first
+  block.
+- `cap DURATION` on a format line caps that block only: three lifts written `Max load, cap 8:00`
+  are three windows of 8 minutes, and with the rest between them the workout lasts their sum.
+- A `cap:` line in a workout where a block also carries a cap is an error (`E037`), reported on the
+  `cap:` line. (Before 1.2 the `cap:` line was silently lost.)
+
+A level block (§9) MAY still change the cap with its own `cap:` line.
 
 ## 7. Movement lines
 
@@ -282,7 +327,9 @@ level block is an error (`E014`). The whiteboard joins the options with "or" ("o
 ## 8. Rest
 
 `Rest DURATION` is a timed pause item. As the **last item of a repeated block** it is performed
-between rounds, not after the last one (5 rounds with a trailing `Rest 3:00` contain four rests). In a Sets context (`Back squat 5x5 (rest 2:00)`) use the modifier.
+between rounds, not after the last one (5 rounds with a trailing `Rest 3:00` contain four rests).
+A `Max load` with attempts (§5) is repeated once per attempt: its trailing rest comes between the
+attempts (1.2). In a Sets context (`Back squat 5x5 (rest 2:00)`) use the modifier.
 
 ## 9. Levels
 
@@ -353,7 +400,8 @@ its blocks, score, levels and notes — and keeps its own title. Elsewhere the r
 inserted where the line stands, and must be allowed there (§4.2). PATH is resolved against, in
 order: the directory of the current file, directories given to the compiler, the standard library.
 An unresolved path is an error (`E050`) with suggestions. Cycles are an error (`E051`).
-The standard library ships `girls/`, `heroes/` and `open/`.
+The standard library ships `girls/`, `heroes/`, `open/` and, since 1.2, `benchmarks/` (strength
+benchmarks such as `benchmarks/crossfit_total`).
 
 ## 11. Movement catalog
 
@@ -388,17 +436,32 @@ An explicit score that cannot be measured by the main block is an error (`E036`)
 on a `for_time` without cap. A workout whose body holds several timed blocks (a metcon then a heavy
 single) scores `multi`, with one entry per part — that is also how a workout carries two scores.
 
+**Total** (1.2). `score: VALUE, total` says that the parts **add up** to one score:
+
+- over several timed blocks, the score is `multi` with `"aggregate": "sum"` and `"unit": VALUE`, and
+  every part is scored by VALUE. A part that cannot be measured by VALUE is an error (`E036`), on
+  that part. The CrossFit Total (three `Max load` blocks) is `score: load, total`;
+- over a single block, the score is VALUE with `"aggregate": "sum"`: every effort of the block adds
+  up — Lynne, five rounds of max-rep sets, is `score: reps, total`.
+
+A reader that ignores `aggregate` still sees every part. Without `, total`, nothing changes: a
+declared score on several timed blocks is still the score of the first one.
+
+In a `Max load` with attempts, the best attempt is the load of the part.
+
 ## 13. Compiled output
 
 Compiling a document produces a JSON object described by `spec/workout.schema.json`. In summary:
 
-- `wodcraft`: the version of the compiled format. It is `"1.0"` for a document that uses nothing newer,
-  so that a 1.0 document compiles to exactly the same JSON under 1.1, and `"1.1"` when it uses a
-  construct added in 1.1: an alternative (`or`), a level quantity (`factor`, `quantity`), a block
-  done there and back (`there_and_back`) or an `Adapted:` block (`adapted`). A session is `"1.1"` when
-  one of its sections is. `kind`: `"workout"` or `"session"`; `title`.
+- `wodcraft`: the version of the compiled format — the oldest one that holds the document. It is
+  `"1.0"` for a document that uses nothing newer, so that a 1.0 document compiles to exactly the same
+  JSON under 1.1 and 1.2; `"1.1"` when it uses a construct added in 1.1: an alternative (`or`), a level
+  quantity (`factor`, `quantity`), a block done there and back (`there_and_back`) or an `Adapted:`
+  block (`adapted`); `"1.2"` when it uses a construct added in 1.2: attempts (`attempts`), a total
+  (`aggregate`) or a cap on the whole workout (`cap_s`). A session takes the newest version of its
+  sections. `kind`: `"workout"` or `"session"`; `title`.
 - Workout: `blocks` (the body: blocks, and the movement or rest lines written at the top level, such
-  as a bare strength line), `score`, `levels`, `meta`, `team`.
+  as a bare strength line), `cap_s` (1.2, §6.1), `score`, `levels`, `meta`, `team`.
 - Session: `sections`, each `{ "title", "workout" }`, plus `date`, `time`, `meta`.
 - Every item has a `source` span `{ "line", "col" }` (1-based).
 - The canonical written form of a workout is the **compact** one: `21-15-9 for time, cap 10:00` rather
@@ -434,7 +497,9 @@ Compiling a document produces a JSON object described by `spec/workout.schema.js
 
 Note the canonical merge (§13): the `for_time` block carries the ladder directly, `unit` and
 `written` keep what the author typed, and `kg`/`lb` carry the normalized values. A workout with
-several timed blocks scores `{"type": "multi", "parts": [{"type": "…", "block": 0}, …]}`.
+several timed blocks scores `{"type": "multi", "parts": [{"type": "…", "block": 0}, …]}`, and with
+`score: load, total` `{"type": "multi", "aggregate": "sum", "unit": "load", "parts": [{"type": "load",
+"block": 0}, …]}` (1.2).
 
 ## 14. Athlete resolution
 
@@ -477,6 +542,7 @@ Errors make compilation fail; warnings and infos do not.
 | E034 | error | format without its required duration or count |
 | E035 | error | value out of range (zero rounds, RPE > 10, percent > 200, …) |
 | E036 | error | score incompatible with the format |
+| E037 | error | a workout cap (`cap:`) combined with block caps (1.2, §6.1) |
 | E040 | error | level block references a movement absent from the Rx work |
 | E041 | error | duplicate level block |
 | E050 | error | `use` path not found |
@@ -490,7 +556,11 @@ Errors make compilation fail; warnings and infos do not.
 
 Duration estimates are not diagnostics: they are part of the compiled document (`estimate`, §13).
 They are **indicative** — they come from the average paces of the catalog and a load factor — and
-they are excluded from conformance (§16).
+they are excluded from conformance (§16). Since 1.2, a `Max load` whose lifts carry no sets is
+estimated as a build-up — its attempts (five efforts when none are written), each about 30 s, with
+the rest between them (2:00 unless a `Rest` is written) — and the cap the estimate reports
+(`capped_s`) is the workout's own, or, when several blocks carry a cap, their sum with the rests
+between them.
 
 ## 16. Conformance
 
@@ -501,5 +571,5 @@ A `.diag` file holds one `CODE LINE` per line, in source order, and lists **ever
 case produces — warnings included, and the cascading ones too (a rejected line that leaves its block
 empty also reports `E016`).
 
-An implementation conforms to WODCraft 1.1 when, for every case, it produces the same JSON (key
+An implementation conforms to WODCraft 1.2 when, for every case, it produces the same JSON (key
 order and the `estimate` object excluded) or exactly that list of diagnostics.

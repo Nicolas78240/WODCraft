@@ -1,0 +1,14 @@
+# Burpees
+// one block: the cap is that block's, and nothing newer than 1.0 is used
+cap: 12:00
+For time
+  100 Burpee
+
+# Two parts
+// several blocks: the cap covers the whole workout, not the first block
+cap: 20:00
+For time
+  50 Wall ball 9/6 kg
+Rest 2:00
+AMRAP 6:00
+  10 Burpee

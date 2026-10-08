@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://wodcraft.dev/schema/1.1/workout.schema.json",
+  "$id": "https://wodcraft.dev/schema/1.2/workout.schema.json",
   "title": "WODCraft compiled document",
-  "description": "The interchange format produced by compiling a .wod document (WODCraft 1.1, SPEC §13). A document that uses no 1.1 construct is still stamped \"1.0\" and validates as before.",
+  "description": "The interchange format produced by compiling a .wod document (WODCraft 1.2, SPEC §13). A document is stamped with the oldest version that holds it: one that uses no 1.1 or 1.2 construct is still stamped \"1.0\" and validates as before.",
   "oneOf": [{ "$ref": "#/$defs/workout" }, { "$ref": "#/$defs/session" }],
   "$defs": {
     "amount": {
@@ -138,6 +138,11 @@
         "duration_s": { "type": "number", "exclusiveMinimum": 0 },
         "interval_s": { "type": "number", "exclusiveMinimum": 0 },
         "cap_s": { "type": "number", "exclusiveMinimum": 0 },
+        "attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1.2, max_load only — the best of N attempts counts; a trailing rest comes between the attempts"
+        },
         "teams": { "type": "integer", "minimum": 2 },
         "slot": { "oneOf": [{ "enum": ["odd", "even"] }, { "type": "integer", "minimum": 1 }] },
         "used": {
@@ -161,6 +166,14 @@
         "capped": { "type": "string", "description": "what is scored by an athlete who hits the cap" },
         "tiebreak": { "type": "string" },
         "there_and_back": { "const": true, "description": "1.1 — the scored block is done there and back: a round is the whole path" },
+        "aggregate": {
+          "const": "sum",
+          "description": "1.2 — score: VALUE, total: the parts (multi) or the efforts of the block add up to one score"
+        },
+        "unit": {
+          "enum": ["time", "rounds+reps", "rounds", "reps", "load", "distance", "calories"],
+          "description": "1.2, multi with aggregate only — what every part measures and the total adds up"
+        },
         "parts": {
           "type": "array",
           "description": "score == multi: one entry per timed block",
@@ -221,13 +234,18 @@
     "workout": {
       "type": "object",
       "properties": {
-        "wodcraft": { "enum": ["1.0", "1.1"] },
+        "wodcraft": { "enum": ["1.0", "1.1", "1.2"] },
         "kind": { "const": "workout" },
         "title": { "type": ["string", "null"] },
         "blocks": {
           "type": "array",
           "description": "The body of the workout. Usually blocks; a body written as a bare movement line (a strength piece) or a rest keeps that item at the top level.",
           "items": { "$ref": "#/$defs/item" }
+        },
+        "cap_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "1.2 — the cap of the whole workout (cap:) when its body holds several blocks; a single block carries it itself"
         },
         "score": { "$ref": "#/$defs/score" },
         "team": {
@@ -272,7 +290,7 @@
     "session": {
       "type": "object",
       "properties": {
-        "wodcraft": { "enum": ["1.0", "1.1"] },
+        "wodcraft": { "enum": ["1.0", "1.1", "1.2"] },
         "kind": { "const": "session" },
         "title": { "type": ["string", "null"] },
         "date": { "type": "string" },
