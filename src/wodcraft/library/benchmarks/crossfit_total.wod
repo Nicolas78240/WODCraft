@@ -2,9 +2,7 @@
 tags: benchmark, strength
 stimulus: Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.
 note: One rep per attempt: back squat, then shoulder press, then deadlift.
-note: The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.
 score: load, total
-cap: 30:00
 Max load, 3 attempts
   1 Back squat
   Rest 2:00

@@ -30,8 +30,7 @@ compiler, then this standard library (§10 of the spec). The extension is omitte
 - Dual values are `men/women`, in that order.
 - Rx work is written first; a `Scaled:` block, when present, lists only the differences.
 - Time caps appear only when the original workout has an official one (the Open workouts,
-  and the illustrative cap on `girls/fran`). The exception is `benchmarks/crossfit_total`, whose
-  30:00 cap on the whole session is the reference chosen for the library; a `note:` says so.
+  and the illustrative cap on `girls/fran`).
 - A score made of several lifts or sets adds up with `score: load, total` (`score: reps, total`
   for Lynne), and a lift with attempts is written `Max load, 3 attempts`.
 - Anything the language cannot express (free partitioning in Murph, wall-ball target height,

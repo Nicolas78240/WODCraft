@@ -30,6 +30,7 @@ def test_the_crossfit_total_adds_up_three_lifts_of_three_attempts():
     assert [lift["items"][0]["movement"] for lift in lifts] == ["back_squat", "strict_press", "deadlift"]
     assert {lift["attempts"] for lift in lifts} == {3}
     assert workout["score"]["aggregate"] == "sum" and workout["score"]["unit"] == "load"
+    assert "cap_s" not in workout  # the library keeps only official caps; the Total has none
 
 
 def test_the_library_is_not_empty():
