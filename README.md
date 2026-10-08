@@ -165,13 +165,13 @@ Max load, 3 attempts
 `Max load, N attempts` (`N essais`) gives N attempts at the heaviest load, and the best one counts;
 a `Rest` written last in the block comes between the attempts. `score: load, total` (`charge, total`;
 `reps, total` for Lynne) adds the parts up. `cap:` now covers the whole workout instead of attaching
-to its first block, and combining it with block caps is an error (`E037`). The Total ships in the
-library as `benchmarks/crossfit_total`, and `--lang fr` translates the board:
+to its first block, and combining it with block caps is an error (`E037`); `wodc timer` shows the
+moment that cap stops the clock. The Total ships in the library as `benchmarks/crossfit_total` —
+without a cap, like the original — and `--lang fr` translates the board:
 
 ```console
 $ wodc show benchmarks/crossfit_total --lang fr
 CROSSFIT TOTAL
-Cap : 30:00
 Charge max · 3 essais
   1 Squat arrière
   Repos 2:00 entre les essais
@@ -186,7 +186,6 @@ Charge max · 3 essais
 Score : total des charges (meilleur essai de chaque barre)
 Durée : 17:38–32:46
 Note : One rep per attempt: back squat, then shoulder press, then deadlift.
-Note : The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.
 Stimulus : Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.
 ```
 

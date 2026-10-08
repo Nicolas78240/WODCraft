@@ -208,7 +208,7 @@ def cmd_fmt(args) -> int:
 
 
 def cmd_timer(args) -> int:
-    from wodcraft.emit.timeline import render_timeline, timeline
+    from wodcraft.emit.timeline import render_timer
 
     profile = _profile(args)
     status = EXIT_OK
@@ -220,7 +220,7 @@ def cmd_timer(args) -> int:
         for document in result.documents:
             if profile is not None:
                 document = resolve(document, profile)
-            print(render_timeline(timeline(document)))
+            print(render_timer(document))
     return status
 
 

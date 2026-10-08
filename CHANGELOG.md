@@ -21,7 +21,7 @@ stamped `"1.2"`, and the schema accepts all three.
 ### The library
 - New collection **`benchmarks/`** with `crossfit_total` (`use benchmarks/crossfit_total`): back
   squat, shoulder press, deadlift, three attempts each, 2:00 between attempts, 3:00 between lifts,
-  and a 30:00 cap on the whole session as the library's reference (a note says the original has none).
+  and no cap, like the original (the library keeps only official caps).
 - Lynne scores `reps, total`, and its note no longer explains the count.
 
 ### Fixes
@@ -33,6 +33,10 @@ stamped `"1.2"`, and the schema accepts all three.
 - `wodc show --lang fr` translates the board's labels: `Charge max · 3 essais`, `Repos`,
   `Score : total des charges (meilleur essai de chaque barre)`, `Durée :`, `Note :`… Format names
   other than Max load stay in English, as on French-speaking whiteboards.
+- `wodc timer` shows the cap of the whole workout as the moment the clock stops
+  (`   30:00          cap: the clock stops`), in its place in time; block caps change nothing. The
+  MCP `timeline_wod` result carries it as `cap_s`, and WODCraftKit has `Timeline.cap(of:)`,
+  `Timeline.render(_:cap:)` and `timerText()`.
 - `wodc lib` aligns its columns on the longest path.
 
 ### Tooling

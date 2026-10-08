@@ -98,11 +98,26 @@ struct LanguageOneTwoTests {
     func library() throws {
         let total = try #require(Library.shared.entry(path: "benchmarks/crossfit_total")?.workout)
         #expect(total.wodcraft == "1.2")
-        #expect(total.capS == 1800)
+        #expect(total.capS == nil)  // the library keeps only official caps
         #expect(total.score.isTotal)
         let lifts: [Block] = total.blocks.compactMap(\.asBlock)
         #expect(lifts.compactMap { $0.items.first?.asMovement?.movement } == ["back_squat", "strict_press", "deadlift"])
         #expect(try Self.workout("use benchmarks/crossfit_total\n").score.unit == .load)
+    }
+
+    @Test("the timer shows when the workout cap stops the clock, in its place in time")
+    func timerShowsTheWorkoutCap() throws {
+        let total = try Self.workout(Self.total)
+        let lines = total.timerText().split(separator: "\n").map(String.init)
+        #expect(lines.suffix(2) == ["   30:00          cap: the clock stops", "           25:12  total"])
+        let short = try Self.workout("cap: 12:00\nEMOM 10\n  10 Burpee\nRest 2:00\nAMRAP 6:00\n  10 Wall ball 9/6 kg\n")
+        let text = short.timerText()
+        #expect(text.contains("   10:00    2:00  Rest\n   12:00          cap: the clock stops\n   12:00    6:00  AMRAP 6:00"))
+        // a cap per block, or on a single block, is already the length of its segment: no extra line
+        #expect(!(try Self.workout(Self.perLift).timerText().contains("cap: the clock stops")))
+        #expect(!(try Self.workout("cap: 12:00\nFor time\n  100 Burpee\n").timerText().contains("cap: the clock stops")))
+        #expect(Timeline.cap(of: .workout(total)) == 1800)
+        #expect(total.timeline().rendered() == Timeline.render(total.timeline()))
     }
 
     @Test("the timer gives each lift its own window")

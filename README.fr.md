@@ -172,13 +172,13 @@ Max load, 3 essais
 `Rest` écrit en dernier dans le bloc se place entre les essais. `score: charge, total` (`load, total` ;
 `reps, total` pour Lynne) additionne les parties, et `wodc fmt` le réécrit en anglais. `cap:` couvre
 désormais toute la séance au lieu de s'accrocher au premier bloc, et le combiner avec des caps par
-bloc est une erreur (`E037`). Le Total est dans la bibliothèque, `benchmarks/crossfit_total`, et
+bloc est une erreur (`E037`) ; `wodc timer` montre le moment où ce cap arrête le chrono. Le Total
+est dans la bibliothèque, `benchmarks/crossfit_total` — sans cap, comme l'original — et
 `--lang fr` traduit le tableau :
 
 ```console
 $ wodc show benchmarks/crossfit_total --lang fr
 CROSSFIT TOTAL
-Cap : 30:00
 Charge max · 3 essais
   1 Squat arrière
   Repos 2:00 entre les essais
@@ -193,7 +193,6 @@ Charge max · 3 essais
 Score : total des charges (meilleur essai de chaque barre)
 Durée : 17:38–32:46
 Note : One rep per attempt: back squat, then shoulder press, then deadlift.
-Note : The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.
 Stimulus : Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.
 ```
 

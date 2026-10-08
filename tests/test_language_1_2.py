@@ -5,7 +5,7 @@ from __future__ import annotations
 from conftest import coded_lines, compile_wod
 from test_emit_source import assert_round_trip
 from wodcraft.emit import board, markdown
-from wodcraft.emit.timeline import render_timeline, timeline
+from wodcraft.emit.timeline import render_timeline, render_timer, timeline, timer_cap
 
 TOTAL = """# CrossFit Total
 score: load, total
@@ -220,3 +220,34 @@ def test_the_timer_estimates_a_lift_without_a_cap_on_its_own():
     assert len({s["duration_s"] for s in lifts}) == 1
     assert all(s["open_ended"] for s in lifts)
     assert sum(s["duration_s"] for s in segments) < 30 * 60
+
+
+def test_the_timer_shows_when_the_workout_cap_stops_the_clock():
+    lines = render_timer(document(TOTAL)).splitlines()
+    assert lines[-2:] == ["   30:00          cap: the clock stops", "           25:12  total"]
+    assert timer_cap(document(TOTAL)) == 1800
+
+
+def test_the_cap_line_takes_its_place_in_time():
+    short = document("cap: 12:00\nEMOM 10\n  10 Burpee\nRest 2:00\nAMRAP 6:00\n  10 Wall ball 9/6 kg\n")
+    lines = render_timer(short).splitlines()
+    assert lines[-4:] == [
+        "   10:00    2:00  Rest",
+        "   12:00          cap: the clock stops",
+        "   12:00    6:00  AMRAP 6:00: 10 Wall ball 9/6 kg",
+        "           18:00  total",
+    ]
+
+
+def test_block_caps_add_no_cap_line():
+    # a cap per block, or a cap on a single block, is already the length of its segment
+    for source in (PER_LIFT, "cap: 12:00\nFor time\n  100 Burpee\n"):
+        workout = document(source)
+        assert timer_cap(workout) is None
+        assert render_timer(workout) == render_timeline(timeline(workout))
+        assert "cap: the clock stops" not in render_timer(workout)
+
+
+def test_a_session_has_no_workout_cap_line():
+    session = document("# S\n## A\ncap: 20:00\nFor time\n  10 Burpee\nAMRAP 5:00\n  5 Burpee\n")
+    assert timer_cap(session) is None

@@ -103,13 +103,34 @@ def _items_label(items: list[dict]) -> str:
     return " + ".join(label for label in labels if label)
 
 
-def render_timeline(segments: list[dict]) -> str:
+def timer_cap(document: dict) -> float | None:
+    """The cap of the whole workout (`cap:` over several blocks, 1.2): when the clock stops.
+    A cap on a block is already the length of that block's segment."""
+    if document.get("kind") == "session":
+        return None
+    return document.get("cap_s") or None
+
+
+def render_timer(document: dict) -> str:
+    """What `wodc timer` prints: the timeline, with the workout cap when there is one."""
+    return render_timeline(timeline(document), timer_cap(document))
+
+
+def render_timeline(segments: list[dict], cap_s: float | None = None) -> str:
     lines = []
+    # the workout cap is a moment, not a stretch: at that time the clock stops, whatever is left —
+    # it takes its place in time, before the first segment that would start at or after it
+    cap_line = f"{format_clock(cap_s):>8}  {'':>6}  cap: the clock stops" if cap_s else None
     for segment in segments:
+        if cap_line and cap_s is not None and segment["at_s"] >= cap_s:
+            lines.append(cap_line)
+            cap_line = None
         start = format_clock(segment["at_s"])
         duration = format_clock(segment["duration_s"]) if segment["duration_s"] else "—"
         mark = "~" if segment.get("open_ended") else " "
         lines.append(f"{start:>8}  {duration:>6}{mark} {segment['label']}")
+    if cap_line:
+        lines.append(cap_line)
     total = sum(s["duration_s"] for s in segments)
     lines.append(f"{'':>8}  {format_clock(total):>6}  total")
     return "\n".join(lines)

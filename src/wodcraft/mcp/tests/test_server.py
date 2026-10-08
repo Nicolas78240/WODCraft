@@ -137,6 +137,14 @@ def test_timeline_wod_marks_open_ended_work():
     assert result.segments[0].open_ended is True
 
 
+def test_timeline_wod_carries_the_workout_cap():
+    result = server.timeline_wod("# Two parts\ncap: 20:00\nFor time\n  50 Burpee\nAMRAP 6:00\n  10 Air squat\n")
+    assert result.ok is True
+    assert result.cap_s == 1200
+    assert "   20:00          cap: the clock stops" in result.rendered
+    assert server.timeline_wod("# Open\nFor time\n  100 Burpee\n").cap_s is None
+
+
 def test_search_movements_ranks_exact_matches_first():
     result = server.search_movements("thruster")
     assert result.movements[0].id == "thruster"
