@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wodcraft"
-version = "1.1.0"
+version = "1.1.1"
 description = "A whiteboard-readable language and compiler for functional-fitness workouts (WODs)."
 readme = "README.md"
 license = "Apache-2.0"

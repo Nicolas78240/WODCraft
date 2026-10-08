@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.1 — 2026-10-08
+
+### Catalog
+- Five movements validated by the product owner from a real board (oKo, 6 October): `commando_push_up`,
+  `box_bar_muscle_up`, `kettlebell_side_bend`, `press_back` and `harlow` (228 movements). `press_back`
+  and `harlow` are minimal entries — name and French name only — until their standard is described.
+
+### Packaging
+- A `Package.swift` at the root of the repository: an application can depend on
+  `https://github.com/Nicolas78240/WODCraft` at an exact tag. `swift/WODCraftKit/Package.swift` stays
+  where the tests run.
+
+### Docs
+- `docs/amelioration-continue.fr.md`: how a gap found in an application becomes a WODCraft change, and
+  how the application picks up the release.
+
 ## 1.1.0 — 2026-10-04
 
 Additions for real training sessions (the whiteboard of 29 September: warm-up, skill, team chipper,

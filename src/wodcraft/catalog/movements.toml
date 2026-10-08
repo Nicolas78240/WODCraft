@@ -2370,3 +2370,48 @@ param = "load"
 equipment = "dumbbell"
 rx = { men = 22.5, women = 15, unit = "kg" }
 pace = { rep = 3.0 }
+
+[movements.commando_push_up]
+name = "Commando push-up"
+aliases = ["commando pushup", "commando push up"]
+fr = ["pompe commando"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"
+
+[movements.box_bar_muscle_up]
+name = "Box bar muscle-up"
+aliases = ["box bar mu", "box assisted bar muscle-up", "low bar muscle-up"]
+fr = ["muscle-up barre avec box"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bar"
+
+[movements.kettlebell_side_bend]
+name = "Kettlebell side bend"
+aliases = ["kb side bend", "side bend"]
+fr = ["flexion latérale kettlebell"]
+family = "W"
+quantities = ["reps"]
+param = "load"
+equipment = "kettlebell"
+
+[movements.press_back]
+name = "Press back"
+aliases = []
+fr = ["press back"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "other"
+
+[movements.harlow]
+name = "Harlow"
+aliases = []
+fr = ["harlow"]
+family = "G"
+quantities = ["reps"]
+param = "none"
+equipment = "bodyweight"

@@ -32,7 +32,7 @@
  "#pipe li[data-step='1'] small": "One line, one statement",
  "#pipe li[data-step='2'] b": "Checking",
  "#pipe li[data-step='2'] small": "Catalog, units, plausibility",
- "#pipe li[data-step='2'] .pipe-n": "223 moves",
+ "#pipe li[data-step='2'] .pipe-n": "228 moves",
  "#pipe li[data-step='3'] small": "The compiled document",
  "#pipe li[data-step='4'] .pipe-n": "→ everywhere",
  "#pipe li[data-step='4'] b": "Outputs",
