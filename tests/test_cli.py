@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from wodcraft import SPEC_VERSION, __version__
 from wodcraft.cli import EXIT_DIAGNOSTICS, EXIT_OK, EXIT_USAGE, main
 
 FRAN = "# Fran\n21-15-9 for time, cap 10:00\n  Thruster 95/65 lb\n  Pull-up\n"
@@ -66,7 +67,8 @@ def test_version_exits_zero(capsys):
     with pytest.raises(SystemExit) as excinfo:
         main(["--version"])
     assert excinfo.value.code == 0
-    assert "spec 1.0" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert f"wodc {__version__} (spec {SPEC_VERSION})" in out
 
 
 def test_warnings_alone_still_exit_zero(wod, capsys):
