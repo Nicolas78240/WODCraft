@@ -114,7 +114,7 @@ Even: 10 Burpee
 ```
 
 Formats: `For time`, `N rounds [for time]`, rep ladders (`21-15-9`, `3-6-9 ...`), `AMRAP`, `EMOM`,
-`E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, strength sets (`5x5`, `5-5-3-3-1`).
+`E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load [, 3 attempts]`, strength sets (`5x5`, `5-5-3-3-1`).
 Labels: `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`, `Foundations:`,
 `Adapted:`.
 Units: `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — and `m` always
@@ -142,6 +142,56 @@ level quantities (`-> 2x`, `-> 10`), `there and back` (`aller-retour`) and `Adap
 in SPEC §5, §7.5, §7.6, §9 and §9.1. A document that uses none of them compiles to exactly the same
 JSON as in 1.0 (still stamped `"wodcraft": "1.0"`); one that does is stamped `"1.1"`. The whole
 29 September session is in [`examples/session-2026-09-29.wod`](examples/session-2026-09-29.wod).
+
+### New in 1.2
+
+```wod
+# CrossFit Total
+score: load, total               // the three lifts add up to one score
+cap: 30:00                       // a cap on the whole workout
+Max load, 3 attempts             // (or a cap on each lift, never both)
+  1 Back squat
+  Rest 2:00                      // between the attempts
+Rest 3:00
+Max load, 3 attempts
+  1 Shoulder press
+  Rest 2:00
+Rest 3:00
+Max load, 3 attempts
+  1 Deadlift
+  Rest 2:00
+```
+
+`Max load, N attempts` (`N essais`) gives N attempts at the heaviest load, and the best one counts;
+a `Rest` written last in the block comes between the attempts. `score: load, total` (`charge, total`;
+`reps, total` for Lynne) adds the parts up. `cap:` now covers the whole workout instead of attaching
+to its first block, and combining it with block caps is an error (`E037`). The Total ships in the
+library as `benchmarks/crossfit_total`, and `--lang fr` translates the board:
+
+```console
+$ wodc show benchmarks/crossfit_total --lang fr
+CROSSFIT TOTAL
+Cap : 30:00
+Charge max · 3 essais
+  1 Squat arrière
+  Repos 2:00 entre les essais
+Repos 3:00
+Charge max · 3 essais
+  1 Développé militaire
+  Repos 2:00 entre les essais
+Repos 3:00
+Charge max · 3 essais
+  1 Soulevé de terre
+  Repos 2:00 entre les essais
+Score : total des charges (meilleur essai de chaque barre)
+Durée : 17:38–32:46
+Note : One rep per attempt: back squat, then shoulder press, then deadlift.
+Note : The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.
+Stimulus : Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.
+```
+
+Specified in SPEC §5, §6.1, §8 and §12. A document that uses none of this compiles to exactly the
+same JSON as before, stamped `"1.0"` or `"1.1"`; one that does is stamped `"1.2"`.
 
 The full grammar, the semantics and every diagnostic are in **[spec/SPEC.md](spec/SPEC.md)**.
 
@@ -177,7 +227,7 @@ wodc bundle            # catalog.json, library.json and the schema: 115 kB an ap
 ```
 
 - **Apple platforms** — [`swift/WODCraftKit`](swift/WODCraftKit) is a SwiftPM package with no third
-  party dependency: the compiled model, the compiler, the catalog, the 82 benchmarks, the whiteboard
+  party dependency: the compiled model, the compiler, the catalog, the 83 benchmarks, the whiteboard
   and a timeline that drives a timer. It compiles **offline** and is validated by the same conformance
   suite as the reference implementation.
 - **Anything else** — `pip install "wodcraft[service]"` runs a small HTTP service
