@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.1 — unreleased
+## 1.2.1 — 2026-10-08
 
 ### Fixes
 - `wodc timer` shows the caps of a session too: a section whose `cap:` covers several blocks gets its
@@ -10,6 +10,10 @@
   (its `cap_s` stays null for a session), and WODCraftKit has `Timeline.caps(of:)` and
   `Timeline.render(_:caps:)` behind `timerText()`; Python has `timer_caps`. A new conformance case,
   `session_section_caps`, carries such a session.
+
+### Docs
+- The MCP server, its syntax guide and its prompt name the spec version they implement (they said 1.0).
+- `docs/mcp.md` lists `timeline_wod`'s `cap_s`; `integration-oko.fr.md` gets a dated status box.
 
 ## 1.2.0 — 2026-10-08
 
