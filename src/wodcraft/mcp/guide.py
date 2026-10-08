@@ -1,4 +1,4 @@
-"""The short, exact WODCraft 1.0 syntax guide served as ``wodcraft://guide/syntax``.
+"""The short, exact WODCraft syntax guide served as ``wodcraft://guide/syntax``.
 
 Every ```wod fenced block in this module is checked by ``tests/test_server.py``:
 it must compile with no error. Never add an example without running the tests.
@@ -9,7 +9,9 @@ from __future__ import annotations
 import re
 import textwrap
 
-SYNTAX_GUIDE = """# WODCraft 1.0 — syntax guide
+from wodcraft import SPEC_VERSION
+
+SYNTAX_GUIDE = f"""# WODCraft {SPEC_VERSION} — syntax guide
 
 Write a workout the way it is written on a gym whiteboard. Everything ambiguous is rejected
 with a coded diagnostic, so check your draft with the `check_wod` tool before returning it.

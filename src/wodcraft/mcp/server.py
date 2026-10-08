@@ -1,6 +1,6 @@
 """The WODCraft MCP server.
 
-Exposes the WODCraft 1.0 compiler over the Model Context Protocol: an assistant drafts a
+Exposes the WODCraft compiler over the Model Context Protocol: an assistant drafts a
 workout, `check_wod` tells it exactly what is wrong, and it corrects until the source compiles.
 
 Run it over stdio (the default) or over streamable HTTP::
@@ -72,7 +72,7 @@ server: MCPServer = MCPServer(
 
 # --------------------------------------------------------------------------- helpers
 
-Source = Annotated[str, Field(description="WODCraft 1.0 source (the content of a .wod file)")]
+Source = Annotated[str, Field(description=f"WODCraft {SPEC_VERSION} source (the content of a .wod file)")]
 
 
 def _diagnostics(result: Result) -> list[DiagnosticOut]:
@@ -392,12 +392,12 @@ def library_get(
 
 @server.resource(
     "wodcraft://spec",
-    name="WODCraft 1.0 specification",
+    name=f"WODCraft {SPEC_VERSION} specification",
     description="The full language specification (spec/SPEC.md): lexical structure, blocks, formats, movements, levels, diagnostics.",
     mime_type="text/markdown",
 )
 def spec_resource() -> str:
-    """The WODCraft 1.0 specification, verbatim."""
+    """The WODCraft specification, verbatim."""
     file = spec_file()
     if file is None:
         raise ResourceNotFoundError(
@@ -410,7 +410,7 @@ def spec_resource() -> str:
 @server.resource(
     "wodcraft://guide/syntax",
     name="WODCraft syntax guide",
-    description="Short, exact syntax guide for writing WODCraft 1.0. Read this before drafting.",
+    description=f"Short, exact syntax guide for writing WODCraft {SPEC_VERSION}. Read this before drafting.",
     mime_type="text/markdown",
 )
 def syntax_guide_resource() -> str:
@@ -481,7 +481,7 @@ def library_index_resource() -> str:
 
 @server.prompt(
     title="Design a WOD",
-    description="Write a WODCraft 1.0 workout for a goal, a duration, the available equipment "
+    description=f"Write a WODCraft {SPEC_VERSION} workout for a goal, a duration, the available equipment "
     "and a level — and check it with the compiler before answering.",
 )
 def design_wod(
@@ -492,9 +492,9 @@ def design_wod(
     ] = "barbell, pull-up bar, box, rower",
     level: Annotated[str, Field(description="rx, intermediate, scaled or foundations")] = "rx",
 ) -> str:
-    """Ask the assistant to design a workout in valid WODCraft 1.0."""
+    """Ask the assistant to design a workout in valid WODCraft."""
     return f"""\
-Design one WODCraft 1.0 workout.
+Design one WODCraft {SPEC_VERSION} workout.
 
 - Goal: {goal}
 - Target duration: {duration}
