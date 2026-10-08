@@ -154,9 +154,9 @@ conformité).
 | Manque | Sorte | État |
 |---|---|---|
 | Harlow, Commando push-up, Box bar muscle-up, Kettlebell side bend, Press back | mouvements | publiés en 1.1.1 ; Harlow et Press back restent à décrire |
-| CrossFit Total : score total, essais, cap global ou par barre, bibliothèque `benchmarks/` | langage + benchmark | syntaxe validée (variante A), en cours (1.2, branche `feat/score-total`) |
+| CrossFit Total : score total, essais, cap global ou par barre, bibliothèque `benchmarks/` | langage + benchmark | publié en 1.2.0 (`use benchmarks/crossfit_total`) |
 | Quantités différentes à chaque passage (8/12/16/20) | langage | constaté le 6 octobre, contourné par une `note:` |
 | Double-unders en durée (`E033` : « measured in reps ») ; `Clean & jerk` (`E001` sur le `&`) | langage, alias | notés le 29 septembre, confirmés le 8 octobre |
 | G.I. Jane, Hopper | benchmarks | demandés (Jason et The Seven sont déjà dans la bibliothèque) |
 | Snatch pull, pike HSPU, pike-up | mouvements | absents du catalogue (vérifié le 8 octobre) |
-| Défauts de cap trouvés en testant le Total (caps par bloc non additionnés, cap global accroché au premier bloc, combinaison silencieuse) | compilateur | à corriger avec la 1.2 |
+| Défauts de cap trouvés en testant le Total (caps par bloc non additionnés, cap global accroché au premier bloc, combinaison silencieuse) | compilateur | corrigés en 1.2.0 (E037 pour la combinaison) |

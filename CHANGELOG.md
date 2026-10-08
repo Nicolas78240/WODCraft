@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 — unreleased
+## 1.2.0 — 2026-10-08
 
 The CrossFit Total, decided with Nicolas on 8 October 2026. Every 1.0 and 1.1 document still
 compiles to exactly the same JSON, with the same stamp; a document that uses a 1.2 construct is
