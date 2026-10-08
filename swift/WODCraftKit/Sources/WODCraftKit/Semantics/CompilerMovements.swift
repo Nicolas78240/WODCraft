@@ -444,6 +444,10 @@ extension Compiler {
 
     func score(_ blocks: [JSONObject], _ meta: JSONObject) -> JSONObject {
         let timedIndexes: [Int] = blocks.indices.filter { timedKinds.contains(blocks[$0]["type"]?.stringValue ?? "") }
+        let total: Bool = meta["score_total"] != nil
+        if timedIndexes.count > 1, total, let declared = meta["score"]?.stringValue {
+            return totalScore(blocks, timedIndexes, declared, meta)
+        }
         if timedIndexes.count > 1, !meta.has("score") {
             var parts: [JSONValue] = []
             for index in timedIndexes {
@@ -492,6 +496,9 @@ extension Compiler {
             } else {
                 out["type"] = .string(declared)
             }
+            if total {
+                out["aggregate"] = .string("sum")  // "score: reps, total": every effort adds up (1.2)
+            }
         } else {
             out["type"] = .string(inferred)
         }
@@ -510,6 +517,40 @@ extension Compiler {
         if case .bool(true)? = main?["there_and_back"], out["type"]?.stringValue != "none" {
             // a round is the whole path, and a capped athlete counts the reps done along it
             out["there_and_back"] = .bool(true)
+        }
+        return out
+    }
+
+    /// 'score: load, total' over several timed blocks: one score per part, and they add up (1.2).
+    func totalScore(_ blocks: [JSONObject], _ timedIndexes: [Int], _ declared: String, _ meta: JSONObject) -> JSONObject {
+        var parts: [JSONValue] = []
+        for index in timedIndexes {
+            let block: JSONObject = blocks[index]
+            let kind: String = block["type"]?.stringValue ?? ""
+            if declared != scoreByFormat[kind], !scoreCompatible(declared, kind) {
+                let source: JSONObject = block["source"]?.objectValue ?? JSONObject()
+                err(
+                    "E036",
+                    "This \(humanName(kind)) part cannot be scored by '\(declared)', so it cannot count in the total.",
+                    Span(source["line"]?.intValue ?? 1, source["col"]?.intValue ?? 1),
+                    "this part scores '\(scoreByFormat[kind] ?? "none")'"
+                )
+            }
+            var part = JSONObject()
+            part["type"] = .string(declared)
+            part["block"] = .number(Double(index))
+            if case .bool(true)? = block["there_and_back"] {
+                part["there_and_back"] = .bool(true)
+            }
+            parts.append(.object(part))
+        }
+        var out = JSONObject()
+        out["type"] = .string("multi")
+        out["aggregate"] = .string("sum")
+        out["unit"] = .string(declared)
+        out["parts"] = .array(parts)
+        if let tiebreak = meta["tiebreak"], !tiebreak.isNull {
+            out["tiebreak"] = tiebreak
         }
         return out
     }

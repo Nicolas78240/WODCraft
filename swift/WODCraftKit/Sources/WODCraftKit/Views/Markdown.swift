@@ -41,9 +41,13 @@ public enum Markdown {
         lines.append("```")
         let meta = workout.meta
         let score = workout.score.type
+        if let cap = workout.capS, cap != 0 {
+            lines.append("")
+            lines.append("**Cap** — " + formatClock(cap))
+        }
         if score != Score.Kind.none {
             lines.append("")
-            lines.append("**Score** — " + Board.scoreLabel(score))
+            lines.append("**Score** — " + Board.scoreText(workout))
         }
         if let estimate = workout.estimate {
             lines.append("**Estimate** — " + Board.rangeText(estimate))

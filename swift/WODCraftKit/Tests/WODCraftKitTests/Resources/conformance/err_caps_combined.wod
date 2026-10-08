@@ -1,0 +1,10 @@
+# CrossFit Total
+// a cap on the whole workout and caps on its blocks: one or the other (E037)
+score: load, total
+cap: 30:00
+Max load, 3 attempts, cap 8:00
+  1 Back squat
+Max load, 3 attempts, cap 8:00
+  1 Shoulder press
+Max load, 3 attempts
+  1 Deadlift

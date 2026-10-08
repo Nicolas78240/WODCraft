@@ -16,6 +16,8 @@ let labelNames: [String: String] = [
     "adapted": "adapted",
 ]
 
+/// "Max load, 3 attempts" (French "3 essais"), 1.2
+let attemptWords: [String] = ["attempts", "attempt", "essais", "essai"]
 let modifierWords: Set<String> = ["sync", "split", "each", "alternating", "unbroken", "strict"]
 
 struct LineError: Error {
@@ -277,13 +279,21 @@ func parseFormat(_ line: SourceLine, _ tokens: [Token], _ file: String?) throws 
             block.thereAndBack = true
         } else if cur.acceptWord("aller-retour") != nil {
             block.thereAndBack = true
+        } else if segment[0].kind == .number, segment.count > 1, segment[1].isWord(attemptWords) {
+            // "Max load, 3 attempts" (French "3 essais"): the best of N attempts counts (1.2)
+            let count = number(try cur.next())
+            _ = try cur.next()
+            guard count == count.rounded() else {
+                throw LineError("E035", "A number of attempts must be a whole number.", segment[0].col, segment[1].endCol)
+            }
+            block.attempts = Int(count)
         } else {
             throw LineError(
                 "E001",
                 "Unknown option '\(segment[0].text)'.",
                 segment[0].col,
                 segment[segment.count - 1].endCol,
-                "options are: cap, teams of N, for time, there and back"
+                "options are: cap, teams of N, for time, there and back, N attempts"
             )
         }
         try cur.expectEnd()

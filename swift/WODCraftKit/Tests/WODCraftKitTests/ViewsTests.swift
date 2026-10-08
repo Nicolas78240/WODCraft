@@ -24,7 +24,7 @@ struct ViewExpectation: Decodable, Sendable, CustomTestStringConvertible {
 }
 
 enum ViewExpectations {
-    /// The 82 workouts of the standard library.
+    /// The 83 workouts of the standard library.
     static let all: [ViewExpectation] = decode(ViewsFixtures.libraryJSON)
 
     /// Every compiled document of the conformance corpus: sessions, slots, ladders, teams…
@@ -89,7 +89,7 @@ struct ViewsTests {
 
     @Test("the fixtures cover the whole library")
     func fixturesAreComplete() {
-        #expect(ViewExpectations.all.count == 82)
+        #expect(ViewExpectations.all.count == 83)
         var paths: [String] = []
         for entry in library.entries { paths.append(entry.path) }
         var expected: [String] = []
@@ -140,7 +140,7 @@ struct ViewsTests {
     @Test("the printed timer matches Python for every library workout", arguments: ViewExpectations.all)
     func timerTextMatchesPython(_ expectation: ViewExpectation) throws {
         let entry = try #require(library.entry(path: expectation.path))
-        let produced = entry.compiled.timeline().rendered()
+        let produced = entry.compiled.timerText()
         #expect(produced == expectation.timer, "\(expectation.path): \(firstDifference(produced, expectation.timer))")
     }
 
@@ -162,7 +162,7 @@ struct ViewsTests {
         #expect(french == expectation.boardFr, "\(expectation.path): \(firstDifference(french, expectation.boardFr))")
         let markdown = document.markdown()
         #expect(markdown == expectation.markdown, "\(expectation.path): \(firstDifference(markdown, expectation.markdown))")
-        let timer = document.timeline().rendered()
+        let timer = document.timerText()
         #expect(timer == expectation.timer, "\(expectation.path): \(firstDifference(timer, expectation.timer))")
 
         let segments = document.timeline()

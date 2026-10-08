@@ -69,6 +69,7 @@ class TimelineResult(_WithDiagnostics):
 
     total_s: float = 0.0
     segments: list[TimelineSegment] = Field(default_factory=list)
+    cap_s: float | None = Field(default=None, description="1.2 — the cap of the whole workout: the clock stops there")
     rendered: str = Field(default="", description="The timeline as printed by `wodc timer`")
 
 

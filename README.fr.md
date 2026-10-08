@@ -117,7 +117,7 @@ Even: 10 Burpee
 ```
 
 Formats : `For time`, `N rounds [for time]`, échelles de reps (`21-15-9`, `3-6-9 ...`), `AMRAP`,
-`EMOM`, `E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load`, séries de force (`5x5`,
+`EMOM`, `E2MOM`, `Every 4:00 x 4`, `Tabata`, `Death by`, `Max load [, 3 essais]`, séries de force (`5x5`,
 `5-5-3-3-1`). Labels : `Buy-in:`, `Cash-out:`, `Odd:`, `Even:`, `Min N:`, `Scaled:`, `Intermediate:`,
 `Foundations:`, `Adapted:`. Unités : `kg`, `lb`, `pood`, `in`, `cm`, `m`, `km`, `mi`, `ft`, `cal`, `s`, `min` — et
 `m` signifie toujours mètres, jamais minutes.
@@ -148,6 +148,57 @@ et `Adapted:` sont spécifiés aux §5, §7.5, §7.6, §9 et §9.1 de la spec. U
 aucun compile exactement vers le même JSON qu'en 1.0 (toujours marqué `"wodcraft": "1.0"`) ; un
 document qui en utilise un est marqué `"1.1"`. La séance complète du 29 septembre est dans
 [`examples/session-2026-09-29.wod`](examples/session-2026-09-29.wod).
+
+### Nouveautés de la 1.2
+
+```wod
+# CrossFit Total
+score: charge, total             // les trois barres s'additionnent en un seul score
+cap: 30:00                       // un cap sur toute la séance
+Max load, 3 essais               // (ou un cap par barre, jamais les deux)
+  1 Squat arrière
+  Rest 2:00                      // entre les essais
+Rest 3:00
+Max load, 3 essais
+  1 Développé militaire
+  Rest 2:00
+Rest 3:00
+Max load, 3 essais
+  1 Soulevé de terre
+  Rest 2:00
+```
+
+`Max load, N essais` (`N attempts`) donne N essais à la charge maximale, et le meilleur compte ; un
+`Rest` écrit en dernier dans le bloc se place entre les essais. `score: charge, total` (`load, total` ;
+`reps, total` pour Lynne) additionne les parties, et `wodc fmt` le réécrit en anglais. `cap:` couvre
+désormais toute la séance au lieu de s'accrocher au premier bloc, et le combiner avec des caps par
+bloc est une erreur (`E037`) ; `wodc timer` montre le moment où ce cap arrête le chrono. Le Total
+est dans la bibliothèque, `benchmarks/crossfit_total` — sans cap, comme l'original — et
+`--lang fr` traduit le tableau :
+
+```console
+$ wodc show benchmarks/crossfit_total --lang fr
+CROSSFIT TOTAL
+Charge max · 3 essais
+  1 Squat arrière
+  Repos 2:00 entre les essais
+Repos 3:00
+Charge max · 3 essais
+  1 Développé militaire
+  Repos 2:00 entre les essais
+Repos 3:00
+Charge max · 3 essais
+  1 Soulevé de terre
+  Repos 2:00 entre les essais
+Score : total des charges (meilleur essai de chaque barre)
+Durée : 17:38–32:46
+Note : One rep per attempt: back squat, then shoulder press, then deadlift.
+Stimulus : Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.
+```
+
+Spécifié aux §5, §6.1, §8 et §12 de la spec. Un document qui n'utilise rien de tout cela compile
+exactement vers le même JSON qu'avant, marqué `"1.0"` ou `"1.1"` ; un document qui s'en sert est
+marqué `"1.2"`.
 
 La grammaire complète, la sémantique et tous les diagnostics sont dans **[spec/SPEC.md](spec/SPEC.md)**.
 
@@ -183,7 +234,7 @@ wodc bundle            # catalog.json, library.json et le schéma : 115 Ko à em
 ```
 
 - **Plateformes Apple** — [`swift/WODCraftKit`](swift/WODCraftKit) est un package SwiftPM sans aucune
-  dépendance tierce : le modèle compilé, le compilateur, le catalogue, les 82 benchmarks, le tableau
+  dépendance tierce : le modèle compilé, le compilateur, le catalogue, les 83 benchmarks, le tableau
   blanc et une timeline qui pilote un timer. Il compile **hors ligne** et passe la même suite de
   conformité que l'implémentation de référence.
 - **Le reste** — `pip install "wodcraft[service]"` lance un petit service HTTP (`/compile`, `/check`,

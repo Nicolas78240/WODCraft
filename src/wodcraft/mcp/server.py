@@ -27,7 +27,7 @@ from wodcraft.api import Result, compile_source
 from wodcraft.catalog import load_catalog
 from wodcraft.emit import board
 from wodcraft.emit.source import format_source
-from wodcraft.emit.timeline import render_timeline, timeline
+from wodcraft.emit.timeline import render_timer, timeline, timer_cap
 from wodcraft.mcp.guide import SYNTAX_GUIDE
 from wodcraft.mcp.models import (
     CheckResult,
@@ -228,21 +228,27 @@ def timeline_wod(source: Source) -> TimelineResult:
     """Return the timeline segments of a .wod source.
 
     A segment with `open_ended: true` has no cap: its length is the compiler's estimate.
+    `cap_s` is the cap of the whole workout (`cap:` over several blocks): the clock stops there.
     """
     result, diagnostics, counts = _compile(source)
     if not result.ok:
         return TimelineResult(ok=False, diagnostics=diagnostics, **counts)
     segments: list[TimelineSegment] = []
     rendered: list[str] = []
+    caps: list[float] = []
     for document in result.documents:
         raw = timeline(document)
         segments += [TimelineSegment(**segment) for segment in raw]
-        rendered.append(render_timeline(raw))
+        rendered.append(render_timer(document))
+        cap = timer_cap(document)
+        if cap:
+            caps.append(cap)
     return TimelineResult(
         ok=True,
         diagnostics=diagnostics,
         total_s=sum(s.duration_s for s in segments),
         segments=segments,
+        cap_s=caps[0] if len(caps) == 1 and len(result.documents) == 1 else None,
         rendered="\n".join(rendered),
         **counts,
     )

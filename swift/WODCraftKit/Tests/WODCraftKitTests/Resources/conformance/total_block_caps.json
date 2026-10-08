@@ -1,0 +1,130 @@
+{
+  "wodcraft": "1.2",
+  "kind": "workout",
+  "title": "CrossFit Total, one cap per lift",
+  "blocks": [
+    {
+      "type": "max_load",
+      "source": {
+        "line": 4,
+        "col": 1
+      },
+      "cap_s": 480.0,
+      "attempts": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "back_squat",
+          "name": "Back squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 5,
+            "col": 5
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 120.0,
+          "source": {
+            "line": 6,
+            "col": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "rest",
+      "seconds": 180.0,
+      "source": {
+        "line": 7,
+        "col": 1
+      }
+    },
+    {
+      "type": "max_load",
+      "source": {
+        "line": 8,
+        "col": 1
+      },
+      "cap_s": 480.0,
+      "attempts": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "strict_press",
+          "name": "Strict press",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 9,
+            "col": 5
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 120.0,
+          "source": {
+            "line": 10,
+            "col": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "rest",
+      "seconds": 180.0,
+      "source": {
+        "line": 11,
+        "col": 1
+      }
+    },
+    {
+      "type": "max_load",
+      "source": {
+        "line": 12,
+        "col": 1
+      },
+      "cap_s": 480.0,
+      "attempts": 1,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "deadlift",
+          "name": "Deadlift",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 13,
+            "col": 5
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "multi",
+    "aggregate": "sum",
+    "unit": "load",
+    "parts": [
+      {
+        "type": "load",
+        "block": 0
+      },
+      {
+        "type": "load",
+        "block": 2
+      },
+      {
+        "type": "load",
+        "block": 4
+      }
+    ]
+  }
+}

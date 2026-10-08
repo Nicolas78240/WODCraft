@@ -1,5 +1,52 @@
 # Changelog
 
+## 1.2.0 — 2026-10-08
+
+The CrossFit Total, decided with Nicolas on 8 October 2026. Every 1.0 and 1.1 document still
+compiles to exactly the same JSON, with the same stamp; a document that uses a 1.2 construct is
+stamped `"1.2"`, and the schema accepts all three.
+
+### The language
+- **Attempts**: `Max load, 3 attempts` (French `3 essais`, written back in English by `wodc fmt`).
+  The best attempt counts; a `Rest` written last in the block is the rest **between** the attempts
+  (three attempts, two rests). Elsewhere than on Max load it is `E014`; fewer than one is `E035`.
+- **Totals**: `score: load, total` (French `charge, total`) adds the parts up. Over several timed
+  blocks the score is `{"type": "multi", "aggregate": "sum", "unit": "load", "parts": […]}`, every
+  part scored by the value (`E036` on a part that cannot be); over a single block it is the value
+  with `"aggregate": "sum"` (`score: reps, total` for Lynne). `total` is the only modifier (`E013`).
+- **One cap or the other** (SPEC §6.1): `cap:` caps the whole workout — on a single block it is still
+  that block's cap; over several blocks it is the workout's new `cap_s` instead of the first block's.
+  Combined with block caps it is the new **`E037`**, instead of disappearing without a word.
+
+### The library
+- New collection **`benchmarks/`** with `crossfit_total` (`use benchmarks/crossfit_total`): back
+  squat, shoulder press, deadlift, three attempts each, 2:00 between attempts, 3:00 between lifts,
+  and no cap, like the original (the library keeps only official caps).
+- Lynne scores `reps, total`, and its note no longer explains the count.
+
+### Fixes
+- Several block caps now add up in `estimate.capped_s`, with the rest between the blocks (three lifts
+  capped at 10:00 reported 10:00).
+- A `Max load` without sets is estimated as a build-up — its attempts, or five efforts, about 30 s
+  each with the rest between them — instead of a few seconds (the Total went from 0:09 to
+  17:38–32:46). The timer sizes such a lift on its own.
+- `wodc show --lang fr` translates the board's labels: `Charge max · 3 essais`, `Repos`,
+  `Score : total des charges (meilleur essai de chaque barre)`, `Durée :`, `Note :`… Format names
+  other than Max load stay in English, as on French-speaking whiteboards.
+- `wodc timer` shows the cap of the whole workout as the moment the clock stops
+  (`   30:00          cap: the clock stops`), in its place in time; block caps change nothing. The
+  MCP `timeline_wod` result carries it as `cap_s`, and WODCraftKit has `Timeline.cap(of:)`,
+  `Timeline.render(_:cap:)` and `timerText()`.
+- `wodc lib` aligns its columns on the longest path.
+
+### Tooling
+- Schema `spec/workout.schema.json` moves to `…/schema/1.2/`: `attempts` on a block, `aggregate`
+  and `unit` on the score, `cap_s` on the workout; seven new conformance cases.
+- `swift/WODCraftKit` implements all of the above (`Block.attempts`, `Score.aggregate`,
+  `Score.unit`, `Score.isTotal`, `Workout.capS`, the French board), checked by the same conformance
+  suite and by the differential check.
+- Editor grammar, completions and the MCP guide know attempts, totals and `E037`.
+
 ## 1.1.1 — 2026-10-08
 
 ### Catalog

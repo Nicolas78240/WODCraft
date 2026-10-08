@@ -108,7 +108,23 @@ def test_the_suite_covers_the_main_diagnostics():
         diag = case.with_suffix(".diag")
         if diag.exists():
             codes.update(code for code, _ in expected_diagnostics(diag))
-    for expected in ("E002", "E003", "E012", "E013", "E020", "E030", "E031", "E032", "E033", "E034", "E036", "E040", "E041", "E050"):
+    for expected in (
+        "E002",
+        "E003",
+        "E012",
+        "E013",
+        "E020",
+        "E030",
+        "E031",
+        "E032",
+        "E033",
+        "E034",
+        "E036",
+        "E037",
+        "E040",
+        "E041",
+        "E050",
+    ):
         assert expected in codes, expected
     for expected in ("W100", "W101", "W102", "W103", "W104"):
         assert expected in codes, expected

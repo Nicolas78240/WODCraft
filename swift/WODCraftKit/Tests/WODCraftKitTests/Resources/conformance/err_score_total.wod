@@ -1,0 +1,19 @@
+# Best of
+// 'total' is the only score modifier (E013)
+score: load, best
+Max load
+  1 Deadlift
+
+# Nothing to add
+// 'none' has nothing to add up (E013)
+score: none, total
+For time
+  100 Burpee
+
+# A lift and a metcon
+// every part of a total is measured by its value (E036, on the part)
+score: load, total
+Max load, 3 attempts
+  1 Deadlift
+AMRAP 6:00
+  10 Burpee

@@ -25,7 +25,7 @@ def test_a_compiled_workout_carries_the_spec_version_and_kind():
     result = compile_wod("# Fran\nFor time\n  10 Burpee\n")
     document = result.document
     assert document["wodcraft"] == "1.0"  # the format of a document that uses nothing newer
-    assert SPEC_VERSION == "1.1"
+    assert SPEC_VERSION == "1.2"
     assert document["kind"] == "workout"
     assert document["title"] == "Fran"
     assert set(document) == {"wodcraft", "kind", "title", "blocks", "score"}

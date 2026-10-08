@@ -1,0 +1,125 @@
+[
+  {
+    "wodcraft": "1.0",
+    "kind": "workout",
+    "title": "Burpees",
+    "blocks": [
+      {
+        "type": "for_time",
+        "source": {
+          "line": 4,
+          "col": 1
+        },
+        "items": [
+          {
+            "type": "movement",
+            "movement": "burpee",
+            "name": "Burpee",
+            "quantity": {
+              "kind": "reps",
+              "reps": 100
+            },
+            "source": {
+              "line": 5,
+              "col": 7
+            }
+          }
+        ],
+        "cap_s": 720.0
+      }
+    ],
+    "score": {
+      "type": "time",
+      "capped": "reps"
+    }
+  },
+  {
+    "wodcraft": "1.2",
+    "kind": "workout",
+    "title": "Two parts",
+    "blocks": [
+      {
+        "type": "for_time",
+        "source": {
+          "line": 10,
+          "col": 1
+        },
+        "items": [
+          {
+            "type": "movement",
+            "movement": "wall_ball",
+            "name": "Wall ball",
+            "quantity": {
+              "kind": "reps",
+              "reps": 50
+            },
+            "load": {
+              "kg": {
+                "men": 9,
+                "women": 6
+              },
+              "lb": {
+                "men": 20,
+                "women": 14
+              },
+              "unit": "kg",
+              "written": {
+                "men": 9,
+                "women": 6
+              }
+            },
+            "source": {
+              "line": 11,
+              "col": 6
+            }
+          }
+        ]
+      },
+      {
+        "type": "rest",
+        "seconds": 120.0,
+        "source": {
+          "line": 12,
+          "col": 1
+        }
+      },
+      {
+        "type": "amrap",
+        "source": {
+          "line": 13,
+          "col": 1
+        },
+        "duration_s": 360.0,
+        "items": [
+          {
+            "type": "movement",
+            "movement": "burpee",
+            "name": "Burpee",
+            "quantity": {
+              "kind": "reps",
+              "reps": 10
+            },
+            "source": {
+              "line": 14,
+              "col": 6
+            }
+          }
+        ]
+      }
+    ],
+    "cap_s": 1200.0,
+    "score": {
+      "type": "multi",
+      "parts": [
+        {
+          "type": "time",
+          "block": 0
+        },
+        {
+          "type": "rounds+reps",
+          "block": 2
+        }
+      ]
+    }
+  }
+]

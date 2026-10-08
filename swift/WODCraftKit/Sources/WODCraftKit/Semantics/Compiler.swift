@@ -2,9 +2,13 @@
 import Foundation
 
 /// The language this compiler implements.
-let specVersion: String = "1.1"
+let specVersion: String = "1.2"
 /// The compiled format of a document that uses nothing newer (SPEC §13).
 let baseVersion: String = "1.0"
+/// A document is stamped with the oldest version that holds it (SPEC §13).
+let formatVersions: [String] = ["1.0", "1.1", "1.2"]
+/// The meta keys compiled elsewhere than into "meta".
+let privateMetaKeys: [String] = ["units", "cap_s", "score", "score_total"]
 
 let timedKinds: Set<String> = ["for_time", "amrap", "emom", "every", "tabata", "death_by", "max_load"]
 let intervalKinds: Set<String> = ["emom", "every"]
@@ -31,6 +35,10 @@ let allowedChildren: [String: Set<String>] = {
 }()
 
 let scoreTypes: Set<String> = ["time", "rounds+reps", "rounds", "reps", "load", "distance", "calories", "none"]
+/// French, written back in English by the formatter (1.2).
+let scoreAliases: [String: String] = ["charge": "load"]
+/// "score: load, total": the parts add up (1.2).
+let scoreModifiers: Set<String> = ["total"]
 
 let scoreByFormat: [String: String] = [
     "for_time": "time",
@@ -99,9 +107,13 @@ final class Compiler {
         out["kind"] = .string("session")
         out["title"] = doc.title.map { JSONValue.string($0) } ?? .null
         out["sections"] = .array(sections)
-        let newer: Bool = sections.contains { $0.objectValue?["workout"]?.objectValue?["wodcraft"]?.stringValue != baseVersion }
-        if newer {
-            out["wodcraft"] = .string(specVersion)
+        // a session is stamped with the newest version one of its sections needs
+        for section in sections {
+            let version: String = section.objectValue?["workout"]?.objectValue?["wodcraft"]?.stringValue ?? baseVersion
+            let current: String = out["wodcraft"]?.stringValue ?? baseVersion
+            if (formatVersions.firstIndex(of: version) ?? 0) > (formatVersions.firstIndex(of: current) ?? 0) {
+                out["wodcraft"] = .string(version)
+            }
         }
         if !estimates.isEmpty {
             let minTotal: Double = estimates.reduce(0.0) { $0 + ($1["min_s"]?.doubleValue ?? 0) }
@@ -128,6 +140,7 @@ final class Compiler {
             if let line = statement as? MetaLine { metaLines.append(line) }
         }
         let meta = self.meta(JSONObject(), metaLines)
+        let capSpan: Span? = metaLines.last { $0.key == "cap" }?.valueSpan
         if let declared = meta["units"]?.stringValue {
             units = declared
             unitsDeclared = true
@@ -146,14 +159,32 @@ final class Compiler {
                 team = entry
             }
         }
+        var workoutCap: JSONValue?
         if let cap = meta["cap_s"], !blocks.isEmpty {
-            blocks[0].setDefault("cap_s", cap)
+            let capped: [JSONObject] = blocks.flatMap { walkCompiled($0) }.filter { ($0["cap_s"]?.doubleValue ?? 0) != 0 }
+            if !capped.isEmpty {
+                // one or the other: a cap on the whole workout, or a cap on each block (SPEC §6.1)
+                let lines: String = capped.map { String($0["source"]?.objectValue?["line"]?.intValue ?? 0) }.joined(separator: ", ")
+                err(
+                    "E037",
+                    "A workout cap cannot be combined with block caps (line\(capped.count > 1 ? "s" : "") \(lines)).",
+                    capSpan ?? Span(1, 1),
+                    "keep either 'cap:' for the whole workout, or a cap on each block"
+                )
+            } else if blocks.count == 1 {
+                blocks[0]["cap_s"] = cap  // the block is the whole workout
+            } else {
+                workoutCap = cap  // it covers every block, not the first one (1.2)
+            }
         }
         var out = JSONObject()
         out["wodcraft"] = .string(baseVersion)
         out["kind"] = .string("workout")
         out["title"] = title.map { JSONValue.string($0) } ?? .null
         out["blocks"] = .array(blocks.map { JSONValue.object($0) })
+        if let workoutCap {
+            out["cap_s"] = workoutCap
+        }
         out["score"] = .object(score(blocks, meta))
         if let team {
             out["team"] = .object(team)
@@ -166,7 +197,7 @@ final class Compiler {
             out["adapted"] = .array(adapted)
         }
         var rest = JSONObject()
-        for key in meta.keys where !["units", "cap_s", "score"].contains(key) {
+        for key in meta.keys where !privateMetaKeys.contains(key) {
             rest[key] = meta[key]
         }
         if !rest.isEmpty {
@@ -209,7 +240,7 @@ final class Compiler {
         }
         out["wodcraft"] = .string(compiledVersion(out))
         var merged: JSONObject = source["meta"]?.objectValue ?? JSONObject()
-        for key in meta.keys where !["units", "cap_s", "score"].contains(key) {
+        for key in meta.keys where !privateMetaKeys.contains(key) {
             merged[key] = meta[key]
         }
         if !merged.isEmpty {
@@ -220,8 +251,22 @@ final class Compiler {
 
     // MARK: - helpers
 
-    /// The format version a compiled workout needs: "1.0" unless it uses a 1.1 construct (SPEC §13).
+    /// The format version a compiled workout needs: "1.0" unless it uses a 1.1 or a 1.2 construct
+    /// (SPEC §13). A document written in an older version therefore compiles to exactly the same JSON.
     func compiledVersion(_ workout: JSONObject) -> String {
+        func usesOneTwo(_ value: JSONValue?) -> Bool {
+            switch value {
+            case let .object(object)?:
+                return object.has("attempts") || object.keys.contains { usesOneTwo(object[$0]) }
+            case let .array(array)?:
+                return array.contains { usesOneTwo($0) }
+            default:
+                return false
+            }
+        }
+        if workout.has("cap_s") || workout["score"]?.objectValue?.has("aggregate") == true || usesOneTwo(workout["blocks"]) {
+            return "1.2"
+        }
         func uses(_ value: JSONValue?) -> Bool {
             switch value {
             case let .object(object)?:
@@ -234,14 +279,14 @@ final class Compiler {
                 return false
             }
         }
-        if workout.has("adapted") { return specVersion }
+        if workout.has("adapted") { return "1.1" }
         let levels: JSONObject = workout["levels"]?.objectValue ?? JSONObject()
         for key in levels.keys {
             for operation in levels[key]?.arrayValue ?? [] {
-                if let op = operation.objectValue, op.has("factor") || op.has("quantity") { return specVersion }
+                if let op = operation.objectValue, op.has("factor") || op.has("quantity") { return "1.1" }
             }
         }
-        return uses(workout["blocks"]) ? specVersion : baseVersion
+        return uses(workout["blocks"]) ? "1.1" : baseVersion
     }
 
     func err(_ code: String, _ message: String, _ span: Span, _ suggestion: String? = nil) {
@@ -266,6 +311,17 @@ final class Compiler {
 }
 
 // MARK: - free helpers
+
+/// A compiled block and every block inside it.
+func walkCompiled(_ item: JSONObject) -> [JSONObject] {
+    var out: [JSONObject] = [item]
+    for child in item["items"]?.arrayValue ?? [] {
+        if let object = child.objectValue {
+            out += walkCompiled(object)
+        }
+    }
+    return out
+}
 
 func hasMax(_ block: JSONObject) -> Bool {
     for value in block["items"]?.arrayValue ?? [] {

@@ -23,6 +23,12 @@ enum Estimator {
     static let defaultRepPace: Double = 3.0
     /// strength work: rest between sets unless the source says otherwise
     static let defaultSetRest: Double = 120.0
+    /// a heavy attempt: chalk, set-up, the lift and the plates — not the rep pace
+    static let attemptSeconds: Double = 30.0
+    /// "Max load" without attempts: a typical build-up to the heaviest load
+    static let buildUpEfforts: Int = 5
+    /// the clock, not the volume, sets their duration
+    static let fixedKinds: [String] = ["amrap", "emom", "every", "tabata"]
 
     private static func pick(_ value: JSONValue?, _ category: String = "men") -> Double {
         guard let value else { return 0 }
@@ -151,6 +157,9 @@ enum Estimator {
             return interval * rounds
         }
 
+        if kind == "max_load", buildsUp(block) {
+            return maxLoadSeconds(block, catalog)
+        }
         let children: [JSONObject] = path(of: block)
         // "Rest" as the last item of a repeated block happens between rounds only
         let rounds: Double = block["rounds"]?.doubleValue ?? 1
@@ -182,11 +191,81 @@ enum Estimator {
         return max(0.0, total)
     }
 
+    /// A Max load whose lifts carry no sets is a build-up: efforts towards the heaviest load (1.2).
+    static func buildsUp(_ block: JSONObject) -> Bool {
+        let movements: [JSONObject] = items(of: block).filter { type(of: $0) == "movement" }
+        return !movements.isEmpty && !movements.contains { $0["sets"] != nil }
+    }
+
+    /// The efforts of a build-up and the rest between two of them: the attempts written on the line
+    /// (or a typical build-up), and the rest written last in the block (or the usual rest between
+    /// sets). Like the trailing rest of rounds (SPEC §8), it comes between the efforts.
+    static func efforts(_ block: JSONObject) -> (count: Int, rest: Double) {
+        let children: [JSONObject] = items(of: block)
+        var count: Int = buildUpEfforts
+        if let attempts = block["attempts"]?.intValue, attempts != 0 {
+            count = attempts
+        }
+        var rest: Double = defaultSetRest
+        if let last = children.last, type(of: last) == "rest", let seconds = last["seconds"]?.doubleValue {
+            rest = seconds
+        }
+        return (count, rest)
+    }
+
+    static func maxLoadSeconds(_ block: JSONObject, _ catalog: MovementCatalog) -> Double {
+        let (count, rest) = efforts(block)
+        let work: Double = items(of: block)
+            .filter { type(of: $0) == "movement" }
+            .reduce(0.0) { $0 + max(itemSeconds($1, catalog), attemptSeconds) }
+        return Double(count) * work + rest * Double(count - 1)
+    }
+
+    /// The central estimate of one block: its work stretched by fatigue, its prescribed rest as is.
+    static func effortSeconds(_ block: JSONObject, _ catalog: MovementCatalog) -> Double {
+        let seconds: Double = blockSeconds(block, catalog)
+        let rest: Double = restSeconds(block)
+        return max(0.0, seconds - rest) * fatigue + rest
+    }
+
+    /// The time cap of the whole workout: its own (1.2), or the caps of its blocks one after the
+    /// other — with the rest between them — when several blocks carry one. A single capped block
+    /// keeps its cap.
+    static func workoutCap(_ workout: JSONObject, _ catalog: MovementCatalog) -> Double? {
+        if let cap = workout["cap_s"]?.doubleValue, cap != 0 {
+            return cap
+        }
+        let blocks: [JSONObject] = (workout["blocks"]?.arrayValue ?? []).compactMap(\.objectValue)
+        guard let first = blocks.first else { return nil }
+        let capped: Int = blocks.filter { ($0["cap_s"]?.doubleValue ?? 0) != 0 }.count
+        if capped < 2 {
+            if let cap = first["cap_s"]?.doubleValue, cap != 0 { return cap }
+            return nil
+        }
+        var total: Double = 0.0
+        for block in blocks {
+            if let cap = block["cap_s"]?.doubleValue, cap != 0 {
+                total += cap
+            } else if type(of: block) == "rest" {
+                total += block["seconds"]?.doubleValue ?? 0
+            } else if fixedKinds.contains(type(of: block)) {
+                total += blockSeconds(block, catalog)
+            } else {
+                return nil  // a block without a cap: the workout as a whole is not capped
+            }
+        }
+        return total
+    }
+
     /// Prescribed rest inside a block: it is wall-clock time, so fatigue does not stretch it.
     static func restSeconds(_ block: JSONObject) -> Double {
         let kind: String = type(of: block)
         if kind == "rest" {
             return block["seconds"]?.doubleValue ?? 0
+        }
+        if kind == "max_load", buildsUp(block) {
+            let (count, rest) = efforts(block)
+            return rest * Double(count - 1)
         }
         if kind == "movement" {
             if let sets = block["sets"]?.objectValue, let list = sets["reps"]?.arrayValue {
@@ -227,12 +306,11 @@ enum Estimator {
                 total += cap
                 continue
             }
-            if ["amrap", "emom", "every", "tabata", "rest"].contains(kind) {
+            if fixedKinds.contains(kind) || kind == "rest" {
                 fixed = true
                 total += seconds
             } else {
-                let rest: Double = restSeconds(block)
-                total += max(0.0, seconds - rest) * fatigue + rest
+                total += effortSeconds(block, catalog)
             }
             intervalWarning(block, catalog, diags, file)
         }
@@ -246,7 +324,7 @@ enum Estimator {
             low = total * (1 - spread)
             high = total * (1 + spread)
         }
-        let cap: Double? = blocks[0]["cap_s"]?.doubleValue
+        let cap: Double? = workoutCap(workout, catalog)
         // a cap is a cut-off, not a target: only warn when the work is far beyond it
         if let cap, cap != 0, low > cap * capTolerance {
             let source: JSONObject = blocks[0]["source"]?.objectValue ?? JSONObject()

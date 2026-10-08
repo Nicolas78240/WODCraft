@@ -16,7 +16,7 @@ sys.path.insert(0, str(REPO / "src"))
 
 from wodcraft.emit import board  # noqa: E402  (the package lives in src/)
 from wodcraft.emit.markdown import to_markdown  # noqa: E402
-from wodcraft.emit.timeline import render_timeline, timeline  # noqa: E402
+from wodcraft.emit.timeline import render_timer, timeline  # noqa: E402
 
 KIT = REPO / "swift/WODCraftKit"
 LIBRARY = KIT / "Sources/WODCraftKit/Resources/library.json"
@@ -40,7 +40,7 @@ def rendered(path: str, document: dict) -> dict:
         "board": board.render(document),
         "boardFr": board.render(document, lang="fr"),
         "markdown": to_markdown(document),
-        "timer": render_timeline(segments),
+        "timer": render_timer(document),
         "segments": [
             {
                 "at": segment["at_s"],

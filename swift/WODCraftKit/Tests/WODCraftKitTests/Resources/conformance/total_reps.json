@@ -1,0 +1,48 @@
+{
+  "wodcraft": "1.2",
+  "kind": "workout",
+  "title": "Lynne",
+  "blocks": [
+    {
+      "type": "rounds",
+      "source": {
+        "line": 3,
+        "col": 1
+      },
+      "rounds": 5,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "bench_press",
+          "name": "Bench press",
+          "quantity": {
+            "kind": "max",
+            "of": "reps"
+          },
+          "bodyweight": 1,
+          "source": {
+            "line": 4,
+            "col": 7
+          }
+        },
+        {
+          "type": "movement",
+          "movement": "pull_up",
+          "name": "Pull-up",
+          "quantity": {
+            "kind": "max",
+            "of": "reps"
+          },
+          "source": {
+            "line": 5,
+            "col": 7
+          }
+        }
+      ]
+    }
+  ],
+  "score": {
+    "type": "reps",
+    "aggregate": "sum"
+  }
+}

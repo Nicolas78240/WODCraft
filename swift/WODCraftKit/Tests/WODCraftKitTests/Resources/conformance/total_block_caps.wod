@@ -1,0 +1,13 @@
+# CrossFit Total, one cap per lift
+// a cap on each lift instead of one for the whole workout, written with the French aliases
+score: charge, total
+Max load, 3 essais, cap 8:00
+  1 Back squat
+  Rest 2:00
+Rest 3:00
+Max load, 3 essais, cap 8:00
+  1 Shoulder press
+  Rest 2:00
+Rest 3:00
+Max load, 1 attempt, cap 8:00
+  1 Deadlift

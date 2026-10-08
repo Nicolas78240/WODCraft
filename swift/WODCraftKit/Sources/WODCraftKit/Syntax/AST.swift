@@ -165,6 +165,8 @@ final class BlockNode: Statement {
     var slotMinute: Int?
     /// "there and back": the list in order, then back without the last line
     var thereAndBack: Bool = false
+    /// "Max load, 3 attempts": the best of N attempts counts (1.2)
+    var attempts: Int?
     var isLabel: Bool = false
 
     init(_ kind: String, _ span: Span) {

@@ -1,11 +1,12 @@
 # WODCraft standard library
 
-Reference workouts written in WODCraft 1.0 (see `spec/SPEC.md`). One workout per file.
+Reference workouts written in WODCraft (see `spec/SPEC.md`). One workout per file.
 
 ```
-girls/     the 22 classic CrossFit "Girls" benchmarks
-heroes/    51 Hero WODs
-open/      selected CrossFit Games Open workouts (file name = <yy>_<n>)
+girls/       the 22 classic CrossFit "Girls" benchmarks
+heroes/      51 Hero WODs
+open/        selected CrossFit Games Open workouts (file name = <yy>_<n>)
+benchmarks/  strength benchmarks (1.2): the CrossFit Total
 ```
 
 ## Using a workout
@@ -30,6 +31,8 @@ compiler, then this standard library (§10 of the spec). The extension is omitte
 - Rx work is written first; a `Scaled:` block, when present, lists only the differences.
 - Time caps appear only when the original workout has an official one (the Open workouts,
   and the illustrative cap on `girls/fran`).
+- A score made of several lifts or sets adds up with `score: load, total` (`score: reps, total`
+  for Lynne), and a lift with attempts is written `Max load, 3 attempts`.
 - Anything the language cannot express (free partitioning in Murph, wall-ball target height,
   "to failure" scoring) is stated in a `note:` line rather than invented syntax.
 

@@ -8,7 +8,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-from wodcraft import __version__, library
+from wodcraft import SPEC_VERSION, __version__, library
 from wodcraft.api import LIBRARY_DIR, compile_file, parse_file
 from wodcraft.catalog import load_catalog, normalize
 from wodcraft.emit import board
@@ -52,7 +52,7 @@ def _parser() -> argparse.ArgumentParser:
         description=f"Write, check and compile functional-fitness workouts (WODCraft {__version__}).",
         epilog="Specification: spec/SPEC.md · https://github.com/Nicolas78240/WODCraft",
     )
-    parser.add_argument("--version", action="version", version=f"wodc {__version__} (spec 1.0)")
+    parser.add_argument("--version", action="version", version=f"wodc {__version__} (spec {SPEC_VERSION})")
     subparsers = parser.add_subparsers(dest="command")
 
     check = subparsers.add_parser("check", help="check files and report diagnostics")
@@ -208,7 +208,7 @@ def cmd_fmt(args) -> int:
 
 
 def cmd_timer(args) -> int:
-    from wodcraft.emit.timeline import render_timeline, timeline
+    from wodcraft.emit.timeline import render_timer
 
     profile = _profile(args)
     status = EXIT_OK
@@ -220,7 +220,7 @@ def cmd_timer(args) -> int:
         for document in result.documents:
             if profile is not None:
                 document = resolve(document, profile)
-            print(render_timeline(timeline(document)))
+            print(render_timer(document))
     return status
 
 
@@ -287,8 +287,10 @@ def cmd_bundle(args) -> int:
 
 
 def cmd_lib(args) -> int:
-    for entry in library.entries(args.query):
-        print(f"{entry.path:24} {entry.title}")
+    entries = list(library.entries(args.query))
+    width = max([24, *(len(entry.path) for entry in entries)])  # benchmarks/crossfit_total is longer
+    for entry in entries:
+        print(f"{entry.path:{width}} {entry.title}")
     return EXIT_OK
 
 

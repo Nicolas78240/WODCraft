@@ -195,6 +195,8 @@ public struct Block: Codable, Equatable, Sendable {
     public var slot: Slot?
     /// 1.1 — the items in order, then back to the first one without repeating the last.
     public var thereAndBack: Bool?
+    /// 1.2, Max load only — the best of N attempts counts; a trailing rest comes between them.
+    public var attempts: Int?
     public var used: UsedFrom?
     public var items: [Item]
     public var source: SourceSpan?
@@ -335,7 +337,14 @@ public struct Score: Codable, Equatable, Sendable {
     /// 1.1 — the scored block is done there and back: a round is the whole path, and a capped
     /// athlete counts the reps done along it.
     public var thereAndBack: Bool?
+    /// 1.2 — `score: load, total`: the parts (or the efforts of the block) add up. Always "sum".
+    public var aggregate: String?
+    /// 1.2 — with `aggregate` on a multi score: what every part measures and the total adds up.
+    public var unit: Kind?
     public var parts: [Part]?
+
+    /// 1.2 — the score is the sum of its parts (`score: load, total`).
+    public var isTotal: Bool { aggregate == "sum" }
 }
 
 public struct LevelOperation: Codable, Equatable, Sendable {
@@ -430,6 +439,9 @@ public struct Workout: Codable, Equatable, Sendable {
     public var title: String?
     /// The body: blocks, plus any movement or rest line written at the top level (a strength piece).
     public var blocks: [Item]
+    /// 1.2 — the cap of the whole workout (`cap:`) when its body holds several blocks; a single
+    /// block carries it itself.
+    public var capS: Double?
     public var score: Score
     public var team: Team?
     public var levels: [String: [LevelOperation]]?

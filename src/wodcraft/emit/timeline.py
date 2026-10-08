@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from wodcraft.catalog import load_catalog
 from wodcraft.emit.board import _head, _movement
-from wodcraft.semantics.estimate import item_seconds
+from wodcraft.semantics.estimate import builds_up, effort_seconds, item_seconds
 from wodcraft.syntax.units import format_clock
 
 
@@ -56,11 +56,19 @@ def _block(block: dict, document: dict) -> list[dict]:
         return out
     if kind == "amrap" and block.get("duration_s"):
         return [{"duration_s": block["duration_s"], "label": f"{label}: {_items_label(block.get('items', []))}", "kind": "work"}]
-    duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
+    items = block.get("items", [])
+    content = _items_label(items)
+    if kind == "max_load" and block.get("attempts") and items and items[-1].get("type") == "rest":
+        content += " between attempts"  # the rest comes between the attempts (SPEC §8)
+    if kind == "max_load" and builds_up(block):
+        # a lift has its own length: the whole workout's estimate would count every lift once per lift
+        duration = block.get("cap_s") or round(effort_seconds(block, load_catalog()))
+    else:
+        duration = block.get("cap_s") or (document.get("estimate") or {}).get("max_s") or 0
     return [
         {
             "duration_s": duration,
-            "label": f"{label}: {_items_label(block.get('items', []))}",
+            "label": f"{label}: {content}",
             "kind": "work",
             "open_ended": not block.get("cap_s"),
         }
@@ -95,13 +103,34 @@ def _items_label(items: list[dict]) -> str:
     return " + ".join(label for label in labels if label)
 
 
-def render_timeline(segments: list[dict]) -> str:
+def timer_cap(document: dict) -> float | None:
+    """The cap of the whole workout (`cap:` over several blocks, 1.2): when the clock stops.
+    A cap on a block is already the length of that block's segment."""
+    if document.get("kind") == "session":
+        return None
+    return document.get("cap_s") or None
+
+
+def render_timer(document: dict) -> str:
+    """What `wodc timer` prints: the timeline, with the workout cap when there is one."""
+    return render_timeline(timeline(document), timer_cap(document))
+
+
+def render_timeline(segments: list[dict], cap_s: float | None = None) -> str:
     lines = []
+    # the workout cap is a moment, not a stretch: at that time the clock stops, whatever is left —
+    # it takes its place in time, before the first segment that would start at or after it
+    cap_line = f"{format_clock(cap_s):>8}  {'':>6}  cap: the clock stops" if cap_s else None
     for segment in segments:
+        if cap_line and cap_s is not None and segment["at_s"] >= cap_s:
+            lines.append(cap_line)
+            cap_line = None
         start = format_clock(segment["at_s"])
         duration = format_clock(segment["duration_s"]) if segment["duration_s"] else "—"
         mark = "~" if segment.get("open_ended") else " "
         lines.append(f"{start:>8}  {duration:>6}{mark} {segment['label']}")
+    if cap_line:
+        lines.append(cap_line)
     total = sum(s["duration_s"] for s in segments)
     lines.append(f"{'':>8}  {format_clock(total):>6}  total")
     return "\n".join(lines)

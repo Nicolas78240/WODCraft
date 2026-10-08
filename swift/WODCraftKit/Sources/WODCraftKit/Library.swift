@@ -17,7 +17,7 @@ public struct LibraryEntry: Decodable, Equatable, Sendable, Identifiable {
 
     public var id: String { path }
 
-    /// The collection the workout belongs to: `girls`, `heroes`, `open`.
+    /// The collection the workout belongs to: `girls`, `heroes`, `open`, `benchmarks`.
     public var collection: String {
         guard let slash = path.firstIndex(of: "/") else { return "" }
         return String(path[path.startIndex..<slash])

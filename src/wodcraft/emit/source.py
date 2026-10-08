@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from wodcraft.semantics.compiler import SCORE_ALIASES
 from wodcraft.syntax.ast import (
     LEVEL_LABELS,
     Block,
@@ -129,6 +130,8 @@ def _block_head(block: Block) -> str:
         parts.append("Death by")
     elif kind == "max_load":
         parts.append("Max load")
+        if block.attempts is not None:
+            parts.append(f"{block.attempts} attempt{'' if block.attempts == 1 else 's'}")
     elif kind == "rounds":
         parts.append(f"{block.rounds} rounds" + (" for time" if block.for_time else ""))
     elif kind == "ladder":
@@ -182,7 +185,17 @@ def _modifier(modifier: str) -> str:
 
 
 def _meta(meta: MetaLine) -> str:
+    if meta.key == "score" and "," in meta.value:
+        return f"score: {_score_value(meta.value)}"
+    if meta.key == "score" and meta.value.strip().lower() in SCORE_ALIASES:
+        return f"score: {SCORE_ALIASES[meta.value.strip().lower()]}"
     return f"{meta.key}: {meta.value}"
+
+
+def _score_value(value: str) -> str:
+    """'score: charge, total' is written back 'score: load, total' (1.2)."""
+    head, *modifiers = [part.strip().lower() for part in value.split(",")]
+    return ", ".join([SCORE_ALIASES.get(head, head), *modifiers])
 
 
 def _dual(value: Dual) -> str:

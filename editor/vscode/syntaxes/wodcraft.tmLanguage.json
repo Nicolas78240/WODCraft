@@ -103,7 +103,7 @@
         },
         {
           "name": "keyword.other.option.wod",
-          "match": "\\b(?i:for\\s+time|cap|teams\\s+of|there\\s+and\\s+back|aller-retour|rounds?|rft|x)\\b"
+          "match": "\\b(?i:for\\s+time|cap|teams\\s+of|there\\s+and\\s+back|aller-retour|attempts?|essais?|rounds?|rft|x)\\b"
         }
       ]
     },

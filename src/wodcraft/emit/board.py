@@ -17,12 +17,82 @@ SCORE_LABEL = {
 }
 
 
-WORDS = {"fr": {"or": "ou", "there and back": "aller-retour"}}
+TOTAL_LABEL = {
+    "time": "total time",
+    "rounds+reps": "total rounds + reps",
+    "rounds": "total rounds",
+    "reps": "total reps",
+    "load": "total load",
+    "distance": "total distance",
+    "calories": "total calories",
+}
+
+WORDS = {
+    "fr": {
+        "or": "ou",
+        "there and back": "aller-retour",
+        "Max load": "Charge max",
+        "attempt": "essai",
+        "attempts": "essais",
+        "Rest": "Repos",
+        "between attempts": "entre les essais",
+        "best attempt": "meilleur essai",
+        "best attempt of each lift": "meilleur essai de chaque barre",
+        # the labels in front of the lines under the workout
+        "Cap": "Cap",
+        "Score": "Score",
+        "Estimate": "Durée",
+        "Session estimate": "Durée de la séance",
+        "Vest": "Lest",
+        "Note": "Note",
+        "Stimulus": "Stimulus",
+        "Levels": "Niveaux",
+        "Adapted": "Adapté",
+        "capped": "cap atteint",
+        # what is scored
+        "time": "temps",
+        "rounds + reps": "tours + répétitions",
+        "rounds": "tours",
+        "reps": "répétitions",
+        "load": "charge",
+        "distance": "distance",
+        "calories": "calories",
+        "one score per part": "un score par partie",
+        "total time": "total des temps",
+        "total rounds + reps": "total des tours + répétitions",
+        "total rounds": "total des tours",
+        "total reps": "total des répétitions",
+        "total load": "total des charges",
+        "total distance": "distance totale",
+        "total calories": "total des calories",
+    }
+}
 
 
 def word(text: str, lang: str = "en") -> str:
-    """The connective words of the board in another language ('or', 'there and back')."""
+    """The words of the board in another language ('or', 'there and back', 'Max load', 'Score'…)."""
     return WORDS.get(lang, {}).get(text, text)
+
+
+def label(text: str, lang: str = "en") -> str:
+    """'Score:' — or 'Score :' in French, which puts a space before the colon."""
+    return word(text, lang) + (" :" if lang == "fr" else ":")
+
+
+def score_text(workout: dict, lang: str = "en") -> str:
+    """What the score counts: 'load', 'total load (best attempt of each lift)'…"""
+    score = workout.get("score") or {}
+    kind = score.get("type", "none")
+    if score.get("aggregate") == "sum":
+        unit = score.get("unit", kind)
+        text = word(TOTAL_LABEL.get(unit, unit), lang)
+    else:
+        unit = kind
+        text = word(SCORE_LABEL.get(kind, kind), lang)
+    attempts = any(block.get("type") == "max_load" and block.get("attempts") for block in workout.get("blocks", []))
+    if unit == "load" and attempts:  # 1.2: the best of the attempts counts, for each lift
+        text += f" ({word('best attempt of each lift' if kind == 'multi' else 'best attempt', lang)})"
+    return text
 
 
 def render(document: dict, width: int = 46, lang: str = "en", show_profile: bool = True) -> str:
@@ -69,7 +139,7 @@ def _session(session: dict, width: int, show_profile: bool = True, lang: str = "
         lines.append(_workout(section["workout"], width, skip_title=True, show_profile=show_profile, lang=lang))
     if session.get("estimate"):
         lines.append("")
-        lines.append(f"Session estimate: {_range(session['estimate'])}")
+        lines.append(f"{label('Session estimate', lang)} {_range(session['estimate'])}")
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -77,6 +147,8 @@ def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: 
     lines: list[str] = []
     if not skip_title and workout.get("title"):
         lines.append(_title(workout["title"]))
+    if workout.get("cap_s"):  # a cap on the whole workout has its own line (1.2)
+        lines.append(f"{label('Cap', lang)} {format_clock(workout['cap_s'])}")
     meta = workout.get("meta") or {}
     body: list[str] = []
     for block in workout.get("blocks", []):
@@ -85,26 +157,27 @@ def _workout(workout: dict, width: int, skip_title: bool = False, show_profile: 
         body[0] = f"Teams of {workout['team']['size']} · {body[0]}"
     lines += body
     if meta.get("vest"):
-        lines.append(f"Vest: {_load(meta['vest'])}")
+        lines.append(f"{label('Vest', lang)} {_load(meta['vest'])}")
     score = workout.get("score") or {}
     if score.get("type") and score["type"] != "none":
-        label = SCORE_LABEL.get(score["type"], score["type"])
+        text = score_text(workout, lang)
         if score.get("capped"):
-            label += f" (capped: {SCORE_LABEL.get(score['capped'], score['capped'])})"
-        lines.append(f"Score: {label}")
+            capped = word(SCORE_LABEL.get(score["capped"], score["capped"]), lang)
+            text += f" ({label('capped', lang)} {capped})"
+        lines.append(f"{label('Score', lang)} {text}")
     estimate = workout.get("estimate")
     if estimate:
-        lines.append(f"Estimate: {_range(estimate)}")
+        lines.append(f"{label('Estimate', lang)} {_range(estimate)}")
     for note in meta.get("notes", []):
-        lines.append(f"Note: {note}")
+        lines.append(f"{label('Note', lang)} {note}")
     for stimulus in meta.get("stimulus", []):
-        lines.append(f"Stimulus: {stimulus}")
+        lines.append(f"{label('Stimulus', lang)} {stimulus}")
     levels = workout.get("levels")
     if levels:
-        lines.append("Levels: " + ", ".join(sorted(levels)))
+        lines.append(f"{label('Levels', lang)} " + ", ".join(sorted(levels)))
     changes = [_adaptation(op, lang) for op in workout.get("adapted") or [] if op.get("movement")]
     if changes:
-        lines.append("Adapted: " + "; ".join(changes))
+        lines.append(f"{label('Adapted', lang)} " + "; ".join(changes))
     resolved = workout.get("resolved") if show_profile else None
     if resolved:
         level = resolved["level"] + (" + adapted" if resolved.get("adapted") else "")
@@ -139,14 +212,17 @@ def _block(block: dict, depth: int, width: int, lang: str = "en") -> list[str]:
     if kind == "movement":
         return [pad + _movement(block, width - len(pad), lang=lang)]
     if kind == "rest":
-        return [f"{pad}Rest {format_clock(block['seconds'])}"]
+        return [f"{pad}{word('Rest', lang)} {format_clock(block['seconds'])}"]
     head = _head(block, lang)
     items = block.get("items", [])
     if head and block.get("type") in ("slot", "buy_in", "cash_out") and len(items) == 1 and items[0].get("type") == "movement":
         return [f"{pad}{head} {_movement(items[0], width - len(pad) - len(head) - 1, lang=lang)}"]
     lines = [pad + head] if head else []
-    for item in items:
-        lines += _block(item, depth + (1 if head else 0), width, lang)
+    for index, item in enumerate(items):
+        inner = _block(item, depth + (1 if head else 0), width, lang)
+        if kind == "max_load" and block.get("attempts") and item.get("type") == "rest" and index == len(items) - 1:
+            inner = [f"{inner[0]} {word('between attempts', lang)}"]  # SPEC §8: between the attempts
+        lines += inner
     return lines
 
 
@@ -172,7 +248,10 @@ def _head(block: dict, lang: str = "en") -> str:
     elif kind == "death_by":
         parts.append("Death by")
     elif kind == "max_load":
-        parts.append("Max load")
+        parts.append(word("Max load", lang))
+        attempts = block.get("attempts")
+        if attempts:
+            parts.append(f"{attempts} {word('attempt' if attempts == 1 else 'attempts', lang)}")
     elif kind == "rounds":
         parts.append(f"{rounds} rounds")
     elif kind == "ladder":
