@@ -174,19 +174,27 @@ public enum Timeline {
             return [defaultSegment(block, label: label, workout: workout)]
 
         default:
-            return [defaultSegment(block, label: label, workout: workout)]
+            return [defaultSegment(block, label: label, workout: workout, catalog: catalog)]
         }
     }
 
-    static func defaultSegment(_ block: Block, label: String, workout: Workout) -> TimelineSegment {
+    static func defaultSegment(_ block: Block, label: String, workout: Workout, catalog: Catalog = .shared) -> TimelineSegment {
         var duration: TimeInterval = 0
+        let buildUp: Bool = block.type == .maxLoad && Estimation.buildsUp(block)
         if let cap = block.capS, cap != 0 {
             duration = cap
+        } else if buildUp {
+            // a lift has its own length: the whole workout's estimate would count every lift once per lift
+            duration = Conversion.pythonRound(Estimation.buildUpSeconds(block, catalog: catalog))
         } else if let estimate = workout.estimate {
             duration = estimate.maxS
         }
         let capped = (block.capS ?? 0) != 0
-        let text = label + ": " + itemsLabel(block.items)
+        var content = itemsLabel(block.items)
+        if block.type == .maxLoad, (block.attempts ?? 0) != 0, case .rest? = block.items.last {
+            content += " between attempts"  // the rest comes between the attempts (SPEC §8)
+        }
+        let text = label + ": " + content
         return TimelineSegment(duration: duration, label: text, kind: .work, openEnded: !capped)
     }
 
@@ -373,6 +381,33 @@ enum Estimation {
             return total * perRep + rest * Double(max(0, sets.reps.count - 1))
         }
         return reps * perRep
+    }
+
+    /// A Max load whose lifts carry no sets is a build-up: efforts towards the heaviest load (1.2).
+    static func buildsUp(_ block: Block) -> Bool {
+        var movements: [Movement] = []
+        for item in block.items {
+            if case let .movement(movement) = item { movements.append(movement) }
+        }
+        return !movements.isEmpty && !movements.contains { $0.sets != nil }
+    }
+
+    /// The central estimate of a build-up: its attempts (or a typical build-up), each at least an
+    /// attempt long and stretched by fatigue, and the rest between them as written (SPEC §15).
+    static func buildUpSeconds(_ block: Block, catalog: Catalog) -> Double {
+        var efforts: Int = Estimator.buildUpEfforts
+        if let attempts = block.attempts, attempts != 0 { efforts = attempts }
+        var rest: Double = defaultSetRest
+        if case let .rest(last)? = block.items.last { rest = last.seconds }
+        var work: Double = 0
+        for item in block.items {
+            if case let .movement(movement) = item {
+                work += max(itemSeconds(movement, catalog: catalog), Estimator.attemptSeconds)
+            }
+        }
+        let between: Double = rest * Double(efforts - 1)
+        let seconds: Double = Double(efforts) * work + between
+        return max(0.0, seconds - between) * fatigue + between
     }
 
     /// A `(rest 2:00)` modifier overrides the default rest between sets.

@@ -1,0 +1,141 @@
+{
+  "wodcraft": "1.2",
+  "kind": "workout",
+  "title": "CrossFit Total",
+  "blocks": [
+    {
+      "type": "max_load",
+      "source": {
+        "line": 5,
+        "col": 1
+      },
+      "attempts": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "back_squat",
+          "name": "Back squat",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 6,
+            "col": 5
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 120.0,
+          "source": {
+            "line": 7,
+            "col": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "rest",
+      "seconds": 180.0,
+      "source": {
+        "line": 8,
+        "col": 1
+      }
+    },
+    {
+      "type": "max_load",
+      "source": {
+        "line": 9,
+        "col": 1
+      },
+      "attempts": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "strict_press",
+          "name": "Strict press",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 10,
+            "col": 5
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 120.0,
+          "source": {
+            "line": 11,
+            "col": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "rest",
+      "seconds": 180.0,
+      "source": {
+        "line": 12,
+        "col": 1
+      }
+    },
+    {
+      "type": "max_load",
+      "source": {
+        "line": 13,
+        "col": 1
+      },
+      "attempts": 3,
+      "items": [
+        {
+          "type": "movement",
+          "movement": "deadlift",
+          "name": "Deadlift",
+          "quantity": {
+            "kind": "reps",
+            "reps": 1
+          },
+          "source": {
+            "line": 14,
+            "col": 5
+          }
+        },
+        {
+          "type": "rest",
+          "seconds": 120.0,
+          "source": {
+            "line": 15,
+            "col": 3
+          }
+        }
+      ]
+    }
+  ],
+  "cap_s": 1800.0,
+  "score": {
+    "type": "multi",
+    "aggregate": "sum",
+    "unit": "load",
+    "parts": [
+      {
+        "type": "load",
+        "block": 0
+      },
+      {
+        "type": "load",
+        "block": 2
+      },
+      {
+        "type": "load",
+        "block": 4
+      }
+    ]
+  },
+  "meta": {
+    "tags": [
+      "benchmark"
+    ]
+  }
+}

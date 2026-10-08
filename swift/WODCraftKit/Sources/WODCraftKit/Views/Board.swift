@@ -60,6 +60,42 @@ public enum Board {
         }
     }
 
+    /// How the total of each score kind is spelled on the board (1.2).
+    public static func totalLabel(_ kind: Score.Kind) -> String {
+        switch kind {
+        case .time: return "total time"
+        case .roundsAndReps: return "total rounds + reps"
+        case .rounds: return "total rounds"
+        case .reps: return "total reps"
+        case .load: return "total load"
+        case .distance: return "total distance"
+        case .calories: return "total calories"
+        case .none, .multi: return scoreLabel(kind)
+        }
+    }
+
+    /// What the score counts: `load`, `total load (best attempt of each lift)`…
+    public static func scoreText(_ workout: Workout, language: Language = .en) -> String {
+        let score = workout.score
+        let unit: Score.Kind
+        var text: String
+        if score.isTotal {
+            unit = score.unit ?? score.type
+            text = word(totalLabel(unit), language)
+        } else {
+            unit = score.type
+            text = word(scoreLabel(score.type), language)
+        }
+        let attempts: Bool = workout.blocks.contains { item in
+            if case let .block(block) = item, block.type == .maxLoad, let count = block.attempts, count != 0 { return true }
+            return false
+        }
+        if unit == .load, attempts {  // 1.2: the best of the attempts counts, for each lift
+            text += " (" + word(score.type == .multi ? "best attempt of each lift" : "best attempt", language) + ")"
+        }
+        return text
+    }
+
     /// The whiteboard text of a document.
     public static func render(
         _ document: Document,
@@ -132,14 +168,54 @@ public enum Board {
         return out
     }
 
-    /// The connective words of the board in another language ("or", "there and back").
+    static let french: [String: String] = [
+        "or": "ou",
+        "there and back": "aller-retour",
+        "Max load": "Charge max",
+        "attempt": "essai",
+        "attempts": "essais",
+        "Rest": "Repos",
+        "between attempts": "entre les essais",
+        "best attempt": "meilleur essai",
+        "best attempt of each lift": "meilleur essai de chaque barre",
+        // the labels in front of the lines under the workout
+        "Cap": "Cap",
+        "Score": "Score",
+        "Estimate": "Durée",
+        "Session estimate": "Durée de la séance",
+        "Vest": "Lest",
+        "Note": "Note",
+        "Stimulus": "Stimulus",
+        "Levels": "Niveaux",
+        "Adapted": "Adapté",
+        "capped": "cap atteint",
+        // what is scored
+        "time": "temps",
+        "rounds + reps": "tours + répétitions",
+        "rounds": "tours",
+        "reps": "répétitions",
+        "load": "charge",
+        "distance": "distance",
+        "calories": "calories",
+        "one score per part": "un score par partie",
+        "total time": "total des temps",
+        "total rounds + reps": "total des tours + répétitions",
+        "total rounds": "total des tours",
+        "total reps": "total des répétitions",
+        "total load": "total des charges",
+        "total distance": "distance totale",
+        "total calories": "total des calories",
+    ]
+
+    /// The words of the board in another language ("or", "there and back", "Max load", "Score"…).
     public static func word(_ text: String, _ language: Language) -> String {
         guard language == .fr else { return text }
-        switch text {
-        case "or": return "ou"
-        case "there and back": return "aller-retour"
-        default: return text
-        }
+        return french[text] ?? text
+    }
+
+    /// `Score:` — or `Score :` in French, which puts a space before the colon.
+    public static func label(_ text: String, _ language: Language) -> String {
+        return word(text, language) + (language == .fr ? " :" : ":")
     }
 
     // MARK: Session
@@ -159,7 +235,7 @@ public enum Board {
         }
         if let estimate = session.estimate {
             lines.append("")
-            lines.append("Session estimate: " + rangeText(estimate))
+            lines.append(label("Session estimate", language) + " " + rangeText(estimate))
         }
         var text = lines.joined(separator: "\n")
         while let last = text.last, last == " " || last == "\n" || last == "\t" || last == "\r" {
@@ -181,6 +257,9 @@ public enum Board {
         if !skipTitle, let title = workout.title, !title.isEmpty {
             lines.append(titleText(title))
         }
+        if let cap = workout.capS, cap != 0 {  // a cap on the whole workout has its own line (1.2)
+            lines.append(label("Cap", language) + " " + formatClock(cap))
+        }
         let meta = workout.meta
         var body: [String] = []
         for block in workout.blocks {
@@ -191,27 +270,27 @@ public enum Board {
         }
         lines.append(contentsOf: body)
         if let vest = meta?.vest {
-            lines.append("Vest: " + loadText(vest))
+            lines.append(label("Vest", language) + " " + loadText(vest))
         }
         let score = workout.score
         if score.type != Score.Kind.none {
-            var label = scoreLabel(score.type)
+            var text = scoreText(workout, language: language)
             if let capped = score.capped {
-                label += " (capped: " + scoreLabel(capped) + ")"
+                text += " (" + label("capped", language) + " " + word(scoreLabel(capped), language) + ")"
             }
-            lines.append("Score: " + label)
+            lines.append(label("Score", language) + " " + text)
         }
         if let estimate = workout.estimate {
-            lines.append("Estimate: " + rangeText(estimate))
+            lines.append(label("Estimate", language) + " " + rangeText(estimate))
         }
-        for note in meta?.notes ?? [] { lines.append("Note: " + note) }
-        for stimulus in meta?.stimulus ?? [] { lines.append("Stimulus: " + stimulus) }
+        for note in meta?.notes ?? [] { lines.append(label("Note", language) + " " + note) }
+        for stimulus in meta?.stimulus ?? [] { lines.append(label("Stimulus", language) + " " + stimulus) }
         if let levels = workout.levels, !levels.isEmpty {
-            lines.append("Levels: " + levels.keys.sorted().joined(separator: ", "))
+            lines.append(label("Levels", language) + " " + levels.keys.sorted().joined(separator: ", "))
         }
         let changes: [String] = (workout.adapted ?? []).compactMap { adaptationText($0, language: language) }
         if !changes.isEmpty {
-            lines.append("Adapted: " + changes.joined(separator: "; "))
+            lines.append(label("Adapted", language) + " " + changes.joined(separator: "; "))
         }
         if showProfile, let resolved = workout.resolved {
             let level = resolved.level + (resolved.adapted == true ? " + adapted" : "")
@@ -246,7 +325,7 @@ public enum Board {
             let pad = padding(depth)
             return [pad + movementText(movement, width: width - pad.count, language: language)]
         case let .rest(rest):
-            return [padding(depth) + "Rest " + formatClock(rest.seconds)]
+            return [padding(depth) + word("Rest", language) + " " + formatClock(rest.seconds)]
         case let .block(block):
             return blockLines(block, depth: depth, width: width, language: language)
         }
@@ -264,8 +343,13 @@ public enum Board {
         }
         var lines: [String] = head.isEmpty ? [] : [pad + head]
         let childDepth = depth + (head.isEmpty ? 0 : 1)
-        for item in items {
-            lines.append(contentsOf: blockLines(item, depth: childDepth, width: width, language: language))
+        let attempts: Bool = block.type == .maxLoad && (block.attempts ?? 0) != 0
+        for (index, item) in items.enumerated() {
+            var inner = blockLines(item, depth: childDepth, width: width, language: language)
+            if attempts, case .rest = item, index == items.count - 1, let first = inner.first {
+                inner = [first + " " + word("between attempts", language)]  // SPEC §8: between the attempts
+            }
+            lines.append(contentsOf: inner)
         }
         return lines
     }
@@ -319,7 +403,10 @@ public enum Board {
         case .deathBy:
             parts.append("Death by")
         case .maxLoad:
-            parts.append("Max load")
+            parts.append(word("Max load", language))
+            if let attempts = block.attempts, attempts != 0 {
+                parts.append(String(attempts) + " " + word(attempts == 1 ? "attempt" : "attempts", language))
+            }
         case .rounds:
             parts.append(optionalNumber(rounds) + " rounds")
         case .ladder:

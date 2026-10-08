@@ -26,13 +26,7 @@ extension Compiler {
                     err("E013", "Invalid cap '\(value)'.", line.valueSpan, "e.g. 'cap: 12:00'")
                 }
             case "score":
-                let lowered: String = value.lowercased()
-                if !scoreTypes.contains(lowered) {
-                    let known: String = scoreTypes.sorted().joined(separator: ", ")
-                    err("E013", "Unknown score '\(value)'.", line.valueSpan, "one of: " + known)
-                } else {
-                    out["score"] = .string(lowered)
-                }
+                scoreMeta(&out, value, line)
             case "vest":
                 if let parsed = dualFromText(value) {
                     let unit: String = parsed.unit ?? out["units"]?.stringValue ?? units
@@ -59,6 +53,33 @@ extension Compiler {
             }
         }
         return out
+    }
+
+    /// 'score: VALUE[, total]' — the value, then its modifiers after a comma (SPEC §6, 1.2).
+    func scoreMeta(_ out: inout JSONObject, _ value: String, _ line: MetaLine) {
+        let parts: [String] = value.split(separator: ",", omittingEmptySubsequences: false)
+            .map { $0.trimmingCharacters(in: .whitespaces).lowercased() }
+        let written: String = value.split(separator: ",", omittingEmptySubsequences: false).first
+            .map { $0.trimmingCharacters(in: .whitespaces) } ?? value
+        let head: String = scoreAliases[parts[0]] ?? parts[0]
+        let modifiers: [String] = Array(parts.dropFirst())
+        if !scoreTypes.contains(head) {
+            let known: String = scoreTypes.sorted().joined(separator: ", ")
+            err("E013", "Unknown score '\(written)'.", line.valueSpan, "one of: " + known)
+            return
+        }
+        for modifier in modifiers where !scoreModifiers.contains(modifier) {
+            err("E013", "Unknown score modifier '\(modifier)'.", line.valueSpan, "e.g. 'score: load, total'")
+            return
+        }
+        if !modifiers.isEmpty, head == "none" {
+            err("E013", "A workout scored 'none' has nothing to add up.", line.valueSpan, "e.g. 'score: load, total'")
+            return
+        }
+        out["score"] = .string(head)
+        if !modifiers.isEmpty {
+            out["score_total"] = .bool(true)
+        }
     }
 
     // MARK: - statements
@@ -163,6 +184,15 @@ extension Compiler {
                     node.span,
                     "use it on For time, AMRAP, N rounds or a rep ladder"
                 )
+            }
+        }
+        if let attempts = node.attempts {
+            if kind != "max_load" {
+                err("E014", "Attempts only apply to Max load, not to \(humanName(kind)).", node.span, "e.g. 'Max load, 3 attempts'")
+            } else if attempts < 1 {
+                err("E035", "A Max load needs at least one attempt.", node.span)
+            } else {
+                out["attempts"] = .number(Double(attempts))
             }
         }
         if let teams = node.teams {
