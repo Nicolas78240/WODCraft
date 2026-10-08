@@ -298,7 +298,7 @@ $("#stats").closest("section").addEventListener("enter", () => {
 });
 
 /* ---------- playground: the real compiler, in Pyodide ---------- */
-const WHEEL = "/py/wodcraft-1.1.0-py3-none-any.whl";
+const WHEEL = "/py/wodcraft-1.1.1-py3-none-any.whl";
 const FN = t("mon.wod", "my.wod");
 const PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/";
 {
