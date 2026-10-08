@@ -287,8 +287,10 @@ def cmd_bundle(args) -> int:
 
 
 def cmd_lib(args) -> int:
-    for entry in library.entries(args.query):
-        print(f"{entry.path:24} {entry.title}")
+    entries = list(library.entries(args.query))
+    width = max([24, *(len(entry.path) for entry in entries)])  # benchmarks/crossfit_total is longer
+    for entry in entries:
+        print(f"{entry.path:{width}} {entry.title}")
     return EXIT_OK
 
 

@@ -94,6 +94,17 @@ struct LanguageOneTwoTests {
         #expect(french.contains("Score : total des charges (meilleur essai de chaque barre)"))
     }
 
+    @Test("the library ships the CrossFit Total in benchmarks/")
+    func library() throws {
+        let total = try #require(Library.shared.entry(path: "benchmarks/crossfit_total")?.workout)
+        #expect(total.wodcraft == "1.2")
+        #expect(total.capS == 1800)
+        #expect(total.score.isTotal)
+        let lifts: [Block] = total.blocks.compactMap(\.asBlock)
+        #expect(lifts.compactMap { $0.items.first?.asMovement?.movement } == ["back_squat", "strict_press", "deadlift"])
+        #expect(try Self.workout("use benchmarks/crossfit_total\n").score.unit == .load)
+    }
+
     @Test("the timer gives each lift its own window")
     func timer() throws {
         let segments = try Self.workout(Self.perLift).timeline()

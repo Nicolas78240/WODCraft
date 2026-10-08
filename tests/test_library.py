@@ -13,10 +13,23 @@ LIBRARY_FILES = sorted(LIBRARY_DIR.rglob("*.wod"))
 IDS = [path.relative_to(LIBRARY_DIR).with_suffix("").as_posix() for path in LIBRARY_FILES]
 
 
-def test_the_library_ships_the_three_standard_collections():
-    # SPEC §10: "The standard library ships girls/, heroes/ and open/."
+def test_the_library_ships_the_standard_collections():
+    # SPEC §10: "The standard library ships girls/, heroes/, open/ and, since 1.2, benchmarks/."
     collections = {path.parent.name for path in LIBRARY_FILES}
-    assert {"girls", "heroes", "open"} <= collections
+    assert {"girls", "heroes", "open", "benchmarks"} <= collections
+
+
+def test_the_crossfit_total_adds_up_three_lifts_of_three_attempts():
+    from wodcraft.api import compile_source
+
+    result = compile_source("use benchmarks/crossfit_total\n")
+    assert result.ok, result.report()
+    workout = result.document
+    assert workout["wodcraft"] == "1.2"
+    lifts = [block for block in workout["blocks"] if block["type"] == "max_load"]
+    assert [lift["items"][0]["movement"] for lift in lifts] == ["back_squat", "strict_press", "deadlift"]
+    assert {lift["attempts"] for lift in lifts} == {3}
+    assert workout["score"]["aggregate"] == "sum" and workout["score"]["unit"] == "load"
 
 
 def test_the_library_is_not_empty():
@@ -55,7 +68,8 @@ def test_every_library_workout_has_a_title_and_a_stimulus(path):
 def test_every_library_workout_is_tagged_as_a_benchmark(path):
     tags = compile_file(path).document.get("meta", {}).get("tags", [])
     assert "benchmark" in tags, path.name
-    assert path.parent.name in tags, path.name
+    # girls/, heroes/ and open/ name their collection in a tag; benchmarks/ already says "benchmark"
+    assert path.parent.name in tags or path.parent.name == "benchmarks", path.name
 
 
 @pytest.mark.parametrize("path", LIBRARY_FILES, ids=IDS)

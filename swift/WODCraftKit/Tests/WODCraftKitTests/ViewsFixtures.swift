@@ -8,6 +8,50 @@ enum ViewsFixtures {
     static let libraryJSON: String = #"""
 [
  {
+  "path": "benchmarks/crossfit_total",
+  "board": "CROSSFIT TOTAL\nCap: 30:00\nMax load · 3 attempts\n  1 Back squat\n  Rest 2:00 between attempts\nRest 3:00\nMax load · 3 attempts\n  1 Strict press\n  Rest 2:00 between attempts\nRest 3:00\nMax load · 3 attempts\n  1 Deadlift\n  Rest 2:00 between attempts\nScore: total load (best attempt of each lift)\nEstimate: 17:38–32:46\nNote: One rep per attempt: back squat, then shoulder press, then deadlift.\nNote: The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.\nStimulus: Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.",
+  "boardFr": "CROSSFIT TOTAL\nCap : 30:00\nCharge max · 3 essais\n  1 Squat arrière\n  Repos 2:00 entre les essais\nRepos 3:00\nCharge max · 3 essais\n  1 Développé militaire\n  Repos 2:00 entre les essais\nRepos 3:00\nCharge max · 3 essais\n  1 Soulevé de terre\n  Repos 2:00 entre les essais\nScore : total des charges (meilleur essai de chaque barre)\nDurée : 17:38–32:46\nNote : One rep per attempt: back squat, then shoulder press, then deadlift.\nNote : The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.\nStimulus : Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.",
+  "markdown": "# CrossFit Total\n\n```\nMax load · 3 attempts\n  1 Back squat\n  Rest 2:00 between attempts\nRest 3:00\nMax load · 3 attempts\n  1 Strict press\n  Rest 2:00 between attempts\nRest 3:00\nMax load · 3 attempts\n  1 Deadlift\n  Rest 2:00 between attempts\n```\n\n**Cap** — 30:00\n\n**Score** — total load (best attempt of each lift)\n**Estimate** — 17:38–32:46\n\n> Three lifts, three attempts each; the best attempt of each lift counts, and the three add up.\n\n*One rep per attempt: back squat, then shoulder press, then deadlift.*\n\n*The 30:00 cap is the reference session of this library, not part of the original benchmark; remove the cap line to test without a clock.*\n",
+  "timer": "    0:00    6:24~ Max load · 3 attempts: 1 Back squat + Rest 2:00 between attempts\n    6:24    3:00  Rest\n    9:24    6:24~ Max load · 3 attempts: 1 Strict press + Rest 2:00 between attempts\n   15:48    3:00  Rest\n   18:48    6:24~ Max load · 3 attempts: 1 Deadlift + Rest 2:00 between attempts\n           25:12  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 384,
+    "label": "Max load · 3 attempts: 1 Back squat + Rest 2:00 between attempts",
+    "kind": "work",
+    "openEnded": true
+   },
+   {
+    "at": 384.0,
+    "duration": 180.0,
+    "label": "Rest",
+    "kind": "rest",
+    "openEnded": false
+   },
+   {
+    "at": 564.0,
+    "duration": 384,
+    "label": "Max load · 3 attempts: 1 Strict press + Rest 2:00 between attempts",
+    "kind": "work",
+    "openEnded": true
+   },
+   {
+    "at": 948.0,
+    "duration": 180.0,
+    "label": "Rest",
+    "kind": "rest",
+    "openEnded": false
+   },
+   {
+    "at": 1128.0,
+    "duration": 384,
+    "label": "Max load · 3 attempts: 1 Deadlift + Rest 2:00 between attempts",
+    "kind": "work",
+    "openEnded": true
+   }
+  ]
+ },
+ {
   "path": "girls/amanda",
   "board": "AMANDA\n9-7-5 for time\n  Ring muscle-up\n  Snatch ........................... 135/95 lb\nScore: time\nEstimate: 4:09–7:42\nNote: The snatches are full squat snatches.\nStimulus: Technical couplet; heavy-ish snatches on a gymnastics-fatigued upper body.\nLevels: scaled",
   "boardFr": "AMANDA\n9-7-5 for time\n  Muscle-up aux anneaux\n  Arraché .......................... 135/95 lb\nScore : temps\nDurée : 4:09–7:42\nNote : The snatches are full squat snatches.\nStimulus : Technical couplet; heavy-ish snatches on a gymnastics-fatigued upper body.\nNiveaux : scaled",
@@ -500,9 +544,9 @@ enum ViewsFixtures {
  },
  {
   "path": "girls/lynne",
-  "board": "LYNNE\n5 rounds\n  max Bench press\n  max Pull-up\nScore: reps\nNote: No time component. Each set is taken to failure; score is the total of all bench press and pull-up reps over the five rounds. Rest as needed (2-3 min) between rounds.\nStimulus: Strength endurance; every set goes to failure, rest as needed.",
-  "boardFr": "LYNNE\n5 rounds\n  max Développé couché\n  max Traction\nScore : répétitions\nNote : No time component. Each set is taken to failure; score is the total of all bench press and pull-up reps over the five rounds. Rest as needed (2-3 min) between rounds.\nStimulus : Strength endurance; every set goes to failure, rest as needed.",
-  "markdown": "# Lynne\n\n```\n5 rounds\n  max Bench press\n  max Pull-up\n```\n\n**Score** — reps\n\n> Strength endurance; every set goes to failure, rest as needed.\n\n*No time component. Each set is taken to failure; score is the total of all bench press and pull-up reps over the five rounds. Rest as needed (2-3 min) between rounds.*\n",
+  "board": "LYNNE\n5 rounds\n  max Bench press\n  max Pull-up\nScore: total reps\nNote: No time component. Each set is taken to failure; rest as needed (2-3 min) between rounds.\nStimulus: Strength endurance; every set goes to failure, rest as needed.",
+  "boardFr": "LYNNE\n5 rounds\n  max Développé couché\n  max Traction\nScore : total des répétitions\nNote : No time component. Each set is taken to failure; rest as needed (2-3 min) between rounds.\nStimulus : Strength endurance; every set goes to failure, rest as needed.",
+  "markdown": "# Lynne\n\n```\n5 rounds\n  max Bench press\n  max Pull-up\n```\n\n**Score** — total reps\n\n> Strength endurance; every set goes to failure, rest as needed.\n\n*No time component. Each set is taken to failure; rest as needed (2-3 min) between rounds.*\n",
   "timer": "    0:00       —~ 5 rounds: max Bench press + max Pull-up\n            0:00  total",
   "segments": [
    {
