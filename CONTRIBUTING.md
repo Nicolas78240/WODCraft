@@ -9,6 +9,10 @@ pytest
 
 Python 3.11+. The core package has no runtime dependency, and it should stay that way.
 
+How a gap found in an application (a missing movement, benchmark or format) becomes a WODCraft
+change, and how the application picks it up: [docs/amelioration-continue.fr.md](docs/amelioration-continue.fr.md)
+(in French).
+
 ## The easy contributions
 
 **A movement.** Add an entry to `src/wodcraft/catalog/movements.toml`: identifier in `snake_case`,
