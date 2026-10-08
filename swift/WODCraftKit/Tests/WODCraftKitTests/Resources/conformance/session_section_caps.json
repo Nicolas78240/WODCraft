@@ -1,0 +1,251 @@
+{
+  "wodcraft": "1.2",
+  "kind": "session",
+  "title": "Session",
+  "sections": [
+    {
+      "title": "Warm-up",
+      "workout": {
+        "wodcraft": "1.2",
+        "kind": "workout",
+        "title": "Warm-up",
+        "blocks": [
+          {
+            "type": "emom",
+            "source": {
+              "line": 5,
+              "col": 1
+            },
+            "duration_s": 600.0,
+            "interval_s": 60.0,
+            "items": [
+              {
+                "type": "movement",
+                "movement": "burpee",
+                "name": "Burpee",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "source": {
+                  "line": 6,
+                  "col": 6
+                }
+              }
+            ]
+          },
+          {
+            "type": "rest",
+            "seconds": 120.0,
+            "source": {
+              "line": 7,
+              "col": 1
+            }
+          },
+          {
+            "type": "amrap",
+            "source": {
+              "line": 8,
+              "col": 1
+            },
+            "duration_s": 360.0,
+            "items": [
+              {
+                "type": "movement",
+                "movement": "wall_ball",
+                "name": "Wall ball",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "load": {
+                  "kg": {
+                    "men": 9,
+                    "women": 6
+                  },
+                  "lb": {
+                    "men": 20,
+                    "women": 14
+                  },
+                  "unit": "kg",
+                  "written": {
+                    "men": 9,
+                    "women": 6
+                  }
+                },
+                "source": {
+                  "line": 9,
+                  "col": 6
+                }
+              }
+            ]
+          }
+        ],
+        "cap_s": 720.0,
+        "score": {
+          "type": "multi",
+          "parts": [
+            {
+              "type": "none",
+              "block": 0
+            },
+            {
+              "type": "rounds+reps",
+              "block": 2
+            }
+          ]
+        }
+      },
+      "source": {
+        "line": 3,
+        "col": 1
+      }
+    },
+    {
+      "title": "Strength",
+      "workout": {
+        "wodcraft": "1.0",
+        "kind": "workout",
+        "title": "Strength",
+        "blocks": [
+          {
+            "type": "movement",
+            "movement": "back_squat",
+            "name": "Back squat",
+            "sets": {
+              "reps": [
+                5,
+                5,
+                5,
+                5,
+                5
+              ]
+            },
+            "load": {
+              "kg": {
+                "men": 100,
+                "women": 70
+              },
+              "lb": {
+                "men": 220,
+                "women": 155
+              },
+              "unit": "kg",
+              "written": {
+                "men": 100,
+                "women": 70
+              }
+            },
+            "source": {
+              "line": 12,
+              "col": 1
+            }
+          }
+        ],
+        "score": {
+          "type": "load"
+        }
+      },
+      "source": {
+        "line": 11,
+        "col": 1
+      }
+    },
+    {
+      "title": "Metcon",
+      "workout": {
+        "wodcraft": "1.2",
+        "kind": "workout",
+        "title": "Metcon",
+        "blocks": [
+          {
+            "type": "for_time",
+            "source": {
+              "line": 16,
+              "col": 1
+            },
+            "items": [
+              {
+                "type": "movement",
+                "movement": "wall_ball",
+                "name": "Wall ball",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 50
+                },
+                "load": {
+                  "kg": {
+                    "men": 9,
+                    "women": 6
+                  },
+                  "lb": {
+                    "men": 20,
+                    "women": 14
+                  },
+                  "unit": "kg",
+                  "written": {
+                    "men": 9,
+                    "women": 6
+                  }
+                },
+                "source": {
+                  "line": 17,
+                  "col": 6
+                }
+              }
+            ]
+          },
+          {
+            "type": "rest",
+            "seconds": 120.0,
+            "source": {
+              "line": 18,
+              "col": 1
+            }
+          },
+          {
+            "type": "amrap",
+            "source": {
+              "line": 19,
+              "col": 1
+            },
+            "duration_s": 360.0,
+            "items": [
+              {
+                "type": "movement",
+                "movement": "burpee",
+                "name": "Burpee",
+                "quantity": {
+                  "kind": "reps",
+                  "reps": 10
+                },
+                "source": {
+                  "line": 20,
+                  "col": 6
+                }
+              }
+            ]
+          }
+        ],
+        "cap_s": 1200.0,
+        "score": {
+          "type": "multi",
+          "parts": [
+            {
+              "type": "time",
+              "block": 0
+            },
+            {
+              "type": "rounds+reps",
+              "block": 2
+            }
+          ]
+        }
+      },
+      "source": {
+        "line": 14,
+        "col": 1
+      }
+    }
+  ]
+}

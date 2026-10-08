@@ -105,32 +105,54 @@ def _items_label(items: list[dict]) -> str:
 
 def timer_cap(document: dict) -> float | None:
     """The cap of the whole workout (`cap:` over several blocks, 1.2): when the clock stops.
-    A cap on a block is already the length of that block's segment."""
+    A cap on a block is already the length of that block's segment. A session has no cap of its
+    own: the caps of its sections are in `timer_caps`."""
     if document.get("kind") == "session":
         return None
     return document.get("cap_s") or None
 
 
+def timer_caps(document: dict) -> list[float]:
+    """Every moment a workout cap stops the clock, in clock order: the workout's cap, or in a
+    session the cap of each section at its place in the session (the section's start plus its cap)."""
+    if document.get("kind") != "session":
+        cap = timer_cap(document)
+        return [cap] if cap else []
+    caps: list[float] = []
+    at = 0.0
+    for section in document.get("sections", []):
+        workout = section["workout"]
+        cap = timer_cap(workout)
+        if cap:
+            caps.append(at + cap)
+        segments = timeline(workout)
+        if segments:
+            at += segments[-1]["at_s"] + segments[-1]["duration_s"]
+    return sorted(caps)
+
+
 def render_timer(document: dict) -> str:
-    """What `wodc timer` prints: the timeline, with the workout cap when there is one."""
-    return render_timeline(timeline(document), timer_cap(document))
+    """What `wodc timer` prints: the timeline, with the workout caps when there are some."""
+    return render_timeline(timeline(document), caps=timer_caps(document))
 
 
-def render_timeline(segments: list[dict], cap_s: float | None = None) -> str:
+def render_timeline(segments: list[dict], cap_s: float | None = None, *, caps: list[float] | None = None) -> str:
     lines = []
-    # the workout cap is a moment, not a stretch: at that time the clock stops, whatever is left —
+    # a workout cap is a moment, not a stretch: at that time the clock stops, whatever is left —
     # it takes its place in time, before the first segment that would start at or after it
-    cap_line = f"{format_clock(cap_s):>8}  {'':>6}  cap: the clock stops" if cap_s else None
+    pending = sorted([*(caps or []), *([cap_s] if cap_s else [])])
     for segment in segments:
-        if cap_line and cap_s is not None and segment["at_s"] >= cap_s:
-            lines.append(cap_line)
-            cap_line = None
+        while pending and segment["at_s"] >= pending[0]:
+            lines.append(_cap_line(pending.pop(0)))
         start = format_clock(segment["at_s"])
         duration = format_clock(segment["duration_s"]) if segment["duration_s"] else "—"
         mark = "~" if segment.get("open_ended") else " "
         lines.append(f"{start:>8}  {duration:>6}{mark} {segment['label']}")
-    if cap_line:
-        lines.append(cap_line)
+    lines += [_cap_line(cap) for cap in pending]
     total = sum(s["duration_s"] for s in segments)
     lines.append(f"{'':>8}  {format_clock(total):>6}  total")
     return "\n".join(lines)
+
+
+def _cap_line(cap_s: float) -> str:
+    return f"{format_clock(cap_s):>8}  {'':>6}  cap: the clock stops"
