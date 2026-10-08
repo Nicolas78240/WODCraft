@@ -83,8 +83,9 @@ français). Valider **ne modifie pas** WODCraft : c'est une décision, pas une p
 ### 3. Appliquer (dans WODCraft)
 
 - **Alias, mouvement** : le script d'oKo `scripts/wodcraft_movements.py apply` écrit les propositions
-  validées dans `movements.toml` sur une branche `catalog/oko-<date>`, regénère les ressources Swift
-  (`wodc bundle`), lance `pytest` et `swift test`, et ne commite que si tout passe.
+  validées dans `movements.toml` sur une branche `catalog/oko-<date>` partie d'`origin/main`,
+  regénère les ressources Swift (`wodc bundle`), lance `pytest` et `swift test`, ne commite que si tout
+  passe, puis pousse la branche et ouvre une PR que le PO fusionne.
 - **Benchmark** : un `.wod` dans `library/`, avec sa source en commentaire de PR.
 - **Langage** : une branche `feat/...` qui suit l'ordre spec → conformité → Python → Swift.
 
@@ -125,19 +126,22 @@ Ce qui marche déjà :
 - La boucle de validation des mouvements a tourné une première fois le 7 octobre : 5 mouvements
   (catalogue 223 → 228).
 
-Ce qui ne respecte pas encore le parcours :
+Ce qui a été remis dans le parcours le 8 octobre :
 
-1. **Les 5 mouvements du 7 octobre ne sont pas publiés** : ils vivent sur une branche locale
-   (`feat/oko-seances`, commit `00cb933`), ni sur GitHub ni sur PyPI.
-2. **oKo n'épingle aucune version** : l'app pointe sur un dossier local (`~/Dev/WODCraft` ou le worktree
-   `oko-seances`, selon la branche d'oKo), donc sur « ce qui est extrait à ce moment-là ». Selon le
-   consommateur, le catalogue vu fait 212, 223 ou 228 mouvements.
-3. **Le script d'application part d'une branche locale** (`feat/oko-seances`) au lieu de `main`.
-4. **`integration-oko.fr.md` est périmé** (212 mouvements, 40 benchmarks, 64 cas de conformité).
+1. **Les 5 mouvements du 7 octobre sont publiés** dans la 1.1.1 (GitHub et PyPI) ; ils ne vivaient
+   jusque-là que sur une branche locale.
+2. **WODCraftKit s'épingle par tag** grâce au `Package.swift` racine ; l'app quitte les chemins locaux
+   (`~/Dev/WODCraft`, worktree `oko-seances`), qui faisaient voir 212, 223 ou 228 mouvements selon le
+   consommateur.
+3. **Le script d'application part d'`origin/main` et ouvre une PR** au lieu de commiter sur une branche
+   locale.
 
-## Les décisions à prendre
+Reste à faire : mettre à jour `integration-oko.fr.md` (212 mouvements, 40 benchmarks, 64 cas de
+conformité).
 
-| Question | Proposition |
+## Les décisions prises le 8 octobre
+
+| Question | Décision |
 |---|---|
 | Comment l'app iOS épingle WODCraftKit | un `Package.swift` à la racine du dépôt WODCraft, pour que l'app dépende de `github.com/Nicolas78240/WODCraft` à un tag précis (ce qui ouvre aussi la Swift Package Index) |
 | D'où part le script d'application | de `origin/main`, et il ouvre une PR au lieu de commiter sur une branche locale (le PO fusionne) |
@@ -149,8 +153,8 @@ Ce qui ne respecte pas encore le parcours :
 
 | Manque | Sorte | État |
 |---|---|---|
-| Harlow, Commando push-up, Box bar muscle-up, Kettlebell side bend, Press back | mouvements | faits, à publier (1.1.1) |
-| CrossFit Total : score total, essais, cap global ou par barre, bibliothèque `benchmarks/` | langage + benchmark | syntaxe validée (variante A), pas commencé (1.2) |
+| Harlow, Commando push-up, Box bar muscle-up, Kettlebell side bend, Press back | mouvements | publiés en 1.1.1 ; Harlow et Press back restent à décrire |
+| CrossFit Total : score total, essais, cap global ou par barre, bibliothèque `benchmarks/` | langage + benchmark | syntaxe validée (variante A), en cours (1.2, branche `feat/score-total`) |
 | Quantités différentes à chaque passage (8/12/16/20) | langage | constaté le 6 octobre, contourné par une `note:` |
 | Double-unders en durée (`E033` : « measured in reps ») ; `Clean & jerk` (`E001` sur le `&`) | langage, alias | notés le 29 septembre, confirmés le 8 octobre |
 | G.I. Jane, Hopper | benchmarks | demandés (Jason et The Seven sont déjà dans la bibliothèque) |
