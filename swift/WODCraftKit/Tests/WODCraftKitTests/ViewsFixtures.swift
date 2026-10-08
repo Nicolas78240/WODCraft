@@ -2479,6 +2479,127 @@ enum ViewsFixtures {
   ]
  },
  {
+  "path": "session_section_caps",
+  "board": "SESSION\n\nWARM-UP\nCap: 12:00\nEMOM 10:00\n  10 Burpee\nRest 2:00\nAMRAP 6:00\n  10 Wall ball ........................ 9/6 kg\nScore: one score per part\n\nSTRENGTH\nBack squat ..................... 5x5 100/70 kg\nScore: load\n\nMETCON\nCap: 20:00\nFor time\n  50 Wall ball ........................ 9/6 kg\nRest 2:00\nAMRAP 6:00\n  10 Burpee\nScore: one score per part\n",
+  "boardFr": "SESSION\n\nWARM-UP\nCap : 12:00\nEMOM 10:00\n  10 Burpee\nRepos 2:00\nAMRAP 6:00\n  10 Wall ball ........................ 9/6 kg\nScore : un score par partie\n\nSTRENGTH\nSquat arrière .................. 5x5 100/70 kg\nScore : charge\n\nMETCON\nCap : 20:00\nFor time\n  50 Wall ball ........................ 9/6 kg\nRepos 2:00\nAMRAP 6:00\n  10 Burpee\nScore : un score par partie\n",
+  "markdown": "# Session\n\n## Warm-up\n\n```\nEMOM 10:00\n  10 Burpee\nRest 2:00\nAMRAP 6:00\n  10 Wall ball .................. 9/6 kg\n```\n\n**Cap** — 12:00\n\n**Score** — one score per part\n\n## Strength\n\n```\nBack squat ............... 5x5 100/70 kg\n```\n\n**Score** — load\n\n## Metcon\n\n```\nFor time\n  50 Wall ball .................. 9/6 kg\nRest 2:00\nAMRAP 6:00\n  10 Burpee\n```\n\n**Cap** — 20:00\n\n**Score** — one score per part\n",
+  "timer": "    0:00    1:00  EMOM 10:00 · 1/10: 10 Burpee\n    1:00    1:00  EMOM 10:00 · 2/10: 10 Burpee\n    2:00    1:00  EMOM 10:00 · 3/10: 10 Burpee\n    3:00    1:00  EMOM 10:00 · 4/10: 10 Burpee\n    4:00    1:00  EMOM 10:00 · 5/10: 10 Burpee\n    5:00    1:00  EMOM 10:00 · 6/10: 10 Burpee\n    6:00    1:00  EMOM 10:00 · 7/10: 10 Burpee\n    7:00    1:00  EMOM 10:00 · 8/10: 10 Burpee\n    8:00    1:00  EMOM 10:00 · 9/10: 10 Burpee\n    9:00    1:00  EMOM 10:00 · 10/10: 10 Burpee\n   10:00    2:00  Rest\n   12:00          cap: the clock stops\n   12:00    6:00  AMRAP 6:00: 10 Wall ball 9/6 kg\n   18:00   11:30  Back squat ............... 5x5 100/70 kg\n   29:30       —~ For time: 50 Wall ball 9/6 kg\n   29:30    2:00  Rest\n   31:30    6:00  AMRAP 6:00: 10 Burpee\n   49:30          cap: the clock stops\n           37:30  total",
+  "segments": [
+   {
+    "at": 0.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 1/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 60.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 2/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 120.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 3/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 180.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 4/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 240.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 5/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 300.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 6/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 360.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 7/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 420.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 8/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 480.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 9/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 540.0,
+    "duration": 60.0,
+    "label": "EMOM 10:00 · 10/10: 10 Burpee",
+    "kind": "interval",
+    "openEnded": false
+   },
+   {
+    "at": 600.0,
+    "duration": 120.0,
+    "label": "Rest",
+    "kind": "rest",
+    "openEnded": false
+   },
+   {
+    "at": 720.0,
+    "duration": 360.0,
+    "label": "AMRAP 6:00: 10 Wall ball 9/6 kg",
+    "kind": "work",
+    "openEnded": false
+   },
+   {
+    "at": 1080.0,
+    "duration": 690.0,
+    "label": "Back squat ............... 5x5 100/70 kg",
+    "kind": "work",
+    "openEnded": false
+   },
+   {
+    "at": 1770.0,
+    "duration": 0,
+    "label": "For time: 50 Wall ball 9/6 kg",
+    "kind": "work",
+    "openEnded": true
+   },
+   {
+    "at": 1770.0,
+    "duration": 120.0,
+    "label": "Rest",
+    "kind": "rest",
+    "openEnded": false
+   },
+   {
+    "at": 1890.0,
+    "duration": 360.0,
+    "label": "AMRAP 6:00: 10 Burpee",
+    "kind": "work",
+    "openEnded": false
+   }
+  ]
+ },
+ {
   "path": "sets_ladder_rpe",
   "board": "Max load\n  Deadlift ................. 5-5-3-3-1-1 RPE 8\nScore: load",
   "boardFr": "Charge max\n  Soulevé de terre ......... 5-5-3-3-1-1 RPE 8\nScore : charge",

@@ -244,25 +244,53 @@ public enum Timeline {
     // MARK: Text rendering
 
     /// The cap of the whole workout (`cap:` over several blocks, 1.2): when the clock stops.
-    /// A cap on a block is already the length of that block's segment; a session has none.
+    /// A cap on a block is already the length of that block's segment. A session has no cap of
+    /// its own: the caps of its sections are in `caps(of:)`.
     public static func cap(of document: Document) -> TimeInterval? {
-        guard case let .workout(workout) = document, let cap = workout.capS, cap != 0 else { return nil }
+        guard case let .workout(workout) = document else { return nil }
+        return cap(of: workout)
+    }
+
+    static func cap(of workout: Workout) -> TimeInterval? {
+        guard let cap = workout.capS, cap != 0 else { return nil }
         return cap
+    }
+
+    /// Every moment a workout cap stops the clock, in clock order: the workout's cap, or in a
+    /// session the cap of each section at its place in the session (the section's start plus its cap).
+    public static func caps(of document: Document, catalog: Catalog = .shared) -> [TimeInterval] {
+        switch document {
+        case let .workout(workout):
+            if let cap = cap(of: workout) { return [cap] }
+            return []
+        case let .session(session):
+            var caps: [TimeInterval] = []
+            var at: TimeInterval = 0
+            for section in session.sections {
+                if let cap = cap(of: section.workout) { caps.append(at + cap) }
+                if let last = segments(of: section.workout, catalog: catalog).last { at += last.at + last.duration }
+            }
+            return caps.sorted()
+        }
     }
 
     /// The text form the CLI prints: start, duration, then the label — and, with `cap`, the moment
     /// the clock stops, in its place in time.
     public static func render(_ segments: [TimelineSegment], cap: TimeInterval? = nil) -> String {
+        if let cap, cap != 0 { return render(segments, caps: [cap]) }
+        return render(segments, caps: [])
+    }
+
+    /// The text form the CLI prints, with every moment a workout cap stops the clock, each in its
+    /// place in time.
+    public static func render(_ segments: [TimelineSegment], caps: [TimeInterval]) -> String {
         var lines: [String] = []
         var total: TimeInterval = 0
-        var capLine: String?
-        if let cap, cap != 0 {
-            capLine = pad(formatClock(cap), to: 8) + "  " + pad("", to: 6) + "  cap: the clock stops"
-        }
+        var pending = caps.filter { $0 != 0 }.sorted()
         for segment in segments {
-            if let line = capLine, let cap, segment.at >= cap {
-                lines.append(line)
-                capLine = nil
+            while let cap = pending.first, segment.at >= cap {
+                lines.append(capLine(cap))
+                pending.removeFirst()
             }
             let start = pad(formatClock(segment.at), to: 8)
             let duration = pad(segment.duration == 0 ? "\u{2014}" : formatClock(segment.duration), to: 6)
@@ -270,11 +298,15 @@ public enum Timeline {
             lines.append(start + "  " + duration + mark + " " + segment.label)
             total += segment.duration
         }
-        if let line = capLine {
-            lines.append(line)
+        for cap in pending {
+            lines.append(capLine(cap))
         }
         lines.append(pad("", to: 8) + "  " + pad(formatClock(total), to: 6) + "  total")
         return lines.joined(separator: "\n")
+    }
+
+    static func capLine(_ cap: TimeInterval) -> String {
+        return pad(formatClock(cap), to: 8) + "  " + pad("", to: 6) + "  cap: the clock stops"
     }
 
     static func pad(_ text: String, to width: Int) -> String {
@@ -310,9 +342,10 @@ public extension Document {
         return Timeline.segments(of: self, catalog: catalog)
     }
 
-    /// What `wodc timer` prints: the timeline, with the workout cap when there is one.
+    /// What `wodc timer` prints: the timeline, with the workout caps when there are some — in a
+    /// session, each section's cap at its place in the session.
     func timerText(catalog: Catalog = .shared) -> String {
-        return Timeline.render(timeline(catalog: catalog), cap: Timeline.cap(of: self))
+        return Timeline.render(timeline(catalog: catalog), caps: Timeline.caps(of: self, catalog: catalog))
     }
 }
 

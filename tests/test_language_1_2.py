@@ -5,7 +5,7 @@ from __future__ import annotations
 from conftest import coded_lines, compile_wod
 from test_emit_source import assert_round_trip
 from wodcraft.emit import board, markdown
-from wodcraft.emit.timeline import render_timeline, render_timer, timeline, timer_cap
+from wodcraft.emit.timeline import render_timeline, render_timer, timeline, timer_cap, timer_caps
 
 TOTAL = """# CrossFit Total
 score: load, total
@@ -248,6 +248,68 @@ def test_block_caps_add_no_cap_line():
         assert "cap: the clock stops" not in render_timer(workout)
 
 
-def test_a_session_has_no_workout_cap_line():
+def test_a_session_has_no_cap_of_its_own():
     session = document("# S\n## A\ncap: 20:00\nFor time\n  10 Burpee\nAMRAP 5:00\n  5 Burpee\n")
     assert timer_cap(session) is None
+    assert timer_caps(session) == [1200]
+
+
+SESSION = """# Session
+
+## Warm-up
+cap: 12:00
+EMOM 10:00
+  10 Burpee
+Rest 2:00
+AMRAP 6:00
+  10 Wall ball 9/6 kg
+
+## Strength
+Back squat 5x5 100/70 kg
+
+## Metcon
+cap: 20:00
+For time
+  50 Wall ball 9/6 kg
+Rest 2:00
+AMRAP 6:00
+  10 Burpee
+"""
+
+
+def test_the_session_timer_shows_each_section_cap_at_its_place_in_the_session():
+    # the warm-up's cap in the first section, none in the strength, the metcon's 29:30 + 20:00
+    session = document(SESSION)
+    assert timer_caps(session) == [720, 2970]
+    lines = render_timer(session).splitlines()
+    assert lines[10:] == [
+        "   10:00    2:00  Rest",
+        "   12:00          cap: the clock stops",
+        "   12:00    6:00  AMRAP 6:00: 10 Wall ball 9/6 kg",
+        "   18:00   11:30  Back squat ............... 5x5 100/70 kg",
+        "   29:30   14:44~ For time: 50 Wall ball 9/6 kg",
+        "   44:14    2:00  Rest",
+        "   46:14    6:00  AMRAP 6:00: 10 Burpee",
+        "   49:30          cap: the clock stops",
+        "           52:14  total",
+    ]
+
+
+def test_a_cap_in_a_later_section_counts_from_that_section_start():
+    session = document("# S\n## A\nAMRAP 5:00\n  5 Burpee\n## B\ncap: 10:00\nEMOM 4:00\n  5 Burpee\nAMRAP 8:00\n  5 Burpee\n")
+    assert timer_caps(session) == [900]
+    assert render_timer(session).splitlines()[-4:] == [
+        "    8:00    1:00  EMOM 4:00 · 4/4: 5 Burpee",
+        "    9:00    8:00  AMRAP 8:00: 5 Burpee",
+        "   15:00          cap: the clock stops",
+        "           17:00  total",
+    ]
+
+
+def test_block_caps_in_a_session_add_no_cap_line():
+    single = "# S\n## A\ncap: 12:00\nFor time\n  100 Burpee\n## B\nAMRAP 5:00\n  5 Burpee\n"
+    per_block = "# S\n## A\nAMRAP 5:00\n  5 Burpee\n## B\n" + PER_LIFT.split("\n", 1)[1]
+    for source in (single, per_block):
+        session = document(source)
+        assert timer_caps(session) == []
+        assert render_timer(session) == render_timeline(timeline(session))

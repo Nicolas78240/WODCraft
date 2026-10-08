@@ -120,6 +120,73 @@ struct LanguageOneTwoTests {
         #expect(total.timeline().rendered() == Timeline.render(total.timeline()))
     }
 
+    static let session: String = """
+        # Session
+
+        ## Warm-up
+        cap: 12:00
+        EMOM 10:00
+          10 Burpee
+        Rest 2:00
+        AMRAP 6:00
+          10 Wall ball 9/6 kg
+
+        ## Strength
+        Back squat 5x5 100/70 kg
+
+        ## Metcon
+        cap: 20:00
+        For time
+          50 Wall ball 9/6 kg
+        Rest 2:00
+        AMRAP 6:00
+          10 Burpee
+
+        """
+
+    static func document(_ source: String) throws -> Document {
+        let result: CompileResult = WODCraft.compile(source)
+        return try #require(result.document, "did not compile: \(result.diagnostics.map(\.code))")
+    }
+
+    @Test("the session timer shows each section's cap at its place in the session")
+    func timerShowsTheSectionCaps() throws {
+        // the warm-up's cap in the first section, none in the strength, the metcon's 29:30 + 20:00
+        let session = try Self.document(Self.session)
+        #expect(Timeline.cap(of: session) == nil)
+        #expect(Timeline.caps(of: session) == [720, 2970])
+        let lines = session.timerText().split(separator: "\n").map(String.init)
+        #expect(Array(lines.dropFirst(10)) == [
+            "   10:00    2:00  Rest",
+            "   12:00          cap: the clock stops",
+            "   12:00    6:00  AMRAP 6:00: 10 Wall ball 9/6 kg",
+            "   18:00   11:30  Back squat ............... 5x5 100/70 kg",
+            "   29:30   14:44~ For time: 50 Wall ball 9/6 kg",
+            "   44:14    2:00  Rest",
+            "   46:14    6:00  AMRAP 6:00: 10 Burpee",
+            "   49:30          cap: the clock stops",
+            "           52:14  total",
+        ])
+        // a cap in a later section counts from that section's start
+        let later = try Self.document("# S\n## A\nAMRAP 5:00\n  5 Burpee\n## B\ncap: 10:00\nEMOM 4:00\n  5 Burpee\nAMRAP 8:00\n  5 Burpee\n")
+        #expect(Timeline.caps(of: later) == [900])
+        #expect(later.timerText().split(separator: "\n").map(String.init).suffix(4) == [
+            "    8:00    1:00  EMOM 4:00 · 4/4: 5 Burpee",
+            "    9:00    8:00  AMRAP 8:00: 5 Burpee",
+            "   15:00          cap: the clock stops",
+            "           17:00  total",
+        ])
+        // block caps, or the cap of a single block, add no line in a session either
+        let single = "# S\n## A\ncap: 12:00\nFor time\n  100 Burpee\n## B\nAMRAP 5:00\n  5 Burpee\n"
+        let perBlock = "# S\n## A\nAMRAP 5:00\n  5 Burpee\n## B\n"
+            + Self.perLift.replacingOccurrences(of: "# CrossFit Total\n", with: "")
+        for source in [single, perBlock] {
+            let document = try Self.document(source)
+            #expect(Timeline.caps(of: document).isEmpty)
+            #expect(document.timerText() == document.timeline().rendered())
+        }
+    }
+
     @Test("the timer gives each lift its own window")
     func timer() throws {
         let segments = try Self.workout(Self.perLift).timeline()

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.1 — unreleased
+
+### Fixes
+- `wodc timer` shows the caps of a session too: a section whose `cap:` covers several blocks gets its
+  `cap: the clock stops` line at its place in the session — the section's start plus its cap — in
+  clock order with the other sections' caps. It was compiled but not shown. Block caps and the cap of
+  a single block still add no line. The MCP `timeline_wod` result shows these lines in `rendered`
+  (its `cap_s` stays null for a session), and WODCraftKit has `Timeline.caps(of:)` and
+  `Timeline.render(_:caps:)` behind `timerText()`; Python has `timer_caps`. A new conformance case,
+  `session_section_caps`, carries such a session.
+
 ## 1.2.0 — 2026-10-08
 
 The CrossFit Total, decided with Nicolas on 8 October 2026. Every 1.0 and 1.1 document still

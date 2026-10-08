@@ -229,6 +229,7 @@ def timeline_wod(source: Source) -> TimelineResult:
 
     A segment with `open_ended: true` has no cap: its length is the compiler's estimate.
     `cap_s` is the cap of the whole workout (`cap:` over several blocks): the clock stops there.
+    In a session it stays null: `rendered` shows each section's cap at its place in the session.
     """
     result, diagnostics, counts = _compile(source)
     if not result.ok:

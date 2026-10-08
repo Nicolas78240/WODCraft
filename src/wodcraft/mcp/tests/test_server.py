@@ -145,6 +145,14 @@ def test_timeline_wod_carries_the_workout_cap():
     assert server.timeline_wod("# Open\nFor time\n  100 Burpee\n").cap_s is None
 
 
+def test_timeline_wod_shows_each_section_cap_of_a_session():
+    source = "# S\n## A\nAMRAP 5:00\n  5 Burpee\n## B\ncap: 10:00\nEMOM 4:00\n  5 Burpee\nAMRAP 8:00\n  5 Burpee\n"
+    result = server.timeline_wod(source)
+    assert result.ok is True
+    assert result.cap_s is None  # a session has no cap of its own
+    assert "   15:00          cap: the clock stops\n           17:00  total" in result.rendered
+
+
 def test_search_movements_ranks_exact_matches_first():
     result = server.search_movements("thruster")
     assert result.movements[0].id == "thruster"
